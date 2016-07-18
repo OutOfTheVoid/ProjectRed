@@ -9,9 +9,9 @@ This engine is (currently) an OpenGL based game engine that supports 2D and 3D g
 
 It is broken up into several discrete parts, which include:
 
-	* SDLX: An OOP wrapper for the SDL2 multimedia library
-	* Xenon: An OOP OpenGL abstraction library with 3D management and generation utilities
-	* RAUX: A OOP Resource management and aquisition library.
+  * SDLX: An OOP wrapper for the SDL2 multimedia library
+  * Xenon: An OOP OpenGL abstraction library with 3D management and generation utilities
+  * RAUX: A OOP Resource management and aquisition library.
 	
 You can see what i'm working on, as well as get and Idea of a typical game loop, by looking at src/Main.cpp
 
