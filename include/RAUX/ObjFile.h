@@ -3,15 +3,22 @@
 
 #include <RAUX/RAUX.h>
 #include <RAUX/TextFile.h>
+#include <RAUX/MTLFile.h>
 
-#ifdef RAUX_XENON_MATH_INTERFACE
+#ifdef RAUX_XENON_INTERFACE
 	#include <Xenon/Math/Vec3.h>
 	#include <Xenon/Geometry/Mesh.h>
 #endif
 
 #include <string>
 #include <vector>
+#include <map>
 #include <math.h>
+
+/*
+* ObjFile: Represents a wavefron 3D object file and parses it's contents into values and structures representing it's rendering properties and geometry.
+* Optionally, has the ability to construct a Xenon mesh for rendering.
+*/
 
 namespace RAUX
 {
@@ -25,6 +32,7 @@ namespace RAUX
 		static const uint32_t kStatus_Failure_Load = 2;
 		static const uint32_t kStatus_Failure_MemoryAllocation = 3;
 		static const uint32_t kStatus_Failure_InvalidFile = 4;
+		static const uint32_t kStatus_Failure_InvalidGroup = 5;
 		
 		static const uint32_t kFlags_StoreComments = 1;
 		static const uint32_t kFlags_NoNormals = 2;
@@ -32,8 +40,16 @@ namespace RAUX
 		static const uint32_t kFlags_NoGrouping = 8;
 		static const uint32_t kFlags_FailOnUnsupportedCommand = 16;
 		static const uint32_t kFlags_NoRAUXComment = 16;
+		static const uint32_t kFlags_NoNormalNormalization = 32;
 		
-#ifdef RAUX_XENON_MATH_INTERFACE
+#ifdef RAUX_XENON_INTERFACE
+		
+		static const uint32_t kMeshParameterFlags_Normals = 1;
+		static const uint32_t kMeshParameterFlags_TexturePositions = 2;
+		static const uint32_t kMeshParameterFlags_GenerateMissingNormals = 4;
+		static const uint32_t kMeshParameterFlags_ForceGenerateNormals = 8;
+		static const uint32_t kMeshParameterFlags_GenerateTangents = 16;
+		static const uint32_t kMeshParameterFlags_ForceFirstLineTangents = 32;
 		
 		typedef Xenon::Math::Vec3 Vec3;
 		
@@ -74,6 +90,7 @@ namespace RAUX
 		
 #endif
 		
+		// Tecture position struct, represents a texture position in 1D, 2D, or 3D in < Position > field as denoted by < Dimension >.
 		typedef struct TexturePosition_Struct
 		{
 			
@@ -84,6 +101,7 @@ namespace RAUX
 			
 		} TexturePosition;
 		
+		// Face struct, represents a geometric face as an index < VertexIndexBase > into the vertex list, sequentially, with < VertexCount > verticies.
 		typedef struct Face_Struct
 		{
 			
@@ -113,14 +131,20 @@ namespace RAUX
 			
 		} Group;
 		
-#ifdef RAUX_XENON_MATH_INTERFACE
+#ifdef RAUX_XENON_INTERFACE
 		
 		typedef struct MeshParameters_Struct
 		{
 			
+			const uint32_t * GroupIndexes;
+			const uint32_t GroupCount;
+			
 			std :: string PositionAttributeName;
 			std :: string NormalAttributeName;
 			std :: string TexturePositionAttributeName;
+			std :: string TangentAttributeName;
+			
+			uint32_t Flags;
 			
 			bool InterleaveAttributes;
 			bool StaticAttributes;
@@ -161,9 +185,9 @@ namespace RAUX
 		uint32_t GetFaceCount () const;
 		const Face GetFace ( uint32_t Index ) const;
 		
-#ifdef RAUX_XENON_MATH_INTERFACE
+#ifdef RAUX_XENON_INTERFACE
 		
-		Xenon::Geometry :: Mesh * CreateMesh ( const MeshParameters & Parameters );
+		Xenon::Geometry :: Mesh * CreateMesh ( const MeshParameters & Parameters, uint32_t * Status );
 		
 #endif
 		
@@ -176,6 +200,8 @@ namespace RAUX
 		bool ProcessVertexTexturePosition ( const std :: string & Line, uint32_t Index );
 		bool ProcessFace ( const std :: string & Line, uint32_t Index );
 		bool ProcessGroups ( const std :: string & Line, uint32_t Index );
+		bool ProcessMaterial ( const std :: string & Line, uint32_t Index );
+		bool ProcessMaterialLibrary ( const std :: string & Line, uint32_t Index );
 		
 		void ResolveActiveGroups ();
 		
@@ -191,12 +217,14 @@ namespace RAUX
 		std :: vector <uint32_t> ActiveGroupIndexes;
 		uint32_t ActiveGroupFaceIndexBase;
 		
-		std :: vector <Xenon::Math::Vec3> VertexPositions;
-		std :: vector <Xenon::Math::Vec3> VertexNormals;
+		std :: vector <Vec3> VertexPositions;
+		std :: vector <Vec3> VertexNormals;
 		std :: vector <TexturePosition> VertexTexturePositions;
 		
 		std :: vector <Vertex> Vertices;
 		std :: vector <Face> Faces;
+		
+		std :: map <std :: string, MTLFile :: Material> Materials;
 		
 	};
 	

@@ -49,8 +49,8 @@ void KeyListener ( int32_t ScanCode, int32_t KeyCode, bool Down, void * Data );
 #define WINDOW_WIDTH_0 800
 #define WINDOW_HEIGHT_0 600
 
-#define WINDOW_WIDTH_1 1440
-#define WINDOW_HEIGHT_1 900
+#define WINDOW_WIDTH_1 2000
+#define WINDOW_HEIGHT_1 1400
 
 typedef struct
 {
@@ -64,10 +64,6 @@ typedef struct
 	Xenon::GPU :: VertexArray * ColorArray;
 	Xenon::GPU :: ShaderProgram * ColorProgram;
 	Xenon::GPU :: UniformSet * ColorUniforms;
-	
-	Xenon::GPU :: VertexArray * OutlineArray;
-	Xenon::GPU :: ShaderProgram * OutlineProgram;
-	Xenon::GPU :: UniformSet * OutlineUniforms;
 	
 	Xenon::Math :: Transform3D * Transform;
 	Xenon::Math :: Matrix4x4 * Projection;
@@ -182,6 +178,7 @@ int main ( int argc, const char * argv [] )
 	CubeGenerationSpec.Attributes = Xenon::Geometry::Primitives :: kAttributeFlags_Position | Xenon::Geometry::Primitives :: kAttributeFlags_Normal;
 	
 	Xenon::Geometry::Primitives :: SetupUnitCubeVertexPositionSpec ( CubeGenerationSpec.PositionSpec, "Position", true );
+	//Xenon::Geometry::Primitives :: SetupRadialCubeVertexNormalSpec ( CubeGenerationSpec.NormalSpec, "Normal", true );
 	Xenon::Geometry::Primitives :: SetupRealCubeFaceNormalSpec ( CubeGenerationSpec.NormalSpec, "Normal", true );
 	bool Generated = Xenon::Geometry::Primitives :: GenerateCubeMesh ( & CubeMesh, CubeGenerationSpec );
 	
@@ -198,42 +195,6 @@ int main ( int argc, const char * argv [] )
 		return - 1;
 		
 	}
-	
-	GLchar OutlineVShaderSource [] = 
-	"#version 150\n\n"
-	
-	"uniform mat4 ModelTransform;\n\n"
-	"uniform mat4 ProjectionTransform;\n\n"
-	
-	"uniform float OutlineThickness;\n\n"
-	
-	"in vec3 Position;\n\n"
-	
-	"void main ()\n"
-	"{\n\n"
-	
-	"	float OffsetX = ( gl_InstanceID % 4 ) - 1.5;\n"
-	"	float OffsetY = ( ( gl_InstanceID - ( gl_InstanceID % 4 ) ) / 4.0 ) - 1.0;\n\n"
-	
-	"	gl_Position = ProjectionTransform * ( ( ModelTransform * vec4 ( Position + normalize ( Position ) * OutlineThickness, 1.0 ) ) + vec4 ( OffsetX, OffsetY, 0.0f, 0.0f ) );\n\n"
-	
-	"}\n";
-	
-	Xenon::GPU :: VertexShader OutlineVShader ( OutlineVShaderSource, "VertexShader_Outline" );
-	
-	GLchar OutlineFShaderSource [] = 
-	"#version 150\n\n"
-	
-	"out vec4 Color;\n\n"
-	
-	"void main ()\n"
-	"{\n\n"
-	
-	"	Color = vec4 ( 0.2f, 0.5f, 1.0f, 1.0f );\n\n"
-	
-	"}\n";
-	
-	Xenon::GPU :: FragmentShader OutlineFShader ( OutlineFShaderSource, "FragmentShader_Outline" );
 	
 	GLchar VShaderSource [] =
 	"#version 150\n\n"
@@ -303,12 +264,6 @@ int main ( int argc, const char * argv [] )
 	
 	Xenon::GPU :: FragmentShader ColorFShader ( FShaderSource, "FragmentShader_Color" );
 	
-	if ( ! OutlineVShader.Compile ( true ) )
-		std :: cout << "VertexShader_Outline failed to compile: " << std :: endl << OutlineVShader.GetCompilationLog () << std :: endl;
-	
-	if ( ! OutlineFShader.Compile ( true ) )
-		std :: cout << "FragmentShader_Outline failed to compile: " << std :: endl << OutlineFShader.GetCompilationLog () << std :: endl;
-	
 	if ( ! ColorVShader.Compile ( true ) )
 		std :: cout << "VertexShader_Color failed to compile: " << std :: endl << ColorVShader.GetCompilationLog () << std :: endl;
 	
@@ -320,7 +275,7 @@ int main ( int argc, const char * argv [] )
 	Xenon::Math::Matrix4x4 :: SetAsPerspectiveProjectionFieldOfView ( Projection, 0.1, 4.0, 60.0 / 180.0 * 3.1415926, 2048.0 / 1536.0 );
 	Xenon::Math::RawMatrix4x4UniformSource PerspeciveProjectionUniformSource ( & Projection, true );
 	
-	Xenon::Math :: Transform3D Transform ( Xenon::Math :: Vec3 ( 0.0f, 0.0f, - 3.0f ), Xenon::Math :: Vec3 ( 0.2f, 0.2f, 0.2f ) );
+	Xenon::Math :: Transform3D Transform ( Xenon::Math :: Vec3 ( 0.0f, 0.0f, - 3.0f ), Xenon::Math :: Vec3 ( 0.25f, 0.25f, 0.25f ) );
 	
 	Xenon::Math :: RawFloatUniformSource ThicknessUniform ( 0.1f );
 	
@@ -341,22 +296,6 @@ int main ( int argc, const char * argv [] )
 	ColorUniforms.AddMatrix4x4Uniform ( "ProjectionTransform", & PerspeciveProjectionUniformSource );
 	ColorUniforms.Link ();
 	
-	Xenon::GPU :: ShaderProgram OutlineProgram ( "ShaderProgram_Outline" );
-	OutlineProgram.AddShader ( OutlineVShader );
-	OutlineProgram.AddShader ( OutlineFShader );
-	OutlineProgram.Link ();
-	
-	Xenon::GPU :: VertexArray OutlineVAO;
-	CubeMesh -> BuildVertexArray ( OutlineVAO );
-	OutlineVAO.SetProgram ( & OutlineProgram );
-	OutlineVAO.Build ();
-	
-	Xenon::GPU :: UniformSet OutlineUniforms ( & OutlineProgram );
-	OutlineUniforms.AddMatrix4x4Uniform ( "ModelTransform", & Transform.GetModelUniformSource () );
-	OutlineUniforms.AddMatrix4x4Uniform ( "ProjectionTransform", & PerspeciveProjectionUniformSource );
-	OutlineUniforms.AddFloatUniform ( "OutlineThickness", & ThicknessUniform );
-	OutlineUniforms.Link ();
-	
 	RenderStruct RData;
 	
 	RData.Cont = Cont;
@@ -365,9 +304,6 @@ int main ( int argc, const char * argv [] )
 	RData.ColorProgram = & ColorProgram;
 	RData.ColorArray = & ColorVAO;
 	RData.ColorUniforms = & ColorUniforms;
-	RData.OutlineProgram = & OutlineProgram;
-	RData.OutlineArray = & OutlineVAO;
-	RData.OutlineUniforms = & OutlineUniforms;
 	RData.Transform = & Transform;
 	RData.Projection = & Projection;
 	RData.ProjectionSource = & PerspeciveProjectionUniformSource;
@@ -514,15 +450,6 @@ void DrawEvent ( SDL_UserEvent * Event )
 	RData -> Cont -> SetFrontFace ( Xenon::GPU::Context :: kFrontFace_Clockwise );
 	
 	RData -> Cont -> GetDefaultFrameBuffer () -> Clear ( Xenon::GPU::FrameBuffer :: kFrameBufferComponent_Color | Xenon::GPU::FrameBuffer :: kFrameBufferComponent_Depth );
-	
-	RData -> Cont -> SetCullingFace ( Xenon::GPU::Context :: kCullingFace_Front );
-	
-	RData -> OutlineProgram -> Bind ();
-	RData -> OutlineArray -> Bind ();
-	
-	RData -> OutlineUniforms -> UpdateUniforms ( false );
-	
-	glDrawElementsInstanced ( GL_TRIANGLES, RData -> Cube -> GetIndexCount (), RData -> Cube -> GetIndexType (), 0, 12 );
 	
 	RData -> Cont -> SetCullingFace ( Xenon::GPU::Context :: kCullingFace_Back );
 	

@@ -33,28 +33,31 @@ namespace Xenon
 			Vec4 ( NoInit NO_INIT );
 			~Vec4 ();
 			
-			static void Copy ( const Vec4 & Source, Vec4 & Destination );
+			static void Copy ( Vec4 & Target, const Vec4 & Source );
 			
-			static float DotProduct ( const Vec4 & A, const Vec4 & B );
+			static float DotProduct ( const Vec4 & SourceA, const Vec4 & SourceB );
 			
-			static void Multiply ( Vec4 & A, float B );
-			static void Multiply ( const Vec4 & A, float B, Vec4 & Result );
+			static void Multiply ( Vec4 & Target, float Scalar );
+			static void Multiply ( Vec4 & Target, const Vec4 & Source, float Scalar );
 			
-			static void Add ( const Vec4 & A, const Vec4 & B, Vec4 & Result );
-			static void Add ( Vec4 & A, const Vec4 & B );
-			static void Subtract ( const Vec4 & A, const Vec4 & B, Vec4 & Result );
-			static void Subtract ( Vec4 & A, const Vec4 & B );
+			static void Add ( Vec4 & Target, const Vec4 & SourceA, const Vec4 & SourceB );
+			static void Add ( Vec4 & Target, const Vec4 & Source );
+			static void Subtract ( Vec4 & Target, const Vec4 & SourceA, const Vec4 & SourceB );
+			static void Subtract ( Vec4 & Target, const Vec4 & Source );
 			
-			static void Normalize ( Vec4 & A );
-			static void Normalize ( const Vec4 & A, Vec4 & Result );
+			static void Normalize ( Vec4 & Target );
+			static void Normalize ( Vec4 & Target, const Vec4 & Source );
 			
-			static float Length ( const Vec4 & A );
-			static float LengthSquared ( const Vec4 & A );
+			static float Length ( const Vec4 & Source );
+			static float LengthSquared ( const Vec4 & Source );
 			
-			static float AngleBetween ( const Vec4 & A, const Vec4 & B );
+			static float AngleBetween ( const Vec4 & SourceA, const Vec4 & SourceB );
 			
-			static void Interpolate ( Vec4 & A, const Vec4 & B, float Fraction );
-			static void Interpolate ( const Vec4 & A, const Vec4 & B, float Fraction, Vec4 & Result );
+			static void Interpolate ( Vec4 & Target, const Vec4 & Source, float Fraction );
+			static void Interpolate ( Vec4 & Target, const Vec4 & SourceA, const Vec4 & SourceB, float Fraction );
+			
+			static void Project ( Vec4 & Target, const Vec4 & Direction );
+			static void Project ( Vec4 & Target, const Vec4 & Projected, const Vec4 & Direction );
 			
 #ifdef XENON_SSE
 			

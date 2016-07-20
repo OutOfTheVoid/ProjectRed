@@ -83,6 +83,9 @@ namespace Xenon
 			static void Orthogonal ( Vec3 & Target );
 			static void Orthogonal ( Vec3 & Target, const Vec3 & Source );
 			
+			static void Project ( Vec3 & Target, const Vec3 & Direction );
+			static void Project ( Vec3 & Target, const Vec3 & Projected, const Vec3 & Direction );
+			
 			float X;
 			float Y;
 			float Z;

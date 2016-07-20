@@ -20,6 +20,25 @@ void Xenon::Geometry::Primitives :: SetupRealCubeFaceNormalSpec ( CubeNormalSpec
 	
 };
 
+void Xenon::Geometry::Primitives :: SetupRadialCubeVertexNormalSpec ( CubeNormalSpec & Spec, const std :: string AttributeName, bool Static )
+{
+	
+	Spec.Layout = CubeNormalSpec::NormalLayout :: kNormalLayout_CommonVertex;
+	
+	Spec.CommonVertexNormals [ kCubeVertexPositionIndex_ZNeg_XNeg_YNeg ] = Math :: Vec3 ( - 1.0f, - 1.0f, - 1.0f );
+	Spec.CommonVertexNormals [ kCubeVertexPositionIndex_ZPos_XNeg_YNeg ] = Math :: Vec3 ( - 1.0f, - 1.0f, + 1.0f );
+	Spec.CommonVertexNormals [ kCubeVertexPositionIndex_ZNeg_XNeg_YPos ] = Math :: Vec3 ( - 1.0f, + 1.0f, - 1.0f );
+	Spec.CommonVertexNormals [ kCubeVertexPositionIndex_ZPos_XNeg_YPos ] = Math :: Vec3 ( - 1.0f, + 1.0f, + 1.0f );
+	Spec.CommonVertexNormals [ kCubeVertexPositionIndex_ZNeg_XPos_YNeg ] = Math :: Vec3 ( + 1.0f, - 1.0f, - 1.0f );
+	Spec.CommonVertexNormals [ kCubeVertexPositionIndex_ZPos_XPos_YNeg ] = Math :: Vec3 ( + 1.0f, - 1.0f, + 1.0f );
+	Spec.CommonVertexNormals [ kCubeVertexPositionIndex_ZNeg_XPos_YPos ] = Math :: Vec3 ( + 1.0f, + 1.0f, - 1.0f );
+	Spec.CommonVertexNormals [ kCubeVertexPositionIndex_ZPos_XPos_YPos ] = Math :: Vec3 ( + 1.0f, + 1.0f, + 1.0f );
+	
+	Spec.Static = Static;
+	Spec.AttributeName = AttributeName;
+	
+};
+
 void Xenon::Geometry::Primitives :: SetupUnitCubeVertexPositionSpec ( CubePositionSpec & Spec, const std :: string AttributeName, bool Static )
 {
 	
@@ -915,7 +934,6 @@ bool Xenon::Geometry::Primitives :: GenerateCubeMesh ( Mesh ** Target, const Cub
 				Math::Vec3 :: Copy ( * reinterpret_cast <Math :: Vec3 *> ( reinterpret_cast <char *> ( NormalData ) + ( NormalOffset + NormalStride * ( kCubeFaceIndex_XNeg * kCubeFaceVertexIndex_Modulus + kCubeFaceVertexIndex_XPos_YPos ) ) ), Spec.NormalSpec.CommonVertexNormals [ kCubeVertexPositionIndex_ZNeg_XNeg_YPos ] );
 				Math::Vec3 :: Copy ( * reinterpret_cast <Math :: Vec3 *> ( reinterpret_cast <char *> ( NormalData ) + ( NormalOffset + NormalStride * ( kCubeFaceIndex_XNeg * kCubeFaceVertexIndex_Modulus + kCubeFaceVertexIndex_XPos_YNeg ) ) ), Spec.NormalSpec.CommonVertexNormals [ kCubeVertexPositionIndex_ZNeg_XNeg_YNeg ] );
 				
-				
 			}
 			
 		}
@@ -1061,7 +1079,59 @@ bool Xenon::Geometry::Primitives :: GenerateCubeMesh ( Mesh ** Target, const Cub
 				
 			}
 			
-			// TODO: Fill in data
+			if ( CommonVertexMode )
+			{
+				
+				Math::Vec3 :: Copy ( * reinterpret_cast <Math :: Vec3 *> ( reinterpret_cast <char *> ( TexturePositionData ) + ( TexturePositionOffset + TexturePositionStride * kCubeVertexPositionIndex_ZNeg_XNeg_YNeg ) ), Spec.TexturePositionSpecs [ I ].PerCommonVertexCubeTexturePositions [ kCubeVertexPositionIndex_ZNeg_XNeg_YNeg ] );
+				Math::Vec3 :: Copy ( * reinterpret_cast <Math :: Vec3 *> ( reinterpret_cast <char *> ( TexturePositionData ) + ( TexturePositionOffset + TexturePositionStride * kCubeVertexPositionIndex_ZNeg_XPos_YNeg ) ), Spec.TexturePositionSpecs [ I ].PerCommonVertexCubeTexturePositions [ kCubeVertexPositionIndex_ZNeg_XPos_YNeg ] );
+				Math::Vec3 :: Copy ( * reinterpret_cast <Math :: Vec3 *> ( reinterpret_cast <char *> ( TexturePositionData ) + ( TexturePositionOffset + TexturePositionStride * kCubeVertexPositionIndex_ZNeg_XNeg_YPos ) ), Spec.TexturePositionSpecs [ I ].PerCommonVertexCubeTexturePositions [ kCubeVertexPositionIndex_ZNeg_XNeg_YPos ] );
+				Math::Vec3 :: Copy ( * reinterpret_cast <Math :: Vec3 *> ( reinterpret_cast <char *> ( TexturePositionData ) + ( TexturePositionOffset + TexturePositionStride * kCubeVertexPositionIndex_ZNeg_XPos_YPos ) ), Spec.TexturePositionSpecs [ I ].PerCommonVertexCubeTexturePositions [ kCubeVertexPositionIndex_ZNeg_XPos_YPos ] );
+				Math::Vec3 :: Copy ( * reinterpret_cast <Math :: Vec3 *> ( reinterpret_cast <char *> ( TexturePositionData ) + ( TexturePositionOffset + TexturePositionStride * kCubeVertexPositionIndex_ZPos_XNeg_YNeg ) ), Spec.TexturePositionSpecs [ I ].PerCommonVertexCubeTexturePositions [ kCubeVertexPositionIndex_ZPos_XNeg_YNeg ] );
+				Math::Vec3 :: Copy ( * reinterpret_cast <Math :: Vec3 *> ( reinterpret_cast <char *> ( TexturePositionData ) + ( TexturePositionOffset + TexturePositionStride * kCubeVertexPositionIndex_ZPos_XPos_YNeg ) ), Spec.TexturePositionSpecs [ I ].PerCommonVertexCubeTexturePositions [ kCubeVertexPositionIndex_ZPos_XPos_YNeg ] );
+				Math::Vec3 :: Copy ( * reinterpret_cast <Math :: Vec3 *> ( reinterpret_cast <char *> ( TexturePositionData ) + ( TexturePositionOffset + TexturePositionStride * kCubeVertexPositionIndex_ZPos_XNeg_YPos ) ), Spec.TexturePositionSpecs [ I ].PerCommonVertexCubeTexturePositions [ kCubeVertexPositionIndex_ZPos_XNeg_YPos ] );
+				Math::Vec3 :: Copy ( * reinterpret_cast <Math :: Vec3 *> ( reinterpret_cast <char *> ( TexturePositionData ) + ( TexturePositionOffset + TexturePositionStride * kCubeVertexPositionIndex_ZPos_XPos_YPos ) ), Spec.TexturePositionSpecs [ I ].PerCommonVertexCubeTexturePositions [ kCubeVertexPositionIndex_ZPos_XPos_YPos ] );
+				
+				
+			}
+			else
+			{
+			
+				if ( Spec.TexturePositionSpecs [ I ].Layout == CubeTexturePositionSpec :: kTexturePositionLayout_PerCommonVertexCubeTexture )
+				{
+					
+					Math::Vec3 :: Copy ( * reinterpret_cast <Math :: Vec3 *> ( reinterpret_cast <char *> ( TexturePositionData ) + ( TexturePositionOffset + TexturePositionStride * ( kCubeFaceIndex_ZPos * kCubeFaceVertexIndex_Modulus + kCubeFaceVertexIndex_XNeg_YNeg ) ) ), Spec.TexturePositionSpecs [ I ].PerCommonVertexCubeTexturePositions [ kCubeVertexPositionIndex_ZPos_XPos_YNeg ] );
+					Math::Vec3 :: Copy ( * reinterpret_cast <Math :: Vec3 *> ( reinterpret_cast <char *> ( TexturePositionData ) + ( TexturePositionOffset + TexturePositionStride * ( kCubeFaceIndex_ZPos * kCubeFaceVertexIndex_Modulus + kCubeFaceVertexIndex_XNeg_YPos ) ) ), Spec.TexturePositionSpecs [ I ].PerCommonVertexCubeTexturePositions [ kCubeVertexPositionIndex_ZPos_XPos_YNeg ] );
+					Math::Vec3 :: Copy ( * reinterpret_cast <Math :: Vec3 *> ( reinterpret_cast <char *> ( TexturePositionData ) + ( TexturePositionOffset + TexturePositionStride * ( kCubeFaceIndex_ZPos * kCubeFaceVertexIndex_Modulus + kCubeFaceVertexIndex_XPos_YPos ) ) ), Spec.TexturePositionSpecs [ I ].PerCommonVertexCubeTexturePositions [ kCubeVertexPositionIndex_ZPos_XNeg_YPos ] );
+					Math::Vec3 :: Copy ( * reinterpret_cast <Math :: Vec3 *> ( reinterpret_cast <char *> ( TexturePositionData ) + ( TexturePositionOffset + TexturePositionStride * ( kCubeFaceIndex_ZPos * kCubeFaceVertexIndex_Modulus + kCubeFaceVertexIndex_XPos_YNeg ) ) ), Spec.TexturePositionSpecs [ I ].PerCommonVertexCubeTexturePositions [ kCubeVertexPositionIndex_ZPos_XNeg_YNeg ] );
+					
+					Math::Vec3 :: Copy ( * reinterpret_cast <Math :: Vec3 *> ( reinterpret_cast <char *> ( TexturePositionData ) + ( TexturePositionOffset + TexturePositionStride * ( kCubeFaceIndex_ZNeg * kCubeFaceVertexIndex_Modulus + kCubeFaceVertexIndex_XNeg_YNeg ) ) ), Spec.TexturePositionSpecs [ I ].PerCommonVertexCubeTexturePositions [ kCubeVertexPositionIndex_ZNeg_XNeg_YNeg ] );
+					Math::Vec3 :: Copy ( * reinterpret_cast <Math :: Vec3 *> ( reinterpret_cast <char *> ( TexturePositionData ) + ( TexturePositionOffset + TexturePositionStride * ( kCubeFaceIndex_ZNeg * kCubeFaceVertexIndex_Modulus + kCubeFaceVertexIndex_XNeg_YPos ) ) ), Spec.TexturePositionSpecs [ I ].PerCommonVertexCubeTexturePositions [ kCubeVertexPositionIndex_ZNeg_XNeg_YPos ] );
+					Math::Vec3 :: Copy ( * reinterpret_cast <Math :: Vec3 *> ( reinterpret_cast <char *> ( TexturePositionData ) + ( TexturePositionOffset + TexturePositionStride * ( kCubeFaceIndex_ZNeg * kCubeFaceVertexIndex_Modulus + kCubeFaceVertexIndex_XPos_YPos ) ) ), Spec.TexturePositionSpecs [ I ].PerCommonVertexCubeTexturePositions [ kCubeVertexPositionIndex_ZNeg_XPos_YPos ] );
+					Math::Vec3 :: Copy ( * reinterpret_cast <Math :: Vec3 *> ( reinterpret_cast <char *> ( TexturePositionData ) + ( TexturePositionOffset + TexturePositionStride * ( kCubeFaceIndex_ZNeg * kCubeFaceVertexIndex_Modulus + kCubeFaceVertexIndex_XPos_YNeg ) ) ), Spec.TexturePositionSpecs [ I ].PerCommonVertexCubeTexturePositions [ kCubeVertexPositionIndex_ZNeg_XPos_YNeg ] );
+					
+					Math::Vec3 :: Copy ( * reinterpret_cast <Math :: Vec3 *> ( reinterpret_cast <char *> ( TexturePositionData ) + ( TexturePositionOffset + TexturePositionStride * ( kCubeFaceIndex_YPos * kCubeFaceVertexIndex_Modulus + kCubeFaceVertexIndex_XNeg_YNeg ) ) ), Spec.TexturePositionSpecs [ I ].PerCommonVertexCubeTexturePositions [ kCubeVertexPositionIndex_ZNeg_XNeg_YPos ] );
+					Math::Vec3 :: Copy ( * reinterpret_cast <Math :: Vec3 *> ( reinterpret_cast <char *> ( TexturePositionData ) + ( TexturePositionOffset + TexturePositionStride * ( kCubeFaceIndex_YPos * kCubeFaceVertexIndex_Modulus + kCubeFaceVertexIndex_XNeg_YPos ) ) ), Spec.TexturePositionSpecs [ I ].PerCommonVertexCubeTexturePositions [ kCubeVertexPositionIndex_ZPos_XNeg_YPos ] );
+					Math::Vec3 :: Copy ( * reinterpret_cast <Math :: Vec3 *> ( reinterpret_cast <char *> ( TexturePositionData ) + ( TexturePositionOffset + TexturePositionStride * ( kCubeFaceIndex_YPos * kCubeFaceVertexIndex_Modulus + kCubeFaceVertexIndex_XPos_YPos ) ) ), Spec.TexturePositionSpecs [ I ].PerCommonVertexCubeTexturePositions [ kCubeVertexPositionIndex_ZPos_XPos_YPos ] );
+					Math::Vec3 :: Copy ( * reinterpret_cast <Math :: Vec3 *> ( reinterpret_cast <char *> ( TexturePositionData ) + ( TexturePositionOffset + TexturePositionStride * ( kCubeFaceIndex_YPos * kCubeFaceVertexIndex_Modulus + kCubeFaceVertexIndex_XPos_YNeg ) ) ), Spec.TexturePositionSpecs [ I ].PerCommonVertexCubeTexturePositions [ kCubeVertexPositionIndex_ZNeg_XPos_YPos ] );
+					
+					Math::Vec3 :: Copy ( * reinterpret_cast <Math :: Vec3 *> ( reinterpret_cast <char *> ( TexturePositionData ) + ( TexturePositionOffset + TexturePositionStride * ( kCubeFaceIndex_YNeg * kCubeFaceVertexIndex_Modulus + kCubeFaceVertexIndex_XNeg_YNeg ) ) ), Spec.TexturePositionSpecs [ I ].PerCommonVertexCubeTexturePositions [ kCubeVertexPositionIndex_ZNeg_XPos_YNeg ] );
+					Math::Vec3 :: Copy ( * reinterpret_cast <Math :: Vec3 *> ( reinterpret_cast <char *> ( TexturePositionData ) + ( TexturePositionOffset + TexturePositionStride * ( kCubeFaceIndex_YNeg * kCubeFaceVertexIndex_Modulus + kCubeFaceVertexIndex_XNeg_YPos ) ) ), Spec.TexturePositionSpecs [ I ].PerCommonVertexCubeTexturePositions [ kCubeVertexPositionIndex_ZPos_XPos_YNeg ] );
+					Math::Vec3 :: Copy ( * reinterpret_cast <Math :: Vec3 *> ( reinterpret_cast <char *> ( TexturePositionData ) + ( TexturePositionOffset + TexturePositionStride * ( kCubeFaceIndex_YNeg * kCubeFaceVertexIndex_Modulus + kCubeFaceVertexIndex_XPos_YPos ) ) ), Spec.TexturePositionSpecs [ I ].PerCommonVertexCubeTexturePositions [ kCubeVertexPositionIndex_ZPos_XNeg_YNeg ] );
+					Math::Vec3 :: Copy ( * reinterpret_cast <Math :: Vec3 *> ( reinterpret_cast <char *> ( TexturePositionData ) + ( TexturePositionOffset + TexturePositionStride * ( kCubeFaceIndex_YNeg * kCubeFaceVertexIndex_Modulus + kCubeFaceVertexIndex_XPos_YNeg ) ) ), Spec.TexturePositionSpecs [ I ].PerCommonVertexCubeTexturePositions [ kCubeVertexPositionIndex_ZNeg_XNeg_YNeg ] );
+					
+					Math::Vec3 :: Copy ( * reinterpret_cast <Math :: Vec3 *> ( reinterpret_cast <char *> ( TexturePositionData ) + ( TexturePositionOffset + TexturePositionStride * ( kCubeFaceIndex_XPos * kCubeFaceVertexIndex_Modulus + kCubeFaceVertexIndex_XNeg_YNeg ) ) ), Spec.TexturePositionSpecs [ I ].PerCommonVertexCubeTexturePositions [ kCubeVertexPositionIndex_ZNeg_XPos_YNeg ] );
+					Math::Vec3 :: Copy ( * reinterpret_cast <Math :: Vec3 *> ( reinterpret_cast <char *> ( TexturePositionData ) + ( TexturePositionOffset + TexturePositionStride * ( kCubeFaceIndex_XPos * kCubeFaceVertexIndex_Modulus + kCubeFaceVertexIndex_XNeg_YPos ) ) ), Spec.TexturePositionSpecs [ I ].PerCommonVertexCubeTexturePositions [ kCubeVertexPositionIndex_ZNeg_XPos_YPos ] );
+					Math::Vec3 :: Copy ( * reinterpret_cast <Math :: Vec3 *> ( reinterpret_cast <char *> ( TexturePositionData ) + ( TexturePositionOffset + TexturePositionStride * ( kCubeFaceIndex_XPos * kCubeFaceVertexIndex_Modulus + kCubeFaceVertexIndex_XPos_YPos ) ) ), Spec.TexturePositionSpecs [ I ].PerCommonVertexCubeTexturePositions [ kCubeVertexPositionIndex_ZPos_XPos_YPos ] );
+					Math::Vec3 :: Copy ( * reinterpret_cast <Math :: Vec3 *> ( reinterpret_cast <char *> ( TexturePositionData ) + ( TexturePositionOffset + TexturePositionStride * ( kCubeFaceIndex_XPos * kCubeFaceVertexIndex_Modulus + kCubeFaceVertexIndex_XPos_YNeg ) ) ), Spec.TexturePositionSpecs [ I ].PerCommonVertexCubeTexturePositions [ kCubeVertexPositionIndex_ZPos_XPos_YNeg ] );
+					
+					Math::Vec3 :: Copy ( * reinterpret_cast <Math :: Vec3 *> ( reinterpret_cast <char *> ( TexturePositionData ) + ( TexturePositionOffset + TexturePositionStride * ( kCubeFaceIndex_XNeg * kCubeFaceVertexIndex_Modulus + kCubeFaceVertexIndex_XNeg_YNeg ) ) ), Spec.TexturePositionSpecs [ I ].PerCommonVertexCubeTexturePositions [ kCubeVertexPositionIndex_ZPos_XNeg_YNeg ] );
+					Math::Vec3 :: Copy ( * reinterpret_cast <Math :: Vec3 *> ( reinterpret_cast <char *> ( TexturePositionData ) + ( TexturePositionOffset + TexturePositionStride * ( kCubeFaceIndex_XNeg * kCubeFaceVertexIndex_Modulus + kCubeFaceVertexIndex_XNeg_YPos ) ) ), Spec.TexturePositionSpecs [ I ].PerCommonVertexCubeTexturePositions [ kCubeVertexPositionIndex_ZPos_XNeg_YPos ] );
+					Math::Vec3 :: Copy ( * reinterpret_cast <Math :: Vec3 *> ( reinterpret_cast <char *> ( TexturePositionData ) + ( TexturePositionOffset + TexturePositionStride * ( kCubeFaceIndex_XNeg * kCubeFaceVertexIndex_Modulus + kCubeFaceVertexIndex_XPos_YPos ) ) ), Spec.TexturePositionSpecs [ I ].PerCommonVertexCubeTexturePositions [ kCubeVertexPositionIndex_ZNeg_XNeg_YPos ] );
+					Math::Vec3 :: Copy ( * reinterpret_cast <Math :: Vec3 *> ( reinterpret_cast <char *> ( TexturePositionData ) + ( TexturePositionOffset + TexturePositionStride * ( kCubeFaceIndex_XNeg * kCubeFaceVertexIndex_Modulus + kCubeFaceVertexIndex_XPos_YNeg ) ) ), Spec.TexturePositionSpecs [ I ].PerCommonVertexCubeTexturePositions [ kCubeVertexPositionIndex_ZNeg_XNeg_YNeg ] );
+					
+				}
+				
+			}
 			
 		}
 		

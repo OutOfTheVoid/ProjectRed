@@ -203,3 +203,17 @@ float Xenon::Math::Vec2 :: ScalarProjection ( const Vec2 & Source, const Vec2 & 
 	return DotProduct ( Source, Direction ) / Length ( Direction );
 	
 };
+
+void Xenon::Math::Vec2 :: Project ( Vec2 & Target, const Vec2 & Direction )
+{
+	
+	Multiply ( Target, Direction, DotProduct ( Target, Direction ) / LengthSquared ( Direction ) );
+	
+};
+
+void Xenon::Math::Vec2 :: Project ( Vec2 & Target, const Vec2 & Projected, const Vec2 & Direction )
+{
+	
+	Multiply ( Target, Direction, DotProduct ( Projected, Direction ) / LengthSquared ( Direction ) );
+	
+};

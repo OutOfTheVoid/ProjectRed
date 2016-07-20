@@ -292,3 +292,17 @@ void Xenon::Math::Vec3 :: Orthogonal ( Vec3 & Target, const Vec3 & Source )
 	CrossProduct ( Target, ( Abs.X < Abs.Y ) ? ( ( Abs.X < Abs.Y ) ? RIGHT : FORWARD ) : ( ( Abs.X < Abs.Y ) ? UP : FORWARD ), Source );
 	
 };
+
+void Xenon::Math::Vec3 :: Project ( Vec3 & Target, const Vec3 & Direction )
+{
+	
+	Multiply ( Target, Direction, DotProduct ( Target, Direction ) / LengthSquared ( Direction ) );
+	
+};
+
+void Xenon::Math::Vec3 :: Project ( Vec3 & Target, const Vec3 & Projected, const Vec3 & Direction )
+{
+	
+	Multiply ( Target, Direction, DotProduct ( Projected, Direction ) / LengthSquared ( Direction ) );
+	
+};

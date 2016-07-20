@@ -283,9 +283,13 @@ namespace Xenon
 				
 			} CubeSpec;
 			
-			static void SetupUnitCubeVertexPositionSpec ( CubePositionSpec & Spec, const std :: string AttributeName, bool Static = false );
+			static void SetupUnitCubeVertexPositionSpec ( CubePositionSpec & Spec, const std :: string AttributeName, bool Static );
+			
 			static void SetupRealCubeFaceNormalSpec ( CubeNormalSpec & Spec, const std :: string AttributeName, bool Static );
+			static void SetupRadialCubeVertexNormalSpec ( CubeNormalSpec & Spec, const std :: string AttributeName, bool Static );
+			
 			static void SetupRealCubeFaceTangentSpec ( CubeTangentSpec & Spec, const std :: string AttributeName, const CubeTexturePositionSpec & DirectionReference, bool Clockwise = true );
+			
 			static void SetupRegularCubeFaceTexturePositionSpec ( CubeTexturePositionSpec & Spec, CubeTexturePositionSpec::CommonFaceRightAngleTexturePositions :: RightFaceRotation FaceRotations [ 6 ] = NULL );
 			
 			static bool GenerateCubeMesh ( Mesh ** Target, const CubeSpec & Spec );

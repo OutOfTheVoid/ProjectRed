@@ -65,6 +65,9 @@ namespace Xenon
 			
 			static float ScalarProjection ( const Vec2 & Source, const Vec2 & Direction );
 			
+			static void Project ( Vec2 & Target, const Vec2 & Direction );
+			static void Project ( Vec2 & Target, const Vec2 & Projected, const Vec2 & Direction );
+			
 			float X;
 			float Y;
 			

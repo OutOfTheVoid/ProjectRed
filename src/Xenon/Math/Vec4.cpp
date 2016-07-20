@@ -31,7 +31,7 @@ Xenon::Math::Vec4 :: Vec4 ( Vec3 & XYZ, float W ):
 Xenon::Math::Vec4 :: Vec4 ( const Vec4 & CopyFrom )
 {
 	
-	Copy ( CopyFrom, * this );
+	Copy ( * this, CopyFrom );
 	
 }
 
@@ -50,78 +50,78 @@ Xenon::Math::Vec4 :: ~Vec4 ()
 {
 };
 
-void Xenon::Math::Vec4 :: Copy ( const Vec4 & Source, Vec4 & Destination )
+void Xenon::Math::Vec4 :: Copy ( Vec4 & Target, const Vec4 & Source )
 {
 	
-	memcpy ( & Destination, & Source, sizeof ( Vec4 ) );
+	memcpy ( & Target, & Source, sizeof ( Vec4 ) );
 	
 };
 
-float Xenon::Math::Vec4 :: DotProduct ( const Vec4 & A, const Vec4 & B )
+float Xenon::Math::Vec4 :: DotProduct ( const Vec4 & SourceA, const Vec4 & SourceB )
 {
 	
 #ifdef XENON_SSE4_1
 	
-	Vec4 Temp = _mm_dp_ps ( A.SSEV, B.SSEV, 0xFF );
+	Vec4 Temp = _mm_dp_ps ( SourceA.SSEV, SourceB.SSEV, 0xFF );
 	return Temp.X;
 	
 #else
 	
-	return A.X * B.X + A.Y * B.Y + A.Z * B.Z + A.W * B.W;
+	return SourceA.X * SourceB.X + SourceA.Y * SourceB.Y + SourceA.Z * SourceB.Z + SourceA.W * SourceB.W;
 	
 #endif
 	
 };
 
-void Xenon::Math::Vec4 :: Multiply ( Vec4 & A, float B )
+void Xenon::Math::Vec4 :: Multiply ( Vec4 & Target, float Scalar )
 {
 	
 #ifdef XENON_SSE
 	
-	A.SSEV = _mm_mul_ps ( A.SSEV, _mm_set1_ps ( B ) );
+	Target.SSEV = _mm_mul_ps ( Target.SSEV, _mm_set1_ps ( Scalar ) );
 	
 #else
 	
-	A.X *= B;
-	A.Y *= B;
-	A.Z *= B;
-	A.W *= B;
+	Target.X *= Scalar;
+	Target.Y *= Scalar;
+	Target.Z *= Scalar;
+	Target.W *= Scalar;
 	
 #endif
 	
 };
 
-void Xenon::Math::Vec4 :: Multiply ( const Vec4 & A, float B, Vec4 & Result )
+void Xenon::Math::Vec4 :: Multiply ( Vec4 & Target, const Vec4 & Source, float Scalar )
 {
 	
 #ifdef XENON_SSE
 	
-	Result.SSEV = _mm_mul_ps ( A.SSEV, _mm_set1_ps ( B ) );
+	Target.SSEV = _mm_mul_ps ( Source.SSEV, _mm_set1_ps ( Scalar ) );
 	
 #else
 	
-	Result.X = A.X * B;
-	Result.Y = A.Y * B;
-	Result.Z = A.Z * B;
-	Result.W = A.W * B;
+	Target.X = Source.X * Scalar;
+	Target.Y = Source.Y * Scalar;
+	Target.Z = Source.Z * Scalar;
+	Target.W = Source.W * Scalar;
 	
 #endif
 	
 };
 
-void Xenon::Math::Vec4 :: Add ( const Vec4 & A, const Vec4 & B, Vec4 & Result )
+void Xenon::Math::Vec4 :: Add ( Vec4 & Target, const Vec4 & SourceA, const Vec4 & SourceB )
 {
 	
 #ifdef XENON_SSE
 	
-	Result.SSEV = _mm_add_ps ( A.SSEV, B.SSEV );
+	Target.SSEV = _mm_add_ps ( SourceA.SSEV, SourceB.SSEV );
 	
 #else
 	
-	Result.X = A.X + B.X;
-	Result.Y = A.Y + B.Y;
-	Result.Z = A.Z + B.Z;
-	Result.W = A.W + B.W;
+	Target.X = SourceA.X + SourceB.X;
+	Target.Y = SourceA.Y + SourceB.Y;
+	Target.Z = SourceA.Z + SourceB.Z;
+	Target.W = SourceA.W + BSourceB.W;
 	
 #endif
 	
@@ -145,37 +145,37 @@ void Xenon::Math::Vec4 :: Add ( Vec4 & A, const Vec4 & B )
 	
 };
 
-void Xenon::Math::Vec4 :: Subtract ( const Vec4 & A, const Vec4 & B, Vec4 & Result )
+void Xenon::Math::Vec4 :: Subtract ( Vec4 & Target, const Vec4 & SourceA, const Vec4 & SourceB )
 {
 	
 #ifdef XENON_SSE
 	
-	Result.SSEV = _mm_sub_ps ( A.SSEV, B.SSEV );
+	Target.SSEV = _mm_sub_ps ( SourceA.SSEV, SourceB.SSEV );
 	
 #else
 	
-	Result.X = A.X - B.X;
-	Result.Y = A.Y - B.Y;
-	Result.Z = A.Z - B.Z;
-	Result.W = A.W - B.W;
+	Target.X = SourceA.X - SourceB.X;
+	Target.Y = SourceA.Y - SourceB.Y;
+	Target.Z = SourceA.Z - SourceB.Z;
+	Target.W = SourceA.W - SourceB.W;
 	
 #endif
 	
 };
 
-void Xenon::Math::Vec4 :: Subtract ( Vec4 & A, const Vec4 & B )
+void Xenon::Math::Vec4 :: Subtract ( Vec4 & Target, const Vec4 & Source )
 {
 	
 #ifdef XENON_SSE
 	
-	A.SSEV = _mm_sub_ps ( A.SSEV, B.SSEV );
+	Target.SSEV = _mm_sub_ps ( Target.SSEV, Source.SSEV );
 	
 #else
 	
-	A.X -= B.X;
-	A.Y -= B.Y;
-	A.Z -= B.Z;
-	A.W -= B.W;
+	Target.X -= Source.X;
+	Target.Y -= Source.Y;
+	Target.Z -= Source.Z;
+	Target.W -= Source.W;
 	
 #endif
 	
@@ -196,16 +196,16 @@ void Xenon::Math::Vec4 :: Normalize ( Vec4 & A )
 	
 };
 
-void Xenon::Math::Vec4 :: Normalize ( const Vec4 & A, Vec4 & Result )
+void Xenon::Math::Vec4 :: Normalize ( Vec4 & Target, const Vec4 & Source )
 {
 	
 #ifdef XENON_SSE4_1
 	
-	Result.SSEV = _mm_div_ps ( A.SSEV, _mm_sqrt_ps ( _mm_dp_ps ( A.SSEV, A.SSEV, 0xFF ) ) );
+	Target.SSEV = _mm_div_ps ( Source.SSEV, _mm_sqrt_ps ( _mm_dp_ps ( Source.SSEV, Source.SSEV, 0xFF ) ) );
 	
 #else
 	
-	Multiply ( A, 1.0 / Length ( A ), Result );
+	Multiply ( Source, 1.0 / Length ( Source ), Target );
 	
 #endif
 	
@@ -258,36 +258,50 @@ float Xenon::Math::Vec4 :: AngleBetween ( const Vec4 & A, const Vec4 & B )
 	
 };
 
-void Xenon::Math::Vec4 :: Interpolate ( Vec4 & A, const Vec4 & B, float Fraction )
+void Xenon::Math::Vec4 :: Interpolate ( Vec4 & Target, const Vec4 & Source, float Fraction )
 {
 	
 #ifdef XENON_SSE
 	
 	float OppositeFraction = 1.0f - Fraction;
 	
-	A.SSEV = _mm_add_ps ( _mm_mul_ps ( A.SSEV, _mm_set1_ps ( Fraction ) ), _mm_mul_ps ( B.SSEV, _mm_set1_ps ( OppositeFraction ) ) );
+	Target.SSEV = _mm_add_ps ( _mm_mul_ps ( Target.SSEV, _mm_set1_ps ( Fraction ) ), _mm_mul_ps ( Source.SSEV, _mm_set1_ps ( OppositeFraction ) ) );
 	
 #else
 	
 	Vec4 Temp;
 	
-	Multiply ( A, Fraction );
-	Multiply ( B, 1.0f - Fraction, Temp );
+	Multiply ( Target, Fraction );
+	Multiply ( Source, 1.0f - Fraction, Temp );
 	
-	Add ( A, Temp );
+	Add ( Target, Temp );
 	
 #endif
 	
 };
 
-void Xenon::Math::Vec4 :: Interpolate ( const Vec4 & A, const Vec4 & B, float Fraction, Vec4 & Result )
+void Xenon::Math::Vec4 :: Interpolate ( Vec4 & Target, const Vec4 & SourceA, const Vec4 & SourceB, float Fraction )
 {
 	
 	Vec4 Temp;
 	
-	Multiply ( Result, Fraction );
-	Multiply ( B, 1.0f - Fraction, Temp );
+	Multiply ( Target, SourceA, Fraction );
+	Multiply ( Temp, SourceB, 1.0f - Fraction );
 	
-	Add ( Result, Temp );
+	Add ( Target, Temp );
+	
+};
+
+void Xenon::Math::Vec4 :: Project ( Vec4 & Target, const Vec4 & Direction )
+{
+	
+	Multiply ( Target, Direction, DotProduct ( Target, Direction ) / LengthSquared ( Direction ) );
+	
+};
+
+void Xenon::Math::Vec4 :: Project ( Vec4 & Target, const Vec4 & Projected, const Vec4 & Direction )
+{
+	
+	Multiply ( Target, Direction, DotProduct ( Projected, Direction ) / LengthSquared ( Direction ) );
 	
 };

@@ -3,6 +3,16 @@
 #include <iostream>
 #include <stdexcept>
 
+#ifdef RAUX_XENON_MATH_INTERFACE
+	
+	#include <Xenon/Util/RCMem.h>
+	#include <Xenon/Geometry/MeshAttribute.h>
+	#include <Xenon/Geometry/MeshAttributeData.h>
+
+	#include <Xenon/GPU/GLInclude.h>
+
+#endif
+
 #define READBLOCK_SIZE 0x1000
 
 RAUX::ObjFile :: ObjFile ( const std :: string & Name, uint32_t Flags ):
@@ -17,7 +27,8 @@ RAUX::ObjFile :: ObjFile ( const std :: string & Name, uint32_t Flags ):
 	VertexNormals (),
 	VertexTexturePositions (),
 	Vertices (),
-	Faces ()
+	Faces (),
+	Materials ()
 {
 	
 	if ( ( ( Flags & kFlags_NoRAUXComment ) == 0 ) && ( ( Flags & kFlags_StoreComments ) != 0 ) )
@@ -245,6 +256,36 @@ bool RAUX::ObjFile :: ProcessTextLine ( const std :: string & Line )
 		
 		case 'f':
 			return ProcessFace ( Line, Index );
+			
+		case 'm':
+		{
+			
+			Index ++;
+			
+			if ( Index + 5 > Line.size () )
+				return false;
+			
+			if ( Line.substr ( Index, 5 ) == "tllib" )
+				return ProcessMaterialLibrary ( Line, Index + 5 );
+			
+			return false;
+			
+		}
+		
+		case 'u':
+		{
+			
+			Index ++;
+			
+			if ( Index + 5 > Line.size () )
+				return false;
+			
+			if ( Line.substr ( Index, 5 ) == "semtl" )
+				return ProcessMaterial ( Line, Index + 5 );
+			
+			return false;
+			
+		}
 		
 		default:
 			return ( ( Flags & kFlags_FailOnUnsupportedCommand ) == 0 );
@@ -373,7 +414,8 @@ bool RAUX::ObjFile :: ProcessVertexNormal ( const std :: string & Line, uint32_t
 	FloatString = Line.substr ( FloatIndex, Index - FloatIndex );
 	Normal.Z = strtof ( FloatString.c_str (), NULL );
 	
-	OBJFILE_VEC3_NORMALIZE ( Normal );
+	if ( ( Flags & kFlags_NoNormalNormalization ) == 0 )
+		OBJFILE_VEC3_NORMALIZE ( Normal );
 	
 	VertexNormals.push_back ( Normal );
 	
@@ -659,6 +701,20 @@ bool RAUX::ObjFile :: ProcessGroups ( const std :: string & Line, uint32_t Index
 	
 };
 
+bool RAUX::ObjFile :: ProcessMaterial ( const std :: string & Line, uint32_t Index )
+{
+	
+	return false;
+	
+};
+
+bool RAUX::ObjFile :: ProcessMaterialLibrary ( const std :: string & Line, uint32_t Index )
+{
+	
+	return false;
+	
+};
+
 void RAUX::ObjFile :: ResolveActiveGroups ()
 {
 	
@@ -798,10 +854,64 @@ const RAUX::ObjFile :: Group * const RAUX::ObjFile :: GetGroup ( const std :: st
 	
 };
 
-#ifdef RAUX_XENON_MATH_INTERFACE
-
-Xenon::Geometry :: Mesh * RAUX::ObjFile :: CreateMesh ( const MeshParameters & Parameters )
+uint32_t RAUX::ObjFile :: GetFaceCount () const
 {
+	
+	return Faces.size ();
+	
+};
+
+const RAUX::ObjFile :: Face RAUX::ObjFile :: GetFace ( uint32_t Index ) const
+{
+	
+	if ( Index > Faces.size () )
+	{
+		
+		Face Return;
+		
+		Return.VertexIndexBase = 0;
+		Return.VertexCount = 0;
+		
+		return Return;
+		
+	}
+	
+	return Faces [ Index ];
+	
+};
+
+#ifdef RAUX_XENON_INTERFACE
+
+Xenon::Geometry :: Mesh * RAUX::ObjFile :: CreateMesh ( const MeshParameters & Parameters, uint32_t * Status )
+{
+	
+	uint32_t IndexCount = 0;
+	
+	for ( uint32_t I = 0; I < Parameters.GroupCount; I ++ )
+	{
+		
+		const Group * FGroup = GetGroup ( Parameters.GroupIndexes [ I ] );
+		
+		if ( FGroup == NULL )
+		{
+			
+			* Status = kStatus_Failure_InvalidGroup;
+			
+			return NULL;
+			
+		}
+		
+		for ( uint32_t F = 0; F < FGroup -> FaceIndecies.size (); F ++ )
+			IndexCount += GetFace ( FGroup -> FaceIndecies [ F ] ).VertexCount;
+		
+	}
+	
+	if ( ! IndexCount )
+		return NULL;
+	
+	Xenon::Util :: RCMem * IndexMemory = new Xenon::Util :: RCMem ( sizeof ( GLshort ) * IndexCount );
+	
+	
 	
 	return NULL;
 	

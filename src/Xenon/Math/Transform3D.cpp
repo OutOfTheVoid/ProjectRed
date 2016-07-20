@@ -140,7 +140,7 @@ void Xenon::Math::Transform3D :: SetScale ( const Vec3 & Scale )
 void Xenon::Math::Transform3D :: SetRotation ( const Quaternion & Rotation )
 {
 	
-	Quaternion :: Copy ( Rotation, this -> Rotation );
+	Quaternion :: Copy ( this -> Rotation, Rotation );
 	
 	ModelDirty = true;
 	ModelIteration ++;
