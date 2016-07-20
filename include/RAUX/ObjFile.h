@@ -110,6 +110,7 @@ namespace RAUX
 			
 		} Face;
 		
+		// Vertex struct, represents a vertex as indexes into the position list < VertexPositionIndex >, normal list < VertexNormalIndex >, and texture position list < VertexTexturePositionIndex >. These values are set to - 1 if a vertex does not have the relevant information.
 		typedef struct Vertex_Struct
 		{
 			
@@ -119,6 +120,7 @@ namespace RAUX
 			
 		} Vertex;
 		
+		// Group struct, represents a "group" as per the Wavefront OBJ spec, where the group name is < Name >, and where < FaceIndecies > contains the indecies into the face list of faces that belong to that group.
 		typedef struct Group_Struct
 		{
 			
@@ -133,20 +135,27 @@ namespace RAUX
 		
 #ifdef RAUX_XENON_INTERFACE
 		
+		// Mesh parameter struct, represents parameters for mesh creation.
 		typedef struct MeshParameters_Struct
 		{
 			
+			// Pointer to an array of group indexes.
 			const uint32_t * GroupIndexes;
+			// Count of the number of groups to include in this mesh.
 			const uint32_t GroupCount;
 			
+			// Names of various mesh attributes discoverable in an OBJ file.
 			std :: string PositionAttributeName;
 			std :: string NormalAttributeName;
 			std :: string TexturePositionAttributeName;
 			std :: string TangentAttributeName;
 			
+			// Flags for the mesh, see kMeshParameterFlags_* for more info.
 			uint32_t Flags;
 			
+			// Whether or not to use an interleaved buffer strategy for the mesh attributes.
 			bool InterleaveAttributes;
+			// Whether or not to use static attributes in the mesh.
 			bool StaticAttributes;
 			
 		} MeshParameters;
