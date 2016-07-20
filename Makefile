@@ -54,7 +54,8 @@ OBJECTS=obj/SDLX/Lib.o \
 		obj/RAUX/File.o \
 		obj/RAUX/PNGFile.o \
 		obj/RAUX/TextFile.o \
-		obj/RAUX/ObjFile.o
+		obj/RAUX/ObjFile.o \
+		obj/RAUX/MtlFile.o
 	
 bin/main: obj/Main.o
 	$(LD) $(LINK_FLAGS) $(OBJECTS) obj/Main.o -o bin/Main
@@ -197,8 +198,11 @@ obj/RAUX/PNGFile.o: include/RAUX/PNGFile.h src/RAUX/PNGFile.cpp include/RAUX/RAU
 obj/RAUX/TextFile.o: include/RAUX/TextFile.h src/RAUX/TextFile.cpp include/RAUX/File.h include/RAUX/RAUX.h
 	$(CXX) -c $(CXX_FLAGS) src/RAUX/TextFile.cpp -o obj/RAUX/TextFile.o
 	
-obj/RAUX/ObjFile.o: include/RAUX/ObjFile.h src/RAUX/ObjFile.cpp include/RAUX/TextFile.h include/RAUX/RAUX.h
+obj/RAUX/ObjFile.o: include/RAUX/ObjFile.h src/RAUX/ObjFile.cpp include/RAUX/MtlFile.h include/RAUX/TextFile.h include/RAUX/RAUX.h
 	$(CXX) -c $(CXX_FLAGS) src/RAUX/ObjFile.cpp -o obj/RAUX/ObjFile.o
+	
+obj/RAUX/MtlFile.o: include/RAUX/MtlFile.h src/RAUX/MtlFile.cpp include/RAUX/TextFile.h include/RAUX/RAUX.h
+	$(CXX) -c $(CXX_FLAGS) src/RAUX/MtlFile.cpp -o obj/RAUX/MtlFile.o
 	
 clean:
 	-@rm -r obj/*

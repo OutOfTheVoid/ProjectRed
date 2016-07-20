@@ -19,6 +19,13 @@ bool RAUX::TextFile :: Exists () const
 	
 }
 
+const std :: string & RAUX::TextFile :: GetName () const
+{
+	
+	return FileInstance.GetName ();
+	
+};
+
 void RAUX::TextFile :: Open ( uint32_t * Status )
 {
 	

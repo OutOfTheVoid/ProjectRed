@@ -121,7 +121,15 @@ int main ( int argc, const char * argv [] )
 		const RAUX::ObjFile :: Group * const ObjGroup = MyObj.GetGroup ( I );
 		
 		if ( ObjGroup != NULL )
-			std :: cout << "Group " << ObjGroup -> Name << ": " << ObjGroup -> FaceIndecies.size () << " faces." << std :: endl;
+		{
+			
+			std :: cout << "Group " << ObjGroup -> Name << ": " << ObjGroup -> FaceIndecies.size () << " faces: " << std :: endl;
+			
+			for ( uint32_t F = 0; F < ObjGroup -> FaceIndecies.size (); F ++ )
+				std :: cout << "*	Face " << F << ": " << MyObj.GetFace ( ObjGroup -> FaceIndecies [ F ] ).VertexCount << " vertecies." << std :: endl;
+				
+			
+		}
 		
 	}
 	

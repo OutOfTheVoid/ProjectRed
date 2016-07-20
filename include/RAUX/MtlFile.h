@@ -108,7 +108,14 @@ namespace RAUX
 		
 		// Constructs an MTLFile object, using the file name < Name >.
 		MtlFile ( const std :: string & Name );
+		MtlFile ( const MtlFile & CopyFrom );
 		~MtlFile ();
+		
+		// Whether or not this file exists.
+		bool Exists () const;
+		
+		// = operator.
+		void operator= ( const RAUX::MtlFile & );
 		
 		// Loads and parses the contents of the .mtl file. Returns status in < Status >.
 		void Load ( uint32_t * Status );

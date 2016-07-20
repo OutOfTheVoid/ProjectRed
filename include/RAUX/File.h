@@ -41,6 +41,7 @@ namespace RAUX
 		
 		// Creates a new File with the name < Name > and opens it as read-only unless < Writable > is specified.
 		File ( const std :: string & Name, bool Writable = false );
+		File ( const File & CopyFrom );
 		~File ();
 		
 		// Whether or not the file exists.

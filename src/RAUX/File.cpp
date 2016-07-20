@@ -15,6 +15,14 @@ RAUX::File :: File ( const std :: string & Name, bool Writable ):
 {	
 };
 
+RAUX::File :: File ( const File & CopyFrom ):
+	Name ( CopyFrom.Name ),
+	Writable ( CopyFrom.Writable ),
+	Opened ( false ),
+	Handle ( NULL )
+{
+};
+
 RAUX::File :: ~File ()
 {
 	

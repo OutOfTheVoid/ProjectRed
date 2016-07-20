@@ -22,10 +22,12 @@ namespace RAUX
 		static const uint32_t kStatus_Failure_MemoryAllocation = 3;
 		static const uint32_t kStatus_Failure_FileBounds = 4;
 		
-		TextFile ( const std :: string & Path );
+		TextFile ( const std :: string & Name );
 		~TextFile ();
 		
 		bool Exists () const;
+		
+		const std :: string & GetName () const;
 		
 		void Open ( uint32_t * Status );
 		void Close ();

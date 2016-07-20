@@ -233,7 +233,10 @@ namespace RAUX
 		std :: vector <Vertex> Vertices;
 		std :: vector <Face> Faces;
 		
-		std :: map <std :: string, MTLFile :: Material> Materials;
+		std :: vector <std :: string> MaterialLibraryPrefixes;
+		
+		std :: vector <MtlFile> MaterialLibraries;
+		std :: map <std :: string, MtlFile :: Material> Materials;
 		
 	};
 	

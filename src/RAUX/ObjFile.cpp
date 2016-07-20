@@ -28,6 +28,8 @@ RAUX::ObjFile :: ObjFile ( const std :: string & Name, uint32_t Flags ):
 	VertexTexturePositions (),
 	Vertices (),
 	Faces (),
+	MaterialLibraryPrefixes (),
+	MaterialLibraries (),
 	Materials ()
 {
 	
@@ -704,12 +706,71 @@ bool RAUX::ObjFile :: ProcessGroups ( const std :: string & Line, uint32_t Index
 bool RAUX::ObjFile :: ProcessMaterial ( const std :: string & Line, uint32_t Index )
 {
 	
-	return false;
+	while ( ( Index < Line.size () ) && ( Line.at ( Index ) == ' ' ) )
+		Index ++;
+	
+	if ( Index >= Line.size () )
+		return false;
+	
+	uint32_t NameIndex = Index;
+	
+	while ( ( Index < Line.size () ) && ( Line.at ( Index ) != ' ' ) )
+		Index ++;
+	
+	std :: cout << "Using Material: \"" << Line.substr ( NameIndex, Index - NameIndex ) << "\"" << std :: endl;
+	
+	// TODO: Set current material
+	
+	return true;
 	
 };
 
 bool RAUX::ObjFile :: ProcessMaterialLibrary ( const std :: string & Line, uint32_t Index )
 {
+	
+	while ( ( Index < Line.size () ) && ( Line.at ( Index ) == ' ' ) )
+		Index ++;
+	
+	if ( Index >= Line.size () )
+		return false;
+	
+	uint32_t NameIndex = Index;
+	
+	while ( ( Index < Line.size () ) && ( Line.at ( Index ) != ' ' ) )
+		Index ++;
+	
+	std :: string LibraryName = Line.substr ( NameIndex, Index - NameIndex );
+	std :: string PrefixedName = LibraryName;
+	
+	MtlFile LibraryFile ( LibraryName );
+	
+	uint32_t PrefixIndex = 0;
+		
+	while ( ( ! LibraryFile.Exists () ) && ( PrefixIndex < MaterialLibraryPrefixes.size () ) )
+	{
+		
+		PrefixedName = MaterialLibraryPrefixes [ Index ];
+		PrefixedName.append ( LibraryName );
+		
+		LibraryFile = MtlFile ( PrefixedName );
+		
+	}
+	
+	if ( LibraryFile.Exists () )
+	{
+		
+		std :: cout << "Found material library: \"" << PrefixedName << "\"" << std :: endl;
+		
+		MaterialLibraries.push_back ( LibraryFile );
+		
+		MtlFile & InPlaceLibrary = MaterialLibraries [ MaterialLibraries.size () - 1 ];
+		
+		uint32_t LoadStatus;
+		InPlaceLibrary.Load ( & LoadStatus );
+		
+		return true;
+		
+	}
 	
 	return false;
 	
