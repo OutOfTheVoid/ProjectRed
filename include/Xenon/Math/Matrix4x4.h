@@ -95,52 +95,22 @@ namespace Xenon
 			static void Prepend ( Matrix4x4 & Target, const Matrix4x4 & Pendant );
 			static void Prepend ( Matrix4x4 & Target, const Matrix4x4 & Source, const Matrix4x4 & Pendant );
 			
-#ifdef XENON_SSE
-			
-			typedef union
+			typedef struct
 			{
 				
-				__m128 SSEV;
-				
-				struct
-				{
-					
-					float E0;
-					float E1;
-					float E2;
-					float E3;
-					
-				};
-				
-				float Sub [ 4 ];
+				float E0;
+				float E1;
+				float E2;
+				float E3;
 				
 			} Row_t;
 			
-#else
-			
-			typedef union
-			{
-				
-				struct
-				{
-					
-					float E0;
-					float E1;
-					float E2;
-					float E3;
-				};
-				
-				float Sub [ 4 ];
-				
-			} Row_t;
-			
-#endif
 			alignas ( 16 ) Row_t Elements [ 4 ];
 			
 		};
 		
-	};
+	}
 
-};
+}
 
 #endif

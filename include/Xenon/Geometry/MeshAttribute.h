@@ -63,8 +63,8 @@ namespace Xenon
 			
 		};
 		
-	};
+	}
 	
-};
+}
 
 #endif

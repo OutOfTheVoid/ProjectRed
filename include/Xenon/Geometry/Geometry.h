@@ -8,8 +8,8 @@ namespace Xenon
 	
 	namespace Geometry
 	{
-	};
+	}
 	
-};
+}
 
 #endif

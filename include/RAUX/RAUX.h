@@ -5,6 +5,6 @@
 
 namespace RAUX
 {
-};
+}
 
 #endif

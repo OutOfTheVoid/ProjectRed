@@ -13,14 +13,14 @@ Xenon::GPU::VertexArray :: VertexArray ( uint32_t PreAllocFPAttributeCount, uint
 	Program ( NULL ),
 	IBuffer ( NULL )
 {
-};
+}
 
 Xenon::GPU::VertexArray :: ~VertexArray ()
 {
 	
 	GPUResourceFree ();
 	
-};
+}
 
 void Xenon::GPU::VertexArray :: GPUResourceAlloc ()
 {
@@ -33,7 +33,7 @@ void Xenon::GPU::VertexArray :: GPUResourceAlloc ()
 	if ( AHandle != 0 )
 		Allocated = true;
 	
-};
+}
 
 void Xenon::GPU::VertexArray :: GPUResourceFree ()
 {
@@ -45,14 +45,14 @@ void Xenon::GPU::VertexArray :: GPUResourceFree ()
 	
 	Allocated = false;
 	
-};
+}
 
 bool Xenon::GPU::VertexArray :: GPUResourceAllocated ()
 {
 	
 	return Allocated;
 	
-};
+}
 
 void Xenon::GPU::VertexArray :: SetProgram ( ShaderProgram * Program )
 {
@@ -77,7 +77,7 @@ void Xenon::GPU::VertexArray :: SetProgram ( ShaderProgram * Program )
 	
 	this -> Program = Program;
 	
-};
+}
 
 void Xenon::GPU::VertexArray :: AddFPAttribute ( const std :: string Name, GLint Size, FPAttributeInputType InputType, bool Normalized, GLsizei Stride, GLvoid * Offset, VertexBuffer * Data )
 {
@@ -100,7 +100,7 @@ void Xenon::GPU::VertexArray :: AddFPAttribute ( const std :: string Name, GLint
 	
 	FPAttributes.push_back ( Attribute );
 	
-};
+}
 
 void Xenon::GPU::VertexArray :: AddIntegerAttribute ( const std :: string Name, GLint Size, FPAttributeInputType InputType, GLsizei Stride, GLvoid * Offset, VertexBuffer * Data )
 {
@@ -122,14 +122,14 @@ void Xenon::GPU::VertexArray :: AddIntegerAttribute ( const std :: string Name, 
 	
 	IntegerAttributes.push_back ( Attribute );
 	
-};
+}
 
 void Xenon::GPU::VertexArray :: SetIndexBuffer ( IndexBuffer * IBuffer )
 {
 	
 	this -> IBuffer = IBuffer;
 	
-};
+}
 
 void Xenon::GPU::VertexArray :: Build ()
 {
@@ -179,7 +179,7 @@ void Xenon::GPU::VertexArray :: Build ()
 		
 	}
 	
-};
+}
 
 void Xenon::GPU::VertexArray :: Bind ()
 {
@@ -209,5 +209,5 @@ void Xenon::GPU::VertexArray :: Bind ()
 		
 	}
 	
-};
+}
 

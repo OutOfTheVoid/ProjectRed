@@ -5,7 +5,7 @@ SDLX::Surface :: Surface ( SDL_Surface * SHandle, Mutex * MLock ):
 	SHandle ( SHandle ),
 	MLock ( MLock )
 {
-};
+}
 
 SDLX::Surface :: ~Surface ()
 {
@@ -13,7 +13,7 @@ SDLX::Surface :: ~Surface ()
 	if ( RefCount == 0 )
 		SDL_FreeSurface ( SHandle );
 	
-};
+}
 
 SDLX::Surface * SDLX::Surface :: FromWindowSurface ( SDL_Surface * SHandle, Window * Source )
 {
@@ -46,7 +46,7 @@ SDLX::Surface * SDLX::Surface :: FromWindowSurface ( SDL_Surface * SHandle, Wind
 	
 	return New;
 	
-};
+}
 
 void SDLX::Surface :: WindowResizeCallback ( SDL_WindowEvent * Event, Window * Origin, void * SurfacePtr )
 {
@@ -56,7 +56,7 @@ void SDLX::Surface :: WindowResizeCallback ( SDL_WindowEvent * Event, Window * O
 	reinterpret_cast <Surface *> ( SurfacePtr ) -> Width = Event -> data1;
 	reinterpret_cast <Surface *> ( SurfacePtr ) -> Height = Event -> data2;
 	
-};
+}
 
 SDLX::Surface * SDLX::Surface :: NewSurface ( uint32_t Width, uint32_t Height, uint32_t Flags, uint32_t Depth, uint32_t RedMask, uint32_t GreenMask, uint32_t BlueMask, uint32_t AlphaMask )
 {
@@ -86,7 +86,7 @@ SDLX::Surface * SDLX::Surface :: NewSurface ( uint32_t Width, uint32_t Height, u
 	
 	return new Surface ( SHandle, MLock );
 	
-};
+}
 
 SDLX::Surface * SDLX::Surface :: NewSurfaceFromLoadedBMP ( const char * FileName, uint32_t Flags, const SDL_PixelFormat * Format )
 {
@@ -138,16 +138,16 @@ SDLX::Surface * SDLX::Surface :: NewSurfaceFromLoadedBMP ( const char * FileName
 	
 	return New;
 	
-};
+}
 
 void SDLX::Surface :: SetClipRect ( int32_t X, int32_t Y, uint32_t Width, uint32_t Height )
 {
 	
-	const SDL_Rect NewClipRect { x : static_cast <int> ( X ), y : static_cast <int> ( Y ), w : static_cast <int> ( Width ), h : static_cast <int> ( Height ) };
+	const SDL_Rect NewClipRect { static_cast <int> ( X ), static_cast <int> ( Y ), static_cast <int> ( Width ), static_cast <int> ( Height ) };
 	
 	SDL_SetClipRect ( SHandle, & NewClipRect );
 	
-};
+}
 
 void SDLX::Surface :: GetClipRect ( int32_t & X, int32_t & Y, uint32_t & Width, uint32_t & Height )
 {
@@ -161,16 +161,16 @@ void SDLX::Surface :: GetClipRect ( int32_t & X, int32_t & Y, uint32_t & Width, 
 	Width = static_cast <int32_t> ( Temp.w );
 	Height = static_cast <int32_t> ( Temp.h );
 	
-};
+}
 
 void SDLX::Surface :: ResetClipRect ()
 {
 	
-	const SDL_Rect NewClipRect { x : 0, y : 0, w : static_cast <int> ( GetWidth () ), h : static_cast <int> ( GetHeight () ) };
+	const SDL_Rect NewClipRect { 0, 0, static_cast <int> ( GetWidth () ), static_cast <int> ( GetHeight () ) };
 	
 	SDL_SetClipRect ( SHandle, & NewClipRect );
 	
-};
+}
 
 
 void SDLX::Surface :: SetBlendMode ( BlendMode Mode )
@@ -178,7 +178,7 @@ void SDLX::Surface :: SetBlendMode ( BlendMode Mode )
 	
 	SDL_SetSurfaceBlendMode ( SHandle, static_cast <SDL_BlendMode> ( Mode ) );
 	
-};
+}
 
 SDLX::Surface :: BlendMode SDLX::Surface :: GetBlendMode ()
 {
@@ -189,90 +189,90 @@ SDLX::Surface :: BlendMode SDLX::Surface :: GetBlendMode ()
 	
 	return Mode;
 	
-};
+}
 
 void SDLX::Surface :: BlitFull ( Surface * Source, int32_t X, int32_t Y )
 {
 	
-	SDL_Rect DestRect { x : static_cast <int> ( X ), y : static_cast <int> ( Y ), w : static_cast <int> ( Source -> GetWidth () ), h : static_cast <int> ( Source -> GetHeight () ) };
+	SDL_Rect DestRect { static_cast <int> ( X ), static_cast <int> ( Y ), static_cast <int> ( Source -> GetWidth () ), static_cast <int> ( Source -> GetHeight () ) };
 	
 	SDL_BlitSurface ( Source -> SHandle, NULL, SHandle, & DestRect );
 	
-};
+}
 
 void SDLX::Surface :: BlitRect ( Surface * Source, int32_t X, int32_t Y, uint32_t Width, uint32_t Height )
 {
 	
-	SDL_Rect DestRect { x : static_cast <int> ( X ), y : static_cast <int> ( Y ), w : static_cast <int> ( Width ), h : static_cast <int> ( Height ) };
-	SDL_Rect SourceRect { x : 0, y : 0, w : static_cast <int> ( Width ), h : static_cast <int> ( Height ) };
+	SDL_Rect DestRect { static_cast <int> ( X ), static_cast <int> ( Y ), static_cast <int> ( Width ), static_cast <int> ( Height ) };
+	SDL_Rect SourceRect { 0, 0, static_cast <int> ( Width ), static_cast <int> ( Height ) };
 	
 	SDL_BlitSurface ( Source -> SHandle, & SourceRect, SHandle, & DestRect );
 	
-};
+}
 
 void SDLX::Surface :: Fill ( uint32_t Color )
 {
 	
-	SDL_Rect DestRect { x : 0, y : 0, w : static_cast <int> ( GetWidth () ), h : static_cast <int> ( GetHeight () ) };
+	SDL_Rect DestRect { 0, 0, static_cast <int> ( GetWidth () ), static_cast <int> ( GetHeight () ) };
 	
 	SDL_FillRect ( SHandle, & DestRect, Color );
 	
-};
+}
 
 void SDLX::Surface :: FillRect ( uint32_t Color, int32_t X, int32_t Y, uint32_t Width, uint32_t Height )
 {
 	
-	SDL_Rect DestRect { x : static_cast <int> ( X ), y : static_cast <int> ( Y ), w : static_cast <int> ( Width ), h : static_cast <int> ( Height ) };
+	SDL_Rect DestRect { static_cast <int> ( X ), static_cast <int> ( Y ), static_cast <int> ( Width ), static_cast <int> ( Height ) };
 	
 	SDL_FillRect ( SHandle, & DestRect, Color );
 	
-};
+}
 
 void SDLX::Surface :: Lock ()
 {
 	
 	SDL_LockSurface ( SHandle );
 	
-};
+}
 
 void SDLX::Surface :: Unlock ()
 {
 	
 	SDL_UnlockSurface ( SHandle );
 	
-};
+}
 
 SDL_Surface * SDLX::Surface :: GetSDLHandle ()
 {
 	
 	return SHandle;
 	
-};
+}
 
 void * SDLX::Surface :: GetPixelData ()
 {
 	
 	return SHandle -> pixels;
 	
-};
+}
 
 const SDL_PixelFormat * SDLX::Surface :: GetPixelFormat ()
 {
 	
 	return SHandle -> format;
 	
-};
+}
 
 uint32_t SDLX::Surface :: GetWidth ()
 {
 	
 	return static_cast <uint32_t> ( SHandle -> w );
 	
-};
+}
 
 uint32_t SDLX::Surface :: GetHeight ()
 {
 	
 	return static_cast <uint32_t> ( SHandle -> h );
 	
-};
+}

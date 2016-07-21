@@ -36,39 +36,39 @@ RAUX::ObjFile :: ObjFile ( const std :: string & Name, uint32_t Flags ):
 	if ( ( ( Flags & kFlags_NoRAUXComment ) == 0 ) && ( ( Flags & kFlags_StoreComments ) != 0 ) )
 		Comments.push_back ( std :: string ( "Loaded by RAUX" ) );
 	
-};
+}
 
 RAUX::ObjFile :: ~ObjFile ()
 {
 	
 	CloseFile ();
 	
-};
+}
 
 bool RAUX::ObjFile :: Exists () const
 {
 	
 	return FileInstance.Exists ();
 	
-};
+}
 
 RAUX::ObjFile::TexturePosition_Struct :: TexturePosition_Struct ():
 	Position ( OBJFILE_VEC3_NOINIT ),
 	Dimension ( 0 )
 {
-};
+}
 
 RAUX::ObjFile::Group_Struct :: Group_Struct ( const std :: string & Name ):
 	Name ( Name ),
 	FaceIndecies ()
 {
-};
+}
 
 RAUX::ObjFile::Group_Struct :: Group_Struct ( const Group_Struct & CopyFrom ):
 	Name ( CopyFrom.Name ),
 	FaceIndecies ( CopyFrom.FaceIndecies )
 {
-};
+}
 
 void RAUX::ObjFile :: Load ( uint32_t * Status )
 {
@@ -183,7 +183,7 @@ void RAUX::ObjFile :: Load ( uint32_t * Status )
 	
 	Validated = true;
 	
-};
+}
 
 bool RAUX::ObjFile :: ProcessTextLine ( const std :: string & Line )
 {
@@ -296,7 +296,7 @@ bool RAUX::ObjFile :: ProcessTextLine ( const std :: string & Line )
 	
 	return true;
 	
-};
+}
 
 bool RAUX::ObjFile :: ProcessVertexPosition ( const std :: string & Line, uint32_t Index )
 {
@@ -357,7 +357,7 @@ bool RAUX::ObjFile :: ProcessVertexPosition ( const std :: string & Line, uint32
 	
 	return true;
 	
-};
+}
 
 bool RAUX::ObjFile :: ProcessVertexNormal ( const std :: string & Line, uint32_t Index )
 {
@@ -423,7 +423,7 @@ bool RAUX::ObjFile :: ProcessVertexNormal ( const std :: string & Line, uint32_t
 	
 	return true;
 	
-};
+}
 
 bool RAUX::ObjFile :: ProcessVertexTexturePosition ( const std :: string & Line, uint32_t Index )
 {
@@ -496,7 +496,7 @@ bool RAUX::ObjFile :: ProcessVertexTexturePosition ( const std :: string & Line,
 	
 	return true;
 	
-};
+}
 
 bool RAUX::ObjFile :: ProcessFace ( const std :: string & Line, uint32_t Index )
 {
@@ -639,7 +639,7 @@ bool RAUX::ObjFile :: ProcessFace ( const std :: string & Line, uint32_t Index )
 	
 	return true;
 	
-};
+}
 
 bool RAUX::ObjFile :: ProcessGroups ( const std :: string & Line, uint32_t Index )
 {
@@ -701,7 +701,7 @@ bool RAUX::ObjFile :: ProcessGroups ( const std :: string & Line, uint32_t Index
 	
 	return true;
 	
-};
+}
 
 bool RAUX::ObjFile :: ProcessMaterial ( const std :: string & Line, uint32_t Index )
 {
@@ -723,7 +723,7 @@ bool RAUX::ObjFile :: ProcessMaterial ( const std :: string & Line, uint32_t Ind
 	
 	return true;
 	
-};
+}
 
 bool RAUX::ObjFile :: ProcessMaterialLibrary ( const std :: string & Line, uint32_t Index )
 {
@@ -774,7 +774,7 @@ bool RAUX::ObjFile :: ProcessMaterialLibrary ( const std :: string & Line, uint3
 	
 	return false;
 	
-};
+}
 
 void RAUX::ObjFile :: ResolveActiveGroups ()
 {
@@ -799,28 +799,28 @@ void RAUX::ObjFile :: ResolveActiveGroups ()
 		
 	}
 	
-};
+}
 
 void RAUX::ObjFile :: CloseFile ()
 {
 	
 	FileInstance.Close ();
 	
-};
+}
 
 bool RAUX::ObjFile :: Valid () const
 {
 	
 	return Validated;
 	
-};
+}
 
 uint32_t RAUX::ObjFile :: GetCommentCount () const
 {
 	
 	return Comments.size ();
 	
-};
+}
 
 const std :: string & RAUX::ObjFile :: GetComment ( uint32_t Index ) const
 {
@@ -830,14 +830,14 @@ const std :: string & RAUX::ObjFile :: GetComment ( uint32_t Index ) const
 	
 	return Comments [ Index ];
 	
-};
+}
 
 uint32_t RAUX::ObjFile :: GetVertexPositionCount () const
 {
 	
 	return VertexPositions.size ();
 	
-};
+}
 
 const RAUX::ObjFile :: Vec3 RAUX::ObjFile :: GetVertexPosition ( uint32_t Index ) const
 {
@@ -847,14 +847,14 @@ const RAUX::ObjFile :: Vec3 RAUX::ObjFile :: GetVertexPosition ( uint32_t Index 
 	
 	return VertexPositions [ Index ];
 	
-};
+}
 
 uint32_t RAUX::ObjFile :: GetVertexNormalCount () const
 {
 	
 	return VertexNormals.size ();
 	
-};
+}
 
 const RAUX::ObjFile :: Vec3 RAUX::ObjFile :: GetVertexNormal ( uint32_t Index ) const
 {
@@ -864,14 +864,14 @@ const RAUX::ObjFile :: Vec3 RAUX::ObjFile :: GetVertexNormal ( uint32_t Index ) 
 	
 	return VertexNormals [ Index ];
 	
-};
+}
 
 uint32_t RAUX::ObjFile :: GetVertexTexturePositionCount () const
 {
 	
 	return VertexPositions.size ();
 	
-};
+}
 
 const RAUX::ObjFile :: TexturePosition RAUX::ObjFile :: GetVertexTexturePosition ( uint32_t Index ) const
 {
@@ -881,14 +881,14 @@ const RAUX::ObjFile :: TexturePosition RAUX::ObjFile :: GetVertexTexturePosition
 	
 	return TexturePosition ();
 	
-};
+}
 
 uint32_t RAUX::ObjFile :: GetGroupCount () const
 {
 	
 	return Groups.size ();
 	
-};
+}
 
 const RAUX::ObjFile :: Group * const RAUX::ObjFile :: GetGroup ( uint32_t Index ) const
 {
@@ -898,7 +898,7 @@ const RAUX::ObjFile :: Group * const RAUX::ObjFile :: GetGroup ( uint32_t Index 
 	
 	return & Groups [ Index ];
 	
-};
+}
 
 const RAUX::ObjFile :: Group * const RAUX::ObjFile :: GetGroup ( const std :: string & Name ) const
 {
@@ -913,14 +913,14 @@ const RAUX::ObjFile :: Group * const RAUX::ObjFile :: GetGroup ( const std :: st
 	
 	return NULL;
 	
-};
+}
 
 uint32_t RAUX::ObjFile :: GetFaceCount () const
 {
 	
 	return Faces.size ();
 	
-};
+}
 
 const RAUX::ObjFile :: Face RAUX::ObjFile :: GetFace ( uint32_t Index ) const
 {
@@ -939,7 +939,7 @@ const RAUX::ObjFile :: Face RAUX::ObjFile :: GetFace ( uint32_t Index ) const
 	
 	return Faces [ Index ];
 	
-};
+}
 
 #ifdef RAUX_XENON_INTERFACE
 
@@ -976,6 +976,6 @@ Xenon::Geometry :: Mesh * RAUX::ObjFile :: CreateMesh ( const MeshParameters & P
 	
 	return NULL;
 	
-};
+}
 
 #endif

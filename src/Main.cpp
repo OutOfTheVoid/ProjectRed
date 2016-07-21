@@ -350,7 +350,7 @@ int main ( int argc, const char * argv [] )
 	
 	return 0;
 	
-};
+}
 
 void MouseMoveListener ( SDL_MouseMotionEvent * Event, void * Data )
 {
@@ -363,7 +363,7 @@ void MouseMoveListener ( SDL_MouseMotionEvent * Event, void * Data )
 	Xenon::Math::Quaternion :: FromAxisAngle ( Delta, Xenon::Math::Vec3 :: RIGHT, Event -> yrel / 100.0f );
 	reinterpret_cast <RenderStruct *> ( Data ) -> Transform -> AppendRotation ( Delta );
 	
-};
+}
 
 void KeyListener ( int32_t ScanCode, int32_t KeyCode, bool Down, void * Data )
 {
@@ -410,7 +410,7 @@ void KeyListener ( int32_t ScanCode, int32_t KeyCode, bool Down, void * Data )
 	
 	reinterpret_cast <KeyboardStruct *> ( Data ) -> RenderData -> ProjectionSource -> SetDirty ();
 	
-};
+}
 
 void WindowCloseEvent ( SDL_WindowEvent * Event, SDLX::Window * Win, void * Data )
 {
@@ -422,7 +422,7 @@ void WindowCloseEvent ( SDL_WindowEvent * Event, SDLX::Window * Win, void * Data
 	
 	Win -> Close ( & Status );
 	
-};
+}
 
 void DrawEventPush ( SDLX :: Timer * Source, void * Data )
 {
@@ -442,7 +442,7 @@ void DrawEventPush ( SDLX :: Timer * Source, void * Data )
 	
 	SDLX::UserEvent :: PushEvent ( UEData -> RenderEventID, reinterpret_cast <void *> ( UEData -> RenderData ), NULL );
 	
-};
+}
 
 void DrawEvent ( SDL_UserEvent * Event )
 {
@@ -481,4 +481,4 @@ void DrawEvent ( SDL_UserEvent * Event )
 	
 	RData -> RTimer -> Start ( 1000 / 120 );
 	
-};
+}

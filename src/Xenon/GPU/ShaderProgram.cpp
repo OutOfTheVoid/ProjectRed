@@ -7,11 +7,11 @@ Xenon::GPU::ShaderProgram :: ShaderProgram ( std :: string Name ):
 	SHandle ( 0 ),
 	LinkIteration ( - 1 )
 {
-};
+}
 
 Xenon::GPU::ShaderProgram :: ~ShaderProgram ()
 {
-};
+}
 
 void Xenon::GPU::ShaderProgram :: GPUResourceAlloc ()
 {
@@ -24,7 +24,7 @@ void Xenon::GPU::ShaderProgram :: GPUResourceAlloc ()
 	if ( SHandle != 0 )
 		Allocated = true;
 	
-};
+}
 
 void Xenon::GPU::ShaderProgram :: GPUResourceFree ()
 {
@@ -36,7 +36,7 @@ void Xenon::GPU::ShaderProgram :: GPUResourceFree ()
 	
 	Allocated = false;
 	
-};
+}
 
 void Xenon::GPU::ShaderProgram :: Bind ()
 {
@@ -53,7 +53,7 @@ void Xenon::GPU::ShaderProgram :: Bind ()
 	
 	}
 	
-};
+}
 
 void Xenon::GPU::ShaderProgram :: Link ()
 {
@@ -62,14 +62,14 @@ void Xenon::GPU::ShaderProgram :: Link ()
 	
 	LinkIteration ++;
 	
-};
+}
 
 bool Xenon::GPU::ShaderProgram :: GPUResourceAllocated ()
 {
 	
 	return Allocated;
 	
-};
+}
 
 void Xenon::GPU::ShaderProgram :: AddShader ( IShader & Shader )
 {
@@ -92,7 +92,7 @@ void Xenon::GPU::ShaderProgram :: AddShader ( IShader & Shader )
 	
 	glAttachShader ( SHandle, Shader.GetSHandle () );
 	
-};
+}
 
 void Xenon::GPU::ShaderProgram :: RemoveShader ( IShader & Shader )
 {
@@ -108,7 +108,7 @@ void Xenon::GPU::ShaderProgram :: RemoveShader ( IShader & Shader )
 	
 	glDetachShader ( SHandle, Shader.GetSHandle () );
 	
-};
+}
 
 GLint Xenon::GPU::ShaderProgram :: GetAttributeLocation ( const GLchar * Attribute )
 {
@@ -124,7 +124,7 @@ GLint Xenon::GPU::ShaderProgram :: GetAttributeLocation ( const GLchar * Attribu
 	
 	return glGetAttribLocation ( SHandle, Attribute );
 	
-};
+}
 
 GLint Xenon::GPU::ShaderProgram :: GetUniformLocation ( const GLchar * Attribute )
 {
@@ -140,18 +140,18 @@ GLint Xenon::GPU::ShaderProgram :: GetUniformLocation ( const GLchar * Attribute
 	
 	return glGetUniformLocation ( SHandle, Attribute );
 	
-};
+}
 
 const std :: string & Xenon::GPU::ShaderProgram :: GetName ()
 {
 	
 	return Name;
 	
-};
+}
 
 int64_t Xenon::GPU::ShaderProgram :: GetLinkIteration ()
 {
 	
 	return LinkIteration;
 	
-};
+}

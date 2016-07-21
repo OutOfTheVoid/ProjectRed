@@ -96,6 +96,6 @@ namespace RAUX
 		
 	};
 	
-};
+}
 
 #endif

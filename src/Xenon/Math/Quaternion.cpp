@@ -8,28 +8,28 @@ const Xenon::Math :: Quaternion Xenon::Math::Quaternion :: IDENTITY ( 0.0f, 0.0f
 Xenon::Math::Quaternion :: Quaternion ( NoInit NO_INIT ):
 	Vec4 ( Vec4 :: NO_INIT )
 {	
-};
+}
 
 Xenon::Math::Quaternion :: Quaternion ( float X, float Y, float Z, float W ):
 	Vec4 ( X, Y, Z, W )
 {
-};
+}
 
 Xenon::Math::Quaternion :: Quaternion ( const Quaternion & Source ):
 	Vec4 ( Source )
 {
-};
+}
 
 Xenon::Math::Quaternion :: ~Quaternion ()
 {
-};
+}
 
 void Xenon::Math::Quaternion :: Add ( Quaternion & Target, const Quaternion & Source )
 {
 	
 #ifdef XENON_SSE
 	
-	Target.SSEV = _mm_add_ps ( Target.SSEV, Source.SSEV );
+	reinterpret_cast <__m128 &> ( Target ) = _mm_add_ps ( reinterpret_cast <__m128 &> ( Target ), reinterpret_cast <const __m128 &> ( Source ) );
 	
 #else
 	
@@ -40,14 +40,14 @@ void Xenon::Math::Quaternion :: Add ( Quaternion & Target, const Quaternion & So
 	
 #endif
 	
-};
+}
 
 void Xenon::Math::Quaternion :: Add ( Quaternion & Target, const Quaternion & SourceA, const Quaternion & SourceB )
 {
 	
 #ifdef XENON_SSE
 	
-	Target.SSEV = _mm_add_ps ( SourceA.SSEV, SourceB.SSEV );
+	reinterpret_cast <__m128 &> ( Target ) = _mm_add_ps ( reinterpret_cast <const __m128 &> ( SourceA ), reinterpret_cast <const __m128 &> ( SourceB ) );
 	
 #else
 	
@@ -58,14 +58,14 @@ void Xenon::Math::Quaternion :: Add ( Quaternion & Target, const Quaternion & So
 	
 #endif
 	
-};
+}
 
 void Xenon::Math::Quaternion :: Subtract ( Quaternion & Target, const Quaternion & Source )
 {
 	
 #ifdef XENON_SSE
 	
-	Target.SSEV = _mm_sub_ps ( Target.SSEV, Source.SSEV );
+	reinterpret_cast <__m128 &> ( Target ) = _mm_sub_ps ( reinterpret_cast <__m128 &> ( Target ), reinterpret_cast <const __m128 &> ( Source ) );
 	
 #else
 	
@@ -76,14 +76,14 @@ void Xenon::Math::Quaternion :: Subtract ( Quaternion & Target, const Quaternion
 	
 #endif
 	
-};
+}
 
 void Xenon::Math::Quaternion :: Subtract ( Quaternion & Target, const Quaternion & SourceA, const Quaternion & SourceB )
 {
 	
 #ifdef XENON_SSE
 	
-	Target.SSEV = _mm_sub_ps ( SourceA.SSEV, SourceB.SSEV );
+	reinterpret_cast <__m128 &> ( Target ) = _mm_sub_ps ( reinterpret_cast <const __m128 &> ( SourceA ), reinterpret_cast <const __m128 &> ( SourceB ) );
 	
 #else
 	
@@ -94,14 +94,14 @@ void Xenon::Math::Quaternion :: Subtract ( Quaternion & Target, const Quaternion
 	
 #endif
 	
-};
+}
 
 void Xenon::Math::Quaternion :: Multiply ( Quaternion & A, const float Scalar )
 {
 	
 #ifdef XENON_SSE
 	
-	A.SSEV = _mm_mul_ps ( A.SSEV, _mm_set1_ps ( Scalar ) );
+	reinterpret_cast <__m128 &> ( A ) = _mm_mul_ps ( reinterpret_cast <__m128 &> ( A ), _mm_set1_ps ( Scalar ) );
 	
 #else
 	
@@ -112,14 +112,14 @@ void Xenon::Math::Quaternion :: Multiply ( Quaternion & A, const float Scalar )
 	
 #endif
 	
-};
+}
 
 void Xenon::Math::Quaternion :: Multiply ( Quaternion & Target, const Quaternion & Source, const float Scalar )
 {
 	
 #ifdef XENON_SSE
 	
-	Target.SSEV = _mm_mul_ps ( Source.SSEV, _mm_set1_ps ( Scalar ) );
+	reinterpret_cast <__m128 &> ( Target ) = _mm_mul_ps ( reinterpret_cast <const __m128 &> ( Source ), _mm_set1_ps ( Scalar ) );
 	
 #else
 	
@@ -130,7 +130,7 @@ void Xenon::Math::Quaternion :: Multiply ( Quaternion & Target, const Quaternion
 	
 #endif
 	
-};
+}
 
 void Xenon::Math::Quaternion :: Prepend ( Quaternion & Target, const Quaternion & Source )
 {
@@ -158,7 +158,7 @@ void Xenon::Math::Quaternion :: Prepend ( Quaternion & Target, const Quaternion 
 	
 //#endif
 	
-};
+}
 
 void Xenon::Math::Quaternion :: Prepend ( Quaternion & Target, const Quaternion & SourceA, const Quaternion & SourceB )
 {
@@ -176,7 +176,7 @@ void Xenon::Math::Quaternion :: Prepend ( Quaternion & Target, const Quaternion 
 	
 //#endif
 	
-};
+}
 
 void Xenon::Math::Quaternion :: Append ( Quaternion & Target, const Quaternion & Source )
 {
@@ -204,7 +204,7 @@ void Xenon::Math::Quaternion :: Append ( Quaternion & Target, const Quaternion &
 	
 //#endif
 	
-};
+}
 
 void Xenon::Math::Quaternion :: Append ( Quaternion & Target, const Quaternion & SourceA, const Quaternion & SourceB )
 {
@@ -222,7 +222,7 @@ void Xenon::Math::Quaternion :: Append ( Quaternion & Target, const Quaternion &
 	
 //#endif
 	
-};
+}
 
 void Xenon::Math::Quaternion :: Conjugate ( Quaternion & A )
 {
@@ -231,7 +231,7 @@ void Xenon::Math::Quaternion :: Conjugate ( Quaternion & A )
 	
 	__m128 Sign = _mm_setr_ps ( - 1.0f, - 1.0f, - 1.0f, 1.0f );
 	
-	A.SSEV = _mm_mul_ps ( Sign, A.SSEV );
+	reinterpret_cast <__m128 &> ( A ) = _mm_mul_ps ( Sign, reinterpret_cast <__m128 &> ( A ) );
 	
 #else
 	
@@ -241,7 +241,7 @@ void Xenon::Math::Quaternion :: Conjugate ( Quaternion & A )
 	
 #endif
 	
-};
+}
 
 void Xenon::Math::Quaternion :: Conjugate ( Quaternion & Target, const Quaternion & Source )
 {
@@ -250,7 +250,7 @@ void Xenon::Math::Quaternion :: Conjugate ( Quaternion & Target, const Quaternio
 	
 	__m128 Sign = _mm_setr_ps ( - 1.0f, - 1.0f, - 1.0f, 1.0f );
 	
-	Target.SSEV = _mm_mul_ps ( Sign, Source.SSEV );
+	reinterpret_cast <__m128 &> ( Target ) = _mm_mul_ps ( Sign, reinterpret_cast <const __m128 &> ( Source ) );
 	
 #else
 	
@@ -261,7 +261,7 @@ void Xenon::Math::Quaternion :: Conjugate ( Quaternion & Target, const Quaternio
 	
 #endif
 	
-};
+}
 
 void Xenon::Math::Quaternion :: InterpolateSLERP ( Quaternion & A, const Quaternion & B, const float Fraction )
 {
@@ -270,9 +270,9 @@ void Xenon::Math::Quaternion :: InterpolateSLERP ( Quaternion & A, const Quatern
 	
 	Vec4 Temp;
 	
-	Temp.SSEV = _mm_mul_ps ( A.SSEV, B.SSEV );
-	Temp.SSEV = _mm_hadd_ps ( Temp.SSEV, Temp.SSEV );
-	Temp.SSEV = _mm_hadd_ps ( Temp.SSEV, Temp.SSEV );
+	reinterpret_cast <__m128 &> ( Temp ) = _mm_mul_ps ( reinterpret_cast <const __m128 &> ( A ), reinterpret_cast <const __m128 &> ( B ) );
+	reinterpret_cast <__m128 &> ( Temp ) = _mm_hadd_ps ( reinterpret_cast <__m128 &> ( Temp ), reinterpret_cast <__m128 &> ( Temp ) );
+	reinterpret_cast <__m128 &> ( Temp ) = _mm_hadd_ps ( reinterpret_cast <__m128 &> ( Temp ), reinterpret_cast <__m128 &> ( Temp ) );
 
 	Temp.X = acos ( Temp.X );
 	
@@ -280,7 +280,7 @@ void Xenon::Math::Quaternion :: InterpolateSLERP ( Quaternion & A, const Quatern
 	Temp.Z = sin ( Fraction * Temp.X ) / Temp.Y;
 	Temp.W = sin ( ( 1 - Fraction ) * Temp.X ) / Temp.Y;
 	
-	A.SSEV = _mm_add_ps ( _mm_mul_ps ( A.SSEV, _mm_shuffle_ps ( Temp.SSEV, Temp.SSEV, _MM_SHUFFLE ( 3, 3, 3, 3 ) ) ), _mm_mul_ps ( B.SSEV, _mm_shuffle_ps ( Temp.SSEV, Temp.SSEV, _MM_SHUFFLE ( 2, 2, 2, 2 ) ) ) );
+	reinterpret_cast <__m128 &> ( A ) = _mm_add_ps ( _mm_mul_ps ( reinterpret_cast <__m128 &> ( A ), _mm_shuffle_ps ( reinterpret_cast <__m128 &> ( Temp ), reinterpret_cast <__m128 &> ( Temp ), _MM_SHUFFLE ( 3, 3, 3, 3 ) ) ), _mm_mul_ps ( reinterpret_cast <const __m128 &> ( B ), _mm_shuffle_ps ( reinterpret_cast <__m128 &> ( Temp ), reinterpret_cast <__m128 &> ( Temp ), _MM_SHUFFLE ( 2, 2, 2, 2 ) ) ) );
 	
 #else
 	
@@ -300,7 +300,7 @@ void Xenon::Math::Quaternion :: InterpolateSLERP ( Quaternion & A, const Quatern
 	
 #endif
 	
-};
+}
 
 void Xenon::Math::Quaternion :: InterpolateSLERP ( Quaternion & Target, const Quaternion & SourceA, const Quaternion & SourceB, const float Fraction )
 {
@@ -309,9 +309,9 @@ void Xenon::Math::Quaternion :: InterpolateSLERP ( Quaternion & Target, const Qu
 	
 	Vec4 Temp;
 	
-	Temp.SSEV = _mm_mul_ps ( SourceA.SSEV, SourceB.SSEV );
-	Temp.SSEV = _mm_hadd_ps ( Temp.SSEV, Temp.SSEV );
-	Temp.SSEV = _mm_hadd_ps ( Temp.SSEV, Temp.SSEV );
+	reinterpret_cast <__m128 &> ( Temp ) = _mm_mul_ps ( reinterpret_cast <const __m128 &> ( SourceA ), reinterpret_cast <const __m128 &> ( SourceB ) );
+	reinterpret_cast <__m128 &> ( Temp ) = _mm_hadd_ps ( reinterpret_cast <__m128 &> ( Temp ), reinterpret_cast <__m128 &> ( Temp ) );
+	reinterpret_cast <__m128 &> ( Temp ) = _mm_hadd_ps ( reinterpret_cast <__m128 &> ( Temp ), reinterpret_cast <__m128 &> ( Temp ) );
 
 	Temp.X = acos ( Temp.X );
 	
@@ -319,7 +319,7 @@ void Xenon::Math::Quaternion :: InterpolateSLERP ( Quaternion & Target, const Qu
 	Temp.Z = sin ( Fraction * Temp.X ) / Temp.Y;
 	Temp.W = sin ( ( 1 - Fraction ) * Temp.X ) / Temp.Y;
 	
-	Target.SSEV = _mm_add_ps ( _mm_mul_ps ( SourceA.SSEV, _mm_shuffle_ps ( Temp.SSEV, Temp.SSEV, _MM_SHUFFLE ( 3, 3, 3, 3 ) ) ), _mm_mul_ps ( SourceB.SSEV, _mm_shuffle_ps ( Temp.SSEV, Temp.SSEV, _MM_SHUFFLE ( 2, 2, 2, 2 ) ) ) );
+	reinterpret_cast <__m128 &> ( Target ) = _mm_add_ps ( _mm_mul_ps ( reinterpret_cast <const __m128 &> ( SourceA ), _mm_shuffle_ps ( reinterpret_cast <__m128 &> ( Temp ), reinterpret_cast <__m128 &> ( Temp ), _MM_SHUFFLE ( 3, 3, 3, 3 ) ) ), _mm_mul_ps ( reinterpret_cast <const __m128 &> ( SourceB ), _mm_shuffle_ps ( reinterpret_cast <__m128 &> ( Temp ), reinterpret_cast <__m128 &> ( Temp ), _MM_SHUFFLE ( 2, 2, 2, 2 ) ) ) );
 	
 #else
 	
@@ -339,7 +339,7 @@ void Xenon::Math::Quaternion :: InterpolateSLERP ( Quaternion & Target, const Qu
 	
 #endif
 	
-};
+}
 
 void Xenon::Math::Quaternion :: FromYPR ( Quaternion & Target, const float Yaw, const float Pitch, const float Roll )
 {
@@ -358,7 +358,7 @@ void Xenon::Math::Quaternion :: FromYPR ( Quaternion & Target, const float Yaw, 
 	
 	Normalize ( Target );
 	
-};
+}
 
 void Xenon::Math::Quaternion :: FromAxisAngle ( Quaternion & Target, const Vec3 & Axis, const float Angle )
 {
@@ -371,9 +371,9 @@ void Xenon::Math::Quaternion :: FromAxisAngle ( Quaternion & Target, const Vec3 
 	Target.Y = Axis.Y * RSin;
 	Target.Z = Axis.Z * RSin;
 	
-	Quaternion :: Normalize ( Target );
+	Normalize ( Target );
 	
-};
+}
 
 void Xenon::Math::Quaternion :: FromBetweenVectors ( Quaternion & Target, const Vec3 & From, const Vec3 & To )
 {
@@ -414,49 +414,49 @@ void Xenon::Math::Quaternion :: FromBetweenVectors ( Quaternion & Target, const 
 	Target.Y = FromNormalized.Y;
 	Target.Z = FromNormalized.Z;
 	
-};
+}
 
 void Xenon::Math::Quaternion :: Normalize ( Quaternion & A )
 {
 	
-	Quaternion :: Multiply ( A, 1.0 / Length ( A ) );
+	Multiply ( A, 1.0f / Length ( A ) );
 	
-};
+}
 
 void Xenon::Math::Quaternion :: Normalize ( Quaternion & Target, const Quaternion & Source )
 {
 	
-	Quaternion :: Multiply ( Target, Source, 1.0 / Length ( Source ) );
+	Multiply ( Target, Source, 1.0f / Length ( Source ) );
 	
-};
+}
 
 float Xenon::Math::Quaternion :: Length ( const Quaternion & Source )
 {
 	
 	return sqrt ( Source.X * Source.X + Source.Y * Source.Y + Source.Z * Source.Z + Source.W * Source.W );
 	
-};
+}
 
 float Xenon::Math::Quaternion :: Yaw ( const Quaternion & A )
 {
 	
 	return atan2 ( ( A.W * A.Z + A.X * A.Y ), 0.5 - ( A.Y * A.Y + A.Z * A.Z ) );
 	
-};
+}
 
 float Xenon::Math::Quaternion :: Pitch ( const Quaternion & A )
 {
 	
 	return asin ( 2.0 * ( A.W * A.Y - A.X * A.Z ) );
 	
-};
+}
 
 float Xenon::Math::Quaternion :: Roll ( const Quaternion & A )
 {
 	
 	return atan2 ( ( A.W * A.X + A.Y * A.Z ), 0.5 - ( A.X * A.X + A.Y * A.Y ) );
 	
-};
+}
 
 void Xenon::Math::Quaternion :: Axis ( Vec3 & Target, const Quaternion & Source )
 {
@@ -467,11 +467,11 @@ void Xenon::Math::Quaternion :: Axis ( Vec3 & Target, const Quaternion & Source 
 	Target.Y = Source.Y / Div;
 	Target.Z = Source.Z / Div;
 	
-};
+}
 
 float Xenon::Math::Quaternion :: Angle ( const Quaternion & A )
 {
 	
 	return 2.0 * acos ( A.W );
 	
-};
+}

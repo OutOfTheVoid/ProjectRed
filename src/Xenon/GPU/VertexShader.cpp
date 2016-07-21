@@ -12,14 +12,14 @@ Xenon::GPU::VertexShader :: VertexShader ( const GLchar * Source, const char * N
 	Name ( Name ),
 	SHandle ( 0 )
 {
-};
+}
 
 Xenon::GPU::VertexShader :: ~VertexShader ()
 {
 	
 	GPUResourceFree ();
 	
-};
+}
 
 void Xenon::GPU::VertexShader :: GPUResourceAlloc ()
 {
@@ -36,7 +36,7 @@ void Xenon::GPU::VertexShader :: GPUResourceAlloc ()
 		
 	}
 	
-};
+}
 
 void Xenon::GPU::VertexShader :: GPUResourceFree ()
 {
@@ -49,21 +49,21 @@ void Xenon::GPU::VertexShader :: GPUResourceFree ()
 	Allocated = false;
 	Compiled = false;
 	
-};
+}
 
 bool Xenon::GPU::VertexShader :: GPUResourceAllocated ()
 {
 	
 	return Allocated;
 	
-};
+}
 
 const std :: string & Xenon::GPU::VertexShader :: GetName ()
 {
 	
 	return Name;
 	
-};
+}
 
 bool Xenon::GPU::VertexShader :: Compile ( bool StoreCompilationLog, bool FreeSource )
 {
@@ -123,14 +123,14 @@ bool Xenon::GPU::VertexShader :: Compile ( bool StoreCompilationLog, bool FreeSo
 	
 	return false;
 	
-};
+}
 
 const std :: string & Xenon::GPU::VertexShader :: GetCompilationLog ()
 {
 	
 	return CompileLog;
 	
-};
+}
 
 void Xenon::GPU::VertexShader :: FreeCompilationLog ()
 {
@@ -138,11 +138,11 @@ void Xenon::GPU::VertexShader :: FreeCompilationLog ()
 	CompileLog.clear ();
 	CompileLog.shrink_to_fit ();
 	
-};
+}
 
 GLuint Xenon::GPU::VertexShader :: GetSHandle ()
 {
 	
 	return SHandle;
 	
-};
+}

@@ -10,14 +10,14 @@ Xenon::GPU::GeometryShader :: GeometryShader ( const std :: string Source, const
 	Name ( Name ),
 	SHandle ( 0 )
 {
-};
+}
 
 Xenon::GPU::GeometryShader :: ~GeometryShader ()
 {
 	
 	GPUResourceFree ();
 	
-};
+}
 
 void Xenon::GPU::GeometryShader :: GPUResourceAlloc ()
 {
@@ -29,7 +29,7 @@ void Xenon::GPU::GeometryShader :: GPUResourceAlloc ()
 	
 	Allocated = ( SHandle != 0 );
 	
-};
+}
 
 void Xenon::GPU::GeometryShader :: GPUResourceFree ()
 {
@@ -42,21 +42,21 @@ void Xenon::GPU::GeometryShader :: GPUResourceFree ()
 	Allocated = false;
 	Compiled = false;
 	
-};
+}
 
 bool Xenon::GPU::GeometryShader :: GPUResourceAllocated ()
 {
 	
 	return Allocated;
 	
-};
+}
 
 const std :: string & Xenon::GPU::GeometryShader :: GetName ()
 {
 	
 	return Name;
 	
-};
+}
 
 bool Xenon::GPU::GeometryShader :: Compile ( bool StoreCompilationLog, bool FreeSource )
 {
@@ -115,14 +115,14 @@ bool Xenon::GPU::GeometryShader :: Compile ( bool StoreCompilationLog, bool Free
 	}
 		
 	
-};
+}
 
 const std :: string & Xenon::GPU::GeometryShader :: GetCompilationLog ()
 {
 	
 	return CompileLog;
 	
-};
+}
 
 void Xenon::GPU::GeometryShader :: FreeCompilationLog ()
 {
@@ -130,11 +130,11 @@ void Xenon::GPU::GeometryShader :: FreeCompilationLog ()
 	CompileLog.clear ();
 	CompileLog.shrink_to_fit ();
 	
-};
+}
 
 GLuint Xenon::GPU::GeometryShader :: GetSHandle ()
 {
 	
 	return SHandle;
 	
-};
+}

@@ -18,7 +18,7 @@ void Xenon::Geometry::Primitives :: SetupRealCubeFaceNormalSpec ( CubeNormalSpec
 	Spec.Static = Static;
 	Spec.AttributeName = AttributeName;
 	
-};
+}
 
 void Xenon::Geometry::Primitives :: SetupRadialCubeVertexNormalSpec ( CubeNormalSpec & Spec, const std :: string AttributeName, bool Static )
 {
@@ -37,7 +37,7 @@ void Xenon::Geometry::Primitives :: SetupRadialCubeVertexNormalSpec ( CubeNormal
 	Spec.Static = Static;
 	Spec.AttributeName = AttributeName;
 	
-};
+}
 
 void Xenon::Geometry::Primitives :: SetupUnitCubeVertexPositionSpec ( CubePositionSpec & Spec, const std :: string AttributeName, bool Static )
 {
@@ -50,7 +50,7 @@ void Xenon::Geometry::Primitives :: SetupUnitCubeVertexPositionSpec ( CubePositi
 	Spec.Static = Static;
 	Spec.AttributeName = AttributeName;
 	
-};
+}
 
 void Xenon::Geometry::Primitives :: SetupRealCubeFaceTangentSpec ( CubeTangentSpec & Spec, const std :: string Name, const CubeTexturePositionSpec & DirectionReference, bool Clockwise )
 {
@@ -147,7 +147,7 @@ void Xenon::Geometry::Primitives :: SetupRealCubeFaceTangentSpec ( CubeTangentSp
 		
 	};
 	
-};
+}
 
 void Xenon::Geometry::Primitives :: SetupRegularCubeFaceTexturePositionSpec ( CubeTexturePositionSpec & Spec, CubeTexturePositionSpec::CommonFaceRightAngleTexturePositions :: RightFaceRotation FaceRotations [ 6 ] )
 {
@@ -182,7 +182,7 @@ void Xenon::Geometry::Primitives :: SetupRegularCubeFaceTexturePositionSpec ( Cu
 		
 	}
 	
-};
+}
 
 bool Xenon::Geometry::Primitives :: GenerateCubeMesh ( Mesh ** Target, const CubeSpec & Spec )
 {
@@ -257,7 +257,10 @@ bool Xenon::Geometry::Primitives :: GenerateCubeMesh ( Mesh ** Target, const Cub
 		
 	} AttributeGenTracker;
 	
-	AttributeGenTracker AttributeTrackers [ AttributeCount ];
+	if ( AttributeCount > 40 ) // Something obviously went wrong, we shouldn't have more than 100 attributes.
+		return NULL;
+	
+	AttributeGenTracker AttributeTrackers [ 40 ];
 	
 	uint32_t AttributeTrackerIndex;
 	
@@ -482,8 +485,11 @@ bool Xenon::Geometry::Primitives :: GenerateCubeMesh ( Mesh ** Target, const Cub
 	if ( CommonStaticBufferAttributeTotal != 0 )
 		AttributeDataCount ++;
 	
+	if ( AttributeDataCount > 40 )
+		return NULL;
+	
 	uint32_t AttributeDataIndex = 0;
-	MeshAttributeData * AttributeDataList [ AttributeDataCount ];
+	MeshAttributeData * AttributeDataList [ 40 ];
 	
 	Util :: RCMem * StaticDataBuffer = ( CommonStaticBufferAttributeTotal != 0 ) ? new Util :: RCMem ( CommonStaticBufferAttributeTotal ) : NULL;
 	void * StaticData = ( CommonStaticBufferAttributeTotal != 0 ) ? StaticDataBuffer -> GetData () : NULL;
@@ -1349,4 +1355,4 @@ bool Xenon::Geometry::Primitives :: GenerateCubeMesh ( Mesh ** Target, const Cub
 	
 	return true;
 	
-};
+}

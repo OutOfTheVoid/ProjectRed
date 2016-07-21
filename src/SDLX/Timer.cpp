@@ -6,7 +6,7 @@ SDLX::Timer :: Timer ( void ( * Callback ) ( Timer * Source, void * Data ), void
 	Valid ( false ),
 	MLock ( Mutex :: Create () )
 {
-};
+}
 
 SDLX::Timer :: ~Timer ()
 {
@@ -14,7 +14,7 @@ SDLX::Timer :: ~Timer ()
 	if ( Valid )
 		SDL_RemoveTimer ( ID );
 	
-};
+}
 
 void SDLX::Timer :: Start ( uint32_t Delay )
 {
@@ -24,7 +24,7 @@ void SDLX::Timer :: Start ( uint32_t Delay )
 	ID = SDL_AddTimer ( Delay, & TimerCallback, reinterpret_cast <void *> ( this ) );
 	Valid = true;
 	
-};
+}
 
 void SDLX::Timer :: Stop ()
 {
@@ -45,14 +45,14 @@ SDLX::Mutex * SDLX::Timer :: GetMutex ()
 	
 	return MLock;
 	
-};
+}
 
 uint32_t SDLX::Timer :: TimerCallback ( uint32_t Interval, void * Parameter )
 {
 	
 	return reinterpret_cast <Timer *> ( Parameter ) -> CallbackInternal ( Interval );
 	
-};
+}
 
 uint32_t SDLX::Timer :: CallbackInternal ( uint32_t Interval )
 {
@@ -61,19 +61,19 @@ uint32_t SDLX::Timer :: CallbackInternal ( uint32_t Interval )
 	
 	return Interval;
 	
-};
+}
 
 void SDLX::Timer :: SetCallback ( void ( * Callback ) ( Timer * Source, void * Data ) )
 {
 	
 	this -> Callback = Callback;
 	
-};
+}
 
 void SDLX::Timer :: SetData ( void * Data )
 {
 	
 	this -> Data = Data;
 	
-};
+}
 

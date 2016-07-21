@@ -98,7 +98,7 @@ namespace Xenon
 					float E1;
 					float E2;
 					
-				};
+				} SubElements;
 				
 				float Sub [ 3 ];
 				
@@ -110,8 +110,8 @@ namespace Xenon
 			
 		};
 		
-	};
+	}
 	
-};
+}
 
 #endif

@@ -27,7 +27,7 @@ void SDLX::Lib :: Init ( uint32_t * Status, uint32_t SDLFlags )
 		
 	}
 	
-};
+}
 
 void SDLX::Lib :: EventLoop ( uint32_t * Status )
 {
@@ -127,18 +127,18 @@ void SDLX::Lib :: EventLoop ( uint32_t * Status )
 		
 	}
 	
-};
+}
 
 void SDLX::Lib :: PushEvent ( SDL_Event * Event )
 {
 	
 	SDL_PushEvent ( Event );
 	
-};
+}
 
 void SDLX::Lib :: DeInit ()
 {
 	
 	SDL_Quit ();
 	
-};
+}

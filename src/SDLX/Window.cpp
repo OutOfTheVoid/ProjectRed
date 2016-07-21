@@ -42,7 +42,7 @@ SDLX::Window * SDLX::Window :: CreateWindow ( uint32_t * Status, std :: string N
 	
 	return New;
 	
-};
+}
 
 SDLX::Window :: Window ( SDL_Window * WHandle, std :: string Name, uint32_t Flags ):
 	RefCounted (),
@@ -58,7 +58,7 @@ SDLX::Window :: Window ( SDL_Window * WHandle, std :: string Name, uint32_t Flag
 	
 	SDL_SetWindowData ( WHandle, kDataName_WindowClassInstancePointer, reinterpret_cast <void *> ( this ) );
 	
-};
+}
 
 SDLX::Window :: ~Window ()
 {
@@ -69,14 +69,14 @@ SDLX::Window :: ~Window ()
 	if ( ! Destroyed )
 		SDL_DestroyWindow ( WHandle );
 	
-};
+}
 
 SDLX::Mutex * SDLX::Window :: GetMutex ()
 {
 	
 	return MLock;
 	
-};
+}
 
 void SDLX::Window :: AddEventHook ( uint8_t SDLWindowEventID, void ( * EventCallback ) ( SDL_WindowEvent * Event, Window * Origin, void * Data ), void * Data, int32_t Position )
 {
@@ -86,12 +86,14 @@ void SDLX::Window :: AddEventHook ( uint8_t SDLWindowEventID, void ( * EventCall
 	
 	std :: vector <CallbackPair> & CallbackList = EventMap [ SDLWindowEventID ];
 	
-	if ( Position < 0 )
-		CallbackList.push_back ( CallbackPair { EventCallback : EventCallback, Data : Data } );
-	else
-		CallbackList.insert ( CallbackList.begin () + static_cast <uint32_t> ( Position ), CallbackPair { EventCallback : EventCallback, Data : Data } );
+	CallbackPair Pair { EventCallback, Data };
 	
-};
+	if ( Position < 0 )
+		CallbackList.push_back ( Pair );
+	else
+		CallbackList.insert ( CallbackList.begin () + static_cast <uint32_t> ( Position ), Pair );
+	
+}
 
 void SDLX::Window :: RemoveEventHook ( uint8_t SDLWindowEventID, void ( * EventCallbackPtr ) ( SDL_WindowEvent * Event, Window * Origin, void * Data ) )
 {
@@ -108,7 +110,7 @@ void SDLX::Window :: RemoveEventHook ( uint8_t SDLWindowEventID, void ( * EventC
 		
 	}
 	
-};
+}
 
 void SDLX::Window :: Close ( uint32_t * Status )
 {
@@ -128,7 +130,7 @@ void SDLX::Window :: Close ( uint32_t * Status )
 	
 	* Status = kStatus_Success;
 	
-};
+}
 
 void SDLX::Window :: Event ( SDL_WindowEvent * Event )
 {
@@ -145,7 +147,7 @@ void SDLX::Window :: Event ( SDL_WindowEvent * Event )
 		
 	}
 	
-};
+}
 
 SDLX :: Surface * SDLX::Window :: GetWindowSurface ()
 {
@@ -155,7 +157,7 @@ SDLX :: Surface * SDLX::Window :: GetWindowSurface ()
 	
 	return SurfaceInst;
 	
-};
+}
 
 SDLX :: Renderer * SDLX::Window :: GetRenderer ()
 {
@@ -165,7 +167,7 @@ SDLX :: Renderer * SDLX::Window :: GetRenderer ()
 	
 	return RenderInst;
 	
-};
+}
 
 SDLX :: GLContext * SDLX::Window :: GetOpenGLContext ()
 {
@@ -183,25 +185,25 @@ SDLX :: GLContext * SDLX::Window :: GetOpenGLContext ()
 	
 	return GLInst;
 	
-};
+}
 
 void SDLX::Window :: GLSwap ()
 {
 	
 	SDL_GL_SwapWindow ( WHandle );
 	
-};
+}
 
 void SDLX::Window :: UpdateSurface ()
 {
 	
 	SDL_UpdateWindowSurface ( WHandle );
 	
-};
+}
 
 void SDLX::Window :: Resize ( uint32_t Width, uint32_t Height )
 {
 	
 	SDL_SetWindowSize ( WHandle, Width, Height );
 	
-};
+}

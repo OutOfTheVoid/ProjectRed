@@ -13,7 +13,7 @@ Xenon::Geometry::Mesh :: Mesh ( DrawMode Mode, Util :: RCMem * IndexData, uint32
 	
 	IndexData -> Reference ();
 	
-};
+}
 
 Xenon::Geometry::Mesh :: Mesh ( MemMapIndexData MAP_INDEXBUFFER, uint32_t IndexCount, GPU::IndexBuffer :: IndexType IType, bool Draw ):
 	IndexBuff ( Draw ? GPU::IndexBuffer :: kUsageType_Stream_Draw : GPU::IndexBuffer :: kUsageType_Stream_Copy, IType ),
@@ -23,7 +23,7 @@ Xenon::Geometry::Mesh :: Mesh ( MemMapIndexData MAP_INDEXBUFFER, uint32_t IndexC
 	IndexDirty ( true ),
 	GPUAllocated ( false )
 {	
-};
+}
 
 Xenon::Geometry::Mesh :: ~Mesh ()
 {
@@ -49,14 +49,14 @@ Xenon::Geometry::Mesh :: ~Mesh ()
 	if ( GPUAllocated )
 		GPUResourceFree ();
 	
-};
+}
 			
 void Xenon::Geometry::Mesh :: SetDrawMode ( DrawMode Mode )
 {
 	
 	this -> Mode = Mode;
 	
-};
+}
 
 void Xenon::Geometry::Mesh :: ReIndex ( uint32_t IndexCount, Util :: RCMem * IndexData )
 {
@@ -72,7 +72,7 @@ void Xenon::Geometry::Mesh :: ReIndex ( uint32_t IndexCount, Util :: RCMem * Ind
 	
 	IndexDirty = true;
 	
-};
+}
 
 void Xenon::Geometry::Mesh :: ReIndex ( MemMapIndexData MAP_INDEXBUFFER, uint32_t IndexCount )
 {
@@ -84,7 +84,7 @@ void Xenon::Geometry::Mesh :: ReIndex ( MemMapIndexData MAP_INDEXBUFFER, uint32_
 	
 	IndexDirty = true;
 	
-};
+}
 
 void * Xenon::Geometry::Mesh :: GetIndexMemoryPointer ()
 {
@@ -102,7 +102,7 @@ void * Xenon::Geometry::Mesh :: GetIndexMemoryPointer ()
 	
 	return IndexBuff.Map ();
 	
-};
+}
 
 void Xenon::Geometry::Mesh :: GPUResourceAlloc ()
 {
@@ -114,7 +114,7 @@ void Xenon::Geometry::Mesh :: GPUResourceAlloc ()
 	
 	GPUAllocated = IndexBuff.GPUResourceAllocated ();
 	
-};
+}
 
 void Xenon::Geometry::Mesh :: GPUResourceFree ()
 {
@@ -126,14 +126,14 @@ void Xenon::Geometry::Mesh :: GPUResourceFree ()
 	
 	GPUAllocated = false;
 	
-};
+}
 
 bool Xenon::Geometry::Mesh :: GPUResourceAllocated ()
 {
 	
 	return GPUAllocated;
 	
-};
+}
 
 void Xenon::Geometry::Mesh :: FlushIndexes ( bool DiscardDataReference )
 {
@@ -165,14 +165,14 @@ void Xenon::Geometry::Mesh :: FlushIndexes ( bool DiscardDataReference )
 		
 	}
 	
-};
+}
 
 Xenon::Geometry::Mesh :: DrawMode Xenon::Geometry::Mesh :: GetDrawMode ()
 {
 	
 	return Mode;
 	
-};
+}
 
 void Xenon::Geometry::Mesh :: BindForDraw ()
 {
@@ -180,7 +180,7 @@ void Xenon::Geometry::Mesh :: BindForDraw ()
 	FlushIndexes ( false );
 	FlushVertexes ( false );
 	
-};
+}
 
 void Xenon::Geometry::Mesh :: FlushVertexes ( bool FreeDataReferences )
 {
@@ -188,7 +188,7 @@ void Xenon::Geometry::Mesh :: FlushVertexes ( bool FreeDataReferences )
 	for ( uint32_t I = 0; I < AttributeDataList.size (); I ++ )
 		AttributeDataList [ I ] -> Update ( FreeDataReferences );
 	
-};
+}
 
 void Xenon::Geometry::Mesh :: BuildVertexArray ( GPU :: VertexArray & Target )
 {
@@ -203,32 +203,32 @@ void Xenon::Geometry::Mesh :: BuildVertexArray ( GPU :: VertexArray & Target )
 	
 	Target.SetIndexBuffer ( & IndexBuff );
 	
-};
+}
 
 void Xenon::Geometry::Mesh :: AddAttribute ( MeshAttribute * Attribute )
 {
 	
 	AttributeList.push_back ( Attribute );
 	
-};
+}
 
 void Xenon::Geometry::Mesh :: AddAttributeData ( MeshAttributeData * AttributeData )
 {
 	
 	AttributeDataList.push_back ( AttributeData );
 	
-};
+}
 
 uint32_t Xenon::Geometry::Mesh :: GetIndexCount ()
 {
 	
 	return IndexBuff.GetIndexCount ();
 	
-};
+}
 
 Xenon::GPU::IndexBuffer :: IndexType Xenon::Geometry::Mesh :: GetIndexType ()
 {
 	
 	return IndexBuff.GetIndexType ();
 	
-};
+}

@@ -21,6 +21,6 @@ namespace SDLX
 	const uint32_t kStatus_LibInitFailed = 4;
 	const uint32_t kStatus_RegisterEventsFailed = 5;
 	
-};
+}
 
 #endif /* SDLX_SDLX_H */

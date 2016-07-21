@@ -13,7 +13,7 @@ namespace Xenon
 		
 		class Vec3;
 		
-		class Vec4
+		class alignas ( 16 ) Vec4
 		{
 		public:
 			
@@ -59,38 +59,15 @@ namespace Xenon
 			static void Project ( Vec4 & Target, const Vec4 & Direction );
 			static void Project ( Vec4 & Target, const Vec4 & Projected, const Vec4 & Direction );
 			
-#ifdef XENON_SSE
-			
-			union
-			{
-				
-				struct
-				{
-					
-					float X;
-					float Y;
-					float Z;
-					float W;
-					
-				};
-				
-				__m128 SSEV;
-				
-			};
-			
-#else
-			
 			float X;
 			float Y;
 			float Z;
 			float W;
 			
-#endif
-			
 		};
 		
-	};
+	}
 	
-};
+}
 
 #endif

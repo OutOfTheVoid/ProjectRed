@@ -109,6 +109,6 @@ namespace SDLX
 		
 	};
 	
-};
+}
 
 #endif

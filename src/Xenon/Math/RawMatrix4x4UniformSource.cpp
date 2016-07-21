@@ -8,18 +8,18 @@ Xenon::Math::RawMatrix4x4UniformSource :: RawMatrix4x4UniformSource ( const Matr
 	Transposed ( Transposed ),
 	Iteration ( 0 )
 {
-};
+}
 
 Xenon::Math::RawMatrix4x4UniformSource :: ~RawMatrix4x4UniformSource ()
 {
-};
+}
 
 const GLfloat * Xenon::Math::RawMatrix4x4UniformSource :: GetFloatArray () const
 {
 	
 	return reinterpret_cast <const GLfloat *> ( Source );
 	
-};
+}
 
 void Xenon::Math::RawMatrix4x4UniformSource :: SetSource ( const Matrix4x4 * Source, bool Transposed )
 {
@@ -29,27 +29,27 @@ void Xenon::Math::RawMatrix4x4UniformSource :: SetSource ( const Matrix4x4 * Sou
 	
 	Iteration ++;
 	
-};
+}
 
 void Xenon::Math::RawMatrix4x4UniformSource :: SetDirty ()
 {
 	
 	Iteration ++;
 	
-};
+}
 
 int64_t Xenon::Math::RawMatrix4x4UniformSource :: GetIteration () const
 {
 	
 	return Iteration;
 	
-};
+}
 
 const bool Xenon::Math::RawMatrix4x4UniformSource :: IsTransposed () const
 {
 	
 	return Transposed;
 	
-};
+}
 
 #endif

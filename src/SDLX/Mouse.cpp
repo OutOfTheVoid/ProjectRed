@@ -25,21 +25,21 @@ void SDLX::Mouse :: Init ()
 	
 	Locked = false;
 	
-};
+}
 
 void SDLX::Mouse :: DeInit ()
 {
 	
 	Unlock ();
 	
-};
+}
 
 void SDLX::Mouse :: ButtonEventInternal ( SDL_MouseButtonEvent * Event )
 {
 	
 	
 	
-};
+}
 
 void SDLX::Mouse :: MotionEventInternal ( SDL_MouseMotionEvent * Event )
 {
@@ -51,17 +51,14 @@ void SDLX::Mouse :: MotionEventInternal ( SDL_MouseMotionEvent * Event )
 	
 	Length = MotionListeners.size ();
 	
-	MotionListenerStruct MotionListenersCopy [ Length ];
-	
-	for ( I = 0; I < Length; I ++ )
-		MotionListenersCopy [ I ] = MotionListeners [ I ];
+	std :: vector <MotionListenerStruct> MotionListenersCopy ( MotionListeners );
 	
 	MotionListenerLock -> Unlock ();
 	
 	for ( I = 0; I < Length; I ++ )
 		MotionListenersCopy [ I ].Listener ( Event, MotionListenersCopy [ I ].Data );
 	
-};
+}
 
 void SDLX::Mouse :: Lock ()
 {
@@ -72,7 +69,7 @@ void SDLX::Mouse :: Lock ()
 	if ( SDL_SetRelativeMouseMode ( SDL_TRUE ) == 0 )
 		Locked = true;
 	
-};
+}
 
 void SDLX::Mouse :: Unlock ()
 {
@@ -83,14 +80,14 @@ void SDLX::Mouse :: Unlock ()
 	if ( SDL_SetRelativeMouseMode ( SDL_FALSE ) == 0 )
 		Locked = false;
 	
-};
+}
 
 bool SDLX::Mouse :: IsLocked ()
 {
 	
 	return Locked;
 	
-};
+}
 
 void SDLX::Mouse :: AddMotionListener ( void ( * Listener ) ( SDL_MouseMotionEvent * Event, void * Data ), void * Data )
 {
@@ -106,7 +103,7 @@ void SDLX::Mouse :: AddMotionListener ( void ( * Listener ) ( SDL_MouseMotionEve
 	
 	MotionListenerLock -> Unlock ();
 	
-};
+}
 
 void SDLX::Mouse :: RemoveMotionListener ( void ( * Listener ) ( SDL_MouseMotionEvent * Event, void * Data ) )
 {
@@ -125,5 +122,5 @@ void SDLX::Mouse :: RemoveMotionListener ( void ( * Listener ) ( SDL_MouseMotion
 	
 	MotionListenerLock -> Unlock ();
 	
-};
+}
 

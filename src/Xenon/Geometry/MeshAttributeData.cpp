@@ -13,7 +13,7 @@ Xenon::Geometry::MeshAttributeData :: MeshAttributeData ( Util :: RCMem * Data, 
 	if ( Data != NULL )
 		Data -> Reference ();
 	
-};
+}
 
 Xenon::Geometry::MeshAttributeData :: ~MeshAttributeData ()
 {
@@ -23,35 +23,35 @@ Xenon::Geometry::MeshAttributeData :: ~MeshAttributeData ()
 	if ( Data != NULL )
 		Data -> Dereference ();
 	
-};
+}
 
 void Xenon::Geometry::MeshAttributeData :: MarkDirty ()
 {
 	
 	Dirty = true;
 	
-};
+}
 
 void Xenon::Geometry::MeshAttributeData :: GPUResourceAlloc ()
 {
 	
 	Buffer.GPUResourceAlloc ();
 	
-};
+}
 
 void Xenon::Geometry::MeshAttributeData :: GPUResourceFree ()
 {
 	
 	Buffer.GPUResourceFree ();
 	
-};
+}
 
 bool Xenon::Geometry::MeshAttributeData :: GPUResourceAllocated ()
 {
 	
 	return Buffer.GPUResourceAllocated ();
 	
-};
+}
 
 void Xenon::Geometry::MeshAttributeData :: Update ( bool FreeDataReference )
 {
@@ -88,11 +88,11 @@ void Xenon::Geometry::MeshAttributeData :: Update ( bool FreeDataReference )
 		
 	}
 	
-};
+}
 
 Xenon::GPU :: VertexBuffer * Xenon::Geometry::MeshAttributeData :: GetBuffer ()
 {
 	
 	return & Buffer;
 	
-};
+}

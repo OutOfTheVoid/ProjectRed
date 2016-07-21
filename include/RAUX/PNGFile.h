@@ -59,6 +59,6 @@ namespace RAUX
 		
 	};
 	
-};
+}
 
 #endif

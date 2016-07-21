@@ -15,7 +15,7 @@ void SDLX::Keyboard :: Init ()
 	
 	ListenerLock = Mutex :: Create ();
 	
-};
+}
 
 bool SDLX::Keyboard :: GetKeyState ( int32_t Key )
 {
@@ -27,7 +27,7 @@ bool SDLX::Keyboard :: GetKeyState ( int32_t Key )
 	
 	return KeyArray [ ScanCode ];
 	
-};
+}
 
 bool SDLX::Keyboard :: GetScanState ( int32_t ScanCode )
 {
@@ -37,7 +37,7 @@ bool SDLX::Keyboard :: GetScanState ( int32_t ScanCode )
 	
 	return KeyArray [ ScanCode ];
 	
-};
+}
 
 void SDLX::Keyboard :: AddKeyListener ( void ( * Listener ) ( int32_t ScanCode, int32_t KeyCode, bool Down, void * Data ), void * Data )
 {
@@ -53,7 +53,7 @@ void SDLX::Keyboard :: AddKeyListener ( void ( * Listener ) ( int32_t ScanCode, 
 	
 	ListenerLock -> Unlock ();
 	
-};
+}
 
 void SDLX::Keyboard :: RemoveKeyListener ( void ( * Listener ) ( int32_t ScanCode, int32_t KeyCode, bool Down, void * Data ) )
 {
@@ -67,7 +67,7 @@ void SDLX::Keyboard :: RemoveKeyListener ( void ( * Listener ) ( int32_t ScanCod
 	
 	ListenerLock -> Unlock ();
 	
-};
+}
 
 void SDLX::Keyboard :: EventInternal ( SDL_KeyboardEvent * Event )
 {
@@ -79,24 +79,21 @@ void SDLX::Keyboard :: EventInternal ( SDL_KeyboardEvent * Event )
 	
 	Length = Listeners.size ();
 	
-	ListenerStruct ListenersCopy [ Length ];
-	
-	for ( I = 0; I < Length; I ++ )
-		ListenersCopy [ I ] = Listeners [ I ];
+	std :: vector <ListenerStruct> ListenersCopy ( Listeners );
 	
 	ListenerLock -> Unlock ();
 	
 	for ( I = 0; I < Length; I ++ )
 		ListenersCopy [ I ].Listener ( Event -> keysym.scancode, Event -> keysym.sym, Event -> type == SDL_KEYDOWN, ListenersCopy [ I ].Data );
 
-};
+}
 
 const char * SDLX::Keyboard :: GetKeyName ( int32_t Key )
 {
 	
 	return SDL_GetKeyName ( Key );
 	
-};
+}
 
 const char * SDLX::Keyboard :: GetScanName ( int32_t ScanCode )
 {
@@ -106,4 +103,4 @@ const char * SDLX::Keyboard :: GetScanName ( int32_t ScanCode )
 	
 	return "";
 	
-};
+}

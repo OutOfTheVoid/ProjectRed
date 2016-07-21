@@ -5,28 +5,20 @@
 #include <string.h>
 
 Xenon::Math::Vec4 :: Vec4 ( float X, float Y, float Z, float W ):
-#ifdef XENON_SSE
-	SSEV ( _mm_setr_ps ( X, Y, Z, W ) )
-#else
 	X ( X ),
 	Y ( Y ),
 	Z ( Z ),
 	W ( W )
-#endif
 {
-};
+}
 
 Xenon::Math::Vec4 :: Vec4 ( Vec3 & XYZ, float W ):
-#ifdef XENON_SSE
-	SSEV ( _mm_setr_ps ( XYZ.X, XYZ.Y, XYZ.Z, W ) )
-#else
 	X ( XYZ.X ),
 	Y ( XYZ.Y ),
 	Z ( XYZ.Z ),
 	W ( W )
-#endif
 {	
-};
+}
 
 Xenon::Math::Vec4 :: Vec4 ( const Vec4 & CopyFrom )
 {
@@ -35,34 +27,28 @@ Xenon::Math::Vec4 :: Vec4 ( const Vec4 & CopyFrom )
 	
 }
 
-#ifdef XENON_SSE
-Xenon::Math::Vec4 :: Vec4 ( __m128 SSEV ):
-	SSEV ( SSEV )
-{
-}
-#endif
-
 Xenon::Math::Vec4 :: Vec4 ( NoInit NO_INIT )
 {
-};
+}
 
 Xenon::Math::Vec4 :: ~Vec4 ()
 {
-};
+}
 
 void Xenon::Math::Vec4 :: Copy ( Vec4 & Target, const Vec4 & Source )
 {
 	
 	memcpy ( & Target, & Source, sizeof ( Vec4 ) );
 	
-};
+}
 
 float Xenon::Math::Vec4 :: DotProduct ( const Vec4 & SourceA, const Vec4 & SourceB )
 {
 	
 #ifdef XENON_SSE4_1
 	
-	Vec4 Temp = _mm_dp_ps ( SourceA.SSEV, SourceB.SSEV, 0xFF );
+	__m128 TempSSEV = _mm_dp_ps ( reinterpret_cast <const __m128 &> ( SourceA ), reinterpret_cast <const __m128 &> ( SourceB ), 0xFF );
+	Vec4 Temp = reinterpret_cast <const Vec4 &> ( TempSSEV );
 	return Temp.X;
 	
 #else
@@ -71,14 +57,14 @@ float Xenon::Math::Vec4 :: DotProduct ( const Vec4 & SourceA, const Vec4 & Sourc
 	
 #endif
 	
-};
+}
 
 void Xenon::Math::Vec4 :: Multiply ( Vec4 & Target, float Scalar )
 {
 	
 #ifdef XENON_SSE
 	
-	Target.SSEV = _mm_mul_ps ( Target.SSEV, _mm_set1_ps ( Scalar ) );
+	reinterpret_cast <__m128 &> ( Target ) = _mm_mul_ps ( reinterpret_cast <__m128 &> ( Target ), _mm_set1_ps ( Scalar ) );
 	
 #else
 	
@@ -89,14 +75,14 @@ void Xenon::Math::Vec4 :: Multiply ( Vec4 & Target, float Scalar )
 	
 #endif
 	
-};
+}
 
 void Xenon::Math::Vec4 :: Multiply ( Vec4 & Target, const Vec4 & Source, float Scalar )
 {
 	
 #ifdef XENON_SSE
 	
-	Target.SSEV = _mm_mul_ps ( Source.SSEV, _mm_set1_ps ( Scalar ) );
+	reinterpret_cast <__m128 &> ( Target ) = _mm_mul_ps ( reinterpret_cast <const __m128 &> ( Source ), _mm_set1_ps ( Scalar ) );
 	
 #else
 	
@@ -107,14 +93,14 @@ void Xenon::Math::Vec4 :: Multiply ( Vec4 & Target, const Vec4 & Source, float S
 	
 #endif
 	
-};
+}
 
 void Xenon::Math::Vec4 :: Add ( Vec4 & Target, const Vec4 & SourceA, const Vec4 & SourceB )
 {
 	
 #ifdef XENON_SSE
 	
-	Target.SSEV = _mm_add_ps ( SourceA.SSEV, SourceB.SSEV );
+	reinterpret_cast <__m128 &> ( Target ) = _mm_add_ps ( reinterpret_cast <const __m128 &> ( SourceA ), reinterpret_cast <const __m128 &> ( SourceB ) );
 	
 #else
 	
@@ -125,14 +111,14 @@ void Xenon::Math::Vec4 :: Add ( Vec4 & Target, const Vec4 & SourceA, const Vec4 
 	
 #endif
 	
-};
+}
 
 void Xenon::Math::Vec4 :: Add ( Vec4 & A, const Vec4 & B )
 {
 	
 #ifdef XENON_SSE
 	
-	A.SSEV = _mm_add_ps ( A.SSEV, B.SSEV );
+	reinterpret_cast <__m128 &> ( A ) = _mm_add_ps ( reinterpret_cast <const __m128 &> ( A ), reinterpret_cast <const __m128 &> ( B ) );
 	
 #else
 	
@@ -143,14 +129,14 @@ void Xenon::Math::Vec4 :: Add ( Vec4 & A, const Vec4 & B )
 	
 #endif
 	
-};
+}
 
 void Xenon::Math::Vec4 :: Subtract ( Vec4 & Target, const Vec4 & SourceA, const Vec4 & SourceB )
 {
 	
 #ifdef XENON_SSE
 	
-	Target.SSEV = _mm_sub_ps ( SourceA.SSEV, SourceB.SSEV );
+	reinterpret_cast <__m128 &> ( Target ) = _mm_sub_ps ( reinterpret_cast <const __m128 &> ( SourceA ), reinterpret_cast <const __m128 &> ( SourceB ) );
 	
 #else
 	
@@ -161,14 +147,14 @@ void Xenon::Math::Vec4 :: Subtract ( Vec4 & Target, const Vec4 & SourceA, const 
 	
 #endif
 	
-};
+}
 
 void Xenon::Math::Vec4 :: Subtract ( Vec4 & Target, const Vec4 & Source )
 {
 	
 #ifdef XENON_SSE
 	
-	Target.SSEV = _mm_sub_ps ( Target.SSEV, Source.SSEV );
+	reinterpret_cast <__m128 &> ( Target ) = _mm_sub_ps ( reinterpret_cast <__m128 &> ( Target ), reinterpret_cast <const __m128 &> ( Source ) );
 	
 #else
 	
@@ -179,29 +165,29 @@ void Xenon::Math::Vec4 :: Subtract ( Vec4 & Target, const Vec4 & Source )
 	
 #endif
 	
-};
+}
 
-void Xenon::Math::Vec4 :: Normalize ( Vec4 & A )
+void Xenon::Math::Vec4 :: Normalize ( Vec4 & Target )
 {
 	
 #ifdef XENON_SSE4_1
 	
-	A.SSEV = _mm_div_ps ( A.SSEV, _mm_sqrt_ps ( _mm_dp_ps ( A.SSEV, A.SSEV, 0xFF ) ) );
+	reinterpret_cast <__m128 &> ( Target ) = _mm_div_ps ( reinterpret_cast <__m128 &> ( Target ), _mm_sqrt_ps ( _mm_dp_ps ( reinterpret_cast <__m128 &> ( Target ), reinterpret_cast <__m128 &> ( Target ), 0xFF ) ) );
 	
 #else
 	
-	Multiply ( A, 1.0 / Length ( A ) );
+	Multiply ( Target, 1.0 / Length ( Target ) );
 	
 #endif
 	
-};
+}
 
 void Xenon::Math::Vec4 :: Normalize ( Vec4 & Target, const Vec4 & Source )
 {
 	
 #ifdef XENON_SSE4_1
 	
-	Target.SSEV = _mm_div_ps ( Source.SSEV, _mm_sqrt_ps ( _mm_dp_ps ( Source.SSEV, Source.SSEV, 0xFF ) ) );
+	reinterpret_cast <__m128 &> ( Target ) = _mm_div_ps ( reinterpret_cast <const __m128 &> ( Source ), _mm_sqrt_ps ( _mm_dp_ps ( reinterpret_cast <const __m128 &> ( Source ), reinterpret_cast <const __m128 &> ( Source ), 0xFF ) ) );
 	
 #else
 	
@@ -209,54 +195,48 @@ void Xenon::Math::Vec4 :: Normalize ( Vec4 & Target, const Vec4 & Source )
 	
 #endif
 	
-};
+}
 
-float Xenon::Math::Vec4 :: Length ( const Vec4 & A )
+float Xenon::Math::Vec4 :: Length ( const Vec4 & Target )
 {
 	
 #ifdef XENON_SSE4_1
 	
-	Vec4 Temp ( _mm_sqrt_ps ( _mm_dp_ps ( A.SSEV, A.SSEV, 0xFF ) ) );
+	__m128 TempSSEV = _mm_sqrt_ps ( _mm_dp_ps ( reinterpret_cast <const __m128 &> ( Target ), reinterpret_cast <const __m128 &> ( Target ), 0xFF ) );
+	Vec4 Temp = reinterpret_cast <const Vec4 &> ( TempSSEV );
 	return Temp.X;
 	
 #else
 	
-	return sqrt ( A.X * A.X + A.Y * A.Y + A.Z * A.Z + A.W * A.W );
+	return sqrt ( Target.X * Target.X + Target.Y * Target.Y + Target.Z * Target.Z + Target.W * Target.W );
 	
 #endif
 	
-};
+}
 
-float Xenon::Math::Vec4 :: LengthSquared ( const Vec4 & A )
+float Xenon::Math::Vec4 :: LengthSquared ( const Vec4 & Source )
 {
 	
 #ifdef XENON_SSE4_1
 	
-	Vec4 Temp ( _mm_dp_ps ( A.SSEV, A.SSEV, 0xFF ) );
+	__m128 TempSSEV = _mm_dp_ps ( reinterpret_cast <const __m128 &> ( Source ), reinterpret_cast <const __m128 &> ( Source ), 0xFF );
+	Vec4 Temp ( reinterpret_cast <const Vec4 &> ( TempSSEV ) );
 	return Temp.X;
 	
 #else
 	
-	return A.X * A.X + A.Y * A.Y + A.Z * A.Z + A.W * A.W;
+	return Source.X * Source.X + Source.Y * Source.Y + Source.Z * Source.Z + Source.W * Source.W;
 	
 #endif
 	
-};
+}
 
 float Xenon::Math::Vec4 :: AngleBetween ( const Vec4 & A, const Vec4 & B )
 {
 	
-#ifdef XENON_SSE4_1
-	
-	Vec4 Temp = _mm_div_ps ( _mm_dp_ps ( A.SSEV, B.SSEV, 0xFF ), _mm_sqrt_ps ( _mm_mul_ps ( _mm_dp_ps ( A.SSEV, A.SSEV, 0xFF ), _mm_dp_ps ( B.SSEV, B.SSEV, 0xFF ) ) ) );
-	
-#else
-	
 	return acos ( DotProduct ( A, B ) / sqrt ( LengthSquared ( A ) * LengthSquared ( B ) ) );
 	
-#endif
-	
-};
+}
 
 void Xenon::Math::Vec4 :: Interpolate ( Vec4 & Target, const Vec4 & Source, float Fraction )
 {
@@ -265,7 +245,7 @@ void Xenon::Math::Vec4 :: Interpolate ( Vec4 & Target, const Vec4 & Source, floa
 	
 	float OppositeFraction = 1.0f - Fraction;
 	
-	Target.SSEV = _mm_add_ps ( _mm_mul_ps ( Target.SSEV, _mm_set1_ps ( Fraction ) ), _mm_mul_ps ( Source.SSEV, _mm_set1_ps ( OppositeFraction ) ) );
+	reinterpret_cast <__m128 &> ( Target ) = _mm_add_ps ( _mm_mul_ps ( reinterpret_cast <__m128 &> ( Target ), _mm_set1_ps ( Fraction ) ), _mm_mul_ps ( reinterpret_cast <const __m128 &> ( Source ), _mm_set1_ps ( OppositeFraction ) ) );
 	
 #else
 	
@@ -278,7 +258,7 @@ void Xenon::Math::Vec4 :: Interpolate ( Vec4 & Target, const Vec4 & Source, floa
 	
 #endif
 	
-};
+}
 
 void Xenon::Math::Vec4 :: Interpolate ( Vec4 & Target, const Vec4 & SourceA, const Vec4 & SourceB, float Fraction )
 {
@@ -290,18 +270,18 @@ void Xenon::Math::Vec4 :: Interpolate ( Vec4 & Target, const Vec4 & SourceA, con
 	
 	Add ( Target, Temp );
 	
-};
+}
 
 void Xenon::Math::Vec4 :: Project ( Vec4 & Target, const Vec4 & Direction )
 {
 	
 	Multiply ( Target, Direction, DotProduct ( Target, Direction ) / LengthSquared ( Direction ) );
 	
-};
+}
 
 void Xenon::Math::Vec4 :: Project ( Vec4 & Target, const Vec4 & Projected, const Vec4 & Direction )
 {
 	
 	Multiply ( Target, Direction, DotProduct ( Projected, Direction ) / LengthSquared ( Direction ) );
 	
-};
+}

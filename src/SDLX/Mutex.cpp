@@ -5,7 +5,7 @@
 SDLX::Mutex :: Mutex ( SDL_mutex * MHandle ):
 	MHandle ( MHandle )
 {	
-};
+}
 
 SDLX::Mutex * SDLX::Mutex :: Create ()
 {
@@ -17,14 +17,14 @@ SDLX::Mutex * SDLX::Mutex :: Create ()
 	
 	return new Mutex ( TMHandle );
 	
-};
+}
 
 SDLX::Mutex :: ~Mutex ()
 {
 	
 	SDL_DestroyMutex ( MHandle );
 	
-};
+}
 
 SDLX::Mutex :: MutexStatus SDLX::Mutex :: Lock ()
 {
@@ -34,14 +34,14 @@ SDLX::Mutex :: MutexStatus SDLX::Mutex :: Lock ()
 	
 	return kMutexStatus_Error;
 	
-};
+}
 
 SDLX::Mutex :: MutexStatus SDLX::Mutex :: TryLock ()
 {
 	
 	return static_cast <MutexStatus> ( SDL_TryLockMutex ( MHandle ) );
 	
-};
+}
 
 SDLX::Mutex :: MutexStatus SDLX::Mutex :: Unlock ()
 {
@@ -51,6 +51,6 @@ SDLX::Mutex :: MutexStatus SDLX::Mutex :: Unlock ()
 	
 	return kMutexStatus_Error;
 	
-};
+}
 
 

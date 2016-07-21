@@ -10,7 +10,7 @@ RAUX::PNGFile :: PNGFile ( const std :: string & FileName ):
 	FileInstance ( FileName, false ),
 	Data ( NULL )
 {
-};
+}
 
 RAUX::PNGFile :: ~PNGFile ()
 {
@@ -32,7 +32,7 @@ bool RAUX::PNGFile :: Exists () const
 	
 	return FileInstance.Exists ();
 	
-};
+}
 
 void RAUX::PNGFile :: Load ( uint32_t * Status )
 {
@@ -129,7 +129,7 @@ void RAUX::PNGFile :: Load ( uint32_t * Status )
 	
 	* Status = kStatus_Success;
 	
-};
+}
 
 void RAUX::PNGFile :: CloseFile ()
 {
@@ -138,39 +138,39 @@ void RAUX::PNGFile :: CloseFile ()
 	
 	FileInstance.Close ( & Status );
 	
-};
+}
 
 bool RAUX::PNGFile :: Valid () const
 {
 	
 	return Data != NULL;
 	
-};
+}
 
 const void * RAUX::PNGFile :: GetBitmapData () const
 {
 	
 	return Data;
 	
-};
+}
 
 bool RAUX::PNGFile :: HasAlpha () const
 {
 	
 	return Alpha;
 	
-};
+}
 
 uint32_t RAUX::PNGFile :: GetWidth () const
 {
 	
 	return Width;
 	
-};
+}
 
 uint32_t RAUX::PNGFile :: GetHeight () const
 {
 	
 	return Height;
 	
-};
+}

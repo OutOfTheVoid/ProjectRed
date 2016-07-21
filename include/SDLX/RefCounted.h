@@ -27,6 +27,6 @@ namespace SDLX
 		
 	};
 
-};
+}
 
 #endif

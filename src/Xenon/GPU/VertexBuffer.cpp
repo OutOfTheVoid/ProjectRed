@@ -9,14 +9,14 @@ Xenon::GPU::VertexBuffer :: VertexBuffer ( UsageType Usage ):
 	Written ( false ),
 	BHandle ( 0 )
 {
-};
+}
 
 Xenon::GPU::VertexBuffer :: ~VertexBuffer ()
 {
 	
 	GPUResourceFree ();
 	
-};
+}
 
 void Xenon::GPU::VertexBuffer :: GPUResourceAlloc ()
 {
@@ -29,7 +29,7 @@ void Xenon::GPU::VertexBuffer :: GPUResourceAlloc ()
 	if ( BHandle != 0 )
 		Allocated = true;
 	
-};
+}
 
 void Xenon::GPU::VertexBuffer :: GPUResourceFree ()
 {
@@ -42,14 +42,14 @@ void Xenon::GPU::VertexBuffer :: GPUResourceFree ()
 	
 	Allocated = false;
 	
-};
+}
 
 bool Xenon::GPU::VertexBuffer :: GPUResourceAllocated ()
 {
 	
 	return Allocated;
 	
-};
+}
 
 void Xenon::GPU::VertexBuffer :: Buffer ( const GLvoid * Data, GLsizeiptr Size )
 {
@@ -61,7 +61,7 @@ void Xenon::GPU::VertexBuffer :: Buffer ( const GLvoid * Data, GLsizeiptr Size )
 	this -> Size = Size;
 	Written = true;
 	
-};
+}
 
 void Xenon::GPU::VertexBuffer :: SubBuffer ( const GLvoid * SubData, GLsizeiptr Size, GLintptr Offset )
 {
@@ -70,14 +70,14 @@ void Xenon::GPU::VertexBuffer :: SubBuffer ( const GLvoid * SubData, GLsizeiptr 
 	
 	glBufferSubData ( GL_ARRAY_BUFFER, Offset, Size, SubData );
 	
-};
+}
 
 void Xenon::GPU::VertexBuffer :: Orphan ()
 {
 	
 	glBufferData ( GL_ARRAY_BUFFER, Size, NULL, Usage );
 	
-};
+}
 
 void Xenon::GPU::VertexBuffer :: Bind ()
 {
@@ -101,5 +101,5 @@ void Xenon::GPU::VertexBuffer :: Bind ()
 	
 	}
 	
-};
+}
 

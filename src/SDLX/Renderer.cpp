@@ -14,19 +14,19 @@ SDLX :: Renderer * SDLX::Renderer :: FromWindow ( Window * Wind, bool Accellerat
 	
 	return new Renderer ( Handle );
 	
-};
+}
 
 SDLX::Renderer :: Renderer ( SDL_Renderer * Handle ):
 	RHandle ( Handle )
 {
-};
+}
 
 SDLX::Renderer :: ~Renderer ()
 {
 	
 	SDL_DestroyRenderer ( RHandle );
 	
-};
+}
 
 SDLX :: Texture * SDLX::Renderer :: CreateTexture ( uint32_t Width, uint32_t Height, uint32_t Access, uint32_t Depth, uint32_t RedMask, uint32_t GreenMask, uint32_t BlueMask, uint32_t AlphaMask )
 {
@@ -38,7 +38,7 @@ SDLX :: Texture * SDLX::Renderer :: CreateTexture ( uint32_t Width, uint32_t Hei
 	
 	return new Texture ( Handle );
 	
-};
+}
 
 SDLX :: Texture * SDLX::Renderer :: CreateTextureFromSurface ( Surface * Source )
 {
@@ -50,26 +50,26 @@ SDLX :: Texture * SDLX::Renderer :: CreateTextureFromSurface ( Surface * Source 
 	
 	return new Texture ( Handle );
 	
-};
+}
 
 void SDLX::Renderer :: SetDrawColor ( uint8_t Red, uint8_t Green, uint8_t Blue, uint8_t Alpha )
 {
 	
 	SDL_SetRenderDrawColor ( RHandle, Red, Green, Blue, Alpha );
 	
-};
+}
 
 void SDLX::Renderer :: Clear ()
 {
 	
 	SDL_RenderClear ( RHandle );
 	
-};
+}
 
 void SDLX::Renderer :: Present ()
 {
 	
 	SDL_RenderPresent ( RHandle );
 	
-};
+}
 

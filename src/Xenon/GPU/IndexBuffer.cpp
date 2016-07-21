@@ -10,14 +10,14 @@ Xenon::GPU::IndexBuffer :: IndexBuffer ( UsageType Usage, IndexType Type ):
 	MMapped ( false ),
 	ReadableMap ( false )
 {
-};
+}
 
 Xenon::GPU::IndexBuffer :: ~IndexBuffer ()
 {
 	
 	GPUResourceFree ();
 	
-};
+}
 
 void Xenon::GPU::IndexBuffer :: GPUResourceAlloc ()
 {
@@ -30,7 +30,7 @@ void Xenon::GPU::IndexBuffer :: GPUResourceAlloc ()
 	if ( BHandle != 0 )
 		Allocated = true;
 	
-};
+}
 
 void Xenon::GPU::IndexBuffer :: GPUResourceFree ()
 {
@@ -45,14 +45,14 @@ void Xenon::GPU::IndexBuffer :: GPUResourceFree ()
 	
 	Allocated = false;
 	
-};
+}
 
 bool Xenon::GPU::IndexBuffer :: GPUResourceAllocated ()
 {
 	
 	return Allocated;
 	
-};
+}
 
 void Xenon::GPU::IndexBuffer :: Buffer ( const GLvoid * Data, GLuint Count )
 {
@@ -82,7 +82,7 @@ void Xenon::GPU::IndexBuffer :: Buffer ( const GLvoid * Data, GLuint Count )
 		
 	}
 	
-};
+}
 
 void Xenon::GPU::IndexBuffer :: SubBuffer ( const GLvoid * SubData, GLuint Count, GLuint Offset )
 {
@@ -106,7 +106,7 @@ void Xenon::GPU::IndexBuffer :: SubBuffer ( const GLvoid * SubData, GLuint Count
 		
 	}
 	
-};
+}
 
 void * Xenon::GPU::IndexBuffer :: Map ( bool Read )
 {
@@ -128,7 +128,7 @@ void * Xenon::GPU::IndexBuffer :: Map ( bool Read )
 	ReadableMap = Read;
 	MMapped = MapAddress != NULL;
 	
-};
+}
 
 void Xenon::GPU::IndexBuffer :: Unmap ()
 {
@@ -142,14 +142,14 @@ void Xenon::GPU::IndexBuffer :: Unmap ()
 	
 	MMapped = false;
 	
-};
+}
 
 bool Xenon::GPU::IndexBuffer :: Mapped ()
 {
 	
 	return MMapped;
 	
-};
+}
 
 void Xenon::GPU::IndexBuffer :: FlushMap ()
 {
@@ -176,7 +176,7 @@ void Xenon::GPU::IndexBuffer :: FlushMap ()
 			
 	}
 	
-};
+}
 
 void Xenon::GPU::IndexBuffer :: Orphan ()
 {
@@ -235,7 +235,7 @@ void Xenon::GPU::IndexBuffer :: Orphan ()
 		
 	}
 	
-};
+}
 
 void Xenon::GPU::IndexBuffer :: Bind ()
 {
@@ -252,18 +252,18 @@ void Xenon::GPU::IndexBuffer :: Bind ()
 	
 	glBindBuffer ( GL_ELEMENT_ARRAY_BUFFER, BHandle );
 	
-};
+}
 
 Xenon::GPU::IndexBuffer :: IndexType Xenon::GPU::IndexBuffer :: GetIndexType ()
 {
 	
 	return Type;
 	
-};
+}
 
 GLuint Xenon::GPU::IndexBuffer :: GetIndexCount ()
 {
 	
 	return Count;
 	
-};
+}

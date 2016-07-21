@@ -9,75 +9,51 @@
 #include <utility>
 
 Xenon::Math::Matrix4x4 :: Matrix4x4 ():
-#ifdef XENON_SSE
-
-	Elements { _mm_setr_ps ( 1.0f, 0.0f, 0.0f, 0.0f ), _mm_setr_ps ( 0.0f, 1.0f, 0.0f, 0.0f ), _mm_setr_ps ( 0.0f, 0.0f, 1.0f, 0.0f ), _mm_setr_ps ( 0.0f, 0.0f, 0.0f, 1.0f ) }
-
-#else
-	
 	Elements { { 1.0f, 0.0f, 0.0f, 0.0f }, { 0.0f, 1.0f, 0.0f, 0.0f }, { 0.0f, 0.0f, 1.0f, 0.0f }, { 0.0f, 0.0f, 0.0f, 1.0f } }
-
-#endif
 {
-};
+}
 
 Xenon::Math::Matrix4x4 :: Matrix4x4 ( const float A, const float B, const float C, const float D, const float E, const float F, const float G, const float H, const float I, const float J, const float K, const float L, const float M, const float N, const float O, const float P ):
-#ifdef XENON_SSE
-	
-	Elements { _mm_setr_ps ( A, B, C, D ), _mm_setr_ps ( E, F, G, H ), _mm_setr_ps ( I, J, K, L ), _mm_setr_ps ( M, N, O, P ) }
-	
-#else
-	
 	Elements { { A, B, C, D }, { E, F, G, H }, { I, J, K, L }, { M, N, O, P } }
-	
-#endif
 {
-};
+}
 
 Xenon::Math::Matrix4x4 :: Matrix4x4 ( const Vec4 & Row1, const Vec4 & Row2, const Vec4 & Row3, const Vec4 & Row4 ):
-#ifdef XENON_SSE
-
-	Elements { _mm_setr_ps ( Row1.X, Row1.Y, Row1.Z, Row1.W ), _mm_setr_ps ( Row2.X, Row2.Y, Row2.Z, Row2.W ), _mm_setr_ps ( Row3.X, Row3.Y, Row3.Z, Row3.W ), _mm_setr_ps ( Row4.X, Row4.Y, Row4.Z, Row4.W ) }
-
-#else
-	
 	Elements { { Row1.X, Row1.Y, Row1.Z, Row1.W }, { Row2.X, Row2.Y, Row2.Z, Row2.W }, { Row3.X, Row3.Y, Row3.Z, Row3.W }, { Row4.X, Row4.Y, Row4.Z, Row4.W } }
-
-#endif
 {
-};
+}
 
 Xenon::Math::Matrix4x4 :: Matrix4x4 ( NoInit NO_INIT )
 {	
-};
+}
 
 Xenon::Math::Matrix4x4 :: Matrix4x4 ( const Matrix4x4 & CopyFrom ):
 	Elements ( CopyFrom.Elements )
 {	
-};
+}
 
 Xenon::Math::Matrix4x4 :: ~Matrix4x4 ()
 {
-};
+}
 
-void Xenon::Math::Matrix4x4 :: Identity ( Matrix4x4 & Source )
+void Xenon::Math::Matrix4x4 :: Identity ( Matrix4x4 & Target )
 {
 	
 #ifdef XENON_SSE
 	
-	Source.Elements [ 0 ].SSEV = _mm_setr_ps ( 1.0f, 0.0f, 0.0f, 0.0f );
-	Source.Elements [ 1 ].SSEV = _mm_setr_ps ( 0.0f, 1.0f, 0.0f, 0.0f );
-	Source.Elements [ 2 ].SSEV = _mm_setr_ps ( 0.0f, 0.0f, 1.0f, 0.0f );
-	Source.Elements [ 3 ].SSEV = _mm_setr_ps ( 0.0f, 0.0f, 0.0f, 1.0f );
+	reinterpret_cast <__m128 &> ( Target.Elements [ 0 ] ) = _mm_setr_ps ( 1.0f, 0.0f, 0.0f, 0.0f );
+	reinterpret_cast <__m128 &> ( Target.Elements [ 1 ] ) = _mm_setr_ps ( 0.0f, 1.0f, 0.0f, 0.0f );
+	reinterpret_cast <__m128 &> ( Target.Elements [ 2 ] ) = _mm_setr_ps ( 0.0f, 0.0f, 1.0f, 0.0f );
+	reinterpret_cast <__m128 &> ( Target.Elements [ 3 ] ) = _mm_setr_ps ( 0.0f, 0.0f, 0.0f, 1.0f );
 	
 #else
 	
-	Source.Elements [ 0 ].E0 = Source.Elements [ 1 ].E1 = Source.Elements [ 2 ].E2 = Source.Elements [ 3 ].E3 = 1.0f;
-	Source.Elements [ 0 ].E1 = Source.Elements [ 0 ].E2 = Source.Elements [ 0 ].E3 = Source.Elements [ 1 ].E0 = Source.Elements [ 1 ].E2 = Source.Elements [ 1 ].E3 = Source.Elements [ 2 ].E0 = Source.Elements [ 2 ].E1 = Source.Elements [ 2 ].E3 = Source.Elements [ 3 ].E0 = Source.Elements [ 3 ].E1 = Source.Elements [ 3 ].E2 = 0.0f;
+	Target.Elements [ 0 ].E0 = Target.Elements [ 1 ].E1 = Target.Elements [ 2 ].E2 = Target.Elements [ 3 ].E3 = 1.0f;
+	Target.Elements [ 0 ].E1 = Target.Elements [ 0 ].E2 = Target.Elements [ 0 ].E3 = Target.Elements [ 1 ].E0 = Target.Elements [ 1 ].E2 = Target.Elements [ 1 ].E3 = Target.Elements [ 2 ].E0 = Target.Elements [ 2 ].E1 = Target.Elements [ 2 ].E3 = Target.Elements [ 3 ].E0 = Target.Elements [ 3 ].E1 = Target.Elements [ 3 ].E2 = 0.0f;
 	
 #endif
 	
-};
+}
 
 void Xenon::Math::Matrix4x4 :: MultiplyScalar ( Matrix4x4 & Target, float Scalar )
 {
@@ -86,10 +62,10 @@ void Xenon::Math::Matrix4x4 :: MultiplyScalar ( Matrix4x4 & Target, float Scalar
 	
 	const __m128 Multiplier = _mm_set1_ps ( Scalar );
 	
-	Target.Elements [ 0 ].SSEV = _mm_mul_ps ( Target.Elements [ 0 ].SSEV, Multiplier );
-	Target.Elements [ 1 ].SSEV = _mm_mul_ps ( Target.Elements [ 1 ].SSEV, Multiplier );
-	Target.Elements [ 2 ].SSEV = _mm_mul_ps ( Target.Elements [ 2 ].SSEV, Multiplier );
-	Target.Elements [ 3 ].SSEV = _mm_mul_ps ( Target.Elements [ 3 ].SSEV, Multiplier );
+	reinterpret_cast <__m128 &> ( Target.Elements [ 0 ] ) = _mm_mul_ps ( reinterpret_cast <__m128 &> ( Target.Elements [ 0 ] ), Multiplier );
+	reinterpret_cast <__m128 &> ( Target.Elements [ 1 ] ) = _mm_mul_ps ( reinterpret_cast <__m128 &> ( Target.Elements [ 1 ] ), Multiplier );
+	reinterpret_cast <__m128 &> ( Target.Elements [ 2 ] ) = _mm_mul_ps ( reinterpret_cast <__m128 &> ( Target.Elements [ 2 ] ), Multiplier );
+	reinterpret_cast <__m128 &> ( Target.Elements [ 3 ] ) = _mm_mul_ps ( reinterpret_cast <__m128 &> ( Target.Elements [ 3 ] ), Multiplier );
 	
 #else
 	
@@ -115,7 +91,7 @@ void Xenon::Math::Matrix4x4 :: MultiplyScalar ( Matrix4x4 & Target, float Scalar
 	
 #endif
 	
-};
+}
 
 void Xenon::Math::Matrix4x4 :: MultiplyScalar ( Matrix4x4 & Target, const Matrix4x4 & Source, float Scalar )
 {
@@ -124,10 +100,10 @@ void Xenon::Math::Matrix4x4 :: MultiplyScalar ( Matrix4x4 & Target, const Matrix
 	
 	const __m128 Multiplier = _mm_set1_ps ( Scalar );
 	
-	Target.Elements [ 0 ].SSEV = _mm_mul_ps ( Source.Elements [ 0 ].SSEV, Multiplier );
-	Target.Elements [ 1 ].SSEV = _mm_mul_ps ( Source.Elements [ 1 ].SSEV, Multiplier );
-	Target.Elements [ 2 ].SSEV = _mm_mul_ps ( Source.Elements [ 2 ].SSEV, Multiplier );
-	Target.Elements [ 3 ].SSEV = _mm_mul_ps ( Source.Elements [ 3 ].SSEV, Multiplier );
+	reinterpret_cast <__m128 &> ( Target.Elements [ 0 ] ) = _mm_mul_ps ( reinterpret_cast <const __m128 &> ( Source.Elements [ 0 ] ), Multiplier );
+	reinterpret_cast <__m128 &> ( Target.Elements [ 1 ] ) = _mm_mul_ps ( reinterpret_cast <const __m128 &> ( Source.Elements [ 1 ] ), Multiplier );
+	reinterpret_cast <__m128 &> ( Target.Elements [ 2 ] ) = _mm_mul_ps ( reinterpret_cast <const __m128 &> ( Source.Elements [ 2 ] ), Multiplier );
+	reinterpret_cast <__m128 &> ( Target.Elements [ 3 ] ) = _mm_mul_ps ( reinterpret_cast <const __m128 &> ( Source.Elements [ 3 ] ), Multiplier );
 	
 #else
 	
@@ -153,7 +129,7 @@ void Xenon::Math::Matrix4x4 :: MultiplyScalar ( Matrix4x4 & Target, const Matrix
 	
 #endif
 	
-};
+}
 
 void Xenon::Math::Matrix4x4 :: SetAsPerspectiveProjection ( Matrix4x4 & Target, float Near, float Far, float Left, float Right, float Top, float Bottom )
 {
@@ -170,10 +146,10 @@ void Xenon::Math::Matrix4x4 :: SetAsPerspectiveProjection ( Matrix4x4 & Target, 
 	
 #ifdef XENON_SSE
 	
-	Target.Elements [ 0 ].SSEV = _mm_setr_ps ( 2.0f * Near / DiffX, 0.0f, ProjX / DiffX, 0.0f );
-	Target.Elements [ 1 ].SSEV = _mm_setr_ps ( 0.0f, 2.0f * Near / DiffY, ProjY / DiffY, 0.0f );
-	Target.Elements [ 2 ].SSEV = _mm_setr_ps ( 0.0f, 0.0f, - ProjZ / DiffZ, - 2.0f * ScalZ / DiffZ );
-	Target.Elements [ 3 ].SSEV = _mm_setr_ps ( 0.0f, 0.0f, - 1.0f, 0.0f );
+	reinterpret_cast <__m128 &> ( Target.Elements [ 0 ] ) = _mm_setr_ps ( 2.0f * Near / DiffX, 0.0f, ProjX / DiffX, 0.0f );
+	reinterpret_cast <__m128 &> ( Target.Elements [ 1 ] ) = _mm_setr_ps ( 0.0f, 2.0f * Near / DiffY, ProjY / DiffY, 0.0f );
+	reinterpret_cast <__m128 &> ( Target.Elements [ 2 ] ) = _mm_setr_ps ( 0.0f, 0.0f, - ProjZ / DiffZ, - 2.0f * ScalZ / DiffZ );
+	reinterpret_cast <__m128 &> ( Target.Elements [ 3 ] ) = _mm_setr_ps ( 0.0f, 0.0f, - 1.0f, 0.0f );
 	
 #else
 	
@@ -199,7 +175,7 @@ void Xenon::Math::Matrix4x4 :: SetAsPerspectiveProjection ( Matrix4x4 & Target, 
 	
 #endif
 	
-};
+}
 
 void Xenon::Math::Matrix4x4 :: SetAsPerspectiveProjectionFieldOfView ( Matrix4x4 & Target, const float Near, const float Far, const float FieldOfView, const float AspectRatio )
 {
@@ -209,10 +185,10 @@ void Xenon::Math::Matrix4x4 :: SetAsPerspectiveProjectionFieldOfView ( Matrix4x4
 	
 	#ifdef XENON_SSE
 	
-	Target.Elements [ 0 ].SSEV = _mm_setr_ps ( F / AspectRatio, 0.0f, 0.0f, 0.0f );
-	Target.Elements [ 1 ].SSEV = _mm_setr_ps ( 0.0f, F, 0.0f, 0.0f );
-	Target.Elements [ 2 ].SSEV = _mm_setr_ps ( 0.0f, 0.0f, ( Near + Far ) * InvRange, Near * Far * InvRange * 2.0f );
-	Target.Elements [ 3 ].SSEV = _mm_setr_ps ( 0.0f, 0.0f, - 1.0f, 0.0f );
+	reinterpret_cast <__m128 &> ( Target.Elements [ 0 ] ) = _mm_setr_ps ( F / AspectRatio, 0.0f, 0.0f, 0.0f );
+	reinterpret_cast <__m128 &> ( Target.Elements [ 1 ] ) = _mm_setr_ps ( 0.0f, F, 0.0f, 0.0f );
+	reinterpret_cast <__m128 &> ( Target.Elements [ 2 ] ) = _mm_setr_ps ( 0.0f, 0.0f, ( Near + Far ) * InvRange, Near * Far * InvRange * 2.0f );
+	reinterpret_cast <__m128 &> ( Target.Elements [ 3 ] ) = _mm_setr_ps ( 0.0f, 0.0f, - 1.0f, 0.0f );
 	
 #else
 	
@@ -234,38 +210,38 @@ void Xenon::Math::Matrix4x4 :: SetAsPerspectiveProjectionFieldOfView ( Matrix4x4
 	
 #endif
 	
-};
+}
 
 void Xenon::Math::Matrix4x4 :: SetAsSymmetricPerspectiveProjection ( Matrix4x4 & Target, const float Near, const float Far, const float Width, const float Height )
 {
 	
 	SetAsPerspectiveProjection ( Target, Near, Far, - Width * 0.5f, Width * 0.5f, - Height * 0.5f, Height * 0.5f );
 	
-};
+}
 
 void Xenon::Math::Matrix4x4 :: SetAsPerspectiveProjectionAngle ( Matrix4x4 & Target, const float Near, const float Far, const float LeftAngle, const float RightAngle, const float TopAngle, const float BottomAngle )
 {
 	
 	SetAsPerspectiveProjection ( Target, Near, Far, tan ( LeftAngle ) * Near, tan ( RightAngle ) * Near, - tan ( TopAngle ) * Near, - tan ( BottomAngle ) * Near );
 	
-};
+}
 
 void Xenon::Math::Matrix4x4 :: SetAsSymmetricPerspectiveProjectionAngle ( Matrix4x4 & Target, const float Near, const float Far, const float AngleX, const float AngleY )
 {
 	
 	SetAsPerspectiveProjection ( Target, Near, Far, - AngleX * 0.5f, AngleX * 0.5f, AngleY * 0.5f, - AngleY * 0.5f );
 	
-};
+}
 
 void Xenon::Math::Matrix4x4 :: SetAsTranslation ( Matrix4x4 & Target, const float X, const float Y, const float Z )
 {
 	
 #ifdef XENON_SSE
 	
-	Target.Elements [ 0 ].SSEV = _mm_setr_ps ( 1.0f, 0.0f, 0.0f, X );
-	Target.Elements [ 1 ].SSEV = _mm_setr_ps ( 0.0f, 1.0f, 0.0f, Y );
-	Target.Elements [ 2 ].SSEV = _mm_setr_ps ( 0.0f, 0.0f, 1.0f, Z );
-	Target.Elements [ 3 ].SSEV = _mm_setr_ps ( 0.0f, 0.0f, 0.0f, 1.0f );
+	reinterpret_cast <__m128 &> ( Target.Elements [ 0 ] ) = _mm_setr_ps ( 1.0f, 0.0f, 0.0f, X );
+	reinterpret_cast <__m128 &> ( Target.Elements [ 1 ] ) = _mm_setr_ps ( 0.0f, 1.0f, 0.0f, Y );
+	reinterpret_cast <__m128 &> ( Target.Elements [ 2 ] ) = _mm_setr_ps ( 0.0f, 0.0f, 1.0f, Z );
+	reinterpret_cast <__m128 &> ( Target.Elements [ 3 ] ) = _mm_setr_ps ( 0.0f, 0.0f, 0.0f, 1.0f );
 	
 #else
 	
@@ -279,40 +255,40 @@ void Xenon::Math::Matrix4x4 :: SetAsTranslation ( Matrix4x4 & Target, const floa
 	
 #endif
 	
-};
+}
 
-void Xenon::Math::Matrix4x4 :: SetAsTranslation ( Matrix4x4 & Source, const Vec3 & Translation )
+void Xenon::Math::Matrix4x4 :: SetAsTranslation ( Matrix4x4 & Target, const Vec3 & Translation )
 {
 	
 #ifdef XENON_SSE
 	
-	Source.Elements [ 0 ].SSEV = _mm_setr_ps ( 1.0f, 0.0f, 0.0f, Translation.X );
-	Source.Elements [ 1 ].SSEV = _mm_setr_ps ( 0.0f, 1.0f, 0.0f, Translation.Y );
-	Source.Elements [ 2 ].SSEV = _mm_setr_ps ( 0.0f, 0.0f, 1.0f, Translation.Z );
-	Source.Elements [ 3 ].SSEV = _mm_setr_ps ( 0.0f, 0.0f, 0.0f, 1.0f );
+	reinterpret_cast <__m128 &> ( Target.Elements [ 0 ] ) = _mm_setr_ps ( 1.0f, 0.0f, 0.0f, Translation.X );
+	reinterpret_cast <__m128 &> ( Target.Elements [ 1 ] ) = _mm_setr_ps ( 0.0f, 1.0f, 0.0f, Translation.Y );
+	reinterpret_cast <__m128 &> ( Target.Elements [ 2 ] ) = _mm_setr_ps ( 0.0f, 0.0f, 1.0f, Translation.Z );
+	reinterpret_cast <__m128 &> ( Target.Elements [ 3 ] ) = _mm_setr_ps ( 0.0f, 0.0f, 0.0f, 1.0f );
 	
 #else
 	
-	Source.Elements [ 0 ].E0 = Source.Elements [ 1 ].E1 = Source.Elements [ 2 ].E2 = Source.Elements [ 3 ].E3 = 1.0f;
+	Target.Elements [ 0 ].E0 = Target.Elements [ 1 ].E1 = Target.Elements [ 2 ].E2 = Target.Elements [ 3 ].E3 = 1.0f;
 	
-	Source.Elements [ 0 ].E3 = Translation.X;
-	Source.Elements [ 1 ].E3 = Translation.Y;
-	Source.Elements [ 2 ].E3 = Translation.Z;
+	Target.Elements [ 0 ].E3 = Translation.X;
+	Target.Elements [ 1 ].E3 = Translation.Y;
+	Target.Elements [ 2 ].E3 = Translation.Z;
 	
-	Source.Elements [ 0 ].E1 = Source.Elements [ 0 ].E2 = Source.Elements [ 1 ].E0 = Source.Elements [ 1 ].E2 = Source.Elements [ 2 ].E0 = Source.Elements [ 2 ].E1 = Source.Elements [ 3 ].E0 = Source.Elements [ 3 ].E1 = Source.Elements [ 3 ].E2 = 0.0f;
+	Target.Elements [ 0 ].E1 = Target.Elements [ 0 ].E2 = Target.Elements [ 1 ].E0 = Target.Elements [ 1 ].E2 = Target.Elements [ 2 ].E0 = Target.Elements [ 2 ].E1 = Target.Elements [ 3 ].E0 = Target.Elements [ 3 ].E1 = Target.Elements [ 3 ].E2 = 0.0f;
 	
 #endif
 	
-};
+}
 
 void Xenon::Math::Matrix4x4 :: AppendTranslation ( Matrix4x4 & Target, const float X, const float Y, const float Z )
 {
 	
 #ifdef XENON_SSE
 	
-	Target.Elements [ 0 ].SSEV = _mm_add_ps ( Target.Elements [ 0 ].SSEV, _mm_mul_ps ( Target.Elements [ 3 ].SSEV, _mm_set1_ps ( X ) ) );
-	Target.Elements [ 1 ].SSEV = _mm_add_ps ( Target.Elements [ 1 ].SSEV, _mm_mul_ps ( Target.Elements [ 3 ].SSEV, _mm_set1_ps ( Y ) ) );
-	Target.Elements [ 2 ].SSEV = _mm_add_ps ( Target.Elements [ 2 ].SSEV, _mm_mul_ps ( Target.Elements [ 3 ].SSEV, _mm_set1_ps ( Z ) ) );
+	reinterpret_cast <__m128 &> ( Target.Elements [ 0 ] ) = _mm_add_ps ( reinterpret_cast <__m128 &> ( Target.Elements [ 0 ] ), _mm_mul_ps ( reinterpret_cast <__m128 &> ( Target.Elements [ 3 ] ), _mm_set1_ps ( X ) ) );
+	reinterpret_cast <__m128 &> ( Target.Elements [ 1 ] ) = _mm_add_ps ( reinterpret_cast <__m128 &> ( Target.Elements [ 1 ] ), _mm_mul_ps ( reinterpret_cast <__m128 &> ( Target.Elements [ 3 ] ), _mm_set1_ps ( Y ) ) );
+	reinterpret_cast <__m128 &> ( Target.Elements [ 2 ] ) = _mm_add_ps ( reinterpret_cast <__m128 &> ( Target.Elements [ 2 ] ), _mm_mul_ps ( reinterpret_cast <__m128 &> ( Target.Elements [ 3 ] ), _mm_set1_ps ( Z ) ) );
 	
 #else
 	
@@ -333,16 +309,16 @@ void Xenon::Math::Matrix4x4 :: AppendTranslation ( Matrix4x4 & Target, const flo
 	
 #endif
 	
-};
+}
 
 void Xenon::Math::Matrix4x4 :: AppendTranslation ( Matrix4x4 & Target, const Vec3 & Translation )
 {
 	
 #ifdef XENON_SSE
 	
-	Target.Elements [ 0 ].SSEV = _mm_add_ps ( Target.Elements [ 0 ].SSEV, _mm_mul_ps ( Target.Elements [ 3 ].SSEV, _mm_set1_ps ( Translation.X ) ) );
-	Target.Elements [ 1 ].SSEV = _mm_add_ps ( Target.Elements [ 1 ].SSEV, _mm_mul_ps ( Target.Elements [ 3 ].SSEV, _mm_set1_ps ( Translation.Y ) ) );
-	Target.Elements [ 2 ].SSEV = _mm_add_ps ( Target.Elements [ 2 ].SSEV, _mm_mul_ps ( Target.Elements [ 3 ].SSEV, _mm_set1_ps ( Translation.Z ) ) );
+	reinterpret_cast <__m128 &> ( Target.Elements [ 0 ] ) = _mm_add_ps ( reinterpret_cast <__m128 &> ( Target.Elements [ 0 ] ), _mm_mul_ps ( reinterpret_cast <__m128 &> ( Target.Elements [ 3 ] ), _mm_set1_ps ( Translation.X ) ) );
+	reinterpret_cast <__m128 &> ( Target.Elements [ 1 ] ) = _mm_add_ps ( reinterpret_cast <__m128 &> ( Target.Elements [ 1 ] ), _mm_mul_ps ( reinterpret_cast <__m128 &> ( Target.Elements [ 3 ] ), _mm_set1_ps ( Translation.Y ) ) );
+	reinterpret_cast <__m128 &> ( Target.Elements [ 2 ] ) = _mm_add_ps ( reinterpret_cast <__m128 &> ( Target.Elements [ 2 ] ), _mm_mul_ps ( reinterpret_cast <__m128 &> ( Target.Elements [ 3 ] ), _mm_set1_ps ( Translation.Z ) ) );
 	
 #else
 	
@@ -363,17 +339,17 @@ void Xenon::Math::Matrix4x4 :: AppendTranslation ( Matrix4x4 & Target, const Vec
 	
 #endif
 	
-};
+}
 
 void Xenon::Math::Matrix4x4 :: AppendTranslation ( Matrix4x4 & Target, const Matrix4x4 & Source, const float X, const float Y, const float Z )
 {
 	
 #ifdef XENON_SSE
 	
-	Target.Elements [ 0 ].SSEV = _mm_add_ps ( Source.Elements [ 0 ].SSEV, _mm_mul_ps ( Source.Elements [ 3 ].SSEV, _mm_set1_ps ( X ) ) );
-	Target.Elements [ 1 ].SSEV = _mm_add_ps ( Source.Elements [ 1 ].SSEV, _mm_mul_ps ( Source.Elements [ 3 ].SSEV, _mm_set1_ps ( Y ) ) );
-	Target.Elements [ 2 ].SSEV = _mm_add_ps ( Source.Elements [ 2 ].SSEV, _mm_mul_ps ( Source.Elements [ 3 ].SSEV, _mm_set1_ps ( Z ) ) );
-	Target.Elements [ 3 ].SSEV = Source.Elements [ 3 ].SSEV;
+	reinterpret_cast <__m128 &> ( Target.Elements [ 0 ] ) = _mm_add_ps ( reinterpret_cast <const __m128 &> ( Source.Elements [ 0 ] ), _mm_mul_ps ( reinterpret_cast <const __m128 &> ( Source.Elements [ 3 ] ), _mm_set1_ps ( X ) ) );
+	reinterpret_cast <__m128 &> ( Target.Elements [ 1 ] ) = _mm_add_ps ( reinterpret_cast <const __m128 &> ( Source.Elements [ 1 ] ), _mm_mul_ps ( reinterpret_cast <const __m128 &> ( Source.Elements [ 3 ] ), _mm_set1_ps ( Y ) ) );
+	reinterpret_cast <__m128 &> ( Target.Elements [ 2 ] ) = _mm_add_ps ( reinterpret_cast <const __m128 &> ( Source.Elements [ 2 ] ), _mm_mul_ps ( reinterpret_cast <const __m128 &> ( Source.Elements [ 3 ] ), _mm_set1_ps ( Z ) ) );
+	reinterpret_cast <__m128 &> ( Target.Elements [ 3 ] ) = reinterpret_cast <const __m128 &> ( Source.Elements [ 3 ] );
 	
 #else
 	
@@ -396,7 +372,7 @@ void Xenon::Math::Matrix4x4 :: AppendTranslation ( Matrix4x4 & Target, const Mat
 	
 #endif
 	
-};
+}
 
 void Xenon::Math::Matrix4x4 :: AppendTranslation ( Matrix4x4 & Target, const Matrix4x4 & Source, const Vec3 & Translation )
 {
@@ -404,10 +380,10 @@ void Xenon::Math::Matrix4x4 :: AppendTranslation ( Matrix4x4 & Target, const Mat
 		
 #ifdef XENON_SSE
 	
-	Target.Elements [ 0 ].SSEV = _mm_add_ps ( Source.Elements [ 0 ].SSEV, _mm_mul_ps ( Source.Elements [ 3 ].SSEV, _mm_set1_ps ( Translation.X ) ) );
-	Target.Elements [ 1 ].SSEV = _mm_add_ps ( Source.Elements [ 1 ].SSEV, _mm_mul_ps ( Source.Elements [ 3 ].SSEV, _mm_set1_ps ( Translation.Y ) ) );
-	Target.Elements [ 2 ].SSEV = _mm_add_ps ( Source.Elements [ 2 ].SSEV, _mm_mul_ps ( Source.Elements [ 3 ].SSEV, _mm_set1_ps ( Translation.Z ) ) );
-	Target.Elements [ 3 ].SSEV = Source.Elements [ 3 ].SSEV;
+	reinterpret_cast <__m128 &> ( Target.Elements [ 0 ] ) = _mm_add_ps ( reinterpret_cast <const __m128 &> ( Source.Elements [ 0 ] ), _mm_mul_ps ( reinterpret_cast <const __m128 &> ( Source.Elements [ 3 ] ), _mm_set1_ps ( Translation.X ) ) );
+	reinterpret_cast <__m128 &> ( Target.Elements [ 1 ] ) = _mm_add_ps ( reinterpret_cast <const __m128 &> ( Source.Elements [ 1 ] ), _mm_mul_ps ( reinterpret_cast <const __m128 &> ( Source.Elements [ 3 ] ), _mm_set1_ps ( Translation.Y ) ) );
+	reinterpret_cast <__m128 &> ( Target.Elements [ 2 ] ) = _mm_add_ps ( reinterpret_cast <const __m128 &> ( Source.Elements [ 2 ] ), _mm_mul_ps ( reinterpret_cast <const __m128 &> ( Source.Elements [ 3 ] ), _mm_set1_ps ( Translation.Z ) ) );
+	reinterpret_cast <__m128 &> ( Target.Elements [ 3 ] ) = reinterpret_cast <const __m128 &> ( Source.Elements [ 3 ] );
 	
 #else
 	
@@ -430,7 +406,7 @@ void Xenon::Math::Matrix4x4 :: AppendTranslation ( Matrix4x4 & Target, const Mat
 	
 #endif
 	
-};
+}
 
 void Xenon::Math::Matrix4x4 :: PrependTranslation ( Matrix4x4 & Target, const float X, const float Y, const float Z )
 {
@@ -440,7 +416,7 @@ void Xenon::Math::Matrix4x4 :: PrependTranslation ( Matrix4x4 & Target, const fl
 	__m128 TranslationVect = _mm_setr_ps ( X, Y, Z, 0.0f );
 	
 	Row_t Temp;
-	Temp.SSEV = _mm_hadd_ps ( _mm_hadd_ps ( _mm_mul_ps ( TranslationVect, Target.Elements [ 0 ].SSEV ), _mm_mul_ps ( TranslationVect, Target.Elements [ 1 ].SSEV ) ), _mm_hadd_ps ( _mm_mul_ps ( TranslationVect, Target.Elements [ 2 ].SSEV ), _mm_mul_ps ( TranslationVect, Target.Elements [ 3 ].SSEV ) ) );
+	reinterpret_cast <__m128 &> ( Temp ) = _mm_hadd_ps ( _mm_hadd_ps ( _mm_mul_ps ( TranslationVect, reinterpret_cast <__m128 &> ( Target.Elements [ 0 ] ) ), _mm_mul_ps ( TranslationVect, reinterpret_cast <__m128 &> ( Target.Elements [ 1 ] ) ) ), _mm_hadd_ps ( _mm_mul_ps ( TranslationVect, reinterpret_cast <__m128 &> ( Target.Elements [ 2 ] ) ), _mm_mul_ps ( TranslationVect, reinterpret_cast <__m128 &> ( Target.Elements [ 3 ] ) ) ) );
 	
 	Target.Elements [ 0 ].E3 += Temp.E3;
 	Target.Elements [ 1 ].E3 += Temp.E2;
@@ -456,7 +432,7 @@ void Xenon::Math::Matrix4x4 :: PrependTranslation ( Matrix4x4 & Target, const fl
 	
 #endif
 	
-};
+}
 
 void Xenon::Math::Matrix4x4 :: PrependTranslation ( Matrix4x4 & Target, const Vec3 & Translation )
 {
@@ -466,7 +442,7 @@ void Xenon::Math::Matrix4x4 :: PrependTranslation ( Matrix4x4 & Target, const Ve
 	__m128 TranslationVect = _mm_setr_ps ( Translation.X, Translation.Y, Translation.Z, 0.0f );
 	
 	Row_t Temp;
-	Temp.SSEV = _mm_hadd_ps ( _mm_hadd_ps ( _mm_mul_ps ( TranslationVect,Target.Elements [ 0 ].SSEV ), _mm_mul_ps ( TranslationVect,Target.Elements [ 1 ].SSEV ) ), _mm_hadd_ps ( _mm_mul_ps ( TranslationVect,Target.Elements [ 2 ].SSEV ), _mm_mul_ps ( TranslationVect,Target.Elements [ 3 ].SSEV ) ) );
+	reinterpret_cast <__m128 &> ( Temp ) = _mm_hadd_ps ( _mm_hadd_ps ( _mm_mul_ps ( TranslationVect,reinterpret_cast <__m128 &> ( Target.Elements [ 0 ] ) ), _mm_mul_ps ( TranslationVect,reinterpret_cast <__m128 &> ( Target.Elements [ 1 ] ) ) ), _mm_hadd_ps ( _mm_mul_ps ( TranslationVect,reinterpret_cast <__m128 &> ( Target.Elements [ 2 ] ) ), _mm_mul_ps ( TranslationVect,reinterpret_cast <__m128 &> ( Target.Elements [ 3 ] ) ) ) );
 	
 	Target.Elements [ 0 ].E3 += Temp.E3;
 	Target.Elements [ 1 ].E3 += Temp.E2;
@@ -482,7 +458,7 @@ void Xenon::Math::Matrix4x4 :: PrependTranslation ( Matrix4x4 & Target, const Ve
 	
 #endif
 	
-};
+}
 
 void Xenon::Math::Matrix4x4 :: PrependTranslation ( Matrix4x4 & Target, const Matrix4x4 & Source, float X, float Y, float Z )
 {
@@ -494,7 +470,7 @@ void Xenon::Math::Matrix4x4 :: PrependTranslation ( Matrix4x4 & Target, const Ma
 	__m128 TranslationVect = _mm_setr_ps ( X, Y, Z, 0.0f );
 	
 	Row_t Temp;
-	Temp.SSEV = _mm_hadd_ps ( _mm_hadd_ps ( _mm_mul_ps ( TranslationVect, Source.Elements [ 0 ].SSEV ), _mm_mul_ps ( TranslationVect, Source.Elements [ 1 ].SSEV ) ), _mm_hadd_ps ( _mm_mul_ps ( TranslationVect, Source.Elements [ 2 ].SSEV ), _mm_mul_ps ( TranslationVect, Source.Elements [ 3 ].SSEV ) ) );
+	reinterpret_cast <__m128 &> ( Temp ) = _mm_hadd_ps ( _mm_hadd_ps ( _mm_mul_ps ( TranslationVect, reinterpret_cast <const __m128 &> ( Source.Elements [ 0 ] ) ), _mm_mul_ps ( TranslationVect, reinterpret_cast <const __m128 &> ( Source.Elements [ 1 ] ) ) ), _mm_hadd_ps ( _mm_mul_ps ( TranslationVect, reinterpret_cast <const __m128 &> ( Source.Elements [ 2 ] ) ), _mm_mul_ps ( TranslationVect, reinterpret_cast <const __m128 &> ( Source.Elements [ 3 ] ) ) ) );
 	
 	Target.Elements [ 0 ].E3 = Source.Elements [ 0 ].E3 + Temp.E3;
 	Target.Elements [ 1 ].E3 = Source.Elements [ 1 ].E3 + Temp.E2;
@@ -510,7 +486,7 @@ void Xenon::Math::Matrix4x4 :: PrependTranslation ( Matrix4x4 & Target, const Ma
 	
 #endif
 	
-};
+}
 
 void Xenon::Math::Matrix4x4 :: PrependTranslation ( Matrix4x4 & Target, const Matrix4x4 & Source, const Vec3 & Translation )
 {
@@ -522,7 +498,7 @@ void Xenon::Math::Matrix4x4 :: PrependTranslation ( Matrix4x4 & Target, const Ma
 	__m128 TranslationVect = _mm_setr_ps ( Translation.X, Translation.Y, Translation.Z, 0.0f );
 	
 	Row_t Temp;
-	Temp.SSEV = _mm_hadd_ps ( _mm_hadd_ps ( _mm_mul_ps ( TranslationVect, Source.Elements [ 0 ].SSEV ), _mm_mul_ps ( TranslationVect, Source.Elements [ 1 ].SSEV ) ), _mm_hadd_ps ( _mm_mul_ps ( TranslationVect, Source.Elements [ 2 ].SSEV ), _mm_mul_ps ( TranslationVect, Source.Elements [ 3 ].SSEV ) ) );
+	reinterpret_cast <__m128 &> ( Temp ) = _mm_hadd_ps ( _mm_hadd_ps ( _mm_mul_ps ( TranslationVect, reinterpret_cast <const __m128 &> ( Source.Elements [ 0 ] ) ), _mm_mul_ps ( TranslationVect, reinterpret_cast <const __m128 &> ( Source.Elements [ 1 ] ) ) ), _mm_hadd_ps ( _mm_mul_ps ( TranslationVect, reinterpret_cast <const __m128 &> ( Source.Elements [ 2 ] ) ), _mm_mul_ps ( TranslationVect, reinterpret_cast <const __m128 &> ( Source.Elements [ 3 ] ) ) ) );
 	
 	Target.Elements [ 0 ].E3 = Source.Elements [ 0 ].E3 + Temp.E3;
 	Target.Elements [ 1 ].E3 = Source.Elements [ 1 ].E3 + Temp.E2;
@@ -538,17 +514,17 @@ void Xenon::Math::Matrix4x4 :: PrependTranslation ( Matrix4x4 & Target, const Ma
 	
 #endif
 	
-};
+}
 
 void Xenon::Math::Matrix4x4 :: SetAsScale ( Matrix4x4 & Target, const float X, const float Y, const float Z )
 {
 	
 #ifdef XENON_SSE
 	
-	Target.Elements [ 0 ].SSEV = _mm_setr_ps ( X, 0.0f, 0.0f, 0.0f );
-	Target.Elements [ 1 ].SSEV = _mm_setr_ps ( 0.0f, Y, 0.0f, 0.0f );
-	Target.Elements [ 2 ].SSEV = _mm_setr_ps ( 0.0f, 0.0f, Z, 0.0f );
-	Target.Elements [ 3 ].SSEV = _mm_setr_ps ( 0.0f, 0.0f, 0.0f, 1.0f );
+	reinterpret_cast <__m128 &> ( Target.Elements [ 0 ] ) = _mm_setr_ps ( X, 0.0f, 0.0f, 0.0f );
+	reinterpret_cast <__m128 &> ( Target.Elements [ 1 ] ) = _mm_setr_ps ( 0.0f, Y, 0.0f, 0.0f );
+	reinterpret_cast <__m128 &> ( Target.Elements [ 2 ] ) = _mm_setr_ps ( 0.0f, 0.0f, Z, 0.0f );
+	reinterpret_cast <__m128 &> ( Target.Elements [ 3 ] ) = _mm_setr_ps ( 0.0f, 0.0f, 0.0f, 1.0f );
 	
 #else
 	
@@ -561,17 +537,17 @@ void Xenon::Math::Matrix4x4 :: SetAsScale ( Matrix4x4 & Target, const float X, c
 	
 #endif
 	
-};
+}
 
 void Xenon::Math::Matrix4x4 :: SetAsScale ( Matrix4x4 & Target, const Vec3 & Scale )
 {
 	
 #ifdef XENON_SSE
 	
-	Target.Elements [ 0 ].SSEV = _mm_setr_ps ( Scale.X, 0.0f, 0.0f, 0.0f );
-	Target.Elements [ 1 ].SSEV = _mm_setr_ps ( 0.0f, Scale.Y, 0.0f, 0.0f );
-	Target.Elements [ 2 ].SSEV = _mm_setr_ps ( 0.0f, 0.0f, Scale.Z, 0.0f );
-	Target.Elements [ 3 ].SSEV = _mm_setr_ps ( 0.0f, 0.0f, 0.0f, 1.0f );
+	reinterpret_cast <__m128 &> ( Target.Elements [ 0 ] ) = _mm_setr_ps ( Scale.X, 0.0f, 0.0f, 0.0f );
+	reinterpret_cast <__m128 &> ( Target.Elements [ 1 ] ) = _mm_setr_ps ( 0.0f, Scale.Y, 0.0f, 0.0f );
+	reinterpret_cast <__m128 &> ( Target.Elements [ 2 ] ) = _mm_setr_ps ( 0.0f, 0.0f, Scale.Z, 0.0f );
+	reinterpret_cast <__m128 &> ( Target.Elements [ 3 ] ) = _mm_setr_ps ( 0.0f, 0.0f, 0.0f, 1.0f );
 	
 #else
 	
@@ -585,16 +561,16 @@ void Xenon::Math::Matrix4x4 :: SetAsScale ( Matrix4x4 & Target, const Vec3 & Sca
 	
 #endif
 	
-};
+}
 
 void Xenon::Math::Matrix4x4 :: AppendScale ( Matrix4x4 & Target, const float X, const float Y, const float Z )
 {
 	
 #ifdef XENON_SSE
 	
-	Target.Elements [ 0 ].SSEV = _mm_mul_ps ( Target.Elements [ 0 ].SSEV, _mm_set1_ps ( X ) );
-	Target.Elements [ 1 ].SSEV = _mm_mul_ps ( Target.Elements [ 1 ].SSEV, _mm_set1_ps ( Y ) );
-	Target.Elements [ 2 ].SSEV = _mm_mul_ps ( Target.Elements [ 2 ].SSEV, _mm_set1_ps ( Z ) );
+	reinterpret_cast <__m128 &> ( Target.Elements [ 0 ] ) = _mm_mul_ps ( reinterpret_cast <__m128 &> ( Target.Elements [ 0 ] ), _mm_set1_ps ( X ) );
+	reinterpret_cast <__m128 &> ( Target.Elements [ 1 ] ) = _mm_mul_ps ( reinterpret_cast <__m128 &> ( Target.Elements [ 1 ] ), _mm_set1_ps ( Y ) );
+	reinterpret_cast <__m128 &> ( Target.Elements [ 2 ] ) = _mm_mul_ps ( reinterpret_cast <__m128 &> ( Target.Elements [ 2 ] ), _mm_set1_ps ( Z ) );
 	
 #else
 	
@@ -615,16 +591,16 @@ void Xenon::Math::Matrix4x4 :: AppendScale ( Matrix4x4 & Target, const float X, 
 	
 #endif
 	
-};
+}
 
 void Xenon::Math::Matrix4x4 :: AppendScale ( Matrix4x4 & Target, const Vec3 & Scale )
 {
 	
 #ifdef XENON_SSE
 	
-	Target.Elements [ 0 ].SSEV = _mm_mul_ps ( Target.Elements [ 0 ].SSEV, _mm_set1_ps ( Scale.X ) );
-	Target.Elements [ 1 ].SSEV = _mm_mul_ps ( Target.Elements [ 1 ].SSEV, _mm_set1_ps ( Scale.Y ) );
-	Target.Elements [ 2 ].SSEV = _mm_mul_ps ( Target.Elements [ 2 ].SSEV, _mm_set1_ps ( Scale.Z ) );
+	reinterpret_cast <__m128 &> ( Target.Elements [ 0 ] ) = _mm_mul_ps ( reinterpret_cast <__m128 &> ( Target.Elements [ 0 ] ), _mm_set1_ps ( Scale.X ) );
+	reinterpret_cast <__m128 &> ( Target.Elements [ 1 ] ) = _mm_mul_ps ( reinterpret_cast <__m128 &> ( Target.Elements [ 1 ] ), _mm_set1_ps ( Scale.Y ) );
+	reinterpret_cast <__m128 &> ( Target.Elements [ 2 ] ) = _mm_mul_ps ( reinterpret_cast <__m128 &> ( Target.Elements [ 2 ] ), _mm_set1_ps ( Scale.Z ) );
 	
 #else
 	
@@ -645,16 +621,16 @@ void Xenon::Math::Matrix4x4 :: AppendScale ( Matrix4x4 & Target, const Vec3 & Sc
 	
 #endif
 	
-};
+}
 
 void Xenon::Math::Matrix4x4 :: AppendScale ( Matrix4x4 & Target, const Matrix4x4 & Source, const float X, const float Y, const float Z )
 {
 	
 #ifdef XENON_SSE
 	
-	Target.Elements [ 0 ].SSEV = _mm_mul_ps ( Source.Elements [ 0 ].SSEV, _mm_set1_ps ( X ) );
-	Target.Elements [ 1 ].SSEV = _mm_mul_ps ( Source.Elements [ 1 ].SSEV, _mm_set1_ps ( Y ) );
-	Target.Elements [ 2 ].SSEV = _mm_mul_ps ( Source.Elements [ 2 ].SSEV, _mm_set1_ps ( Z ) );
+	reinterpret_cast <__m128 &> ( Target.Elements [ 0 ] ) = _mm_mul_ps ( reinterpret_cast <const __m128 &> ( Source.Elements [ 0 ] ), _mm_set1_ps ( X ) );
+	reinterpret_cast <__m128 &> ( Target.Elements [ 1 ] ) = _mm_mul_ps ( reinterpret_cast <const __m128 &> ( Source.Elements [ 1 ] ), _mm_set1_ps ( Y ) );
+	reinterpret_cast <__m128 &> ( Target.Elements [ 2 ] ) = _mm_mul_ps ( reinterpret_cast <const __m128 &> ( Source.Elements [ 2 ] ), _mm_set1_ps ( Z ) );
 	
 #else
 	
@@ -675,16 +651,16 @@ void Xenon::Math::Matrix4x4 :: AppendScale ( Matrix4x4 & Target, const Matrix4x4
 	
 #endif
 	
-};
+}
 
 void Xenon::Math::Matrix4x4 :: AppendScale ( Matrix4x4 & Target, const Matrix4x4 & Source, const Vec3 & Scale )
 {
 	
 #ifdef XENON_SSE
 	
-	Target.Elements [ 0 ].SSEV = _mm_mul_ps ( Source.Elements [ 0 ].SSEV, _mm_set1_ps ( Scale.X ) );
-	Target.Elements [ 1 ].SSEV = _mm_mul_ps ( Source.Elements [ 1 ].SSEV, _mm_set1_ps ( Scale.Y ) );
-	Target.Elements [ 2 ].SSEV = _mm_mul_ps ( Source.Elements [ 2 ].SSEV, _mm_set1_ps ( Scale.Z ) );
+	reinterpret_cast <__m128 &> ( Target.Elements [ 0 ] ) = _mm_mul_ps ( reinterpret_cast <const __m128 &> ( Source.Elements [ 0 ] ), _mm_set1_ps ( Scale.X ) );
+	reinterpret_cast <__m128 &> ( Target.Elements [ 1 ] ) = _mm_mul_ps ( reinterpret_cast <const __m128 &> ( Source.Elements [ 1 ] ), _mm_set1_ps ( Scale.Y ) );
+	reinterpret_cast <__m128 &> ( Target.Elements [ 2 ] ) = _mm_mul_ps ( reinterpret_cast <const __m128 &> ( Source.Elements [ 2 ] ), _mm_set1_ps ( Scale.Z ) );
 	
 #else
 	
@@ -705,41 +681,41 @@ void Xenon::Math::Matrix4x4 :: AppendScale ( Matrix4x4 & Target, const Matrix4x4
 	
 #endif
 	
-};
+}
 
-void Xenon::Math::Matrix4x4 :: PrependScale ( Matrix4x4 & Source, const float X, const float Y, const float Z )
+void Xenon::Math::Matrix4x4 :: PrependScale ( Matrix4x4 & Target, const float X, const float Y, const float Z )
 {
 	
 #ifdef XENON_SSE
 	
 	__m128 ScaleVect = _mm_setr_ps ( X, Y, Z, 1.0f );
 	
-	Source.Elements [ 0 ].SSEV = _mm_mul_ps ( Source.Elements [ 0 ].SSEV, ScaleVect );
-	Source.Elements [ 1 ].SSEV = _mm_mul_ps ( Source.Elements [ 1 ].SSEV, ScaleVect );
-	Source.Elements [ 2 ].SSEV = _mm_mul_ps ( Source.Elements [ 2 ].SSEV, ScaleVect );
-	Source.Elements [ 3 ].SSEV = _mm_mul_ps ( Source.Elements [ 3 ].SSEV, ScaleVect );
+	reinterpret_cast <__m128 &> ( Target.Elements [ 0 ] ) = _mm_mul_ps ( reinterpret_cast <const __m128 &> ( Target.Elements [ 0 ] ), ScaleVect );
+	reinterpret_cast <__m128 &> ( Target.Elements [ 1 ] ) = _mm_mul_ps ( reinterpret_cast <const __m128 &> ( Target.Elements [ 1 ] ), ScaleVect );
+	reinterpret_cast <__m128 &> ( Target.Elements [ 2 ] ) = _mm_mul_ps ( reinterpret_cast <const __m128 &> ( Target.Elements [ 2 ] ), ScaleVect );
+	reinterpret_cast <__m128 &> ( Target.Elements [ 3 ] ) = _mm_mul_ps ( reinterpret_cast <const __m128 &> ( Target.Elements [ 3 ] ), ScaleVect );
 	
 #else
 	
-	Source.Elements [ 0 ].E0 * X;
-	Source.Elements [ 0 ].E1 * Y;
-	Source.Elements [ 0 ].E2 * Z;
+	Target.Elements [ 0 ].E0 * X;
+	Target.Elements [ 0 ].E1 * Y;
+	Target.Elements [ 0 ].E2 * Z;
 	
-	Source.Elements [ 1 ].E0 * X;
-	Source.Elements [ 1 ].E1 * Y;
-	Source.Elements [ 1 ].E2 * Z;
+	Target.Elements [ 1 ].E0 * X;
+	Target.Elements [ 1 ].E1 * Y;
+	Target.Elements [ 1 ].E2 * Z;
 	
-	Source.Elements [ 2 ].E0 * X;
-	Source.Elements [ 2 ].E1 * Y;
-	Source.Elements [ 2 ].E2 * Z;
+	Target.Elements [ 2 ].E0 * X;
+	Target.Elements [ 2 ].E1 * Y;
+	Target.Elements [ 2 ].E2 * Z;
 	
-	Source.Elements [ 3 ].E0 * X;
-	Source.Elements [ 3 ].E1 * Y;
-	Source.Elements [ 3 ].E2 * Z;
+	Target.Elements [ 3 ].E0 * X;
+	Target.Elements [ 3 ].E1 * Y;
+	Target.Elements [ 3 ].E2 * Z;
 	
 #endif
 	
-};
+}
 
 void Xenon::Math::Matrix4x4 :: PrependScale ( Matrix4x4 & Source, const Vec3 & Scale )
 {
@@ -748,10 +724,10 @@ void Xenon::Math::Matrix4x4 :: PrependScale ( Matrix4x4 & Source, const Vec3 & S
 	
 	__m128 ScaleVect = _mm_setr_ps ( Scale.X, Scale.Y, Scale.Z, 1.0f );
 	
-	Source.Elements [ 0 ].SSEV = _mm_mul_ps ( Source.Elements [ 0 ].SSEV, ScaleVect );
-	Source.Elements [ 1 ].SSEV = _mm_mul_ps ( Source.Elements [ 1 ].SSEV, ScaleVect );
-	Source.Elements [ 2 ].SSEV = _mm_mul_ps ( Source.Elements [ 2 ].SSEV, ScaleVect );
-	Source.Elements [ 3 ].SSEV = _mm_mul_ps ( Source.Elements [ 3 ].SSEV, ScaleVect );
+	reinterpret_cast <__m128 &> ( Source.Elements [ 0 ] ) = _mm_mul_ps ( reinterpret_cast <const __m128 &> ( Source.Elements [ 0 ] ), ScaleVect );
+	reinterpret_cast <__m128 &> ( Source.Elements [ 1 ] ) = _mm_mul_ps ( reinterpret_cast <const __m128 &> ( Source.Elements [ 1 ] ), ScaleVect );
+	reinterpret_cast <__m128 &> ( Source.Elements [ 2 ] ) = _mm_mul_ps ( reinterpret_cast <const __m128 &> ( Source.Elements [ 2 ] ), ScaleVect );
+	reinterpret_cast <__m128 &> ( Source.Elements [ 3 ] ) = _mm_mul_ps ( reinterpret_cast <const __m128 &> ( Source.Elements [ 3 ] ), ScaleVect );
 	
 #else
 	
@@ -773,7 +749,7 @@ void Xenon::Math::Matrix4x4 :: PrependScale ( Matrix4x4 & Source, const Vec3 & S
 	
 #endif
 	
-};
+}
 
 void Xenon::Math::Matrix4x4 :: PrependScale ( Matrix4x4 & Target, const Matrix4x4 & Source, const float X, const float Y, const float Z )
 {
@@ -782,10 +758,10 @@ void Xenon::Math::Matrix4x4 :: PrependScale ( Matrix4x4 & Target, const Matrix4x
 	
 	__m128 ScaleVect = _mm_setr_ps ( X, Y, Z, 1.0f );
 	
-	Target.Elements [ 0 ].SSEV = _mm_mul_ps ( Source.Elements [ 0 ].SSEV, ScaleVect );
-	Target.Elements [ 1 ].SSEV = _mm_mul_ps ( Source.Elements [ 1 ].SSEV, ScaleVect );
-	Target.Elements [ 2 ].SSEV = _mm_mul_ps ( Source.Elements [ 2 ].SSEV, ScaleVect );
-	Target.Elements [ 3 ].SSEV = _mm_mul_ps ( Source.Elements [ 3 ].SSEV, ScaleVect );
+	reinterpret_cast <__m128 &> ( Target.Elements [ 0 ] ) = _mm_mul_ps ( reinterpret_cast <const __m128 &> ( Source.Elements [ 0 ] ), ScaleVect );
+	reinterpret_cast <__m128 &> ( Target.Elements [ 1 ] ) = _mm_mul_ps ( reinterpret_cast <const __m128 &> ( Source.Elements [ 1 ] ), ScaleVect );
+	reinterpret_cast <__m128 &> ( Target.Elements [ 2 ] ) = _mm_mul_ps ( reinterpret_cast <const __m128 &> ( Source.Elements [ 2 ] ), ScaleVect );
+	reinterpret_cast <__m128 &> ( Target.Elements [ 3 ] ) = _mm_mul_ps ( reinterpret_cast <const __m128 &> ( Source.Elements [ 3 ] ), ScaleVect );
 	
 #else
 	
@@ -807,7 +783,7 @@ void Xenon::Math::Matrix4x4 :: PrependScale ( Matrix4x4 & Target, const Matrix4x
 	
 #endif
 	
-};
+}
 
 void Xenon::Math::Matrix4x4 :: PrependScale ( Matrix4x4 & Target, const Matrix4x4 & Source, const Vec3 & Scale )
 {
@@ -816,10 +792,10 @@ void Xenon::Math::Matrix4x4 :: PrependScale ( Matrix4x4 & Target, const Matrix4x
 	
 	__m128 ScaleVect = _mm_setr_ps ( Scale.X, Scale.Y, Scale.Z, 1.0f );
 	
-	Target.Elements [ 0 ].SSEV = _mm_mul_ps ( Source.Elements [ 0 ].SSEV, ScaleVect );
-	Target.Elements [ 1 ].SSEV = _mm_mul_ps ( Source.Elements [ 1 ].SSEV, ScaleVect );
-	Target.Elements [ 2 ].SSEV = _mm_mul_ps ( Source.Elements [ 2 ].SSEV, ScaleVect );
-	Target.Elements [ 3 ].SSEV = _mm_mul_ps ( Source.Elements [ 3 ].SSEV, ScaleVect );
+	reinterpret_cast <__m128 &> ( Target.Elements [ 0 ] ) = _mm_mul_ps ( reinterpret_cast <const __m128 &> ( Source.Elements [ 0 ] ), ScaleVect );
+	reinterpret_cast <__m128 &> ( Target.Elements [ 1 ] ) = _mm_mul_ps ( reinterpret_cast <const __m128 &> ( Source.Elements [ 1 ] ), ScaleVect );
+	reinterpret_cast <__m128 &> ( Target.Elements [ 2 ] ) = _mm_mul_ps ( reinterpret_cast <const __m128 &> ( Source.Elements [ 2 ] ), ScaleVect );
+	reinterpret_cast <__m128 &> ( Target.Elements [ 3 ] ) = _mm_mul_ps ( reinterpret_cast <const __m128 &> ( Source.Elements [ 3 ] ), ScaleVect );
 	
 #else
 	
@@ -841,7 +817,7 @@ void Xenon::Math::Matrix4x4 :: PrependScale ( Matrix4x4 & Target, const Matrix4x
 	
 #endif
 	
-};
+}
 
 #ifdef XENON_SSE
 
@@ -853,7 +829,7 @@ inline void RowMult ( __m128 & Result, const __m128 & Row, const __m128 B [] )
 	Result = _mm_add_ps ( Result, _mm_mul_ps ( _mm_shuffle_ps ( Row, Row, 0xAA ), B [ 2 ] ) );
 	Result = _mm_add_ps ( Result, _mm_mul_ps ( _mm_shuffle_ps ( Row, Row, 0xFF ), B [ 3 ] ) );
 	
-};
+}
 
 #else
 
@@ -865,7 +841,7 @@ inline void RowMult ( float Result [], const float Row [], const float Matrix []
 	Result [ 2 ] = Row [ 0 ] * Matrix [ 2 ] + Row [ 1 ] * Matrix [ 6 ] + Row [ 2 ] * Matrix [ 10 ] + Row [ 3 ] * Matrix [ 14 ];
 	Result [ 3 ] = Row [ 0 ] * Matrix [ 3 ] + Row [ 1 ] * Matrix [ 7 ] + Row [ 2 ] * Matrix [ 11 ] + Row [ 3 ] * Matrix [ 15 ];
 	
-};
+}
 
 #endif
 
@@ -876,17 +852,17 @@ void Xenon::Math::Matrix4x4 :: Append ( Matrix4x4 & Target, const Matrix4x4 & Pe
 	
 	__m128 Temp;
 	
-	RowMult ( Temp,Target.Elements [ 0 ].SSEV, reinterpret_cast <const __m128 *> ( Pendant.Elements ) );
-	Target.Elements [ 0 ].SSEV = Temp;
+	RowMult ( Temp,reinterpret_cast <__m128 &> ( Target.Elements [ 0 ] ), reinterpret_cast <const __m128 *> ( Pendant.Elements ) );
+	reinterpret_cast <__m128 &> ( Target.Elements [ 0 ] ) = Temp;
 	
-	RowMult ( Temp,Target.Elements [ 1 ].SSEV, reinterpret_cast <const __m128 *> ( Pendant.Elements ) );
-	Target.Elements [ 1 ].SSEV = Temp;
+	RowMult ( Temp,reinterpret_cast <__m128 &> ( Target.Elements [ 1 ] ), reinterpret_cast <const __m128 *> ( Pendant.Elements ) );
+	reinterpret_cast <__m128 &> ( Target.Elements [ 1 ] ) = Temp;
 	
-	RowMult ( Temp,Target.Elements [ 2 ].SSEV, reinterpret_cast <const __m128 *> ( Pendant.Elements ) );
-	Target.Elements [ 2 ].SSEV = Temp;
+	RowMult ( Temp,reinterpret_cast <__m128 &> ( Target.Elements [ 2 ] ), reinterpret_cast <const __m128 *> ( Pendant.Elements ) );
+	reinterpret_cast <__m128 &> ( Target.Elements [ 2 ] ) = Temp;
 	
-	RowMult ( Temp,Target.Elements [ 3 ].SSEV, reinterpret_cast <const __m128 *> ( Pendant.Elements ) );
-	Target.Elements [ 3 ].SSEV = Temp;
+	RowMult ( Temp,reinterpret_cast <__m128 &> ( Target.Elements [ 3 ] ), reinterpret_cast <const __m128 *> ( Pendant.Elements ) );
+	reinterpret_cast <__m128 &> ( Target.Elements [ 3 ] ) = Temp;
 	
 #else
 	
@@ -906,17 +882,17 @@ void Xenon::Math::Matrix4x4 :: Append ( Matrix4x4 & Target, const Matrix4x4 & Pe
 	
 #endif
 	
-};
+}
 
 void Xenon::Math::Matrix4x4 :: Append ( Matrix4x4 & Target, const Matrix4x4 & Source, const Matrix4x4 & Pendant )
 {
 	
 #ifdef XENON_SSE
 	
-	RowMult ( Target.Elements [ 0 ].SSEV, Source.Elements [ 0 ].SSEV, reinterpret_cast <const __m128 *> ( Pendant.Elements ) );
-	RowMult ( Target.Elements [ 1 ].SSEV, Source.Elements [ 1 ].SSEV, reinterpret_cast <const __m128 *> ( Pendant.Elements ) );
-	RowMult ( Target.Elements [ 2 ].SSEV, Source.Elements [ 2 ].SSEV, reinterpret_cast <const __m128 *> ( Pendant.Elements ) );
-	RowMult ( Target.Elements [ 3 ].SSEV, Source.Elements [ 3 ].SSEV, reinterpret_cast <const __m128 *> ( Pendant.Elements ) );
+	RowMult ( reinterpret_cast <__m128 &> ( Target.Elements [ 0 ] ), reinterpret_cast <const __m128 &> ( Source.Elements [ 0 ] ), reinterpret_cast <const __m128 *> ( Pendant.Elements ) );
+	RowMult ( reinterpret_cast <__m128 &> ( Target.Elements [ 1 ] ), reinterpret_cast <const __m128 &> ( Source.Elements [ 1 ] ), reinterpret_cast <const __m128 *> ( Pendant.Elements ) );
+	RowMult ( reinterpret_cast <__m128 &> ( Target.Elements [ 2 ] ), reinterpret_cast <const __m128 &> ( Source.Elements [ 2 ] ), reinterpret_cast <const __m128 *> ( Pendant.Elements ) );
+	RowMult ( reinterpret_cast <__m128 &> ( Target.Elements [ 3 ] ), reinterpret_cast <const __m128 &> ( Source.Elements [ 3 ] ), reinterpret_cast <const __m128 *> ( Pendant.Elements ) );
 	
 #else
 	
@@ -927,7 +903,7 @@ void Xenon::Math::Matrix4x4 :: Append ( Matrix4x4 & Target, const Matrix4x4 & So
 	
 #endif
 	
-};
+}
 
 void Xenon::Math::Matrix4x4 :: Prepend ( Matrix4x4 & Target, const Matrix4x4 & Pendant )
 {
@@ -936,10 +912,10 @@ void Xenon::Math::Matrix4x4 :: Prepend ( Matrix4x4 & Target, const Matrix4x4 & P
 	
 #ifdef XENON_SSE
 	
-	RowMult ( Temp [ 0 ].SSEV, Pendant.Elements [ 0 ].SSEV, reinterpret_cast <const __m128 *> ( Target.Elements ) );
-	RowMult ( Temp [ 1 ].SSEV, Pendant.Elements [ 1 ].SSEV, reinterpret_cast <const __m128 *> ( Target.Elements ) );
-	RowMult ( Temp [ 2 ].SSEV, Pendant.Elements [ 2 ].SSEV, reinterpret_cast <const __m128 *> ( Target.Elements ) );
-	RowMult ( Temp [ 3 ].SSEV, Pendant.Elements [ 3 ].SSEV, reinterpret_cast <const __m128 *> ( Target.Elements ) );
+	RowMult ( reinterpret_cast <__m128 &> ( Temp [ 0 ] ), reinterpret_cast <const __m128 &> ( Pendant.Elements [ 0 ] ), reinterpret_cast <const __m128 *> ( Target.Elements ) );
+	RowMult ( reinterpret_cast <__m128 &> ( Temp [ 1 ] ), reinterpret_cast <const __m128 &> ( Pendant.Elements [ 1 ] ), reinterpret_cast <const __m128 *> ( Target.Elements ) );
+	RowMult ( reinterpret_cast <__m128 &> ( Temp [ 2 ] ), reinterpret_cast <const __m128 &> ( Pendant.Elements [ 2 ] ), reinterpret_cast <const __m128 *> ( Target.Elements ) );
+	RowMult ( reinterpret_cast <__m128 &> ( Temp [ 3 ] ), reinterpret_cast <const __m128 &> ( Pendant.Elements [ 3 ] ), reinterpret_cast <const __m128 *> ( Target.Elements ) );
 	
 	Target.Elements [ 0 ] = Temp [ 0 ];
 	Target.Elements [ 1 ] = Temp [ 1 ];
@@ -960,7 +936,7 @@ void Xenon::Math::Matrix4x4 :: Prepend ( Matrix4x4 & Target, const Matrix4x4 & P
 	
 #endif
 	
-};
+}
 
 void Xenon::Math::Matrix4x4 :: Prepend ( Matrix4x4 & Target, const Matrix4x4 & Source, const Matrix4x4 & Pendant )
 {
@@ -969,10 +945,10 @@ void Xenon::Math::Matrix4x4 :: Prepend ( Matrix4x4 & Target, const Matrix4x4 & S
 	
 #ifdef XENON_SSE
 	
-	RowMult ( Target.Elements [ 0 ].SSEV, Pendant.Elements [ 0 ].SSEV, reinterpret_cast <const __m128 *> ( Source.Elements ) );
-	RowMult ( Target.Elements [ 1 ].SSEV, Pendant.Elements [ 1 ].SSEV, reinterpret_cast <const __m128 *> ( Source.Elements ) );
-	RowMult ( Target.Elements [ 2 ].SSEV, Pendant.Elements [ 2 ].SSEV, reinterpret_cast <const __m128 *> ( Source.Elements ) );
-	RowMult ( Target.Elements [ 3 ].SSEV, Pendant.Elements [ 3 ].SSEV, reinterpret_cast <const __m128 *> ( Source.Elements ) );
+	RowMult ( reinterpret_cast <__m128 &> ( Target.Elements [ 0 ] ), reinterpret_cast <const __m128 &> ( Pendant.Elements [ 0 ] ), reinterpret_cast <const __m128 *> ( Source.Elements ) );
+	RowMult ( reinterpret_cast <__m128 &> ( Target.Elements [ 1 ] ), reinterpret_cast <const __m128 &> ( Pendant.Elements [ 1 ] ), reinterpret_cast <const __m128 *> ( Source.Elements ) );
+	RowMult ( reinterpret_cast <__m128 &> ( Target.Elements [ 2 ] ), reinterpret_cast <const __m128 &> ( Pendant.Elements [ 2 ] ), reinterpret_cast <const __m128 *> ( Source.Elements ) );
+	RowMult ( reinterpret_cast <__m128 &> ( Target.Elements [ 3 ] ), reinterpret_cast <const __m128 &> ( Pendant.Elements [ 3 ] ), reinterpret_cast <const __m128 *> ( Source.Elements ) );
 	
 #else
 	
@@ -983,7 +959,7 @@ void Xenon::Math::Matrix4x4 :: Prepend ( Matrix4x4 & Target, const Matrix4x4 & S
 	
 #endif
 	
-};
+}
 
 void Xenon::Math::Matrix4x4 :: SetAsQuaternionRotation ( Matrix4x4 & Target, const Quaternion & Rotation )
 {
@@ -1001,10 +977,10 @@ void Xenon::Math::Matrix4x4 :: SetAsQuaternionRotation ( Matrix4x4 & Target, con
 	
 #ifdef XENON_SSE
 	
-	Target.Elements [ 0 ].SSEV = _mm_setr_ps ( 1.0f - ( YY + ZZ ), XY - ZW, XZ + YW, 0.0f );
-	Target.Elements [ 1 ].SSEV = _mm_setr_ps ( XY + ZW, 1.0f - ( XX + ZZ ), YZ - XW, 0.0f );
-	Target.Elements [ 2 ].SSEV = _mm_setr_ps ( XZ - YW, YZ + XW, 1.0f - ( XX + YY ), 0.0f );
-	Target.Elements [ 3 ].SSEV = _mm_setr_ps ( 0.0f, 0.0f, 0.0f, 1.0f );
+	reinterpret_cast <__m128 &> ( Target.Elements [ 0 ] ) = _mm_setr_ps ( 1.0f - ( YY + ZZ ), XY - ZW, XZ + YW, 0.0f );
+	reinterpret_cast <__m128 &> ( Target.Elements [ 1 ] ) = _mm_setr_ps ( XY + ZW, 1.0f - ( XX + ZZ ), YZ - XW, 0.0f );
+	reinterpret_cast <__m128 &> ( Target.Elements [ 2 ] ) = _mm_setr_ps ( XZ - YW, YZ + XW, 1.0f - ( XX + YY ), 0.0f );
+	reinterpret_cast <__m128 &> ( Target.Elements [ 3 ] ) = _mm_setr_ps ( 0.0f, 0.0f, 0.0f, 1.0f );
 	
 #else
 	
@@ -1025,7 +1001,7 @@ void Xenon::Math::Matrix4x4 :: SetAsQuaternionRotation ( Matrix4x4 & Target, con
 	
 #endif
 	
-};
+}
 
 void Xenon::Math::Matrix4x4 :: SetAsQuaternionRotation ( Matrix4x4 & Target, const float X, const float Y, const float Z, const float W )
 {
@@ -1043,10 +1019,10 @@ void Xenon::Math::Matrix4x4 :: SetAsQuaternionRotation ( Matrix4x4 & Target, con
 	
 #ifdef XENON_SSE
 	
-	Target.Elements [ 0 ].SSEV = _mm_setr_ps ( 1.0f - ( YY + ZZ ), XY - ZW, XZ + YW, 0.0f );
-	Target.Elements [ 1 ].SSEV = _mm_setr_ps ( XY + ZW, 1.0f - ( XX + ZZ ), YZ - XW, 0.0f );
-	Target.Elements [ 2 ].SSEV = _mm_setr_ps ( XZ - YW, YZ + XW, 1.0f - ( XX + YY ), 0.0f );
-	Target.Elements [ 3 ].SSEV = _mm_setr_ps ( 0.0f, 0.0f, 0.0f, 1.0f );
+	reinterpret_cast <__m128 &> ( Target.Elements [ 0 ] ) = _mm_setr_ps ( 1.0f - ( YY + ZZ ), XY - ZW, XZ + YW, 0.0f );
+	reinterpret_cast <__m128 &> ( Target.Elements [ 1 ] ) = _mm_setr_ps ( XY + ZW, 1.0f - ( XX + ZZ ), YZ - XW, 0.0f );
+	reinterpret_cast <__m128 &> ( Target.Elements [ 2 ] ) = _mm_setr_ps ( XZ - YW, YZ + XW, 1.0f - ( XX + YY ), 0.0f );
+	reinterpret_cast <__m128 &> ( Target.Elements [ 3 ] ) = _mm_setr_ps ( 0.0f, 0.0f, 0.0f, 1.0f );
 	
 #else
 	
@@ -1067,7 +1043,7 @@ void Xenon::Math::Matrix4x4 :: SetAsQuaternionRotation ( Matrix4x4 & Target, con
 	
 #endif
 	
-};
+}
 
 void Xenon::Math::Matrix4x4 :: AppendQuaternionRotation ( Matrix4x4 & Target, const Quaternion & Rotation )
 {
@@ -1077,7 +1053,7 @@ void Xenon::Math::Matrix4x4 :: AppendQuaternionRotation ( Matrix4x4 & Target, co
 	
 	Target.Append ( Target, RotationMatrix );
 	
-};
+}
 
 void Xenon::Math::Matrix4x4 :: AppendQuaternionRotation ( Matrix4x4 & Target, const float X, const float Y, const float Z, const float W )
 {
@@ -1087,7 +1063,7 @@ void Xenon::Math::Matrix4x4 :: AppendQuaternionRotation ( Matrix4x4 & Target, co
 	
 	Target.Append ( Target, RotationMatrix );
 	
-};
+}
 
 float Xenon::Math::Matrix4x4 :: Determinant ( const Matrix4x4 & Source )
 {
@@ -1110,8 +1086,8 @@ float Xenon::Math::Matrix4x4 :: Determinant ( const Matrix4x4 & Source )
 		
 	};
 	
-	AddMul = _mm_mul_ps ( _mm_mul_ps ( Source.Elements [ 0 ].SSEV, _mm_shuffle_ps ( Source.Elements [ 1 ].SSEV,Source.Elements [ 1 ].SSEV, _MM_SHUFFLE ( 0, 3, 2, 1 ) ) ), _mm_mul_ps ( _mm_shuffle_ps ( Source.Elements [ 2 ].SSEV,Source.Elements [ 2 ].SSEV, _MM_SHUFFLE ( 1, 0, 3, 2 ) ), _mm_shuffle_ps ( Source.Elements [ 3 ].SSEV,Source.Elements [ 3 ].SSEV, _MM_SHUFFLE ( 2, 1, 0, 3 ) ) ) );
-	SubMul = _mm_mul_ps ( _mm_shuffle_ps ( Source.Elements [ 0 ].SSEV,Source.Elements [ 0 ].SSEV, _MM_SHUFFLE ( 0, 1, 2, 3 ) ), _mm_shuffle_ps ( Source.Elements [ 1 ].SSEV,Source.Elements [ 1 ].SSEV, _MM_SHUFFLE ( 3, 0, 1, 2 ) ) ), _mm_mul_ps ( _mm_shuffle_ps ( Source.Elements [ 2 ].SSEV,Source.Elements [ 2 ].SSEV, _MM_SHUFFLE ( 2, 3, 0, 1 ) ), _mm_shuffle_ps ( Source.Elements [ 3 ].SSEV,Source.Elements [ 3 ].SSEV, _MM_SHUFFLE ( 1, 2, 3, 0 ) ) );
+	AddMul = _mm_mul_ps ( _mm_mul_ps ( reinterpret_cast <const __m128 &> ( Source.Elements [ 0 ] ), _mm_shuffle_ps ( reinterpret_cast <const __m128 &> ( Source.Elements [ 1 ] ),reinterpret_cast <const __m128 &> ( Source.Elements [ 1 ] ), _MM_SHUFFLE ( 0, 3, 2, 1 ) ) ), _mm_mul_ps ( _mm_shuffle_ps ( reinterpret_cast <const __m128 &> ( Source.Elements [ 2 ] ),reinterpret_cast <const __m128 &> ( Source.Elements [ 2 ] ), _MM_SHUFFLE ( 1, 0, 3, 2 ) ), _mm_shuffle_ps ( reinterpret_cast <const __m128 &> ( Source.Elements [ 3 ] ),reinterpret_cast <const __m128 &> ( Source.Elements [ 3 ] ), _MM_SHUFFLE ( 2, 1, 0, 3 ) ) ) );
+	SubMul = _mm_mul_ps ( _mm_shuffle_ps ( reinterpret_cast <const __m128 &> ( Source.Elements [ 0 ] ),reinterpret_cast <const __m128 &> ( Source.Elements [ 0 ] ), _MM_SHUFFLE ( 0, 1, 2, 3 ) ), _mm_shuffle_ps ( reinterpret_cast <const __m128 &> ( Source.Elements [ 1 ] ),reinterpret_cast <const __m128 &> ( Source.Elements [ 1 ] ), _MM_SHUFFLE ( 3, 0, 1, 2 ) ) ), _mm_mul_ps ( _mm_shuffle_ps ( reinterpret_cast <const __m128 &> ( Source.Elements [ 2 ] ),reinterpret_cast <const __m128 &> ( Source.Elements [ 2 ] ), _MM_SHUFFLE ( 2, 3, 0, 1 ) ), _mm_shuffle_ps ( reinterpret_cast <const __m128 &> ( Source.Elements [ 3 ] ),reinterpret_cast <const __m128 &> ( Source.Elements [ 3 ] ), _MM_SHUFFLE ( 1, 2, 3, 0 ) ) );
 	
 #ifdef XENON_SSE4_1
 	
@@ -1147,7 +1123,7 @@ float Xenon::Math::Matrix4x4 :: Determinant ( const Matrix4x4 & Source )
 	
 #endif
 	
-};
+}
 
 void Xenon::Math::Matrix4x4 :: Transpose ( Matrix4x4 & Target )
 {
@@ -1161,7 +1137,7 @@ void Xenon::Math::Matrix4x4 :: Transpose ( Matrix4x4 & Target )
 	
 	std :: swap ( Target.Elements [ 2 ].E3, Target.Elements [ 3 ].E2 );
 	
-};
+}
 
 void Xenon::Math::Matrix4x4 :: Transpose ( Matrix4x4 & Target, const Matrix4x4 & Source )
 {
@@ -1177,14 +1153,14 @@ void Xenon::Math::Matrix4x4 :: Transpose ( Matrix4x4 & Target, const Matrix4x4 &
 	
 	std :: swap ( Target.Elements [ 2 ].E3, Target.Elements [ 3 ].E2 );
 	
-};
+}
 
 void Xenon::Math::Matrix4x4 :: Copy ( Matrix4x4 & Target, const Matrix4x4 & Source )
 {
 	
 	memcpy ( reinterpret_cast <void *> ( Target.Elements ), reinterpret_cast <const void *> ( Source.Elements ), sizeof ( Source.Elements ) );
 	
-};
+}
 
 void Xenon::Math::Matrix4x4 :: Invert ( Matrix4x4 & Target )
 {
@@ -1193,23 +1169,23 @@ void Xenon::Math::Matrix4x4 :: Invert ( Matrix4x4 & Target )
 	
 	Transpose ( Target );
 	
-	__m128 V00 = _mm_shuffle_ps ( Target.Elements [ 2 ].SSEV, Target.Elements [ 2 ].SSEV, _MM_SHUFFLE ( 1, 1, 0, 0 ) );
-	__m128 V10 = _mm_shuffle_ps ( Target.Elements [ 3 ].SSEV, Target.Elements [ 3 ].SSEV, _MM_SHUFFLE ( 3, 2, 3, 2 ) );
-	__m128 V01 = _mm_shuffle_ps ( Target.Elements [ 0 ].SSEV, Target.Elements [ 0 ].SSEV, _MM_SHUFFLE ( 1, 1, 0, 0 ) );
-	__m128 V11 = _mm_shuffle_ps ( Target.Elements [ 1 ].SSEV, Target.Elements [ 1 ].SSEV, _MM_SHUFFLE ( 3, 2, 3, 2 ) );
-	__m128 V02 = _mm_shuffle_ps ( Target.Elements [ 2 ].SSEV, Target.Elements [ 0 ].SSEV, _MM_SHUFFLE ( 2, 0, 2, 0 ) );
-	__m128 V12 = _mm_shuffle_ps ( Target.Elements [ 3 ].SSEV, Target.Elements [ 1 ].SSEV, _MM_SHUFFLE ( 3, 1, 3, 1 ) );
+	__m128 V00 = _mm_shuffle_ps ( reinterpret_cast <__m128 &> ( Target.Elements [ 2 ] ), reinterpret_cast <__m128 &> ( Target.Elements [ 2 ] ), _MM_SHUFFLE ( 1, 1, 0, 0 ) );
+	__m128 V10 = _mm_shuffle_ps ( reinterpret_cast <__m128 &> ( Target.Elements [ 3 ] ), reinterpret_cast <__m128 &> ( Target.Elements [ 3 ] ), _MM_SHUFFLE ( 3, 2, 3, 2 ) );
+	__m128 V01 = _mm_shuffle_ps ( reinterpret_cast <__m128 &> ( Target.Elements [ 0 ] ), reinterpret_cast <__m128 &> ( Target.Elements [ 0 ] ), _MM_SHUFFLE ( 1, 1, 0, 0 ) );
+	__m128 V11 = _mm_shuffle_ps ( reinterpret_cast <__m128 &> ( Target.Elements [ 1 ] ), reinterpret_cast <__m128 &> ( Target.Elements [ 1 ] ), _MM_SHUFFLE ( 3, 2, 3, 2 ) );
+	__m128 V02 = _mm_shuffle_ps ( reinterpret_cast <__m128 &> ( Target.Elements [ 2 ] ), reinterpret_cast <__m128 &> ( Target.Elements [ 0 ] ), _MM_SHUFFLE ( 2, 0, 2, 0 ) );
+	__m128 V12 = _mm_shuffle_ps ( reinterpret_cast <__m128 &> ( Target.Elements [ 3 ] ), reinterpret_cast <__m128 &> ( Target.Elements [ 1 ] ), _MM_SHUFFLE ( 3, 1, 3, 1 ) );
 	
 	__m128 D0 = _mm_mul_ps ( V00, V10 );
 	__m128 D1 = _mm_mul_ps ( V01, V11 );
 	__m128 D2 = _mm_mul_ps ( V02, V12 );
 	
-	V00 = _mm_shuffle_ps ( Target.Elements [ 2 ].SSEV, Target.Elements [ 2 ].SSEV, _MM_SHUFFLE ( 3, 2, 3, 2 ) );
-	V10 = _mm_shuffle_ps ( Target.Elements [ 3 ].SSEV, Target.Elements [ 3 ].SSEV, _MM_SHUFFLE ( 1, 1, 0, 0 ) );
-	V01 = _mm_shuffle_ps ( Target.Elements [ 0 ].SSEV, Target.Elements [ 0 ].SSEV, _MM_SHUFFLE ( 3, 2, 3, 2 ) );
-	V11 = _mm_shuffle_ps ( Target.Elements [ 1 ].SSEV, Target.Elements [ 1 ].SSEV, _MM_SHUFFLE ( 1, 1, 0, 0 ) );
-	V02 = _mm_shuffle_ps ( Target.Elements [ 2 ].SSEV, Target.Elements [ 0 ].SSEV, _MM_SHUFFLE ( 3, 1, 3, 1 ) );
-	V12 = _mm_shuffle_ps ( Target.Elements [ 3 ].SSEV, Target.Elements [ 1 ].SSEV, _MM_SHUFFLE ( 2, 0, 2, 0 ) );
+	V00 = _mm_shuffle_ps ( reinterpret_cast <__m128 &> ( Target.Elements [ 2 ] ), reinterpret_cast <__m128 &> ( Target.Elements [ 2 ] ), _MM_SHUFFLE ( 3, 2, 3, 2 ) );
+	V10 = _mm_shuffle_ps ( reinterpret_cast <__m128 &> ( Target.Elements [ 3 ] ), reinterpret_cast <__m128 &> ( Target.Elements [ 3 ] ), _MM_SHUFFLE ( 1, 1, 0, 0 ) );
+	V01 = _mm_shuffle_ps ( reinterpret_cast <__m128 &> ( Target.Elements [ 0 ] ), reinterpret_cast <__m128 &> ( Target.Elements [ 0 ] ), _MM_SHUFFLE ( 3, 2, 3, 2 ) );
+	V11 = _mm_shuffle_ps ( reinterpret_cast <__m128 &> ( Target.Elements [ 1 ] ), reinterpret_cast <__m128 &> ( Target.Elements [ 1 ] ), _MM_SHUFFLE ( 1, 1, 0, 0 ) );
+	V02 = _mm_shuffle_ps ( reinterpret_cast <__m128 &> ( Target.Elements [ 2 ] ), reinterpret_cast <__m128 &> ( Target.Elements [ 0 ] ), _MM_SHUFFLE ( 3, 1, 3, 1 ) );
+	V12 = _mm_shuffle_ps ( reinterpret_cast <__m128 &> ( Target.Elements [ 3 ] ), reinterpret_cast <__m128 &> ( Target.Elements [ 1 ] ), _MM_SHUFFLE ( 2, 0, 2, 0 ) );
 	
 	V00 = _mm_mul_ps ( V00, V10 );
 	V01 = _mm_mul_ps ( V01, V11 );
@@ -1218,14 +1194,14 @@ void Xenon::Math::Matrix4x4 :: Invert ( Matrix4x4 & Target )
 	D1 = _mm_sub_ps ( D1, V01 );
 	D2 = _mm_sub_ps ( D2, V02 );
 	V11 = _mm_shuffle_ps ( D0, D2, _MM_SHUFFLE ( 1, 1, 3, 1 ) );
-	V00 = _mm_shuffle_ps ( Target.Elements [ 1 ].SSEV, Target.Elements [ 1 ].SSEV, _MM_SHUFFLE ( 1, 0, 2, 1 ) );
+	V00 = _mm_shuffle_ps ( reinterpret_cast <__m128 &> ( Target.Elements [ 1 ] ), reinterpret_cast <__m128 &> ( Target.Elements [ 1 ] ), _MM_SHUFFLE ( 1, 0, 2, 1 ) );
 	V10 = _mm_shuffle_ps ( V11, D0, _MM_SHUFFLE ( 0, 3, 0, 2 ) );
-	V01 = _mm_shuffle_ps ( Target.Elements [ 0 ].SSEV, Target.Elements [ 0 ].SSEV, _MM_SHUFFLE ( 0, 1, 0, 2 ) );
+	V01 = _mm_shuffle_ps ( reinterpret_cast <__m128 &> ( Target.Elements [ 0 ] ), reinterpret_cast <__m128 &> ( Target.Elements [ 0 ] ), _MM_SHUFFLE ( 0, 1, 0, 2 ) );
 	V11 = _mm_shuffle_ps ( V11, D0, _MM_SHUFFLE ( 2, 1, 2, 1 ) );
 	__m128 V13 = _mm_shuffle_ps ( D1, D2, _MM_SHUFFLE ( 3, 3, 3, 1 ) );
-	V02 = _mm_shuffle_ps ( Target.Elements [ 3 ].SSEV, Target.Elements [ 3 ].SSEV, _MM_SHUFFLE ( 1, 0, 2, 1 ) );
+	V02 = _mm_shuffle_ps ( reinterpret_cast <__m128 &> ( Target.Elements [ 3 ] ), reinterpret_cast <__m128 &> ( Target.Elements [ 3 ] ), _MM_SHUFFLE ( 1, 0, 2, 1 ) );
 	V12 = _mm_shuffle_ps ( V13, D1, _MM_SHUFFLE ( 0, 3, 0, 2 ) );
-	__m128 V03 = _mm_shuffle_ps ( Target.Elements [ 2 ].SSEV, Target.Elements [ 2 ].SSEV, _MM_SHUFFLE ( 0, 1, 0, 2 ) );
+	__m128 V03 = _mm_shuffle_ps ( reinterpret_cast <__m128 &> ( Target.Elements [ 2 ] ), reinterpret_cast <__m128 &> ( Target.Elements [ 2 ] ), _MM_SHUFFLE ( 0, 1, 0, 2 ) );
 	V13 = _mm_shuffle_ps ( V13, D1, _MM_SHUFFLE ( 2, 1, 2, 1 ) );
 	
 	__m128 C0 = _mm_mul_ps ( V00, V10 );
@@ -1234,14 +1210,14 @@ void Xenon::Math::Matrix4x4 :: Invert ( Matrix4x4 & Target )
 	__m128 C6 = _mm_mul_ps ( V03, V13 );
 	
 	V11 = _mm_shuffle_ps ( D0, D2, _MM_SHUFFLE ( 0, 0, 1, 0 ) );
-	V00 = _mm_shuffle_ps ( Target.Elements [ 1 ].SSEV, Target.Elements [ 1 ].SSEV, _MM_SHUFFLE ( 2, 1, 3, 2 ) );
+	V00 = _mm_shuffle_ps ( reinterpret_cast <__m128 &> ( Target.Elements [ 1 ] ), reinterpret_cast <__m128 &> ( Target.Elements [ 1 ] ), _MM_SHUFFLE ( 2, 1, 3, 2 ) );
 	V10 = _mm_shuffle_ps ( D0, V11, _MM_SHUFFLE ( 2, 1, 0, 3 ) );
-	V01 = _mm_shuffle_ps ( Target.Elements [ 0 ].SSEV, Target.Elements [ 0 ].SSEV, _MM_SHUFFLE ( 1, 3, 2, 3 ) );
+	V01 = _mm_shuffle_ps ( reinterpret_cast <__m128 &> ( Target.Elements [ 0 ] ), reinterpret_cast <__m128 &> ( Target.Elements [ 0 ] ), _MM_SHUFFLE ( 1, 3, 2, 3 ) );
 	V11 = _mm_shuffle_ps ( D0, V11, _MM_SHUFFLE ( 0, 2, 1, 2 ) );
 	V13 = _mm_shuffle_ps ( D1, D2, _MM_SHUFFLE ( 2, 2, 1, 0 ) );
-	V02 = _mm_shuffle_ps ( Target.Elements [ 3 ].SSEV, Target.Elements [ 3 ].SSEV, _MM_SHUFFLE ( 2, 1, 3, 2 ) );
+	V02 = _mm_shuffle_ps ( reinterpret_cast <__m128 &> ( Target.Elements [ 3 ] ), reinterpret_cast <__m128 &> ( Target.Elements [ 3 ] ), _MM_SHUFFLE ( 2, 1, 3, 2 ) );
 	V12 = _mm_shuffle_ps ( D1, V13, _MM_SHUFFLE ( 2, 1, 0, 3 ) );
-	V03 = _mm_shuffle_ps ( Target.Elements [ 2 ].SSEV, Target.Elements [ 2 ].SSEV, _MM_SHUFFLE ( 1, 3, 2, 3 ) );
+	V03 = _mm_shuffle_ps ( reinterpret_cast <__m128 &> ( Target.Elements [ 2 ] ), reinterpret_cast <__m128 &> ( Target.Elements [ 2 ] ), _MM_SHUFFLE ( 1, 3, 2, 3 ) );
 	V13 = _mm_shuffle_ps ( D1, V13, _MM_SHUFFLE ( 0, 2, 1, 2 ) );
 	
 	V00 = _mm_mul_ps ( V00, V10 );
@@ -1253,16 +1229,16 @@ void Xenon::Math::Matrix4x4 :: Invert ( Matrix4x4 & Target )
 	C4 = _mm_sub_ps ( C4, V02 );
 	C6 = _mm_sub_ps ( C6, V03 );
 	
-	V00 = _mm_shuffle_ps ( Target.Elements [ 1 ].SSEV, Target.Elements [ 1 ].SSEV, _MM_SHUFFLE ( 0, 3, 0, 3 ) );
+	V00 = _mm_shuffle_ps ( reinterpret_cast <__m128 &> ( Target.Elements [ 1 ] ), reinterpret_cast <__m128 &> ( Target.Elements [ 1 ] ), _MM_SHUFFLE ( 0, 3, 0, 3 ) );
 	V10 = _mm_shuffle_ps ( D0, D2, _MM_SHUFFLE ( 1, 0, 2, 2 ) );
 	V10 = _mm_shuffle_ps ( V10, V10, _MM_SHUFFLE ( 0, 2, 3, 0 ) );
-	V01 = _mm_shuffle_ps ( Target.Elements [ 0 ].SSEV, Target.Elements [ 0 ].SSEV, _MM_SHUFFLE ( 2, 0, 3, 1 ) );
+	V01 = _mm_shuffle_ps ( reinterpret_cast <__m128 &> ( Target.Elements [ 0 ] ), reinterpret_cast <__m128 &> ( Target.Elements [ 0 ] ), _MM_SHUFFLE ( 2, 0, 3, 1 ) );
 	V11 = _mm_shuffle_ps ( D0, D2, _MM_SHUFFLE ( 1, 0, 3, 0 ) );
 	V11 = _mm_shuffle_ps ( V11, V11, _MM_SHUFFLE ( 2, 1, 0, 3 ) );
-	V02 = _mm_shuffle_ps ( Target.Elements [ 3 ].SSEV, Target.Elements [ 3 ].SSEV, _MM_SHUFFLE ( 0, 3, 0, 3 ) );
+	V02 = _mm_shuffle_ps ( reinterpret_cast <__m128 &> ( Target.Elements [ 3 ] ), reinterpret_cast <__m128 &> ( Target.Elements [ 3 ] ), _MM_SHUFFLE ( 0, 3, 0, 3 ) );
 	V12 = _mm_shuffle_ps ( D1, D2, _MM_SHUFFLE ( 3, 2, 2, 2 ) );
 	V12 = _mm_shuffle_ps ( V12, V12, _MM_SHUFFLE ( 0, 2, 3, 0 ) );
-	V03 = _mm_shuffle_ps ( Target.Elements [ 2 ].SSEV, Target.Elements [ 2 ].SSEV, _MM_SHUFFLE ( 2, 0, 3, 1 ) );
+	V03 = _mm_shuffle_ps ( reinterpret_cast <__m128 &> ( Target.Elements [ 2 ] ), reinterpret_cast <__m128 &> ( Target.Elements [ 2 ] ), _MM_SHUFFLE ( 2, 0, 3, 1 ) );
 	V13 = _mm_shuffle_ps ( D1, D2, _MM_SHUFFLE ( 3, 2, 3, 0 ) );
 	V13 = _mm_shuffle_ps ( V13, V13, _MM_SHUFFLE ( 2, 1, 0, 3 ) );
 	
@@ -1289,14 +1265,14 @@ void Xenon::Math::Matrix4x4 :: Invert ( Matrix4x4 & Target )
 	C4 = _mm_shuffle_ps ( C4, C4, _MM_SHUFFLE ( 3, 1, 2, 0 ) );
 	C6 = _mm_shuffle_ps ( C6, C6, _MM_SHUFFLE ( 3, 1, 2, 0 ) );
 	
-	__m128 vTemp = _mm_dp_ps ( C0, Target.Elements [ 0 ].SSEV, 0xFF );
+	__m128 vTemp = _mm_dp_ps ( C0, reinterpret_cast <__m128 &> ( Target.Elements [ 0 ] ), 0xFF );
 	
 	vTemp = _mm_div_ps ( _mm_set1_ps ( 1.0f ), vTemp );
 	
-	Target.Elements [ 0 ].SSEV = _mm_mul_ps ( C0, vTemp );
-	Target.Elements [ 1 ].SSEV = _mm_mul_ps ( C2, vTemp );
-	Target.Elements [ 2 ].SSEV = _mm_mul_ps ( C4, vTemp );
-	Target.Elements [ 3 ].SSEV = _mm_mul_ps ( C6, vTemp );
+	reinterpret_cast <__m128 &> ( Target.Elements [ 0 ] ) = _mm_mul_ps ( C0, vTemp );
+	reinterpret_cast <__m128 &> ( Target.Elements [ 1 ] ) = _mm_mul_ps ( C2, vTemp );
+	reinterpret_cast <__m128 &> ( Target.Elements [ 2 ] ) = _mm_mul_ps ( C4, vTemp );
+	reinterpret_cast <__m128 &> ( Target.Elements [ 3 ] ) = _mm_mul_ps ( C6, vTemp );
 	
 #else
 	
@@ -1331,14 +1307,14 @@ void Xenon::Math::Matrix4x4 :: Invert ( Matrix4x4 & Target )
 	
 #endif
 	
-};
+}
 
 bool Xenon::Math::Matrix4x4 :: Invertible ( const Matrix4x4 & Source, float PrecisionThreshold )
 {
 	
 	return fabs ( Determinant ( Source ) ) > PrecisionThreshold;
 	
-};
+}
 
 void Xenon::Math::Matrix4x4 :: Invert ( Matrix4x4 & Target, const Matrix4x4 & Source )
 {
@@ -1349,23 +1325,23 @@ void Xenon::Math::Matrix4x4 :: Invert ( Matrix4x4 & Target, const Matrix4x4 & So
 	
 	Transpose ( Temporary, Source );
 	
-	__m128 V00 = _mm_shuffle_ps ( Temporary.Elements [ 2 ].SSEV, Temporary.Elements [ 2 ].SSEV, _MM_SHUFFLE ( 1, 1, 0, 0 ) );
-	__m128 V10 = _mm_shuffle_ps ( Temporary.Elements [ 3 ].SSEV, Temporary.Elements [ 3 ].SSEV, _MM_SHUFFLE ( 3, 2, 3, 2 ) );
-	__m128 V01 = _mm_shuffle_ps ( Temporary.Elements [ 0 ].SSEV, Temporary.Elements [ 0 ].SSEV, _MM_SHUFFLE ( 1, 1, 0, 0 ) );
-	__m128 V11 = _mm_shuffle_ps ( Temporary.Elements [ 1 ].SSEV, Temporary.Elements [ 1 ].SSEV, _MM_SHUFFLE ( 3, 2, 3, 2 ) );
-	__m128 V02 = _mm_shuffle_ps ( Temporary.Elements [ 2 ].SSEV, Temporary.Elements [ 0 ].SSEV, _MM_SHUFFLE ( 2, 0, 2, 0 ) );
-	__m128 V12 = _mm_shuffle_ps ( Temporary.Elements [ 3 ].SSEV, Temporary.Elements [ 1 ].SSEV, _MM_SHUFFLE ( 3, 1, 3, 1 ) );
+	__m128 V00 = _mm_shuffle_ps ( reinterpret_cast <__m128 &> ( Temporary.Elements [ 2 ] ), reinterpret_cast <__m128 &> ( Temporary.Elements [ 2 ] ), _MM_SHUFFLE ( 1, 1, 0, 0 ) );
+	__m128 V10 = _mm_shuffle_ps ( reinterpret_cast <__m128 &> ( Temporary.Elements [ 3 ] ), reinterpret_cast <__m128 &> ( Temporary.Elements [ 3 ] ), _MM_SHUFFLE ( 3, 2, 3, 2 ) );
+	__m128 V01 = _mm_shuffle_ps ( reinterpret_cast <__m128 &> ( Temporary.Elements [ 0 ] ), reinterpret_cast <__m128 &> ( Temporary.Elements [ 0 ] ), _MM_SHUFFLE ( 1, 1, 0, 0 ) );
+	__m128 V11 = _mm_shuffle_ps ( reinterpret_cast <__m128 &> ( Temporary.Elements [ 1 ] ), reinterpret_cast <__m128 &> ( Temporary.Elements [ 1 ] ), _MM_SHUFFLE ( 3, 2, 3, 2 ) );
+	__m128 V02 = _mm_shuffle_ps ( reinterpret_cast <__m128 &> ( Temporary.Elements [ 2 ] ), reinterpret_cast <__m128 &> ( Temporary.Elements [ 0 ] ), _MM_SHUFFLE ( 2, 0, 2, 0 ) );
+	__m128 V12 = _mm_shuffle_ps ( reinterpret_cast <__m128 &> ( Temporary.Elements [ 3 ] ), reinterpret_cast <__m128 &> ( Temporary.Elements [ 1 ] ), _MM_SHUFFLE ( 3, 1, 3, 1 ) );
 	
 	__m128 D0 = _mm_mul_ps ( V00, V10 );
 	__m128 D1 = _mm_mul_ps ( V01, V11 );
 	__m128 D2 = _mm_mul_ps ( V02, V12 );
 	
-	V00 = _mm_shuffle_ps ( Temporary.Elements [ 2 ].SSEV, Temporary.Elements [ 2 ].SSEV, _MM_SHUFFLE ( 3, 2, 3, 2 ) );
-	V10 = _mm_shuffle_ps ( Temporary.Elements [ 3 ].SSEV, Temporary.Elements [ 3 ].SSEV, _MM_SHUFFLE ( 1, 1, 0, 0 ) );
-	V01 = _mm_shuffle_ps ( Temporary.Elements [ 0 ].SSEV, Temporary.Elements [ 0 ].SSEV, _MM_SHUFFLE ( 3, 2, 3, 2 ) );
-	V11 = _mm_shuffle_ps ( Temporary.Elements [ 1 ].SSEV, Temporary.Elements [ 1 ].SSEV, _MM_SHUFFLE ( 1, 1, 0, 0 ) );
-	V02 = _mm_shuffle_ps ( Temporary.Elements [ 2 ].SSEV, Temporary.Elements [ 0 ].SSEV, _MM_SHUFFLE ( 3, 1, 3, 1 ) );
-	V12 = _mm_shuffle_ps ( Temporary.Elements [ 3 ].SSEV, Temporary.Elements [ 1 ].SSEV, _MM_SHUFFLE ( 2, 0, 2, 0 ) );
+	V00 = _mm_shuffle_ps ( reinterpret_cast <__m128 &> ( Temporary.Elements [ 2 ] ), reinterpret_cast <__m128 &> ( Temporary.Elements [ 2 ] ), _MM_SHUFFLE ( 3, 2, 3, 2 ) );
+	V10 = _mm_shuffle_ps ( reinterpret_cast <__m128 &> ( Temporary.Elements [ 3 ] ), reinterpret_cast <__m128 &> ( Temporary.Elements [ 3 ] ), _MM_SHUFFLE ( 1, 1, 0, 0 ) );
+	V01 = _mm_shuffle_ps ( reinterpret_cast <__m128 &> ( Temporary.Elements [ 0 ] ), reinterpret_cast <__m128 &> ( Temporary.Elements [ 0 ] ), _MM_SHUFFLE ( 3, 2, 3, 2 ) );
+	V11 = _mm_shuffle_ps ( reinterpret_cast <__m128 &> ( Temporary.Elements [ 1 ] ), reinterpret_cast <__m128 &> ( Temporary.Elements [ 1 ] ), _MM_SHUFFLE ( 1, 1, 0, 0 ) );
+	V02 = _mm_shuffle_ps ( reinterpret_cast <__m128 &> ( Temporary.Elements [ 2 ] ), reinterpret_cast <__m128 &> ( Temporary.Elements [ 0 ] ), _MM_SHUFFLE ( 3, 1, 3, 1 ) );
+	V12 = _mm_shuffle_ps ( reinterpret_cast <__m128 &> ( Temporary.Elements [ 3 ] ), reinterpret_cast <__m128 &> ( Temporary.Elements [ 1 ] ), _MM_SHUFFLE ( 2, 0, 2, 0 ) );
 	
 	V00 = _mm_mul_ps ( V00, V10 );
 	V01 = _mm_mul_ps ( V01, V11 );
@@ -1374,14 +1350,14 @@ void Xenon::Math::Matrix4x4 :: Invert ( Matrix4x4 & Target, const Matrix4x4 & So
 	D1 = _mm_sub_ps ( D1, V01 );
 	D2 = _mm_sub_ps ( D2, V02 );
 	V11 = _mm_shuffle_ps ( D0, D2, _MM_SHUFFLE ( 1, 1, 3, 1 ) );
-	V00 = _mm_shuffle_ps ( Temporary.Elements [ 1 ].SSEV, Temporary.Elements [ 1 ].SSEV, _MM_SHUFFLE ( 1, 0, 2, 1 ) );
+	V00 = _mm_shuffle_ps ( reinterpret_cast <__m128 &> ( Temporary.Elements [ 1 ] ), reinterpret_cast <__m128 &> ( Temporary.Elements [ 1 ] ), _MM_SHUFFLE ( 1, 0, 2, 1 ) );
 	V10 = _mm_shuffle_ps ( V11, D0, _MM_SHUFFLE ( 0, 3, 0, 2 ) );
-	V01 = _mm_shuffle_ps ( Temporary.Elements [ 0 ].SSEV, Temporary.Elements [ 0 ].SSEV, _MM_SHUFFLE ( 0, 1, 0, 2 ) );
+	V01 = _mm_shuffle_ps ( reinterpret_cast <__m128 &> ( Temporary.Elements [ 0 ] ), reinterpret_cast <__m128 &> ( Temporary.Elements [ 0 ] ), _MM_SHUFFLE ( 0, 1, 0, 2 ) );
 	V11 = _mm_shuffle_ps ( V11, D0, _MM_SHUFFLE ( 2, 1, 2, 1 ) );
 	__m128 V13 = _mm_shuffle_ps ( D1, D2, _MM_SHUFFLE ( 3, 3, 3, 1 ) );
-	V02 = _mm_shuffle_ps ( Temporary.Elements [ 3 ].SSEV, Temporary.Elements [ 3 ].SSEV, _MM_SHUFFLE ( 1, 0, 2, 1 ) );
+	V02 = _mm_shuffle_ps ( reinterpret_cast <__m128 &> ( Temporary.Elements [ 3 ] ), reinterpret_cast <__m128 &> ( Temporary.Elements [ 3 ] ), _MM_SHUFFLE ( 1, 0, 2, 1 ) );
 	V12 = _mm_shuffle_ps ( V13, D1, _MM_SHUFFLE ( 0, 3, 0, 2 ) );
-	__m128 V03 = _mm_shuffle_ps ( Temporary.Elements [ 2 ].SSEV, Temporary.Elements [ 2 ].SSEV, _MM_SHUFFLE ( 0, 1, 0, 2 ) );
+	__m128 V03 = _mm_shuffle_ps ( reinterpret_cast <__m128 &> ( Temporary.Elements [ 2 ] ), reinterpret_cast <__m128 &> ( Temporary.Elements [ 2 ] ), _MM_SHUFFLE ( 0, 1, 0, 2 ) );
 	V13 = _mm_shuffle_ps ( V13, D1, _MM_SHUFFLE ( 2, 1, 2, 1 ) );
 	
 	__m128 C0 = _mm_mul_ps ( V00, V10 );
@@ -1390,14 +1366,14 @@ void Xenon::Math::Matrix4x4 :: Invert ( Matrix4x4 & Target, const Matrix4x4 & So
 	__m128 C6 = _mm_mul_ps ( V03, V13 );
 	
 	V11 = _mm_shuffle_ps ( D0, D2, _MM_SHUFFLE ( 0, 0, 1, 0 ) );
-	V00 = _mm_shuffle_ps ( Temporary.Elements [ 1 ].SSEV, Temporary.Elements [ 1 ].SSEV, _MM_SHUFFLE ( 2, 1, 3, 2 ) );
+	V00 = _mm_shuffle_ps ( reinterpret_cast <__m128 &> ( Temporary.Elements [ 1 ] ), reinterpret_cast <__m128 &> ( Temporary.Elements [ 1 ] ), _MM_SHUFFLE ( 2, 1, 3, 2 ) );
 	V10 = _mm_shuffle_ps ( D0, V11, _MM_SHUFFLE ( 2, 1, 0, 3 ) );
-	V01 = _mm_shuffle_ps ( Temporary.Elements [ 0 ].SSEV, Temporary.Elements [ 0 ].SSEV, _MM_SHUFFLE ( 1, 3, 2, 3 ) );
+	V01 = _mm_shuffle_ps ( reinterpret_cast <__m128 &> ( Temporary.Elements [ 0 ] ), reinterpret_cast <__m128 &> ( Temporary.Elements [ 0 ] ), _MM_SHUFFLE ( 1, 3, 2, 3 ) );
 	V11 = _mm_shuffle_ps ( D0, V11, _MM_SHUFFLE ( 0, 2, 1, 2 ) );
 	V13 = _mm_shuffle_ps ( D1, D2, _MM_SHUFFLE ( 2, 2, 1, 0 ) );
-	V02 = _mm_shuffle_ps ( Temporary.Elements [ 3 ].SSEV, Temporary.Elements [ 3 ].SSEV, _MM_SHUFFLE ( 2, 1, 3, 2 ) );
+	V02 = _mm_shuffle_ps ( reinterpret_cast <__m128 &> ( Temporary.Elements [ 3 ] ), reinterpret_cast <__m128 &> ( Temporary.Elements [ 3 ] ), _MM_SHUFFLE ( 2, 1, 3, 2 ) );
 	V12 = _mm_shuffle_ps ( D1, V13, _MM_SHUFFLE ( 2, 1, 0, 3 ) );
-	V03 = _mm_shuffle_ps ( Temporary.Elements [ 2 ].SSEV, Temporary.Elements [ 2 ].SSEV, _MM_SHUFFLE ( 1, 3, 2, 3 ) );
+	V03 = _mm_shuffle_ps ( reinterpret_cast <__m128 &> ( Temporary.Elements [ 2 ] ), reinterpret_cast <__m128 &> ( Temporary.Elements [ 2 ] ), _MM_SHUFFLE ( 1, 3, 2, 3 ) );
 	V13 = _mm_shuffle_ps ( D1, V13, _MM_SHUFFLE ( 0, 2, 1, 2 ) );
 	
 	V00 = _mm_mul_ps ( V00, V10 );
@@ -1409,16 +1385,16 @@ void Xenon::Math::Matrix4x4 :: Invert ( Matrix4x4 & Target, const Matrix4x4 & So
 	C4 = _mm_sub_ps ( C4, V02 );
 	C6 = _mm_sub_ps ( C6, V03 );
 	
-	V00 = _mm_shuffle_ps ( Temporary.Elements [ 1 ].SSEV, Temporary.Elements [ 1 ].SSEV, _MM_SHUFFLE ( 0, 3, 0, 3 ) );
+	V00 = _mm_shuffle_ps ( reinterpret_cast <__m128 &> ( Temporary.Elements [ 1 ] ), reinterpret_cast <__m128 &> ( Temporary.Elements [ 1 ] ), _MM_SHUFFLE ( 0, 3, 0, 3 ) );
 	V10 = _mm_shuffle_ps ( D0, D2, _MM_SHUFFLE ( 1, 0, 2, 2 ) );
 	V10 = _mm_shuffle_ps ( V10, V10, _MM_SHUFFLE ( 0, 2, 3, 0 ) );
-	V01 = _mm_shuffle_ps ( Temporary.Elements [ 0 ].SSEV, Temporary.Elements [ 0 ].SSEV, _MM_SHUFFLE ( 2, 0, 3, 1 ) );
+	V01 = _mm_shuffle_ps ( reinterpret_cast <__m128 &> ( Temporary.Elements [ 0 ] ), reinterpret_cast <__m128 &> ( Temporary.Elements [ 0 ] ), _MM_SHUFFLE ( 2, 0, 3, 1 ) );
 	V11 = _mm_shuffle_ps ( D0, D2, _MM_SHUFFLE ( 1, 0, 3, 0 ) );
 	V11 = _mm_shuffle_ps ( V11, V11, _MM_SHUFFLE ( 2, 1, 0, 3 ) );
-	V02 = _mm_shuffle_ps ( Temporary.Elements [ 3 ].SSEV, Temporary.Elements [ 3 ].SSEV, _MM_SHUFFLE ( 0, 3, 0, 3 ) );
+	V02 = _mm_shuffle_ps ( reinterpret_cast <__m128 &> ( Temporary.Elements [ 3 ] ), reinterpret_cast <__m128 &> ( Temporary.Elements [ 3 ] ), _MM_SHUFFLE ( 0, 3, 0, 3 ) );
 	V12 = _mm_shuffle_ps ( D1, D2, _MM_SHUFFLE ( 3, 2, 2, 2 ) );
 	V12 = _mm_shuffle_ps ( V12, V12, _MM_SHUFFLE ( 0, 2, 3, 0 ) );
-	V03 = _mm_shuffle_ps ( Temporary.Elements [ 2 ].SSEV, Temporary.Elements [ 2 ].SSEV, _MM_SHUFFLE ( 2, 0, 3, 1 ) );
+	V03 = _mm_shuffle_ps ( reinterpret_cast <__m128 &> ( Temporary.Elements [ 2 ] ), reinterpret_cast <__m128 &> ( Temporary.Elements [ 2 ] ), _MM_SHUFFLE ( 2, 0, 3, 1 ) );
 	V13 = _mm_shuffle_ps ( D1, D2, _MM_SHUFFLE ( 3, 2, 3, 0 ) );
 	V13 = _mm_shuffle_ps ( V13, V13, _MM_SHUFFLE ( 2, 1, 0, 3 ) );
 	
@@ -1445,14 +1421,14 @@ void Xenon::Math::Matrix4x4 :: Invert ( Matrix4x4 & Target, const Matrix4x4 & So
 	C4 = _mm_shuffle_ps ( C4, C4, _MM_SHUFFLE ( 3, 1, 2, 0 ) );
 	C6 = _mm_shuffle_ps ( C6, C6, _MM_SHUFFLE ( 3, 1, 2, 0 ) );
 	
-	__m128 vTemp = _mm_dp_ps ( C0, Temporary.Elements [ 0 ].SSEV, 0xFF );
+	__m128 vTemp = _mm_dp_ps ( C0, reinterpret_cast <__m128 &> ( Temporary.Elements [ 0 ] ), 0xFF );
 	
 	vTemp = _mm_div_ps ( _mm_set1_ps ( 1.0f ), vTemp );
 	
-	Target.Elements [ 0 ].SSEV = _mm_mul_ps ( C0, vTemp );
-	Target.Elements [ 1 ].SSEV = _mm_mul_ps ( C2, vTemp );
-	Target.Elements [ 2 ].SSEV = _mm_mul_ps ( C4, vTemp );
-	Target.Elements [ 3 ].SSEV = _mm_mul_ps ( C6, vTemp );
+	reinterpret_cast <__m128 &> ( Target.Elements [ 0 ] ) = _mm_mul_ps ( C0, vTemp );
+	reinterpret_cast <__m128 &> ( Target.Elements [ 1 ] ) = _mm_mul_ps ( C2, vTemp );
+	reinterpret_cast <__m128 &> ( Target.Elements [ 2 ] ) = _mm_mul_ps ( C4, vTemp );
+	reinterpret_cast <__m128 &> ( Target.Elements [ 3 ] ) = _mm_mul_ps ( C6, vTemp );
 	
 #else
 	
@@ -1489,4 +1465,4 @@ void Xenon::Math::Matrix4x4 :: Invert ( Matrix4x4 & Target, const Matrix4x4 & So
 	
 #endif
 	
-};
+}

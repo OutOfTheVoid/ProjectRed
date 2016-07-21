@@ -11,11 +11,11 @@ Xenon::GPU::UniformSet :: UniformSet ( ShaderProgram * Program, uint32_t Matrix4
 	Matrix4x4Uniforms ( Matrix4x4Prealloc ),
 	LastLinkIteration ( - 1 )
 {
-};
+}
 
 Xenon::GPU::UniformSet :: ~UniformSet ()
 {
-};
+}
 
 void Xenon::GPU::UniformSet :: AddFloatUniform ( const std :: string Name, const IFloatUniformSource * Source, bool LocateImmediately )
 {
@@ -29,7 +29,7 @@ void Xenon::GPU::UniformSet :: AddFloatUniform ( const std :: string Name, const
 	
 	FloatUniforms.push_back ( Tracker );
 	
-};
+}
 
 void Xenon::GPU::UniformSet :: AddFloatVec2Uniform ( const std :: string Name, const IFloatVec2UniformSource * Source, bool LocateImmediately )
 {
@@ -43,7 +43,7 @@ void Xenon::GPU::UniformSet :: AddFloatVec2Uniform ( const std :: string Name, c
 	
 	FloatVec2Uniforms.push_back ( Tracker );
 	
-};
+}
 
 void Xenon::GPU::UniformSet :: AddFloatVec3Uniform ( const std :: string Name, const IFloatVec3UniformSource * Source, bool LocateImmediately )
 {
@@ -57,7 +57,7 @@ void Xenon::GPU::UniformSet :: AddFloatVec3Uniform ( const std :: string Name, c
 	
 	FloatVec3Uniforms.push_back ( Tracker );
 	
-};
+}
 
 void Xenon::GPU::UniformSet :: AddFloatVec4Uniform ( const std :: string Name, const IFloatVec4UniformSource * Source, bool LocateImmediately )
 {
@@ -71,7 +71,7 @@ void Xenon::GPU::UniformSet :: AddFloatVec4Uniform ( const std :: string Name, c
 	
 	FloatVec4Uniforms.push_back ( Tracker );
 	
-};
+}
 
 void Xenon::GPU::UniformSet :: AddMatrix3x3Uniform ( const std :: string Name, const IMatrix3x3UniformSource * Source, bool LocateImmediately )
 {
@@ -85,7 +85,7 @@ void Xenon::GPU::UniformSet :: AddMatrix3x3Uniform ( const std :: string Name, c
 	
 	Matrix3x3Uniforms.push_back ( Tracker );
 	
-};
+}
 
 void Xenon::GPU::UniformSet :: AddMatrix4x4Uniform ( const std :: string Name, const IMatrix4x4UniformSource * Source, bool LocateImmediately )
 {
@@ -99,7 +99,7 @@ void Xenon::GPU::UniformSet :: AddMatrix4x4Uniform ( const std :: string Name, c
 	
 	Matrix4x4Uniforms.push_back ( Tracker );
 	
-};
+}
 
 void Xenon::GPU::UniformSet :: ResetUniformStates ()
 {
@@ -156,7 +156,7 @@ void Xenon::GPU::UniformSet :: ResetUniformStates ()
 		
 	}
 	
-};
+}
 
 void Xenon::GPU::UniformSet :: UpdateUniforms ( bool Relink )
 {
@@ -268,7 +268,7 @@ void Xenon::GPU::UniformSet :: UpdateUniforms ( bool Relink )
 		
 	}
 	
-};
+}
 
 void Xenon::GPU::UniformSet :: Link ()
 {
@@ -338,7 +338,7 @@ void Xenon::GPU::UniformSet :: Link ()
 		
 	}
 	
-};
+}
 
 void Xenon::GPU::UniformSet :: SetProgram ( ShaderProgram * Program )
 {
@@ -348,4 +348,4 @@ void Xenon::GPU::UniformSet :: SetProgram ( ShaderProgram * Program )
 	
 	this -> Program = Program;
 	
-};
+}

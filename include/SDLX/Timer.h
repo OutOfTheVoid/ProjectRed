@@ -40,6 +40,6 @@ namespace SDLX
 		
 	};
 
-};
+}
 
 #endif

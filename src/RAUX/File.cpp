@@ -13,7 +13,7 @@ RAUX::File :: File ( const std :: string & Name, bool Writable ):
 	Opened ( false ),
 	Handle ( NULL )
 {	
-};
+}
 
 RAUX::File :: File ( const File & CopyFrom ):
 	Name ( CopyFrom.Name ),
@@ -21,7 +21,7 @@ RAUX::File :: File ( const File & CopyFrom ):
 	Opened ( false ),
 	Handle ( NULL )
 {
-};
+}
 
 RAUX::File :: ~File ()
 {
@@ -30,21 +30,21 @@ RAUX::File :: ~File ()
 	
 	Close ( & DummyStatus );
 	
-};
+}
 
 bool RAUX::File :: IsOpen () const
 {
 	
 	return Opened;
 	
-};
+}
 		
 bool RAUX::File :: IsWritable () const
 {
 	
 	return Writable;
 	
-};
+}
 
 bool RAUX::File :: Exists () const
 {
@@ -112,7 +112,7 @@ bool RAUX::File :: Exists () const
 	
 	return true;
 	
-};
+}
 
 
 void RAUX::File :: Open ( uint32_t * Status, bool Overwrite )
@@ -183,7 +183,7 @@ void RAUX::File :: Open ( uint32_t * Status, bool Overwrite )
 		
 	}
 	
-};
+}
 
 void RAUX::File :: SetWritable ( uint32_t * Status, bool Writable )
 {
@@ -215,7 +215,7 @@ void RAUX::File :: SetWritable ( uint32_t * Status, bool Writable )
 	
 	this -> Writable = Writable;
 	
-};
+}
 
 void RAUX::File :: Close ( uint32_t * Status )
 {
@@ -248,7 +248,7 @@ void RAUX::File :: Close ( uint32_t * Status )
 	Opened = false;
 	Handle = NULL;
 	
-};
+}
 
 void RAUX::File :: Seek ( uint32_t * Status, int64_t Position, SeekMode Mode )
 {
@@ -296,7 +296,7 @@ void RAUX::File :: Seek ( uint32_t * Status, int64_t Position, SeekMode Mode )
 	
 #endif
 	
-};
+}
 
 int64_t RAUX::File :: ReadSequential ( void * Buffer, uint64_t Length, uint32_t * Status )
 {
@@ -319,7 +319,7 @@ int64_t RAUX::File :: ReadSequential ( void * Buffer, uint64_t Length, uint32_t 
 	
 	return ReadSize;
 	
-};
+}
 
 int64_t RAUX::File :: WriteSequential ( void * Buffer, uint64_t Length, uint32_t * Status )
 {
@@ -345,7 +345,7 @@ int64_t RAUX::File :: WriteSequential ( void * Buffer, uint64_t Length, uint32_t
 	
 	return ReadSize;
 	
-};
+}
 
 int64_t RAUX::File :: Read ( void * Buffer, uint64_t Length, int64_t Offset, uint32_t * Status )
 {
@@ -364,7 +364,7 @@ int64_t RAUX::File :: Read ( void * Buffer, uint64_t Length, int64_t Offset, uin
 	
 	return ReadSize;
 	
-};
+}
 
 int64_t RAUX::File :: Write ( void * Buffer, uint64_t Length, int64_t Offset, uint32_t * Status )
 {
@@ -383,7 +383,7 @@ int64_t RAUX::File :: Write ( void * Buffer, uint64_t Length, int64_t Offset, ui
 	
 	return ReadSize;
 	
-};
+}
 
 void RAUX::File :: Flush ( uint32_t * Status )
 {
@@ -402,7 +402,7 @@ void RAUX::File :: Flush ( uint32_t * Status )
 	else
 		* Status = kStatus_Failure_IOError;
 	
-};
+}
 
 int64_t RAUX::File :: GetLength ( uint32_t * Status ) const
 {
@@ -476,18 +476,18 @@ int64_t RAUX::File :: GetLength ( uint32_t * Status ) const
 	
 	return FStatData.st_size;
 	
-};
+}
 
 FILE * RAUX::File :: GetFilePointer () const
 {
 	
 	return Handle;
 	
-};
+}
 
 const std :: string & RAUX::File :: GetName () const
 {
 	
 	return Name;
 	
-};
+}

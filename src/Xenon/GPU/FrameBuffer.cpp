@@ -5,20 +5,20 @@ Xenon::GPU::FrameBuffer :: FrameBuffer ():
 	Allocated ( false ),
 	FHandle ( 0 )
 {
-};
+}
 
 Xenon::GPU::FrameBuffer :: FrameBuffer ( GLuint FHandle ):
 	Allocated ( true ),
 	FHandle ( FHandle )
 {
-};
+}
 
 Xenon::GPU::FrameBuffer :: ~FrameBuffer ()
 {
 	
 	GPUResourceFree ();
 	
-};
+}
 
 void Xenon::GPU::FrameBuffer :: GPUResourceAlloc ()
 {
@@ -31,7 +31,7 @@ void Xenon::GPU::FrameBuffer :: GPUResourceAlloc ()
 	if ( FHandle != 0 )
 		Allocated = true;
 	
-};
+}
 
 void Xenon::GPU::FrameBuffer :: GPUResourceFree ()
 {
@@ -47,14 +47,14 @@ void Xenon::GPU::FrameBuffer :: GPUResourceFree ()
 	Allocated = false;
 	FHandle = 0;
 	
-};
+}
 
 bool Xenon::GPU::FrameBuffer :: GPUResourceAllocated ()
 {
 	
 	return Allocated;
 	
-};
+}
 
 void Xenon::GPU::FrameBuffer :: Bind ( FrameBufferBindingFlag FrameBuffers )
 {
@@ -123,7 +123,7 @@ void Xenon::GPU::FrameBuffer :: Bind ( FrameBufferBindingFlag FrameBuffers )
 		
 	}
 	
-};
+}
 
 void Xenon::GPU::FrameBuffer :: SetClearColor ( GLfloat Red, GLfloat Green, GLfloat Blue, GLfloat Alpha )
 {
@@ -132,7 +132,7 @@ void Xenon::GPU::FrameBuffer :: SetClearColor ( GLfloat Red, GLfloat Green, GLfl
 	
 	glClearColor ( Red, Green, Blue, Alpha );
 	
-};
+}
 
 void Xenon::GPU::FrameBuffer :: SetClearDepth ( GLfloat Depth )
 {
@@ -141,7 +141,7 @@ void Xenon::GPU::FrameBuffer :: SetClearDepth ( GLfloat Depth )
 	
 	glClearDepth ( Depth );
 	
-};
+}
 
 void Xenon::GPU::FrameBuffer :: SetClearStencil ( GLint Value )
 {
@@ -150,7 +150,7 @@ void Xenon::GPU::FrameBuffer :: SetClearStencil ( GLint Value )
 	
 	glClearStencil ( Value );
 	
-};
+}
 
 void Xenon::GPU::FrameBuffer :: Clear ( FrameBufferComponent Components )
 {
@@ -159,5 +159,5 @@ void Xenon::GPU::FrameBuffer :: Clear ( FrameBufferComponent Components )
 	
 	glClear ( Components );
 	
-};
+}
 

@@ -14,7 +14,7 @@ namespace Xenon
 		
 		class Vec3;
 
-		class Quaternion : public Vec4
+		class alignas ( 16 ) Quaternion : public Vec4
 		{
 		public:
 			
@@ -69,8 +69,8 @@ namespace Xenon
 			
 		};
 		
-	};
+	}
 
-};
+}
 
 #endif

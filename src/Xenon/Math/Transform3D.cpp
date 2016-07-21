@@ -17,7 +17,7 @@ Xenon::Math::Transform3D :: Transform3D ():
 	InverseNormalMatrixSource ( this, & Xenon::Math::Transform3D :: ReadInverseNormalMatrix, & InverseNormalIteration ),
 	ModelMatrixSource ( this, & Xenon::Math::Transform3D :: ReadModelMatrix, & ModelIteration )
 {
-};
+}
 
 Xenon::Math::Transform3D :: Transform3D ( const Vec3 & Translation ):
 	Translation ( Translation ),
@@ -36,7 +36,7 @@ Xenon::Math::Transform3D :: Transform3D ( const Vec3 & Translation ):
 	InverseNormalMatrixSource ( this, & Xenon::Math::Transform3D :: ReadInverseNormalMatrix, & InverseNormalIteration ),
 	ModelMatrixSource ( this, & Xenon::Math::Transform3D :: ReadModelMatrix, & ModelIteration )
 {	
-};
+}
 
 Xenon::Math::Transform3D :: Transform3D ( const Vec3 & Translation, const Vec3 & Scale ):
 	Translation ( Translation ),
@@ -55,7 +55,7 @@ Xenon::Math::Transform3D :: Transform3D ( const Vec3 & Translation, const Vec3 &
 	InverseNormalMatrixSource ( this, & Xenon::Math::Transform3D :: ReadInverseNormalMatrix, & InverseNormalIteration ),
 	ModelMatrixSource ( this, & Xenon::Math::Transform3D :: ReadModelMatrix, & ModelIteration )
 {	
-};
+}
 
 Xenon::Math::Transform3D :: Transform3D ( const Vec3 & Translation, const Vec3 & Scale, const Quaternion & Rotation ):
 	Translation ( Translation ),
@@ -74,43 +74,43 @@ Xenon::Math::Transform3D :: Transform3D ( const Vec3 & Translation, const Vec3 &
 	InverseNormalMatrixSource ( this, & Xenon::Math::Transform3D :: ReadInverseNormalMatrix, & InverseNormalIteration ),
 	ModelMatrixSource ( this, & Xenon::Math::Transform3D :: ReadModelMatrix, & ModelIteration )
 {
-};
+}
 
 Xenon::Math::Transform3D :: ~Transform3D ()
 {
-};
+}
 
 Xenon::Math::Transform3D::InternalMatrix4x4UniformSource :: InternalMatrix4x4UniformSource ( Transform3D * Source, const Matrix4x4 & ( Transform3D :: * ReadFunction ) (), int64_t * IterationPTR ):
 	Source ( Source ),
 	ReadFunction ( ReadFunction ),
 	IterationPTR ( IterationPTR )
 {
-};
+}
 
 Xenon::Math::Transform3D::InternalMatrix4x4UniformSource :: ~InternalMatrix4x4UniformSource ()
 {
-};
+}
 				
 const GLfloat * Xenon::Math::Transform3D::InternalMatrix4x4UniformSource :: GetFloatArray () const
 {
 	
 	return reinterpret_cast <const GLfloat *> ( & ( Source ->* ReadFunction ) () );
 	
-};
+}
 
 const bool Xenon::Math::Transform3D::InternalMatrix4x4UniformSource :: IsTransposed () const
 {
 	
 	return true;
 	
-};
+}
 
 int64_t Xenon::Math::Transform3D::InternalMatrix4x4UniformSource :: GetIteration () const
 {
 	
 	return * IterationPTR;
 	
-};
+}
 
 void Xenon::Math::Transform3D :: SetTranslation ( const Vec3 & Translation )
 {
@@ -119,7 +119,7 @@ void Xenon::Math::Transform3D :: SetTranslation ( const Vec3 & Translation )
 	
 	ModelDirty = true;
 	
-};
+}
 
 void Xenon::Math::Transform3D :: SetScale ( const Vec3 & Scale )
 {
@@ -135,7 +135,7 @@ void Xenon::Math::Transform3D :: SetScale ( const Vec3 & Scale )
 	InverseNormalDirty = true;
 	InverseNormalIteration ++;
 	
-};
+}
 
 void Xenon::Math::Transform3D :: SetRotation ( const Quaternion & Rotation )
 {
@@ -151,7 +151,7 @@ void Xenon::Math::Transform3D :: SetRotation ( const Quaternion & Rotation )
 	InverseNormalDirty = true;
 	InverseNormalIteration ++;
 	
-};
+}
 
 void Xenon::Math::Transform3D :: AppendTranslation ( const Vec3 & Translation )
 {
@@ -161,7 +161,7 @@ void Xenon::Math::Transform3D :: AppendTranslation ( const Vec3 & Translation )
 	ModelDirty = true;
 	ModelIteration ++;
 	
-};
+}
 
 void Xenon::Math::Transform3D :: AppendScale ( const Vec3 & Scale )
 {
@@ -177,7 +177,7 @@ void Xenon::Math::Transform3D :: AppendScale ( const Vec3 & Scale )
 	InverseNormalDirty = true;
 	InverseNormalIteration ++;
 	
-};
+}
 
 void Xenon::Math::Transform3D :: AppendRotation ( const Quaternion & Rotation )
 {
@@ -194,28 +194,28 @@ void Xenon::Math::Transform3D :: AppendRotation ( const Quaternion & Rotation )
 	InverseNormalDirty = true;
 	InverseNormalIteration ++;
 	
-};
+}
 
 const Xenon::Math :: Vec3 & Xenon::Math::Transform3D :: ReadTranslation ()
 {
 	
 	return Translation;
 	
-};
+}
 
 const Xenon::Math :: Vec3 & Xenon::Math::Transform3D :: ReadScale ()
 {
 	
 	return Scale;
 	
-};
+}
 
 const Xenon::Math :: Quaternion & Xenon::Math::Transform3D :: ReadRotation ()
 {
 	
 	return Rotation;
 	
-};
+}
 			
 Xenon::Math :: Vec3 & Xenon::Math::Transform3D :: ReadTranslationMutable ()
 {
@@ -225,7 +225,7 @@ Xenon::Math :: Vec3 & Xenon::Math::Transform3D :: ReadTranslationMutable ()
 	
 	return Translation;
 	
-};
+}
 
 Xenon::Math :: Vec3 & Xenon::Math::Transform3D :: ReadScaleMutable ()
 {
@@ -241,7 +241,7 @@ Xenon::Math :: Vec3 & Xenon::Math::Transform3D :: ReadScaleMutable ()
 	
 	return Scale;
 	
-};
+}
 
 Xenon::Math :: Quaternion & Xenon::Math::Transform3D :: ReadRotationMutable ()
 {
@@ -257,7 +257,7 @@ Xenon::Math :: Quaternion & Xenon::Math::Transform3D :: ReadRotationMutable ()
 	
 	return Rotation;
 	
-};
+}
 
 const Xenon::Math :: Matrix4x4 & Xenon::Math::Transform3D :: ReadNormalMatrix ()
 {
@@ -276,7 +276,7 @@ const Xenon::Math :: Matrix4x4 & Xenon::Math::Transform3D :: ReadNormalMatrix ()
 	
 	return NormalMatrix;
 	
-};
+}
 
 const Xenon::Math :: Matrix4x4 & Xenon::Math::Transform3D :: ReadModelMatrix ()
 {
@@ -294,7 +294,7 @@ const Xenon::Math :: Matrix4x4 & Xenon::Math::Transform3D :: ReadModelMatrix ()
 	
 	return ModelMatrix;
 	
-};
+}
 
 const Xenon::Math :: Matrix4x4 & Xenon::Math::Transform3D :: ReadInverseNormalMatrix ()
 {
@@ -310,28 +310,28 @@ const Xenon::Math :: Matrix4x4 & Xenon::Math::Transform3D :: ReadInverseNormalMa
 	
 	return InverseNormalMatrix;
 	
-};
+}
 
 Xenon::GPU :: IMatrix4x4UniformSource & Xenon::Math::Transform3D :: GetNormalUniformSource ()
 {
 	
 	return NormalMatrixSource;
 	
-};
+}
 
 Xenon::GPU :: IMatrix4x4UniformSource & Xenon::Math::Transform3D :: GetInverseNormalUniformSource ()
 {
 	
 	return InverseNormalMatrixSource;
 	
-};
+}
 
 Xenon::GPU :: IMatrix4x4UniformSource & Xenon::Math::Transform3D :: GetModelUniformSource ()
 {
 	
 	return ModelMatrixSource;
 	
-};
+}
 
 void Xenon::Math::Transform3D :: FlushMatricies ( bool Model, bool Normal, bool InverseNormal )
 {
@@ -368,4 +368,4 @@ void Xenon::Math::Transform3D :: FlushMatricies ( bool Model, bool Normal, bool 
 		
 	}
 	
-};
+}

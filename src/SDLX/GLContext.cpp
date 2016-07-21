@@ -12,21 +12,21 @@ SDLX::GLContext :: ~GLContext ()
 	
 	SDL_GL_DeleteContext ( GLHandle );
 	
-};
+}
 
 int32_t SDLX::GLContext :: MakeCurrent ()
 {
 	
 	return SDL_GL_MakeCurrent ( ContextWindow -> WHandle, GLHandle );
 	
-};
+}
 
 void SDLX::GLContext :: SetWindow ( Window * ContextWindow )
 {
 	
 	this -> ContextWindow = ContextWindow;
 	
-};
+}
 
 void SDLX::GLContext :: RequestGLContextVersion ( GLProfile Profile, uint32_t VMajor, uint32_t VMinor )
 {
@@ -60,21 +60,21 @@ void SDLX::GLContext :: RequestGLContextVersion ( GLProfile Profile, uint32_t VM
 		
 	};
 	
-};
+}
 
 void SDLX::GLContext :: RequestDoubleBuffering ( bool DoubleBuffer )
 {
 	
 	SDL_GL_SetAttribute ( SDL_GL_DOUBLEBUFFER, DoubleBuffer ? 1 : 0 );
 	
-};
+}
 
 void SDLX::GLContext :: RequestDepthBufferSize ( uint32_t BufferSize )
 {
 	
 	SDL_GL_SetAttribute ( SDL_GL_DEPTH_SIZE, BufferSize );
 	
-};
+}
 
 void SDLX::GLContext :: RequestStencilBufferSize ( uint32_t BufferSize )
 {
@@ -108,7 +108,7 @@ SDLX::GLContext :: VSyncMode SDLX::GLContext :: RequestVSyncMode ( VSyncMode Req
 	
 	return kVSyncMode_Synced;
 	
-};
+}
 
 bool SDLX::GLContext :: RequestMSAA ( bool Enabled, uint32_t Level )
 {
@@ -125,4 +125,4 @@ bool SDLX::GLContext :: RequestMSAA ( bool Enabled, uint32_t Level )
 	else
 		return SDL_GL_SetAttribute ( SDL_GL_MULTISAMPLEBUFFERS, 0 );
 	
-};
+}

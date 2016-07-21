@@ -19,25 +19,25 @@ Xenon::Math::Vec3 :: Vec3 ( const float X, const float Y, const float Z ):
 	Y ( Y ),
 	Z ( Z )
 {
-};
+}
 
 Xenon::Math::Vec3 :: Vec3 ( const Vec3 & CopyFrom )
 {
 	
 	Copy ( * this, CopyFrom );
 	
-};
+}
 
 Xenon::Math::Vec3 :: Vec3 ( const Vec2 & Lower, const float Z ):
 	X ( Lower.X ),
 	Y ( Lower.Y ),
 	Z ( Z )
 {
-};
+}
 
 Xenon::Math::Vec3 :: ~Vec3 ()
 {
-};
+}
 
 void Xenon::Math::Vec3 :: Set ( Vec3 & Target, const float X, const float Y, const float Z )
 {
@@ -46,28 +46,28 @@ void Xenon::Math::Vec3 :: Set ( Vec3 & Target, const float X, const float Y, con
 	Target.Y = Y;
 	Target.Z = Z;
 	
-};
+}
 
 void Xenon::Math::Vec3 :: Copy ( Vec3 & Target, const Vec3 & Source )
 {
 	
 	memcpy ( & Target, & Source, sizeof ( Vec3 ) );
 	
-};
+}
 
 bool Xenon::Math::Vec3 :: Equal ( const Vec3 & Source, const Vec3 & B )
 {
 	
 	return ( ( Source.X == B.X ) && ( Source.Y == B.Y ) && ( Source.Z == B.Z ) );
 	
-};
+}
 
 float Xenon::Math::Vec3 :: DotProduct ( const Vec3 & Source, const Vec3 & B )
 {
 	
 	return Source.X * B.X + Source.Y * B.Y + Source.Z * B.Z;
 	
-};
+}
 
 void Xenon::Math::Vec3 :: CrossProduct ( Vec3 & Target, const Vec3 & Source, const Vec3 & B )
 {
@@ -76,7 +76,7 @@ void Xenon::Math::Vec3 :: CrossProduct ( Vec3 & Target, const Vec3 & Source, con
 	Target.Y = Source.Z * B.X - Source.X * B.Z;
 	Target.Z = Source.X * B.Y - Source.Y * B.X;
 	
-};
+}
 
 void Xenon::Math::Vec3 :: CrossProduct ( Vec3 & Target, const Vec3 & B )
 {
@@ -87,7 +87,7 @@ void Xenon::Math::Vec3 :: CrossProduct ( Vec3 & Target, const Vec3 & B )
 	Target.X = X;
 	Target.Y = Y;
 	
-};
+}
 
 void Xenon::Math::Vec3 :: Multiply ( Vec3 & Target, const float B )
 {
@@ -96,7 +96,7 @@ void Xenon::Math::Vec3 :: Multiply ( Vec3 & Target, const float B )
 	Target.Y *= B;
 	Target.Z *= B;
 	
-};
+}
 
 void Xenon::Math::Vec3 :: Multiply ( Vec3 & Target, const Vec3 & Source, const float B )
 {
@@ -105,7 +105,7 @@ void Xenon::Math::Vec3 :: Multiply ( Vec3 & Target, const Vec3 & Source, const f
 	Target.Y = Source.Y * B;
 	Target.Z = Source.Z * B;
 	
-};
+}
 
 void Xenon::Math::Vec3 :: Scale ( Vec3 & Target, const Vec3 & B )
 {
@@ -114,7 +114,7 @@ void Xenon::Math::Vec3 :: Scale ( Vec3 & Target, const Vec3 & B )
 	Target.Y *= B.Y;
 	Target.Z *= B.Z;
 	
-};
+}
 
 void Xenon::Math::Vec3 :: Scale ( Vec3 & Target, const Vec3 & Source, const Vec3 & B )
 {
@@ -123,7 +123,7 @@ void Xenon::Math::Vec3 :: Scale ( Vec3 & Target, const Vec3 & Source, const Vec3
 	Target.Z = Source.Y * B.Y;
 	Target.Y = Source.Z * B.Z;
 	
-};
+}
 
 void Xenon::Math::Vec3 :: Add ( Vec3 & Target, const Vec3 & Source, const Vec3 & B )
 {
@@ -132,7 +132,7 @@ void Xenon::Math::Vec3 :: Add ( Vec3 & Target, const Vec3 & Source, const Vec3 &
 	Target.Y = Source.Y + B.Y;
 	Target.Z = Source.Z + B.Z;
 	
-};
+}
 
 void Xenon::Math::Vec3 :: Add ( Vec3 & Target, const Vec3 & B )
 {
@@ -141,7 +141,7 @@ void Xenon::Math::Vec3 :: Add ( Vec3 & Target, const Vec3 & B )
 	Target.Y += B.Y;
 	Target.Z += B.Z;
 	
-};
+}
 
 void Xenon::Math::Vec3 :: Subtract ( Vec3 & Target, const Vec3 & Source, const Vec3 & B )
 {
@@ -150,7 +150,7 @@ void Xenon::Math::Vec3 :: Subtract ( Vec3 & Target, const Vec3 & Source, const V
 	Target.Y = Source.Y - B.Y;
 	Target.Z = Source.Z - B.Z;
 	
-};
+}
 
 void Xenon::Math::Vec3 :: Subtract ( Vec3 & Target, const Vec3 & B )
 {
@@ -159,35 +159,35 @@ void Xenon::Math::Vec3 :: Subtract ( Vec3 & Target, const Vec3 & B )
 	Target.Y -= B.Y;
 	Target.Z -= B.Z;
 	
-};
+}
 
 void Xenon::Math::Vec3 :: Normalize ( Vec3 & Target )
 {
 	
 	Multiply ( Target, 1 / Length ( Target ) );
 	
-};
+}
 
 void Xenon::Math::Vec3 :: Normalize ( Vec3 & Target, const Vec3 & Source )
 {
 	
 	Multiply ( Target, Source, 1.0f / Length ( Source ) );
 	
-};
+}
 
 float Xenon::Math::Vec3 :: Length ( const Vec3 & Source )
 {
 	
 	return sqrt ( Source.X * Source.X + Source.Y * Source.Y + Source.Z * Source.Z );
 	
-};
+}
 
 float Xenon::Math::Vec3 :: LengthSquared ( const Vec3 & Source )
 {
 	
 	return Source.X * Source.X + Source.Y * Source.Y + Source.Z * Source.Z;
 	
-};
+}
 
 void Xenon::Math::Vec3 :: Absolute ( Vec3 & Target )
 {
@@ -196,7 +196,7 @@ void Xenon::Math::Vec3 :: Absolute ( Vec3 & Target )
 	Target.Y = fabs ( Target.Y );
 	Target.Z = fabs ( Target.Z );
 	
-};
+}
 
 void Xenon::Math::Vec3 :: Absolute ( Vec3 & Target, const Vec3 & Source )
 {
@@ -205,14 +205,14 @@ void Xenon::Math::Vec3 :: Absolute ( Vec3 & Target, const Vec3 & Source )
 	Target.Y = fabs ( Source.Y );
 	Target.Z = fabs ( Source.Z );
 	
-};
+}
 
 float Xenon::Math::Vec3 :: AngleBetween ( const Vec3 & Source, const Vec3 & B )
 {
 	
 	return acos ( DotProduct ( Source, B ) / sqrt ( LengthSquared ( Source ) * LengthSquared ( B ) ) );
 	
-};
+}
 
 void Xenon::Math::Vec3 :: Interpolate ( Vec3 & Target, const Vec3 & B, const float Fraction )
 {
@@ -223,7 +223,7 @@ void Xenon::Math::Vec3 :: Interpolate ( Vec3 & Target, const Vec3 & B, const flo
 	Multiply ( Temp, B, 1.0f - Fraction );
 	Add ( Target, Temp );
 	
-};
+}
 
 void Xenon::Math::Vec3 :: Interpolate ( Vec3 & Target, const Vec3 & Source, const Vec3 & B, const float Fraction )
 {
@@ -234,7 +234,7 @@ void Xenon::Math::Vec3 :: Interpolate ( Vec3 & Target, const Vec3 & Source, cons
 	Multiply ( Temp, B, 1 - Fraction );
 	Add ( Target, Temp );
 	
-};
+}
 
 void Xenon::Math::Vec3 :: Rotate ( Vec3 & Target, const Quaternion & Rotation )
 {
@@ -251,7 +251,7 @@ void Xenon::Math::Vec3 :: Rotate ( Vec3 & Target, const Quaternion & Rotation )
 	Multiply ( Temp2, 2.0f * Rotation.W );
 	Add ( Target, Temp, Temp2 );
 	
-};
+}
 
 void Xenon::Math::Vec3 :: Rotate ( Vec3 & Target, const Vec3 & Source, const Quaternion & Rotation )
 {
@@ -269,7 +269,7 @@ void Xenon::Math::Vec3 :: Rotate ( Vec3 & Target, const Vec3 & Source, const Qua
 	Target.Y = Temp.Y * Rotation.W + BCross.Y;
 	Target.Z = Temp.Z * Rotation.W + BCross.Z;
 	
-};
+}
 
 void Xenon::Math::Vec3 :: Orthogonal ( Vec3 & Target )
 {
@@ -280,7 +280,7 @@ void Xenon::Math::Vec3 :: Orthogonal ( Vec3 & Target )
 	
 	CrossProduct ( Target, ( Abs.X < Abs.Y ) ? ( ( Abs.X < Abs.Y ) ? RIGHT : FORWARD ) : ( ( Abs.X < Abs.Y ) ? UP : FORWARD ) );
 	
-};
+}
 
 void Xenon::Math::Vec3 :: Orthogonal ( Vec3 & Target, const Vec3 & Source )
 {
@@ -291,18 +291,18 @@ void Xenon::Math::Vec3 :: Orthogonal ( Vec3 & Target, const Vec3 & Source )
 	
 	CrossProduct ( Target, ( Abs.X < Abs.Y ) ? ( ( Abs.X < Abs.Y ) ? RIGHT : FORWARD ) : ( ( Abs.X < Abs.Y ) ? UP : FORWARD ), Source );
 	
-};
+}
 
 void Xenon::Math::Vec3 :: Project ( Vec3 & Target, const Vec3 & Direction )
 {
 	
 	Multiply ( Target, Direction, DotProduct ( Target, Direction ) / LengthSquared ( Direction ) );
 	
-};
+}
 
 void Xenon::Math::Vec3 :: Project ( Vec3 & Target, const Vec3 & Projected, const Vec3 & Direction )
 {
 	
 	Multiply ( Target, Direction, DotProduct ( Projected, Direction ) / LengthSquared ( Direction ) );
 	
-};
+}

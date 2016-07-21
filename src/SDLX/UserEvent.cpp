@@ -15,7 +15,7 @@ void SDLX::UserEvent :: Init ( uint32_t * Status )
 	
 	* Status = kStatus_Success;
 	
-};
+}
 
 uint32_t SDLX::UserEvent :: GetNewEventID ( uint32_t * Status )
 {
@@ -38,7 +38,7 @@ uint32_t SDLX::UserEvent :: GetNewEventID ( uint32_t * Status )
 	
 	return Beginning - EventBase;
 	
-};
+}
 
 void SDLX::UserEvent :: SetEventHook ( uint32_t EventID, void ( * EventHook ) ( SDL_UserEvent * Event ) )
 {
@@ -55,7 +55,7 @@ void SDLX::UserEvent :: SetEventHook ( uint32_t EventID, void ( * EventHook ) ( 
 	
 	HookMutex -> Unlock ();
 	
-};
+}
 
 void SDLX::UserEvent :: ClearEventHook ( uint32_t EventID )
 {
@@ -70,7 +70,7 @@ void SDLX::UserEvent :: ClearEventHook ( uint32_t EventID )
 	
 	HookMutex -> Unlock ();
 	
-};
+}
 
 void SDLX::UserEvent :: EventInternal ( SDL_UserEvent * Event )
 {
@@ -90,7 +90,7 @@ void SDLX::UserEvent :: EventInternal ( SDL_UserEvent * Event )
 	
 	HookMutex -> Unlock ();
 	
-};
+}
 
 void SDLX::UserEvent :: PushEvent ( uint32_t EventID, void * Data1, void * Data2 )
 {
@@ -108,4 +108,4 @@ void SDLX::UserEvent :: PushEvent ( uint32_t EventID, void * Data1, void * Data2
 	
 	SDL_PushEvent ( & Event );
 	
-};
+}

@@ -28,8 +28,8 @@ namespace Xenon
 		vprintf ( Format, Args );
 		va_end ( Args );
 		
-	};
+	}
 	
-};
+}
 
 #endif

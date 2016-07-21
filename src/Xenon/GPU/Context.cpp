@@ -20,11 +20,11 @@ Xenon::GPU::Context :: Context ( IGLContext * GLContext ):
 	FrontFaceCurrent ( kFrontFace_CounterClockwise ),
 	DepthTestEnabledCurrent ( false )
 {
-};
+}
 
 Xenon::GPU::Context :: ~Context ()
 {
-};
+}
 
 void Xenon::GPU::Context :: MakeCurrent ()
 {
@@ -37,7 +37,7 @@ void Xenon::GPU::Context :: MakeCurrent ()
 		
 	}
 	
-};
+}
 
 void Xenon::GPU::Context :: BlendFunc ( BlendFactor Source, BlendFactor Destination )
 {
@@ -50,14 +50,14 @@ void Xenon::GPU::Context :: BlendFunc ( BlendFactor Source, BlendFactor Destinat
 	glEnable ( GL_BLEND );
 	glBlendFunc ( Source, Destination );
 	
-};
+}
 
 Xenon::GPU :: FrameBuffer * Xenon::GPU::Context :: GetDefaultFrameBuffer ()
 {
 	
 	return & DefaultFrameBuffer;
 	
-};
+}
 
 void Xenon::GPU::Context :: SetCullingEnabled ( bool Enabled )
 {
@@ -77,7 +77,7 @@ void Xenon::GPU::Context :: SetCullingEnabled ( bool Enabled )
 	else
 		glDisable ( GL_CULL_FACE );
 	
-};
+}
 
 void Xenon::GPU::Context :: SetCullingFace ( CullingFace Face )
 {
@@ -94,7 +94,7 @@ void Xenon::GPU::Context :: SetCullingFace ( CullingFace Face )
 	
 	glCullFace ( Face );
 	
-};
+}
 
 void Xenon::GPU::Context :: SetFrontFace ( FrontFace Face )
 {
@@ -111,7 +111,7 @@ void Xenon::GPU::Context :: SetFrontFace ( FrontFace Face )
 	
 	glFrontFace ( Face );
 	
-};
+}
 
 void Xenon::GPU::Context :: SetDepthTestEnabled ( bool Enabled )
 {
@@ -131,4 +131,4 @@ void Xenon::GPU::Context :: SetDepthTestEnabled ( bool Enabled )
 	else
 		glDisable ( GL_DEPTH_TEST );
 	
-};
+}

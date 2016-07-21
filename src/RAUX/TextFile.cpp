@@ -3,14 +3,14 @@
 RAUX::TextFile :: TextFile ( const std :: string & Name ):
 FileInstance ( Name )
 {
-};
+}
 
 RAUX::TextFile :: ~TextFile ()
 {
 	
 	Close ();
 	
-};
+}
 
 bool RAUX::TextFile :: Exists () const
 {
@@ -24,7 +24,7 @@ const std :: string & RAUX::TextFile :: GetName () const
 	
 	return FileInstance.GetName ();
 	
-};
+}
 
 void RAUX::TextFile :: Open ( uint32_t * Status )
 {
@@ -51,7 +51,7 @@ void RAUX::TextFile :: Open ( uint32_t * Status )
 	
 	* Status = kStatus_Success;
 	
-};
+}
 
 void RAUX::TextFile :: Close ()
 {
@@ -60,7 +60,7 @@ void RAUX::TextFile :: Close ()
 	
 	FileInstance.Close ( & DummyStatus );
 	
-};
+}
 
 void RAUX::TextFile :: LoadToString ( uint32_t * Status, std :: string & String, uint64_t Offset, uint64_t Length, bool TrimToFileEdge )
 {
@@ -108,7 +108,7 @@ void RAUX::TextFile :: LoadToString ( uint32_t * Status, std :: string & String,
 		
 	}
 	
-	if ( Length > RAUX_STACKBUFFER_MAX )
+	if ( Length > RAUX_STACKBUFFER_SIZE )
 	{
 		
 		void * ReadBuffer = malloc ( static_cast <size_t> ( Length ) );
@@ -145,7 +145,7 @@ void RAUX::TextFile :: LoadToString ( uint32_t * Status, std :: string & String,
 		
 	}
 	
-	char ReadBuffer [ Length ];
+	char ReadBuffer [ RAUX_STACKBUFFER_SIZE ];
 	
 	FileInstance.Read ( reinterpret_cast <void *> ( ReadBuffer ), Length, Offset, Status );
 	
@@ -162,4 +162,4 @@ void RAUX::TextFile :: LoadToString ( uint32_t * Status, std :: string & String,
 	
 	* Status = kStatus_Success;
 	
-};
+}

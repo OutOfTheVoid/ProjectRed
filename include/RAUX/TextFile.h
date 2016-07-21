@@ -6,7 +6,7 @@
 
 #include <string>
 
-#define RAUX_STACKBUFFER_MAX 0x16000
+#define RAUX_STACKBUFFER_SIZE 0x1000
 
 namespace RAUX
 {
@@ -40,6 +40,6 @@ namespace RAUX
 		
 	};
 	
-};
+}
 
 #endif

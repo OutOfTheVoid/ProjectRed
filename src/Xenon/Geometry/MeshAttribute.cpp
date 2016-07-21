@@ -15,7 +15,7 @@ Xenon::Geometry::MeshAttribute :: MeshAttribute ( const std :: string Name, GPU:
 	if ( Data != NULL )
 		Data -> Reference ();
 	
-};
+}
 
 Xenon::Geometry::MeshAttribute :: MeshAttribute ( const std :: string Name, GPU::VertexArray :: IntegerAttributeInputType IntegerType, GLuint Size, GLuint Stride, GLvoid * Offset, MeshAttributeData * Data ):
 	Name ( Name ),
@@ -31,12 +31,12 @@ Xenon::Geometry::MeshAttribute :: MeshAttribute ( const std :: string Name, GPU:
 	if ( Data != NULL )
 		Data -> Reference ();
 	
-};
+}
 
 Xenon::Geometry::MeshAttribute :: MeshAttribute ( NoInit NO_INIT ):
 	Data ( NULL )
 {
-};
+}
 
 Xenon::Geometry::MeshAttribute :: ~MeshAttribute ()
 {
@@ -46,7 +46,7 @@ Xenon::Geometry::MeshAttribute :: ~MeshAttribute ()
 	
 	Data = NULL;
 	
-};
+}
 
 void Xenon::Geometry::MeshAttribute :: ApplyToVertexArray ( GPU :: VertexArray & Target )
 {
@@ -59,4 +59,4 @@ void Xenon::Geometry::MeshAttribute :: ApplyToVertexArray ( GPU :: VertexArray &
 	else
 		Target.AddIntegerAttribute ( Name, Size, IntegerType, Stride, Offset, Data -> GetBuffer () );
 	
-};
+}

@@ -9,7 +9,7 @@ Xenon::Math::Transform2D :: Transform2D ():
 	MatrixSource ( * this ),
 	Iteration ( 0 )
 {
-};
+}
 
 Xenon::Math::Transform2D :: Transform2D ( const Vec2 & Translation ):
 	Translation ( Translation ),
@@ -20,7 +20,7 @@ Xenon::Math::Transform2D :: Transform2D ( const Vec2 & Translation ):
 	MatrixSource ( * this ),
 	Iteration ( 0 )
 {
-};
+}
 
 Xenon::Math::Transform2D :: Transform2D ( const Vec2 & Translation, const Vec2 & Scale ):
 	Translation ( Translation ),
@@ -31,7 +31,7 @@ Xenon::Math::Transform2D :: Transform2D ( const Vec2 & Translation, const Vec2 &
 	MatrixSource ( * this ),
 	Iteration ( 0 )
 {
-};
+}
 
 Xenon::Math::Transform2D :: Transform2D ( const Vec2 & Translation, const Vec2 & Scale, const float Rotation ):
 	Translation ( Translation ),
@@ -42,41 +42,41 @@ Xenon::Math::Transform2D :: Transform2D ( const Vec2 & Translation, const Vec2 &
 	MatrixSource ( * this ),
 	Iteration ( 0 )
 {
-};
+}
 
 Xenon::Math::Transform2D :: ~Transform2D ()
 {
-};
+}
 
 Xenon::Math::Transform2D::InternalMatrix3x3UniformSource :: InternalMatrix3x3UniformSource ( Transform2D & Source ):
 	Source ( Source )
 {
-};
+}
 
 Xenon::Math::Transform2D::InternalMatrix3x3UniformSource :: ~InternalMatrix3x3UniformSource ()
 {
-};
+}
 
 const GLfloat * Xenon::Math::Transform2D::InternalMatrix3x3UniformSource :: GetFloatArray () const
 {
 	
 	return reinterpret_cast <const GLfloat *> ( & Source.ReadMatrix () );
 	
-};
+}
 
 const bool Xenon::Math::Transform2D::InternalMatrix3x3UniformSource :: IsTransposed () const
 {
 	
 	return true;
 	
-};
+}
 
 int64_t Xenon::Math::Transform2D::InternalMatrix3x3UniformSource :: GetIteration () const 
 {
 	
 	return Source.Iteration;
 	
-};
+}
 
 void Xenon::Math::Transform2D :: SetTranslation ( const Vec2 & Translation )
 {
@@ -86,7 +86,7 @@ void Xenon::Math::Transform2D :: SetTranslation ( const Vec2 & Translation )
 	Dirty = true;
 	Iteration ++;
 	
-};
+}
 
 void Xenon::Math::Transform2D :: SetScale ( const Vec2 & Scale )
 {
@@ -96,7 +96,7 @@ void Xenon::Math::Transform2D :: SetScale ( const Vec2 & Scale )
 	Dirty = true;
 	Iteration ++;
 	
-};
+}
 
 void Xenon::Math::Transform2D :: SetRotation ( float Rotation )
 {
@@ -106,28 +106,28 @@ void Xenon::Math::Transform2D :: SetRotation ( float Rotation )
 	Dirty = true;
 	Iteration ++;
 	
-};
+}
 
 const Xenon::Math :: Vec2 & Xenon::Math::Transform2D :: ReadTranslation ()
 {
 	
 	return Translation;
 	
-};
+}
 
 const Xenon::Math :: Vec2 & Xenon::Math::Transform2D :: ReadScale ()
 {
 	
 	return Scale;
 	
-};
+}
 
 const float Xenon::Math::Transform2D :: ReadRotation ()
 {
 	
 	return Rotation;
 	
-};
+}
 
 Xenon::Math :: Vec2 & Xenon::Math::Transform2D :: ReadTranslationMutable ()
 {
@@ -137,7 +137,7 @@ Xenon::Math :: Vec2 & Xenon::Math::Transform2D :: ReadTranslationMutable ()
 	
 	return Translation;
 	
-};
+}
 
 Xenon::Math :: Vec2 & Xenon::Math::Transform2D :: ReadScaleMutable ()
 {
@@ -147,7 +147,7 @@ Xenon::Math :: Vec2 & Xenon::Math::Transform2D :: ReadScaleMutable ()
 	
 	return Scale;
 	
-};
+}
 
 float & Xenon::Math::Transform2D :: ReadRotationMutable ()
 {
@@ -157,7 +157,7 @@ float & Xenon::Math::Transform2D :: ReadRotationMutable ()
 	
 	return Rotation;
 	
-};
+}
 
 const Xenon::Math :: Matrix3x3 & Xenon::Math::Transform2D :: ReadMatrix ()
 {
@@ -175,7 +175,7 @@ const Xenon::Math :: Matrix3x3 & Xenon::Math::Transform2D :: ReadMatrix ()
 	
 	return Matrix;
 	
-};
+}
 
 void Xenon::Math::Transform2D :: Flush ()
 {
@@ -191,11 +191,11 @@ void Xenon::Math::Transform2D :: Flush ()
 		
 	}
 	
-};
+}
 
 Xenon::GPU :: IMatrix3x3UniformSource & Xenon::Math::Transform2D :: GetTransformUniformSource ()
 {
 	
 	return MatrixSource;
 	
-};
+}

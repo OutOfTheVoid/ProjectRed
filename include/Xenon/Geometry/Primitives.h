@@ -279,7 +279,7 @@ namespace Xenon
 				CubeTangentSpec TangentSpec;
 				
 				uint32_t TexturePositionCount;
-				CubeTexturePositionSpec TexturePositionSpecs [];
+				CubeTexturePositionSpec * TexturePositionSpecs;
 				
 			} CubeSpec;
 			
@@ -296,8 +296,8 @@ namespace Xenon
 			
 		};
 		
-	};
+	}
 	
-};
+}
 
 #endif

@@ -8,8 +8,8 @@ namespace Xenon
 	
 	namespace Util
 	{	
-	};
+	}
 	
-};
+}
 
 #endif

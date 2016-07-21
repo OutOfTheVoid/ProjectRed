@@ -5,11 +5,11 @@
 SDLX::Texture :: Texture ( SDL_Texture * Handle ):
 	THandle ( Handle )
 {
-};
+}
 
 SDLX::Texture :: ~Texture ()
 {
 	
 	SDL_DestroyTexture ( THandle );
 	
-};
+}

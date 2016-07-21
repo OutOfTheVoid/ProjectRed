@@ -4,11 +4,11 @@ Xenon::GPU::Texture2D :: Texture2D ():
 	Allocated ( false ),
 	THandle ( 0 )
 {	
-};
+}
 
 Xenon::GPU::Texture2D :: ~Texture2D ()
 {
-};
+}
 
 void Xenon::GPU::Texture2D :: GPUResourceAlloc ()
 {
@@ -21,7 +21,7 @@ void Xenon::GPU::Texture2D :: GPUResourceAlloc ()
 	if ( THandle != 0 )
 		Allocated = true;
 	
-};
+}
 
 void Xenon::GPU::Texture2D :: GPUResourceFree ()
 {
@@ -31,14 +31,14 @@ void Xenon::GPU::Texture2D :: GPUResourceFree ()
 	
 	glDeleteTextures ( 1, & THandle );
 	
-};
+}
 
 bool Xenon::GPU::Texture2D :: GPUResourceAllocated ()
 {
 	
 	return Allocated;
 	
-};
+}
 
 void Xenon::GPU::Texture2D :: Bind ()
 {
@@ -55,7 +55,7 @@ void Xenon::GPU::Texture2D :: Bind ()
 		
 	}
 	
-};
+}
 
 void Xenon::GPU::Texture2D :: BlankTextureImage ( GLint DetailLevel, InternalFormat FInternal, GLsizei Width, GLsizei Height, ExternalFormat EFormat, ExternalLayout ELayout )
 {
@@ -64,7 +64,7 @@ void Xenon::GPU::Texture2D :: BlankTextureImage ( GLint DetailLevel, InternalFor
 	
 	glTexImage2D ( GL_TEXTURE_2D, DetailLevel, FInternal, Width, Height, 0, EFormat, ELayout, NULL );
 	
-};
+}
 
 void Xenon::GPU::Texture2D :: TextureImage ( GLint DetailLevel, InternalFormat FInternal, GLsizei Width, GLsizei Height, ExternalFormat EFormat, ExternalLayout ELayout, GLvoid * Data, GLuint Alignment )
 {
@@ -74,7 +74,7 @@ void Xenon::GPU::Texture2D :: TextureImage ( GLint DetailLevel, InternalFormat F
 	glPixelStorei ( GL_UNPACK_ALIGNMENT, Alignment );
 	glTexImage2D ( GL_TEXTURE_2D, DetailLevel, FInternal, Width, Height, 0, ELayout, EFormat, Data );
 	
-};
+}
 
 void Xenon::GPU::Texture2D :: GenerateMipMaps ()
 {
@@ -83,7 +83,7 @@ void Xenon::GPU::Texture2D :: GenerateMipMaps ()
 	
 	glGenerateMipmap ( GL_TEXTURE_2D );
 	
-};
+}
 
 void Xenon::GPU::Texture2D :: AssignToTextureUnit ( GLuint Unit )
 {
@@ -96,7 +96,7 @@ void Xenon::GPU::Texture2D :: AssignToTextureUnit ( GLuint Unit )
 	
 	Context :: CurrentBoundContext -> CurrentBoundTexture2D = this;
 	
-};
+}
 		
 void Xenon::GPU::Texture2D :: SetFiltering ( MinimizingFilter MinFilter, MagnificationFilter MagFilter )
 {
@@ -106,7 +106,7 @@ void Xenon::GPU::Texture2D :: SetFiltering ( MinimizingFilter MinFilter, Magnifi
 	glTexParameteri ( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, MagFilter );
 	glTexParameteri ( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, MinFilter );
 	
-};
+}
 
 void Xenon::GPU::Texture2D :: SetWrapMode ( WrapMode Mode )
 {
@@ -116,7 +116,7 @@ void Xenon::GPU::Texture2D :: SetWrapMode ( WrapMode Mode )
 	glTexParameteri ( GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, Mode );
 	glTexParameteri ( GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, Mode );
 	
-};
+}
 
 void Xenon::GPU::Texture2D :: SetWrapMode ( WrapMode ModeS, WrapMode ModeT )
 {
@@ -126,4 +126,4 @@ void Xenon::GPU::Texture2D :: SetWrapMode ( WrapMode ModeS, WrapMode ModeT )
 	glTexParameteri ( GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, ModeS );
 	glTexParameteri ( GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, ModeT );
 	
-};
+}

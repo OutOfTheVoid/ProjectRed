@@ -9,14 +9,14 @@ Xenon::GPU::FragmentShader :: FragmentShader ( const std :: string Source, std :
 	Name ( Name ),
 	SHandle ( 0 )
 {
-};
+}
 
 Xenon::GPU::FragmentShader :: ~FragmentShader ()
 {
 	
 	GPUResourceFree ();
 	
-};
+}
 
 void Xenon::GPU::FragmentShader :: GPUResourceAlloc ()
 {
@@ -29,7 +29,7 @@ void Xenon::GPU::FragmentShader :: GPUResourceAlloc ()
 	if ( SHandle != 0 )
 		Allocated = true;
 	
-};
+}
 
 void Xenon::GPU::FragmentShader :: GPUResourceFree ()
 {
@@ -42,21 +42,21 @@ void Xenon::GPU::FragmentShader :: GPUResourceFree ()
 	Allocated = false;
 	Compiled = false;
 	
-};
+}
 
 bool Xenon::GPU::FragmentShader :: GPUResourceAllocated ()
 {
 	
 	return Allocated;
 	
-};
+}
 
 const std :: string & Xenon::GPU::FragmentShader :: GetName ()
 {
 	
 	return Name;
 	
-};
+}
 
 bool Xenon::GPU::FragmentShader :: Compile ( bool StoreCompilationLog, bool FreeSource )
 {
@@ -115,14 +115,14 @@ bool Xenon::GPU::FragmentShader :: Compile ( bool StoreCompilationLog, bool Free
 	}
 		
 	
-};
+}
 
 const std :: string & Xenon::GPU::FragmentShader :: GetCompilationLog ()
 {
 	
 	return CompileLog;
 	
-};
+}
 
 void Xenon::GPU::FragmentShader :: FreeCompilationLog ()
 {
@@ -130,11 +130,11 @@ void Xenon::GPU::FragmentShader :: FreeCompilationLog ()
 	CompileLog.clear ();
 	CompileLog.shrink_to_fit ();
 	
-};
+}
 
 GLuint Xenon::GPU::FragmentShader :: GetSHandle ()
 {
 	
 	return SHandle;
 	
-};
+}

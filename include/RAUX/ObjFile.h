@@ -240,6 +240,6 @@ namespace RAUX
 		
 	};
 	
-};
+}
 
 #endif
