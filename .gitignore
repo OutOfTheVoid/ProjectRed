@@ -1,3 +1,6 @@
 *.png
 *.obj
 obj/*
+bin
+bin/*
+
