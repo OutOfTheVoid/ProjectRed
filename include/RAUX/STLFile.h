@@ -93,7 +93,21 @@ namespace RAUX
 		
 	private:
 		
+		typedef struct Triangle_Struct
+		{
+			
+			Vec3 Normal;
+			Vec3 P1;
+			Vec3 P2;
+			Vec3 P3;
+			
+		} Triangle;
+		
 		File FileInstance;
+		
+		uint32_t TriangleCount;
+		
+		Triangle * TriangleList;
 		
 	};
 	

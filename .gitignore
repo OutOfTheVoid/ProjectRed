@@ -1,5 +1,6 @@
 *.png
 *.obj
+*.stl
 obj/*
 bin
 bin/*

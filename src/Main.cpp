@@ -34,6 +34,7 @@
 #include <Xenon/Geometry/Primitives.h>
 
 #include <RAUX/ObjFile.h>
+#include <RAUX/StlFile.h>
 
 #include <math.h>
 
@@ -132,6 +133,9 @@ int main ( int argc, const char * argv [] )
 		}
 		
 	}
+	
+	RAUX :: StlFile MySTL ( "Fawn.stl" );
+	MySTL.Load ( & Status );
 	
 	SDLX::Lib :: Init ( & Status, SDLX::Lib :: kSDLFlag_Video );
 	
