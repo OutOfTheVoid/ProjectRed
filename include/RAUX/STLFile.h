@@ -12,13 +12,20 @@
 #include <stdint.h>
 
 #include <string>
+#include <math.h>
 
 namespace RAUX
 {
 	
-	class STLFile
+	class StlFile
 	{
 	public:
+		
+		static const uint32_t kStatus_Success = 0;
+		static const uint32_t kStatus_Failure_NonExistantFile = 1;
+		static const uint32_t kStatus_Failure_Load = 2;
+		static const uint32_t kStatus_Failure_MemoryAllocation = 3;
+		static const uint32_t kStatus_Failure_InvalidFile = 4;
 		
 #ifdef RAUX_XENON_INTERFACE
 		
@@ -70,12 +77,13 @@ namespace RAUX
 		
 #endif
 		
-		STLFile ( const std :: string & Name );
-		~STLFile ();
+		StlFile ( const std :: string & Name );
+		~StlFile ();
 		
-		bool Exists () const ();
+		bool Exists () const;
 		
 		void Load ( uint32_t * Status );
+		void CloseFile ();
 		
 #ifdef RAUX_XENON_INTERFACE
 		
@@ -89,6 +97,6 @@ namespace RAUX
 		
 	};
 	
-};
+}
 
 #endif

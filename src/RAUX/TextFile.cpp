@@ -1,7 +1,7 @@
 #include <RAUX/TextFile.h>
 
 RAUX::TextFile :: TextFile ( const std :: string & Name ):
-FileInstance ( Name )
+	FileInstance ( Name )
 {
 }
 
