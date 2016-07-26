@@ -1,7 +1,7 @@
 #ifndef RAUX_RAUX_H
 #define RAUX_RAUX_H
 
-#define RAUX_XENON_MATH_INTERFACE
+#define RAUX_XENON_INTERFACE
 
 namespace RAUX
 {

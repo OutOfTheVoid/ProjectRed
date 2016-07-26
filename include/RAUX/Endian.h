@@ -3,6 +3,28 @@
 
 #include <stdint.h>
 
+#ifdef __GNU_LIBRARY__
+	#include <endian.h>
+#endif
+
+#ifdef __BYTE_ORDER__
+	
+	#if __BYTE_ORDER__ == __ORDER_BIG_ENDIAN__
+		
+		#define RAUX_BIG_ENDIAN_DEFINITE
+
+	#elif __BYTE_ORDER__ == __ORDER_LITTLE_ENDIAN__
+
+		#define RAUX_LITTLE_ENDIAN_DEFINITE
+
+	#else
+	
+		#define RAUX_ENDIAN_INDEFINATE
+
+	#endif
+
+#endif
+
 inline uint32_t LittleToHostEndian32 ( const uint32_t In )
 {
 	

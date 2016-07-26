@@ -110,6 +110,7 @@ int main ( int argc, const char * argv [] )
 	
 	uint32_t Status;
 	
+	/*
 	RAUX :: ObjFile MyObj ( "Cube.obj", RAUX::ObjFile :: kFlags_StoreComments );
 	MyObj.Load ( & Status );
 	
@@ -133,9 +134,16 @@ int main ( int argc, const char * argv [] )
 		}
 		
 	}
+	*/
 	
-	RAUX :: StlFile MySTL ( "Fawn.stl" );
-	MySTL.Load ( & Status );
+	if ( Status != RAUX::StlFile :: kStatus_Success )
+	{
+		
+		std :: cout << "Failed to load stl file" << std :: endl;
+		
+		return - 1;
+		
+	}
 	
 	SDLX::Lib :: Init ( & Status, SDLX::Lib :: kSDLFlag_Video );
 	
@@ -181,9 +189,9 @@ int main ( int argc, const char * argv [] )
 	Cont -> MakeCurrent ();
 	Cont -> GetDefaultFrameBuffer () -> SetClearColor ( 0.0f, 0.0f, 0.0f );
 	
-	Xenon::Geometry :: Mesh * CubeMesh = NULL;
+	Xenon::Geometry :: Mesh * TestMesh = NULL;
 	
-	Xenon::Geometry::Primitives :: CubeSpec CubeGenerationSpec;
+	/*Xenon::Geometry::Primitives :: CubeSpec CubeGenerationSpec;
 	
 	CubeGenerationSpec.WindOutwardFacesClockwise = true;
 	CubeGenerationSpec.CompositionMode = Xenon::Geometry::Primitives :: kStaticAttributeCompositionMode_Interleaved;
@@ -192,7 +200,7 @@ int main ( int argc, const char * argv [] )
 	Xenon::Geometry::Primitives :: SetupUnitCubeVertexPositionSpec ( CubeGenerationSpec.PositionSpec, "Position", true );
 	//Xenon::Geometry::Primitives :: SetupRadialCubeVertexNormalSpec ( CubeGenerationSpec.NormalSpec, "Normal", true );
 	Xenon::Geometry::Primitives :: SetupRealCubeFaceNormalSpec ( CubeGenerationSpec.NormalSpec, "Normal", true );
-	bool Generated = Xenon::Geometry::Primitives :: GenerateCubeMesh ( & CubeMesh, CubeGenerationSpec );
+	bool Generated = Xenon::Geometry::Primitives :: GenerateCubeMesh ( & TestMesh, CubeGenerationSpec );
 	
 	if ( ! Generated )
 	{
@@ -206,7 +214,17 @@ int main ( int argc, const char * argv [] )
 		
 		return - 1;
 		
-	}
+	}*/
+	
+	RAUX :: StlFile MySTL ( "Teapot.stl" );
+	MySTL.Load ( & Status, RAUX::StlFile :: kFlags_ReplaceNormalsForced | RAUX::StlFile :: kFlags_ForwardFace_CounterClockwise | RAUX::StlFile :: kFlags_CenterPositions | RAUX::StlFile :: kFlags_NormalizePositions );
+	
+	RAUX::StlFile :: MeshParameters STLParams ( RAUX::StlFile :: kMeshParameterFlags_Normals | RAUX::StlFile :: kMeshParameterFlags_InterleavedAttributes, "Position", "Normal" );
+	
+	TestMesh = MySTL.CreateMesh ( STLParams );
+	
+	if ( TestMesh == NULL )
+		std :: cout << "Failed to create mesh from STL data " << std :: endl;
 	
 	GLchar VShaderSource [] =
 	"#version 150\n\n"
@@ -287,9 +305,7 @@ int main ( int argc, const char * argv [] )
 	Xenon::Math::Matrix4x4 :: SetAsPerspectiveProjectionFieldOfView ( Projection, 0.1, 4.0, 60.0 / 180.0 * 3.1415926, 2048.0 / 1536.0 );
 	Xenon::Math::RawMatrix4x4UniformSource PerspeciveProjectionUniformSource ( & Projection, true );
 	
-	Xenon::Math :: Transform3D Transform ( Xenon::Math :: Vec3 ( 0.0f, 0.0f, - 3.0f ), Xenon::Math :: Vec3 ( 0.25f, 0.25f, 0.25f ) );
-	
-	Xenon::Math :: RawFloatUniformSource ThicknessUniform ( 0.1f );
+	Xenon::Math :: Transform3D Transform ( Xenon::Math :: Vec3 ( 0.0f, 0.0f, - 3.0f ), Xenon::Math :: Vec3 ( 0.5f, 0.5f, 0.5f ) );
 	
 	Xenon::GPU :: ShaderProgram ColorProgram ( "ShaderProgram_Color" );
 	ColorProgram.AddShader ( ColorVShader );
@@ -297,7 +313,7 @@ int main ( int argc, const char * argv [] )
 	ColorProgram.Link ();
 	
 	Xenon::GPU :: VertexArray ColorVAO;
-	CubeMesh -> BuildVertexArray ( ColorVAO );
+	TestMesh -> BuildVertexArray ( ColorVAO );
 	ColorVAO.SetProgram ( & ColorProgram );
 	ColorVAO.Build ();
 	
@@ -312,7 +328,7 @@ int main ( int argc, const char * argv [] )
 	
 	RData.Cont = Cont;
 	RData.Win = Win;
-	RData.Cube = CubeMesh;
+	RData.Cube = TestMesh;
 	RData.ColorProgram = & ColorProgram;
 	RData.ColorArray = & ColorVAO;
 	RData.ColorUniforms = & ColorUniforms;
@@ -350,7 +366,7 @@ int main ( int argc, const char * argv [] )
 	Win -> Disown ();
 	SDLX::Lib :: DeInit ();
 	
-	delete CubeMesh;
+	delete TestMesh;
 	
 	return 0;
 	
