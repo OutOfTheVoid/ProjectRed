@@ -238,6 +238,8 @@ namespace RAUX
 		std :: vector <MtlFile> MaterialLibraries;
 		std :: map <std :: string, MtlFile :: Material> Materials;
 		
+		static std :: string NullComment;
+		
 	};
 	
 }

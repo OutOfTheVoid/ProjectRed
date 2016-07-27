@@ -49,6 +49,8 @@ namespace Xenon
 			static void SetAsPerspectiveProjectionAngle ( Matrix4x4 & Target, const float Near, const float Far, const float LeftAngle, const float RightAngle, const float TopAngle, const float BottomAngle );
 			static void SetAsSymmetricPerspectiveProjectionAngle ( Matrix4x4 & Target, const float Near, const float Far, const float AngleX, const float AngleY );
 			
+			static void SetAsOrthographicProjection ( Matrix4x4 & Target, const float Near, const float Far, const float Left, const float Right, const float Top, const float Bottom );
+			
 			// Translate
 			static void SetAsTranslation ( Matrix4x4 & Target, const float X, const float Y, const float Z );
 			static void SetAsTranslation ( Matrix4x4 & Target, const Vec3 & Translation );

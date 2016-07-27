@@ -39,7 +39,7 @@ namespace RAUX
 		static const uint32_t kMeshParameterFlags_Normals = 1;
 		static const uint32_t kMeshParameterFlags_SeperateStaticAttributes = 2;
 		static const uint32_t kMeshParameterFlags_InterleavedAttributes = 4;
-		static const uint32_t kMeshParameterFlags_ReverseWindingDirection = 8;
+		static const uint32_t kMeshParameterFlags_ReverseWindingOrder = 8;
 		static const uint32_t kMeshParameterFlags_DynamicPositions = 16;
 		static const uint32_t kMeshParameterFlags_DynamicNormals = 32;
 		

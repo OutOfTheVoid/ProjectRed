@@ -15,6 +15,8 @@
 
 #define READBLOCK_SIZE 0x1000
 
+std :: string RAUX::ObjFile :: NullComment ( "" );
+
 RAUX::ObjFile :: ObjFile ( const std :: string & Name, uint32_t Flags ):
 	FileInstance ( Name ),
 	Flags ( Flags ),
@@ -742,7 +744,7 @@ bool RAUX::ObjFile :: ProcessMaterialLibrary ( const std :: string & Line, uint3
 	std :: string LibraryName = Line.substr ( NameIndex, Index - NameIndex );
 	std :: string PrefixedName = LibraryName;
 	
-	MtlFile LibraryFile ( LibraryName );
+	MtlFile LibraryFile ( LibraryName, ( ( ( Flags & kFlags_StoreComments ) != 0 ) ? MtlFile :: kFlags_StoreComments : 0 ) | ( ( ( Flags & kFlags_FailOnUnsupportedCommand ) != 0 ) ? MtlFile :: kFlags_FailOnUnsupportedCommand : 0 ) );
 	
 	uint32_t PrefixIndex = 0;
 		
@@ -752,7 +754,7 @@ bool RAUX::ObjFile :: ProcessMaterialLibrary ( const std :: string & Line, uint3
 		PrefixedName = MaterialLibraryPrefixes [ Index ];
 		PrefixedName.append ( LibraryName );
 		
-		LibraryFile = MtlFile ( PrefixedName );
+		LibraryFile = MtlFile ( PrefixedName, ( ( ( Flags & kFlags_StoreComments ) != 0 ) ? MtlFile :: kFlags_StoreComments : 0 ) | ( ( ( Flags & kFlags_FailOnUnsupportedCommand ) != 0 ) ? MtlFile :: kFlags_FailOnUnsupportedCommand : 0 ) );
 		
 	}
 	
@@ -767,6 +769,14 @@ bool RAUX::ObjFile :: ProcessMaterialLibrary ( const std :: string & Line, uint3
 		
 		uint32_t LoadStatus;
 		InPlaceLibrary.Load ( & LoadStatus );
+		
+		if ( ( Flags & kFlags_StoreComments ) != 0 )
+		{
+			
+			for ( uint32_t I = 0; I < InPlaceLibrary.GetCommentCount (); I ++ )
+				Comments.push_back ( PrefixedName + ": " + InPlaceLibrary.GetComment ( I ) );
+			
+		}
 		
 		return true;
 		
@@ -826,7 +836,7 @@ const std :: string & RAUX::ObjFile :: GetComment ( uint32_t Index ) const
 {
 	
 	if ( Index >= Comments.size () )
-		return Comments [ 0 ];
+		return NullComment;
 	
 	return Comments [ Index ];
 	

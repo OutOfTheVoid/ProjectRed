@@ -10,6 +10,8 @@
 
 #include <math.h>
 
+#include <vector>
+
 /*
 * MtlFile: Represents a model library file used by the ObjFile class for loading 3D object materials.
 */
@@ -27,12 +29,16 @@ namespace RAUX
 		static const uint32_t kStatus_Failure_MemoryAllocation = 3;
 		static const uint32_t kStatus_Failure_InvalidFile = 4;
 		
+		static const uint32_t kFlags_StoreComments = 1;
+		static const uint32_t kFlags_FailOnUnsupportedCommand = 2;
+		static const uint32_t kFlags_NoRAUXComment = 4;
+		
 #ifdef RAUX_XENON_INTERFACE
 		
 		typedef Xenon::Math::Vec3 Vec3;
 		
-		#define OBJFILE_VEC3_NOINIT Xenon::Math::Vec3 :: NO_INIT
-		#define OBJFILE_VEC3_NORMALIZE(v) Xenon::Math::Vec3 :: Normalize ( v )
+		#define MTLFILE_VEC3_NOINIT Xenon::Math::Vec3 :: NO_INIT
+		#define MTLFILE_VEC3_NORMALIZE(v) Xenon::Math::Vec3 :: Normalize ( v )
 		
 #else
 		
@@ -63,8 +69,8 @@ namespace RAUX
 			
 		};
 		
-		#define OBJFILE_VEC3_NOINIT 0.0f, 0.0f, 0.0f
-		#define OBJFILE_VEC3_NORMALIZE(v) Vec3_Normalize ( v );
+		#define MTLFILE_VEC3_NOINIT 0.0f, 0.0f, 0.0f
+		#define MTLFILE_VEC3_NORMALIZE(v) Vec3_Normalize ( v );
 		
 #endif
 		
@@ -81,19 +87,33 @@ namespace RAUX
 		
 		// MTLFile :: Material: A structure representing a parsed material from the file.
 		
-		typedef struct
+		typedef struct Material_Struct
 		{
 			
-			Vec3 Reflectivity;
-			bool ReflectivityIsCIEXYZ;
+			Material_Struct ( const std :: string & Name );
+			Material_Struct ( const Material_Struct & CopyFrom );
+			
+			std :: string Name;
+			
+			Vec3 Ambiant;
+			bool AmbiantIsCIEXYZ;
+			std :: string AmbiantMapName;
 			
 			Vec3 Diffuse;
 			bool DiffuseIsCIEXYZ;
+			std :: string DiffuseMapName;
 			
 			Vec3 Specular;
 			bool SpecularIsCIEXYZ;
+			std :: string SpecularMapName;
+			
+			Vec3 Emission;
+			bool EmissionIsCIEXYZ;
+			std :: string EmissionMapName;
 			
 			Vec3 TransmissionFilter;
+			bool TransmissionIsCIEXYZ;
+			std :: string TransmissionMapName;
 			
 			uint32_t IlluminationModel;
 			
@@ -107,7 +127,7 @@ namespace RAUX
 		} Material;
 		
 		// Constructs an MTLFile object, using the file name < Name >.
-		MtlFile ( const std :: string & Name );
+		MtlFile ( const std :: string & Name, uint32_t Flags );
 		MtlFile ( const MtlFile & CopyFrom );
 		~MtlFile ();
 		
@@ -130,10 +150,34 @@ namespace RAUX
 		// Returns a pointer to a material structure specified by the name < Name >, or returns NULL if a material by that name doesn't exist.
 		const Material * const GetMaterial ( const std :: string & Name ) const;
 		
+		// Returns the number of comments recorded.
+		uint32_t GetCommentCount () const;
+		// Gets a comment by index, or "" if the index is out of range.
+		const std :: string & GetComment ( uint32_t Index ) const;
+		
 	private:
+		
+		bool ProcessTextLine ( const std :: string & Line );
+		
+		bool ProcessIlluminationModel ( const std :: string & Line, uint32_t Index );
+		bool ProcessNewMaterial ( const std :: string & Line, uint32_t Index );
+		
+		bool ProcessAmbiant ( const std :: string & Line, uint32_t Index );
+		bool ProcessDiffuse ( const std :: string & Line, uint32_t Index );
+		bool ProcessSpecular ( const std :: string & Line, uint32_t Index );
+		bool ProcessEmission ( const std :: string & Line, uint32_t Index );
+		bool ProcessTransmissionFilter ( const std :: string & Line, uint32_t Index );
+		
+		uint32_t Flags;
 		
 		// The actual file
 		TextFile FileInstance;
+		
+		std :: vector <Material> Materials;
+		
+		std :: vector <std :: string> Comments;
+		
+		static std :: string NullComment;
 		
 	};
 	

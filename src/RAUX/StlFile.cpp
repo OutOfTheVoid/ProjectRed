@@ -92,8 +92,6 @@ void RAUX::StlFile :: Load ( uint32_t * Status, uint32_t Flags )
 	TriangleCount = LittleToHostEndian32 ( TriangleCount );
 #endif
 	
-	std :: cout << "triangle count: " << TriangleCount << std :: endl;
-	
 	TriangleList = new Triangle [ TriangleCount ];
 	
 	for ( uint32_t I = 0; I < TriangleCount; I ++ )
@@ -337,7 +335,7 @@ Xenon::Geometry :: Mesh * RAUX::StlFile :: CreateMesh ( const MeshParameters & P
 	
 	GLuint * Indexes = reinterpret_cast <GLuint *> ( IndexMemory -> GetData () );
 	
-	if ( Params.Flags & kMeshParameterFlags_ReverseWindingDirection )
+	if ( Params.Flags & kMeshParameterFlags_ReverseWindingOrder )
 	{
 		
 		for ( uint32_t I = 0; I < TriangleCount; I ++ )
@@ -416,7 +414,7 @@ Xenon::Geometry :: Mesh * RAUX::StlFile :: CreateMesh ( const MeshParameters & P
 		else
 		{
 			
-			// One might be static, the other not, either way, seperate data.
+			// TODO: One might be static, the other not, either way, seperate data.
 			
 		}
 		
@@ -446,8 +444,6 @@ Xenon::Geometry :: Mesh * RAUX::StlFile :: CreateMesh ( const MeshParameters & P
 		PositionMeshAttribute = new Xenon::Geometry :: MeshAttribute ( Params.PositionAttributeName, Xenon::GPU::VertexArray :: kFPAttributeInputType_Float, false, 3, PositionStride, reinterpret_cast <void *> ( PositionOffset ), AttributeData );
 		
 	}
-	
-	std :: cout << "Position Offset: " << PositionOffset << ", Position Stride: " << PositionStride << std :: endl;
 	
 	// Position data
 	{

@@ -110,7 +110,7 @@ int main ( int argc, const char * argv [] )
 	
 	uint32_t Status;
 	
-	/*
+	
 	RAUX :: ObjFile MyObj ( "Cube.obj", RAUX::ObjFile :: kFlags_StoreComments );
 	MyObj.Load ( & Status );
 	
@@ -134,12 +134,11 @@ int main ( int argc, const char * argv [] )
 		}
 		
 	}
-	*/
 	
 	if ( Status != RAUX::StlFile :: kStatus_Success )
 	{
 		
-		std :: cout << "Failed to load stl file" << std :: endl;
+		std :: cout << "Failed to load obj file" << std :: endl;
 		
 		return - 1;
 		
@@ -216,10 +215,10 @@ int main ( int argc, const char * argv [] )
 		
 	}*/
 	
-	RAUX :: StlFile MySTL ( "Teapot.stl" );
-	MySTL.Load ( & Status, RAUX::StlFile :: kFlags_ReplaceNormalsForced | RAUX::StlFile :: kFlags_ForwardFace_CounterClockwise | RAUX::StlFile :: kFlags_CenterPositions | RAUX::StlFile :: kFlags_NormalizePositions );
+	RAUX :: StlFile MySTL ( "CCube.stl" );
+	MySTL.Load ( & Status, RAUX::StlFile :: kFlags_ReplaceNormalsForced | RAUX::StlFile :: kFlags_CenterPositions | RAUX::StlFile :: kFlags_NormalizePositions );
 	
-	RAUX::StlFile :: MeshParameters STLParams ( RAUX::StlFile :: kMeshParameterFlags_Normals | RAUX::StlFile :: kMeshParameterFlags_InterleavedAttributes, "Position", "Normal" );
+	RAUX::StlFile :: MeshParameters STLParams ( RAUX::StlFile :: kMeshParameterFlags_Normals | RAUX::StlFile :: kMeshParameterFlags_ReverseWindingOrder | RAUX::StlFile :: kMeshParameterFlags_InterleavedAttributes, "Position", "Normal" );
 	
 	TestMesh = MySTL.CreateMesh ( STLParams );
 	
@@ -302,10 +301,12 @@ int main ( int argc, const char * argv [] )
 	
 	Xenon::Math :: Matrix4x4 Projection ( Xenon::Math::Matrix4x4 :: NO_INIT );
 	
-	Xenon::Math::Matrix4x4 :: SetAsPerspectiveProjectionFieldOfView ( Projection, 0.1, 4.0, 60.0 / 180.0 * 3.1415926, 2048.0 / 1536.0 );
+	//Xenon::Math::Matrix4x4 :: SetAsPerspectiveProjectionFieldOfView ( Projection, 0.1, 4.0, 60.0 / 180.0 * 3.1415926, WINDOW_WIDTH_0 / WINDOW_HEIGHT_0 );
+	Xenon::Math::Matrix4x4 :: SetAsOrthographicProjection ( Projection, 0.1, 4.0, -2.0, 2.0, 2.0 * WINDOW_HEIGHT_0 / WINDOW_WIDTH_0, - 2.0 * WINDOW_HEIGHT_0 / WINDOW_WIDTH_0 );
+	
 	Xenon::Math::RawMatrix4x4UniformSource PerspeciveProjectionUniformSource ( & Projection, true );
 	
-	Xenon::Math :: Transform3D Transform ( Xenon::Math :: Vec3 ( 0.0f, 0.0f, - 3.0f ), Xenon::Math :: Vec3 ( 0.5f, 0.5f, 0.5f ) );
+	Xenon::Math :: Transform3D Transform ( Xenon::Math :: Vec3 ( 0.0f, 0.0f, - 1.5f ), Xenon::Math :: Vec3 ( 0.3f, 0.3f, 0.3f ) );
 	
 	Xenon::GPU :: ShaderProgram ColorProgram ( "ShaderProgram_Color" );
 	ColorProgram.AddShader ( ColorVShader );
@@ -412,7 +413,8 @@ void KeyListener ( int32_t ScanCode, int32_t KeyCode, bool Down, void * Data )
 			
 			reinterpret_cast <KeyboardStruct *> ( Data ) -> RenderData -> Win -> Resize ( WINDOW_WIDTH_0, WINDOW_HEIGHT_0 );
 			
-			Xenon::Math::Matrix4x4 :: SetAsPerspectiveProjectionFieldOfView ( * reinterpret_cast <KeyboardStruct *> ( Data ) -> RenderData -> Projection, 0.1, 4.0, 60.0 / 180.0 * 3.1415926, static_cast <float> ( WINDOW_WIDTH_0 ) / static_cast <float> ( WINDOW_HEIGHT_0 ) );
+			//Xenon::Math::Matrix4x4 :: SetAsPerspectiveProjectionFieldOfView ( * reinterpret_cast <KeyboardStruct *> ( Data ) -> RenderData -> Projection, 0.1, 4.0, 60.0 / 180.0 * 3.1415926, static_cast <float> ( WINDOW_WIDTH_0 ) / static_cast <float> ( WINDOW_HEIGHT_0 ) );
+			Xenon::Math::Matrix4x4 :: SetAsOrthographicProjection ( * reinterpret_cast <KeyboardStruct *> ( Data ) -> RenderData -> Projection, 0.1, 4.0, -2.0, 2.0, 2.0 * WINDOW_HEIGHT_0 / WINDOW_WIDTH_0, - 2.0 * WINDOW_HEIGHT_0 / WINDOW_WIDTH_0 );
 			
 		}
 		else
@@ -422,8 +424,8 @@ void KeyListener ( int32_t ScanCode, int32_t KeyCode, bool Down, void * Data )
 			
 			reinterpret_cast <KeyboardStruct *> ( Data ) -> RenderData -> Win -> Resize ( WINDOW_WIDTH_1, WINDOW_HEIGHT_1 );
 			
-			Xenon::Math::Matrix4x4 :: SetAsPerspectiveProjectionFieldOfView ( * reinterpret_cast <KeyboardStruct *> ( Data ) -> RenderData -> Projection, 0.1, 4.0, 60.0 / 180.0 * 3.1415926, static_cast <float> ( WINDOW_WIDTH_1 ) / static_cast <float> ( WINDOW_HEIGHT_1 ) );
-			
+			//Xenon::Math::Matrix4x4 :: SetAsPerspectiveProjectionFieldOfView ( * reinterpret_cast <KeyboardStruct *> ( Data ) -> RenderData -> Projection, 0.1, 4.0, 60.0 / 180.0 * 3.1415926, static_cast <float> ( WINDOW_WIDTH_1 ) / static_cast <float> ( WINDOW_HEIGHT_1 ) );
+			Xenon::Math::Matrix4x4 :: SetAsOrthographicProjection ( * reinterpret_cast <KeyboardStruct *> ( Data ) -> RenderData -> Projection, 0.1, 4.0, -2.0, 2.0, 2.0 * WINDOW_HEIGHT_1 / WINDOW_WIDTH_1, - 2.0 * WINDOW_HEIGHT_1 / WINDOW_WIDTH_1 );
 		}
 		
 	}

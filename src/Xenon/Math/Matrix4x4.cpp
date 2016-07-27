@@ -233,6 +233,32 @@ void Xenon::Math::Matrix4x4 :: SetAsSymmetricPerspectiveProjectionAngle ( Matrix
 	
 }
 
+void Xenon::Math::Matrix4x4 :: SetAsOrthographicProjection ( Matrix4x4 & Target, const float Near, const float Far, const float Left, const float Right, const float Top, const float Bottom )
+{
+	
+#ifdef XENON_SSE
+	
+	reinterpret_cast <__m128 &> ( Target.Elements [ 0 ] ) = _mm_setr_ps ( 2.0f / ( Right - Left ), 0.0f, 0.0f, - ( Right + Left ) / ( Right - Left ) );
+	reinterpret_cast <__m128 &> ( Target.Elements [ 1 ] ) = _mm_setr_ps ( 0.0f, 2.0f / ( Top - Bottom ), 0.0f, - ( Top + Bottom ) / ( Top - Bottom ) );
+	reinterpret_cast <__m128 &> ( Target.Elements [ 2 ] ) = _mm_setr_ps ( 0.0f, 0.0f, - 2.0f / ( Far - Near ), - ( Far + Near ) / ( Far - Near ) );
+	reinterpret_cast <__m128 &> ( Target.Elements [ 3 ] ) = _mm_setr_ps ( 0.0f, 0.0f, 0.0f, 1.0f );
+	
+#else
+	
+	Target.Elements [ 0 ].E0 = 2.0f / ( Right - Left );
+	Target.Elements [ 1 ].E1 = 2.0f / ( Top - Bottom );
+	Target.Elements [ 2 ].E2 = - 2.0f / ( Far - Near );
+	
+	Target.Elements [ 0 ].E3 = - ( Right + Left ) / ( Right - Left );
+	Target.Elements [ 1 ].E3 = - ( Top + Bottom ) / ( Top - Bottom );
+	Target.Elements [ 2 ].E3 = - ( Far + Near ) / ( Far - Near );
+	
+	Target.Elements [ 3 ].E3 = 1.0f;
+	
+#endif
+	
+}
+
 void Xenon::Math::Matrix4x4 :: SetAsTranslation ( Matrix4x4 & Target, const float X, const float Y, const float Z )
 {
 	
