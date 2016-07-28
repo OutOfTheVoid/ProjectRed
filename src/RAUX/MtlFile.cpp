@@ -47,13 +47,13 @@ bool RAUX::MtlFile :: Exists () const
 
 RAUX::MtlFile::Material_Struct :: Material_Struct ( const std :: string & Name ):
 	Name ( Name ),
-	Ambiant ( 0.0f, 0.0f, 0.0f ),
+	Ambiant ( 0.5f, 0.5f, 0.5f ),
 	AmbiantIsCIEXYZ ( false ),
 	AmbiantMapName ( "" ),
 	Diffuse ( 1.0f, 1.0f, 1.0f ),
 	DiffuseIsCIEXYZ ( false ),
 	DiffuseMapName ( "" ),
-	Specular ( 0.0f, 0.0f, 0.0f ),
+	Specular ( 0.2f, 0.2f, 0.2f ),
 	SpecularIsCIEXYZ ( false ),
 	SpecularMapName ( "" ),
 	Emission ( 0.0f, 0.0f, 0.0f ),
@@ -210,7 +210,7 @@ bool RAUX::MtlFile :: ProcessTextLine ( const std :: string & Line )
 		
 		Index ++;
 		
-		if ( Index >= Line.size () )
+		if ( Index + 1 >= Line.size () )
 			return true;
 		
 		Charachter = Line.at ( Index );
@@ -266,7 +266,7 @@ bool RAUX::MtlFile :: ProcessTextLine ( const std :: string & Line )
 					
 					Index ++;
 			
-					if ( Index > Line.size () )
+					if ( Index + 1 > Line.size () )
 						return false;
 					
 					return ProcessAmbiant ( Line, Index );
@@ -278,7 +278,7 @@ bool RAUX::MtlFile :: ProcessTextLine ( const std :: string & Line )
 					
 					Index ++;
 			
-					if ( Index > Line.size () )
+					if ( Index + 1 > Line.size () )
 						return false;
 					
 					return ProcessDiffuse ( Line, Index );
@@ -290,7 +290,7 @@ bool RAUX::MtlFile :: ProcessTextLine ( const std :: string & Line )
 					
 					Index ++;
 			
-					if ( Index > Line.size () )
+					if ( Index + 1 > Line.size () )
 						return false;
 					
 					return ProcessSpecular ( Line, Index );
@@ -302,7 +302,7 @@ bool RAUX::MtlFile :: ProcessTextLine ( const std :: string & Line )
 					
 					Index ++;
 			
-					if ( Index > Line.size () )
+					if ( Index + 1 > Line.size () )
 						return false;
 					
 					return ProcessEmission ( Line, Index );
@@ -328,6 +328,57 @@ bool RAUX::MtlFile :: ProcessTextLine ( const std :: string & Line )
 				return ProcessIlluminationModel ( Line, Index + 4 );
 			
 			return false;
+			
+		}
+		
+		case 'd':
+		{
+			
+			Index ++;
+			
+			if ( Index + 1 > Line.size () )
+				return false;
+			
+			return ProcessDisolve ( Line, Index );
+			
+		}
+		
+		case 'N':
+		{
+			
+			Index ++;
+			
+			if ( Index + 1 > Line.size () )
+				return false;
+			
+			switch ( Line.at ( Index ) )
+			{
+				
+				case 's':
+				{
+					
+					Index ++;
+					
+					if ( Index + 1 > Line.size () )
+						return false;
+					
+					return ProcessSpecularExponent ( Line, Index );
+					
+				}
+				
+				case 'i':
+				{
+					
+					Index ++;
+					
+					if ( Index + 1 > Line.size () )
+						return false;
+					
+					return ProcessOpticalDensity ( Line, Index );
+					
+				}
+				
+			}
 			
 		}
 		
@@ -357,10 +408,8 @@ bool RAUX::MtlFile :: ProcessIlluminationModel ( const std :: string & Line, uin
 	while ( ( Index < Line.size () ) && ( Line.at ( Index ) != ' ' ) )
 		Index ++;
 	
-	if ( Index >= Line.size () )
-		return false;
-	
 	std :: string IntegerString = Line.substr ( IntegerIndex, Index - IntegerIndex );
+	
 	uint32_t IlluminationModel = 0;
 	
 	try
@@ -384,7 +433,7 @@ bool RAUX::MtlFile :: ProcessNewMaterial ( const std :: string & Line, uint32_t 
 	while ( ( Index < Line.size () ) && ( ( Line.at ( Index ) == ' ' ) || ( Line.at ( Index ) == '\t' ) ) )
 		Index ++;
 	
-	if ( Index >= Line.size () )
+	if ( Index + 1 >= Line.size () )
 		return false;
 	
 	uint32_t NameIndex = Index;
@@ -392,14 +441,11 @@ bool RAUX::MtlFile :: ProcessNewMaterial ( const std :: string & Line, uint32_t 
 	while ( ( Index < Line.size () ) && ( Line.at ( Index ) != ' ' ) )
 		Index ++;
 	
-	if ( Index >= Line.size () )
-		return false;
-	
 	std :: string NameString = Line.substr ( NameIndex, Index - NameIndex );
 	
 	Materials.push_back ( NameString );
 	
-	return false;
+	return true;
 	
 }
 
@@ -873,6 +919,118 @@ bool RAUX::MtlFile :: ProcessTransmissionFilter ( const std :: string & Line, ui
 	
 }
 
+bool RAUX::MtlFile :: ProcessDisolve ( const std :: string & Line, uint32_t Index )
+{
+	
+	if ( Materials.size () == 0 )
+		return false;
+	
+	uint32_t StringIndex;
+	
+	Index ++;
+	
+	while ( ( Index < Line.size () ) && ( Line.at ( Index ) == ' ' ) )
+		Index ++;
+	
+	if ( Index >= Line.size () )
+		return false;
+	
+	StringIndex = Index;
+	
+	while ( ( Index < Line.size () ) && ( Line.at ( Index ) != ' ' ) )
+		Index ++;
+	
+	std :: string FloatString = Line.substr ( StringIndex, Index - StringIndex );
+	
+	if ( FloatString == "-halo" )
+	{
+		
+		Materials [ Materials.size () - 1 ].Halo = true;
+		
+		Index ++;
+	
+		while ( ( Index < Line.size () ) && ( Line.at ( Index ) == ' ' ) )
+			Index ++;
+		
+		if ( Index >= Line.size () )
+			return false;
+		
+		StringIndex = Index;
+		
+		while ( ( Index < Line.size () ) && ( Line.at ( Index ) != ' ' ) )
+			Index ++;
+		
+		if ( Index >= Line.size () )
+			return false;
+		
+		FloatString = Line.substr ( StringIndex, Index - StringIndex );
+		
+	}
+	
+	Materials [ Materials.size () - 1 ].Dissolve = strtof ( FloatString.c_str (), NULL );
+	
+	return true;
+	
+}
+
+bool RAUX::MtlFile :: ProcessSpecularExponent ( const std :: string & Line, uint32_t Index )
+{
+	
+	if ( Materials.size () == 0 )
+		return false;
+	
+	uint32_t StringIndex;
+	
+	Index ++;
+	
+	while ( ( Index < Line.size () ) && ( Line.at ( Index ) == ' ' ) )
+		Index ++;
+	
+	if ( Index >= Line.size () )
+		return false;
+	
+	StringIndex = Index;
+	
+	while ( ( Index < Line.size () ) && ( Line.at ( Index ) != ' ' ) )
+		Index ++;
+	
+	std :: string FloatString = Line.substr ( StringIndex, Index - StringIndex );
+	
+	Materials [ Materials.size () - 1 ].SpecularExponent = strtof ( FloatString.c_str (), NULL );
+	
+	return true;
+	
+}
+
+bool RAUX::MtlFile :: ProcessOpticalDensity ( const std :: string & Line, uint32_t Index )
+{
+	
+	if ( Materials.size () == 0 )
+		return false;
+	
+	uint32_t StringIndex;
+	
+	Index ++;
+	
+	while ( ( Index < Line.size () ) && ( Line.at ( Index ) == ' ' ) )
+		Index ++;
+	
+	if ( Index >= Line.size () )
+		return false;
+	
+	StringIndex = Index;
+	
+	while ( ( Index < Line.size () ) && ( Line.at ( Index ) != ' ' ) )
+		Index ++;
+	
+	std :: string FloatString = Line.substr ( StringIndex, Index - StringIndex );
+	
+	Materials [ Materials.size () - 1 ].OpticalDensity = strtof ( FloatString.c_str (), NULL );
+	
+	return true;
+	
+}
+
 uint32_t RAUX::MtlFile :: GetCommentCount () const
 {
 	
@@ -887,5 +1045,47 @@ const std :: string & RAUX::MtlFile :: GetComment ( uint32_t Index ) const
 		return NullComment;
 	
 	return Comments [ Index ];
+	
+}
+
+uint32_t RAUX::MtlFile :: GetMaterialCount () const
+{
+	
+	return Materials.size ();
+	
+}
+
+const std :: string & RAUX::MtlFile :: GetMaterialName ( uint32_t Index ) const
+{
+	
+	if ( Index < Materials.size () )
+		return Materials [ Index ].Name;
+	
+	return NullComment;
+	
+}
+
+const RAUX::MtlFile :: Material * const RAUX::MtlFile :: GetMaterial ( uint32_t Index ) const
+{
+	
+	if ( Index < Materials.size () )
+		return & Materials [ Index ];
+	
+	return NULL;
+	
+}
+
+const RAUX::MtlFile :: Material * const RAUX::MtlFile :: GetMaterial ( const std :: string & Name ) const
+{
+	
+	for ( uint32_t I = 0; I < Materials.size (); I ++ )
+	{
+		
+		if ( Materials [ I ].Name == Name )
+			return & Materials [ I ];
+		
+	}
+	
+	return NULL;
 	
 }

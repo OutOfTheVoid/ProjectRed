@@ -168,6 +168,11 @@ namespace RAUX
 		bool ProcessEmission ( const std :: string & Line, uint32_t Index );
 		bool ProcessTransmissionFilter ( const std :: string & Line, uint32_t Index );
 		
+		bool ProcessDisolve ( const std :: string & Line, uint32_t Index );
+		
+		bool ProcessSpecularExponent ( const std :: string & Line, uint32_t Index );
+		bool ProcessOpticalDensity ( const std :: string & Line, uint32_t Index );
+		
 		uint32_t Flags;
 		
 		// The actual file

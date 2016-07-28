@@ -32,7 +32,8 @@ RAUX::ObjFile :: ObjFile ( const std :: string & Name, uint32_t Flags ):
 	Faces (),
 	MaterialLibraryPrefixes (),
 	MaterialLibraries (),
-	Materials ()
+	ActiveMaterials (),
+	CurrentMaterial ( - 1 )
 {
 	
 	if ( ( ( Flags & kFlags_NoRAUXComment ) == 0 ) && ( ( Flags & kFlags_StoreComments ) != 0 ) )
@@ -166,6 +167,8 @@ void RAUX::ObjFile :: Load ( uint32_t * Status )
 		
 		if ( ! ProcessTextLine ( Line ) )
 		{
+			
+			std :: cout << "Failed line: \"" << Line << "\"" << std :: endl;
 			
 			* Status = kStatus_Failure_InvalidFile;
 			
@@ -636,8 +639,10 @@ bool RAUX::ObjFile :: ProcessFace ( const std :: string & Line, uint32_t Index )
 	
 	Out.VertexIndexBase = Vertices.size ();
 	Out.VertexCount = VertexAccumulator.size ();
+	Out.MaterialIndex = ActiveMaterials.size () - 1;
 	
 	Faces.push_back ( Out );
+	Vertices.insert ( Vertices.end (), VertexAccumulator.begin (), VertexAccumulator.end () );
 	
 	return true;
 	
@@ -719,11 +724,43 @@ bool RAUX::ObjFile :: ProcessMaterial ( const std :: string & Line, uint32_t Ind
 	while ( ( Index < Line.size () ) && ( Line.at ( Index ) != ' ' ) )
 		Index ++;
 	
-	std :: cout << "Using Material: \"" << Line.substr ( NameIndex, Index - NameIndex ) << "\"" << std :: endl;
+	std :: string MaterialName = Line.substr ( NameIndex, Index - NameIndex );
 	
-	// TODO: Set current material
+	std :: cout << "Using Material: \"" << MaterialName << "\"" << std :: endl;
 	
-	return true;
+	CurrentMaterial = - 1;
+	
+	for ( uint32_t I = 0; I < ActiveMaterials.size (); I ++ )
+	{
+		
+		if ( MaterialName == ActiveMaterials [ I ].Name )
+			CurrentMaterial = I;
+		
+	}
+	
+	if ( CurrentMaterial == - 1 )
+	{
+		
+		for ( uint32_t I = 0; I < MaterialLibraries.size (); I ++ )
+		{
+			
+			const MtlFile :: Material * PendingMaterial = MaterialLibraries [ I ].GetMaterial ( MaterialName );
+			
+			if ( PendingMaterial != NULL )
+			{
+				
+				CurrentMaterial = ActiveMaterials.size ();
+				ActiveMaterials.push_back ( * PendingMaterial );
+				
+				break;
+				
+			}
+			
+		}
+		
+	}
+	
+	return ( CurrentMaterial != - 1 );
 	
 }
 
@@ -982,7 +1019,7 @@ Xenon::Geometry :: Mesh * RAUX::ObjFile :: CreateMesh ( const MeshParameters & P
 	
 	Xenon::Util :: RCMem * IndexMemory = new Xenon::Util :: RCMem ( sizeof ( GLshort ) * IndexCount );
 	
-	
+	// TODO:: Fill mesh
 	
 	return NULL;
 	

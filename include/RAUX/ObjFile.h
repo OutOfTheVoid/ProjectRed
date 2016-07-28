@@ -108,6 +108,8 @@ namespace RAUX
 			uint32_t VertexIndexBase;
 			uint32_t VertexCount;
 			
+			int32_t MaterialIndex;
+			
 		} Face;
 		
 		// Vertex struct, represents a vertex as indexes into the position list < VertexPositionIndex >, normal list < VertexNormalIndex >, and texture position list < VertexTexturePositionIndex >. These values are set to - 1 if a vertex does not have the relevant information.
@@ -194,6 +196,9 @@ namespace RAUX
 		uint32_t GetFaceCount () const;
 		const Face GetFace ( uint32_t Index ) const;
 		
+		uint32_t GetMaterialCount () const;
+		const MtlFile :: Material * const GetMaterial ( uint32_t Index ) const;
+		
 #ifdef RAUX_XENON_INTERFACE
 		
 		Xenon::Geometry :: Mesh * CreateMesh ( const MeshParameters & Parameters, uint32_t * Status );
@@ -236,7 +241,9 @@ namespace RAUX
 		std :: vector <std :: string> MaterialLibraryPrefixes;
 		
 		std :: vector <MtlFile> MaterialLibraries;
-		std :: map <std :: string, MtlFile :: Material> Materials;
+		std :: vector <MtlFile :: Material> ActiveMaterials;
+		
+		int32_t CurrentMaterial;
 		
 		static std :: string NullComment;
 		
