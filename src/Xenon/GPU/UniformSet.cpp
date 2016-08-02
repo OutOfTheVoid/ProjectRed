@@ -3,13 +3,13 @@
 
 Xenon::GPU::UniformSet :: UniformSet ( ShaderProgram * Program, uint32_t Matrix4x4Prealloc, uint32_t Matrix3x3Prealloc, uint32_t FloatVec4Prealloc, uint32_t FloatVec3Prealloc, uint32_t FloatVec2Prealloc, uint32_t FloatPrealloc ):
 	Program ( Program ),
+	LastLinkIteration ( - 1 ),
 	FloatUniforms ( FloatPrealloc ),
 	FloatVec2Uniforms ( FloatVec2Prealloc ),
 	FloatVec3Uniforms ( FloatVec3Prealloc ),
 	FloatVec4Uniforms ( FloatVec4Prealloc ),
 	Matrix3x3Uniforms ( Matrix3x3Prealloc ),
-	Matrix4x4Uniforms ( Matrix4x4Prealloc ),
-	LastLinkIteration ( - 1 )
+	Matrix4x4Uniforms ( Matrix4x4Prealloc )
 {
 }
 

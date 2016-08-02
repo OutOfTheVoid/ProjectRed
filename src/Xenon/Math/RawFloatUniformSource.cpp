@@ -19,7 +19,7 @@ void Xenon::Math::RawFloatUniformSource :: SetValue ( GLfloat Value )
 	
 }
 
-const GLfloat Xenon::Math::RawFloatUniformSource :: GetValue () const
+GLfloat Xenon::Math::RawFloatUniformSource :: GetValue () const
 {
 	
 	return Value;

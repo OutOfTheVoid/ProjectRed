@@ -29,6 +29,9 @@ Xenon::Math::Vec4 :: Vec4 ( const Vec4 & CopyFrom )
 
 Xenon::Math::Vec4 :: Vec4 ( NoInit NO_INIT )
 {
+	
+	(void) NO_INIT;
+	
 }
 
 Xenon::Math::Vec4 :: ~Vec4 ()

@@ -36,6 +36,9 @@ Xenon::Geometry::MeshAttribute :: MeshAttribute ( const std :: string Name, GPU:
 Xenon::Geometry::MeshAttribute :: MeshAttribute ( NoInit NO_INIT ):
 	Data ( NULL )
 {
+	
+	(void) NO_INIT;
+	
 }
 
 Xenon::Geometry::MeshAttribute :: ~MeshAttribute ()

@@ -16,7 +16,7 @@ namespace Xenon
 		public:
 			
 			virtual const GLfloat * GetFloatArray () const = 0;
-			virtual const bool IsTransposed () const = 0;
+			virtual bool IsTransposed () const = 0;
 			
 			virtual int64_t GetIteration () const = 0;
 			

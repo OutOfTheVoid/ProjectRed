@@ -81,7 +81,7 @@ void RAUX::TextFile :: LoadToString ( uint32_t * Status, std :: string & String,
 		
 	}
 	
-	int64_t FileLength = FileInstance.GetLength ( Status );
+	uint64_t FileLength = FileInstance.GetLength ( Status );
 	
 	if ( * Status != File :: kStatus_Success )
 	{

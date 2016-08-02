@@ -4,11 +4,11 @@
 Xenon::GPU::GeometryShader :: GeometryShader ( const std :: string Source, const std :: string Name ):
 	ShaderCode ( Source ),
 	DiscardableSource ( false ),
+	SHandle ( 0 ),
 	Allocated ( false ),
 	Compiled ( false ),
 	CompileLog ( "" ),
-	Name ( Name ),
-	SHandle ( 0 )
+	Name ( Name )
 {
 }
 
@@ -113,7 +113,8 @@ bool Xenon::GPU::GeometryShader :: Compile ( bool StoreCompilationLog, bool Free
 		}
 		
 	}
-		
+	
+	return false;
 	
 }
 

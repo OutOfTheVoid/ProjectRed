@@ -15,7 +15,7 @@ namespace Xenon
 		{
 		public:
 			
-			virtual const GLfloat GetValue () const = 0;
+			virtual GLfloat GetValue () const = 0;
 			
 			virtual int64_t GetIteration () const = 0;
 			

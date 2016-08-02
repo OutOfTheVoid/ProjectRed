@@ -64,7 +64,7 @@ const GLfloat * Xenon::Math::Transform2D::InternalMatrix3x3UniformSource :: GetF
 	
 }
 
-const bool Xenon::Math::Transform2D::InternalMatrix3x3UniformSource :: IsTransposed () const
+bool Xenon::Math::Transform2D::InternalMatrix3x3UniformSource :: IsTransposed () const
 {
 	
 	return true;
@@ -122,7 +122,7 @@ const Xenon::Math :: Vec2 & Xenon::Math::Transform2D :: ReadScale ()
 	
 }
 
-const float Xenon::Math::Transform2D :: ReadRotation ()
+float Xenon::Math::Transform2D :: ReadRotation ()
 {
 	
 	return Rotation;

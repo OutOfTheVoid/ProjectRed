@@ -5,10 +5,11 @@ Xenon::GPU::IndexBuffer :: IndexBuffer ( UsageType Usage, IndexType Type ):
 	Usage ( Usage ),
 	Type ( Type ),
 	Allocated ( false ),
-	BHandle ( 0 ),
-	Count ( 0 ),
 	MMapped ( false ),
-	ReadableMap ( false )
+	ReadableMap ( false ),
+	MapAddress ( NULL ),
+	BHandle ( 0 ),
+	Count ( 0 )
 {
 }
 
@@ -127,6 +128,8 @@ void * Xenon::GPU::IndexBuffer :: Map ( bool Read )
 	
 	ReadableMap = Read;
 	MMapped = MapAddress != NULL;
+	
+	return MapAddress;
 	
 }
 

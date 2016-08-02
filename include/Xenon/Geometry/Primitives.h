@@ -261,11 +261,11 @@ namespace Xenon
 				
 				inline CubeSpec_Struct ()
 				{
-				};
+				}
 				
 				inline ~CubeSpec_Struct ()
 				{
-				};
+				}
 				
 				bool WindOutwardFacesClockwise;
 				
@@ -293,6 +293,102 @@ namespace Xenon
 			static void SetupRegularCubeFaceTexturePositionSpec ( CubeTexturePositionSpec & Spec, CubeTexturePositionSpec::CommonFaceRightAngleTexturePositions :: RightFaceRotation FaceRotations [ 6 ] = NULL );
 			
 			static bool GenerateCubeMesh ( Mesh ** Target, const CubeSpec & Spec );
+			
+			typedef uint32_t Quad2DVertexIndex;
+			
+			static const Quad2DVertexIndex kQuad2DVertexIndex_XNeg_YNeg = 0;
+			static const Quad2DVertexIndex kQuad2DVertexIndex_XNeg_YPos = 1;
+			static const Quad2DVertexIndex kQuad2DVertexIndex_XPos_YPos = 2;
+			static const Quad2DVertexIndex kQuad2DVertexIndex_XPos_YNeg = 3;
+			
+			static const Quad2DVertexIndex kQuad2DVertexIndex_Modulus = 4;
+			
+			typedef struct Quad2DPositionSpec_Struct
+			{
+				
+				inline Quad2DPositionSpec_Struct ()
+				{
+				}
+				
+				inline ~Quad2DPositionSpec_Struct ()
+				{
+				}
+				
+				Math :: Vec2 Positions [ 4 ];
+				
+				std :: string AttributeName;
+				
+				bool Static;
+				
+			} Quad2DPositionSpec;
+			
+			typedef struct Quad2DTexturePositionSpec_Struct
+			{
+				
+				inline Quad2DTexturePositionSpec_Struct ()
+				{
+				}
+				
+				inline ~Quad2DTexturePositionSpec_Struct ()
+				{
+				}
+				
+				Math::Vec2 Positions [ 4 ];
+				
+				std :: string AttributeName;
+				
+				bool Static;
+				
+			} Quad2DTexturePositionSpec;
+			
+			typedef struct Quad2DColorSpec_Struct
+			{
+				
+				inline Quad2DColorSpec_Struct ()
+				{
+				}
+				
+				inline ~Quad2DColorSpec_Struct ()
+				{
+				}
+				
+				Math::Vec3 Colors [ 4 ];
+				
+				std :: string AttributeName;
+				
+				bool Static;
+				
+			} Quad2DColorSpec;
+			
+			typedef struct Quad2DSpec_Struct
+			{
+				
+				inline Quad2DSpec_Struct ()
+				{
+				}
+				
+				inline ~Quad2DSpec_Struct ()
+				{
+				}
+				
+				bool WindOutwardFacesClockwise;
+				
+				AttributeFlags Attributes;
+				
+				StaticAttributeCompositionMode CompositionMode;
+				
+				Quad2DPositionSpec PositionSpec;
+				Quad2DColorSpec ColorSpec;
+				
+				uint32_t TexturePositionCount;
+				Quad2DTexturePositionSpec * TexturePositionSpecs;
+				
+			} Quad2DSpec;
+			
+			static void SetupNormalQuad2DPositionSpec ( Quad2DPositionSpec & Spec, const std :: string AttributeName, bool Static );
+			static void SetupNormalQuad2DTexturePositionSpec ( Quad2DTexturePositionSpec & Spec, const std :: string AttributeName, bool Static );
+			
+			static bool GenerateQuad2DMesh ( Mesh ** Target, const Quad2DSpec & Spec );
 			
 		};
 		

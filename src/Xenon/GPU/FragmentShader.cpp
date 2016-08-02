@@ -3,11 +3,11 @@
 
 Xenon::GPU::FragmentShader :: FragmentShader ( const std :: string Source, std :: string Name ):
 	ShaderCode ( Source ),
+	SHandle ( 0 ),
 	Allocated ( false ),
 	Compiled ( false ),
 	CompileLog ( "" ),
-	Name ( Name ),
-	SHandle ( 0 )
+	Name ( Name )
 {
 }
 
@@ -114,6 +114,7 @@ bool Xenon::GPU::FragmentShader :: Compile ( bool StoreCompilationLog, bool Free
 		
 	}
 		
+	return false;
 	
 }
 

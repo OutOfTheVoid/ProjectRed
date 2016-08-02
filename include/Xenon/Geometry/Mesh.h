@@ -53,9 +53,9 @@ namespace Xenon
 			};
 			
 			Mesh ( DrawMode Mode, Util :: RCMem * IndexData, uint32_t IndexCount, GPU::IndexBuffer :: IndexType IType = GPU::IndexBuffer :: kIndexType_UInts, GPU::IndexBuffer :: UsageType IUsage = GPU::IndexBuffer :: kUsageType_Static_Draw );
-			Mesh ( MemMapIndexData MAP_INDEXBUFFER_WRITEONLY, uint32_t IndexCount, GPU::IndexBuffer :: IndexType IType = GPU::IndexBuffer :: kIndexType_UInts, bool Draw = true );
+			Mesh ( MemMapIndexData MAP_INDEXBUFFER_WRITEONLY, DrawMode Mode, uint32_t IndexCount, GPU::IndexBuffer :: IndexType IType = GPU::IndexBuffer :: kIndexType_UInts, bool Draw = true );
 			
-			~Mesh ();
+			virtual ~Mesh ();
 			
 			void SetDrawMode ( DrawMode Mode );
 			

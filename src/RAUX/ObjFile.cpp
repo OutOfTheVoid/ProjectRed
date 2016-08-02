@@ -132,7 +132,6 @@ void RAUX::ObjFile :: Load ( uint32_t * Status )
 	std :: string Line;
 	
 	
-	uint64_t LineStartIndex = 0;
 	uint64_t Index = 0;
 	
 	bool EndOfReadBlock = false;
@@ -144,7 +143,6 @@ void RAUX::ObjFile :: Load ( uint32_t * Status )
 			break;
 		
 		char Charachter = ReadBlock.at ( Index );
-		LineStartIndex = Index;
 		
 		while ( Charachter != '\n' )
 		{
@@ -688,7 +686,7 @@ bool RAUX::ObjFile :: ProcessGroups ( const std :: string & Line, uint32_t Index
 		
 		int32_t ActiveIndex = - 1;
 		
-		for ( int32_t J = 0; J < Groups.size (); J ++ )
+		for ( uint32_t J = 0; J < Groups.size (); J ++ )
 		{
 			
 			if ( Groups [ J ].Name == GroupNames [ I ] )
@@ -937,7 +935,7 @@ uint32_t RAUX::ObjFile :: GetGroupCount () const
 	
 }
 
-const RAUX::ObjFile :: Group * const RAUX::ObjFile :: GetGroup ( uint32_t Index ) const
+const RAUX::ObjFile :: Group * RAUX::ObjFile :: GetGroup ( uint32_t Index ) const
 {
 	
 	if ( Index >= Groups.size () )
@@ -947,7 +945,7 @@ const RAUX::ObjFile :: Group * const RAUX::ObjFile :: GetGroup ( uint32_t Index 
 	
 }
 
-const RAUX::ObjFile :: Group * const RAUX::ObjFile :: GetGroup ( const std :: string & Name ) const
+const RAUX::ObjFile :: Group * RAUX::ObjFile :: GetGroup ( const std :: string & Name ) const
 {
 	
 	for ( uint32_t I = 0; I < Groups.size (); I ++ )
@@ -1017,7 +1015,7 @@ Xenon::Geometry :: Mesh * RAUX::ObjFile :: CreateMesh ( const MeshParameters & P
 	if ( ! IndexCount )
 		return NULL;
 	
-	Xenon::Util :: RCMem * IndexMemory = new Xenon::Util :: RCMem ( sizeof ( GLshort ) * IndexCount );
+	//Xenon::Util :: RCMem * IndexMemory = new Xenon::Util :: RCMem ( sizeof ( GLshort ) * IndexCount );
 	
 	// TODO:: Fill mesh
 	

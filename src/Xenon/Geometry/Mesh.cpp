@@ -7,6 +7,7 @@ Xenon::Geometry::Mesh :: Mesh ( DrawMode Mode, Util :: RCMem * IndexData, uint32
 	Mode ( Mode ),
 	IndexDirty ( true ),
 	GPUAllocated ( false ),
+	Mapped ( false ),
 	AttributeList (),
 	AttributeDataList ()
 {
@@ -15,14 +16,18 @@ Xenon::Geometry::Mesh :: Mesh ( DrawMode Mode, Util :: RCMem * IndexData, uint32
 	
 }
 
-Xenon::Geometry::Mesh :: Mesh ( MemMapIndexData MAP_INDEXBUFFER, uint32_t IndexCount, GPU::IndexBuffer :: IndexType IType, bool Draw ):
+Xenon::Geometry::Mesh :: Mesh ( MemMapIndexData MAP_INDEXBUFFER, DrawMode Mode, uint32_t IndexCount, GPU::IndexBuffer :: IndexType IType, bool Draw ):
 	IndexBuff ( Draw ? GPU::IndexBuffer :: kUsageType_Stream_Draw : GPU::IndexBuffer :: kUsageType_Stream_Copy, IType ),
 	IndexData ( NULL ),
 	IndexCount ( IndexCount ),
 	Mode ( Mode ),
 	IndexDirty ( true ),
-	GPUAllocated ( false )
-{	
+	GPUAllocated ( false ),
+	Mapped ( false )
+{
+	
+	(void) MAP_INDEXBUFFER;
+	
 }
 
 Xenon::Geometry::Mesh :: ~Mesh ()
@@ -76,6 +81,8 @@ void Xenon::Geometry::Mesh :: ReIndex ( uint32_t IndexCount, Util :: RCMem * Ind
 
 void Xenon::Geometry::Mesh :: ReIndex ( MemMapIndexData MAP_INDEXBUFFER, uint32_t IndexCount )
 {
+	
+	(void) MAP_INDEXBUFFER;
 	
 	if ( GPUAllocated && ! IndexBuff.Mapped () )
 		return;

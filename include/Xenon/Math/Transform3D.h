@@ -62,7 +62,7 @@ namespace Xenon
 				~InternalMatrix4x4UniformSource ();
 				
 				const GLfloat * GetFloatArray () const;
-				const bool IsTransposed () const;
+				bool IsTransposed () const;
 				
 				int64_t GetIteration () const;
 				

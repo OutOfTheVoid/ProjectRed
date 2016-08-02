@@ -21,7 +21,7 @@ namespace Xenon
 			
 			void SetValue ( GLfloat Value );
 			
-			const GLfloat GetValue () const;
+			GLfloat GetValue () const;
 			
 			int64_t GetIteration () const;
 			

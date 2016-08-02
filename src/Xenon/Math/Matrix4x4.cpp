@@ -24,7 +24,10 @@ Xenon::Math::Matrix4x4 :: Matrix4x4 ( const Vec4 & Row1, const Vec4 & Row2, cons
 }
 
 Xenon::Math::Matrix4x4 :: Matrix4x4 ( NoInit NO_INIT )
-{	
+{
+	
+	(void) NO_INIT;
+	
 }
 
 Xenon::Math::Matrix4x4 :: Matrix4x4 ( const Matrix4x4 & CopyFrom ):
@@ -967,8 +970,6 @@ void Xenon::Math::Matrix4x4 :: Prepend ( Matrix4x4 & Target, const Matrix4x4 & P
 void Xenon::Math::Matrix4x4 :: Prepend ( Matrix4x4 & Target, const Matrix4x4 & Source, const Matrix4x4 & Pendant )
 {
 	
-	Row_t Temp [ 4 ];
-	
 #ifdef XENON_SSE
 	
 	RowMult ( reinterpret_cast <__m128 &> ( Target.Elements [ 0 ] ), reinterpret_cast <const __m128 &> ( Pendant.Elements [ 0 ] ), reinterpret_cast <const __m128 *> ( Source.Elements ) );
@@ -999,7 +1000,6 @@ void Xenon::Math::Matrix4x4 :: SetAsQuaternionRotation ( Matrix4x4 & Target, con
 	float YW = 2.0 * Rotation.Y * Rotation.W;
 	float ZZ = 2.0 * Rotation.Z * Rotation.Z;
 	float ZW = 2.0 * Rotation.Z * Rotation.W;
-	float WW = 2.0 * Rotation.W * Rotation.W;
 	
 #ifdef XENON_SSE
 	
@@ -1041,7 +1041,6 @@ void Xenon::Math::Matrix4x4 :: SetAsQuaternionRotation ( Matrix4x4 & Target, con
 	float YW = 2.0 * Y * W;
 	float ZZ = 2.0 * Z * Z;
 	float ZW = 2.0 * Z * W;
-	float WW = 2.0 * W * W;
 	
 #ifdef XENON_SSE
 	

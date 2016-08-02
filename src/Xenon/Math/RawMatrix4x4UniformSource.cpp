@@ -45,7 +45,7 @@ int64_t Xenon::Math::RawMatrix4x4UniformSource :: GetIteration () const
 	
 }
 
-const bool Xenon::Math::RawMatrix4x4UniformSource :: IsTransposed () const
+bool Xenon::Math::RawMatrix4x4UniformSource :: IsTransposed () const
 {
 	
 	return Transposed;

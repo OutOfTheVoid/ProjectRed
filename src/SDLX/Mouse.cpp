@@ -19,7 +19,7 @@ void SDLX::Mouse :: Init ()
 	uint32_t ButtonMask = SDL_GetMouseState ( NULL, NULL );
 	
 	for ( uint32_t I = 0; I < 32; I ++ )
-		ButtonStates [ I ] = SDL_BUTTON ( I );
+		ButtonStates [ I ] = SDL_BUTTON ( I ) & ButtonMask;
 	
 	SDL_SetRelativeMouseMode ( SDL_FALSE );
 	
@@ -37,7 +37,7 @@ void SDLX::Mouse :: DeInit ()
 void SDLX::Mouse :: ButtonEventInternal ( SDL_MouseButtonEvent * Event )
 {
 	
-	
+	(void) Event;
 	
 }
 
@@ -109,11 +109,6 @@ void SDLX::Mouse :: RemoveMotionListener ( void ( * Listener ) ( SDL_MouseMotion
 {
 	
 	MotionListenerLock -> Lock ();
-	
-	MotionListenerStruct Comparison;
-	
-	Comparison.Listener = Listener;
-	Comparison.Data = NULL;
 	
 	std::vector <MotionListenerStruct> :: iterator Index = std :: find_if ( MotionListeners.begin (), MotionListeners.end (), MotionListenerCompare ( Listener ) );
 	

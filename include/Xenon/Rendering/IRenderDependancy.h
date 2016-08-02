@@ -16,7 +16,7 @@ namespace Xenon
 		{
 		public:
 			
-			virtual int32_t GetCurrentSatisfiedIteration () = 0;
+			virtual int64_t GetCurrentSatisfiedIteration () = 0;
 			
 			void Reset ( DependancyPassBlock * Pass ) = 0;
 			

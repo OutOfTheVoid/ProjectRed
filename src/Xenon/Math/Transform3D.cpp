@@ -6,16 +6,16 @@ Xenon::Math::Transform3D :: Transform3D ():
 	Rotation ( Quaternion :: IDENTITY ),
 	NormalDirty ( false ),
 	NormalMatrix (),
+	NormalMatrixSource ( this, & Xenon::Math::Transform3D :: ReadNormalMatrix, & NormalIteration ),
+	NormalIteration ( 0 ),
 	InverseNormalDirty ( false ),
 	InverseNormalMatrix (),
+	InverseNormalMatrixSource ( this, & Xenon::Math::Transform3D :: ReadInverseNormalMatrix, & InverseNormalIteration ),
+	InverseNormalIteration ( 0 ),
 	ModelDirty ( false ),
 	ModelMatrix (),
-	NormalIteration ( 0 ),
-	InverseNormalIteration ( 0 ),
-	ModelIteration ( 0 ),
-	NormalMatrixSource ( this, & Xenon::Math::Transform3D :: ReadNormalMatrix, & NormalIteration ),
-	InverseNormalMatrixSource ( this, & Xenon::Math::Transform3D :: ReadInverseNormalMatrix, & InverseNormalIteration ),
-	ModelMatrixSource ( this, & Xenon::Math::Transform3D :: ReadModelMatrix, & ModelIteration )
+	ModelMatrixSource ( this, & Xenon::Math::Transform3D :: ReadModelMatrix, & ModelIteration ),
+	ModelIteration ( 0 )
 {
 }
 
@@ -25,16 +25,16 @@ Xenon::Math::Transform3D :: Transform3D ( const Vec3 & Translation ):
 	Rotation ( Quaternion :: IDENTITY ),
 	NormalDirty ( false ),
 	NormalMatrix (),
+	NormalMatrixSource ( this, & Xenon::Math::Transform3D :: ReadNormalMatrix, & NormalIteration ),
+	NormalIteration ( 0 ),
 	InverseNormalDirty ( false ),
 	InverseNormalMatrix (),
+	InverseNormalMatrixSource ( this, & Xenon::Math::Transform3D :: ReadInverseNormalMatrix, & InverseNormalIteration ),
+	InverseNormalIteration ( 0 ),
 	ModelDirty ( true ),
 	ModelMatrix ( Matrix4x4 :: NO_INIT ),
-	NormalIteration ( 0 ),
-	InverseNormalIteration ( 0 ),
-	ModelIteration ( 0 ),
-	NormalMatrixSource ( this, & Xenon::Math::Transform3D :: ReadNormalMatrix, & NormalIteration ),
-	InverseNormalMatrixSource ( this, & Xenon::Math::Transform3D :: ReadInverseNormalMatrix, & InverseNormalIteration ),
-	ModelMatrixSource ( this, & Xenon::Math::Transform3D :: ReadModelMatrix, & ModelIteration )
+	ModelMatrixSource ( this, & Xenon::Math::Transform3D :: ReadModelMatrix, & ModelIteration ),
+	ModelIteration ( 0 )
 {	
 }
 
@@ -43,17 +43,17 @@ Xenon::Math::Transform3D :: Transform3D ( const Vec3 & Translation, const Vec3 &
 	Scale ( Scale ),
 	Rotation ( Quaternion :: IDENTITY ),
 	NormalDirty ( true ),
-	NormalMatrix ( Matrix4x4 :: NO_INIT ),
+	NormalMatrix (),
+	NormalMatrixSource ( this, & Xenon::Math::Transform3D :: ReadNormalMatrix, & NormalIteration ),
+	NormalIteration ( 0 ),
 	InverseNormalDirty ( true ),
-	InverseNormalMatrix ( Matrix4x4 :: NO_INIT ),
+	InverseNormalMatrix (),
+	InverseNormalMatrixSource ( this, & Xenon::Math::Transform3D :: ReadInverseNormalMatrix, & InverseNormalIteration ),
+	InverseNormalIteration ( 0 ),
 	ModelDirty ( true ),
 	ModelMatrix ( Matrix4x4 :: NO_INIT ),
-	NormalIteration ( 0 ),
-	InverseNormalIteration ( 0 ),
-	ModelIteration ( 0 ),
-	NormalMatrixSource ( this, & Xenon::Math::Transform3D :: ReadNormalMatrix, & NormalIteration ),
-	InverseNormalMatrixSource ( this, & Xenon::Math::Transform3D :: ReadInverseNormalMatrix, & InverseNormalIteration ),
-	ModelMatrixSource ( this, & Xenon::Math::Transform3D :: ReadModelMatrix, & ModelIteration )
+	ModelMatrixSource ( this, & Xenon::Math::Transform3D :: ReadModelMatrix, & ModelIteration ),
+	ModelIteration ( 0 )
 {	
 }
 
@@ -62,17 +62,17 @@ Xenon::Math::Transform3D :: Transform3D ( const Vec3 & Translation, const Vec3 &
 	Scale ( Scale ),
 	Rotation ( Rotation ),
 	NormalDirty ( true ),
-	NormalMatrix ( Matrix4x4 :: NO_INIT ),
+	NormalMatrix (),
+	NormalMatrixSource ( this, & Xenon::Math::Transform3D :: ReadNormalMatrix, & NormalIteration ),
+	NormalIteration ( 0 ),
 	InverseNormalDirty ( true ),
-	InverseNormalMatrix ( Matrix4x4 :: NO_INIT ),
+	InverseNormalMatrix (),
+	InverseNormalMatrixSource ( this, & Xenon::Math::Transform3D :: ReadInverseNormalMatrix, & InverseNormalIteration ),
+	InverseNormalIteration ( 0 ),
 	ModelDirty ( true ),
 	ModelMatrix ( Matrix4x4 :: NO_INIT ),
-	NormalIteration ( 0 ),
-	InverseNormalIteration ( 0 ),
-	ModelIteration ( 0 ),
-	NormalMatrixSource ( this, & Xenon::Math::Transform3D :: ReadNormalMatrix, & NormalIteration ),
-	InverseNormalMatrixSource ( this, & Xenon::Math::Transform3D :: ReadInverseNormalMatrix, & InverseNormalIteration ),
-	ModelMatrixSource ( this, & Xenon::Math::Transform3D :: ReadModelMatrix, & ModelIteration )
+	ModelMatrixSource ( this, & Xenon::Math::Transform3D :: ReadModelMatrix, & ModelIteration ),
+	ModelIteration ( 0 )
 {
 }
 
@@ -98,7 +98,7 @@ const GLfloat * Xenon::Math::Transform3D::InternalMatrix4x4UniformSource :: GetF
 	
 }
 
-const bool Xenon::Math::Transform3D::InternalMatrix4x4UniformSource :: IsTransposed () const
+bool Xenon::Math::Transform3D::InternalMatrix4x4UniformSource :: IsTransposed () const
 {
 	
 	return true;

@@ -144,8 +144,6 @@ void RAUX::MtlFile :: Load ( uint32_t * Status )
 	
 	std :: string Line;
 	
-	
-	uint64_t LineStartIndex = 0;
 	uint64_t Index = 0;
 	
 	bool EndOfReadBlock = false;
@@ -157,7 +155,6 @@ void RAUX::MtlFile :: Load ( uint32_t * Status )
 			break;
 		
 		char Charachter = ReadBlock.at ( Index );
-		LineStartIndex = Index;
 		
 		while ( Charachter != '\n' )
 		{
@@ -1065,7 +1062,7 @@ const std :: string & RAUX::MtlFile :: GetMaterialName ( uint32_t Index ) const
 	
 }
 
-const RAUX::MtlFile :: Material * const RAUX::MtlFile :: GetMaterial ( uint32_t Index ) const
+const RAUX::MtlFile :: Material * RAUX::MtlFile :: GetMaterial ( uint32_t Index ) const
 {
 	
 	if ( Index < Materials.size () )
@@ -1075,7 +1072,7 @@ const RAUX::MtlFile :: Material * const RAUX::MtlFile :: GetMaterial ( uint32_t 
 	
 }
 
-const RAUX::MtlFile :: Material * const RAUX::MtlFile :: GetMaterial ( const std :: string & Name ) const
+const RAUX::MtlFile :: Material * RAUX::MtlFile :: GetMaterial ( const std :: string & Name ) const
 {
 	
 	for ( uint32_t I = 0; I < Materials.size (); I ++ )

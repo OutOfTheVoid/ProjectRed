@@ -25,7 +25,7 @@ namespace Xenon
 			
 			const GLfloat * GetFloatArray () const;
 			
-			const bool IsTransposed () const;
+			bool IsTransposed () const;
 			
 			int64_t GetIteration () const;
 			

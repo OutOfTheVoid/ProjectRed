@@ -40,9 +40,16 @@
 
 #include <string>
 
+struct RenderStruct_Struct;
+
+typedef struct RenderStruct_Struct RenderStruct;
+
 void WindowCloseEvent ( SDL_WindowEvent * Event, SDLX::Window * Win, void * Data );
 void DrawEventPush ( SDLX :: Timer * Source, void * Data );
 void DrawEvent ( SDL_UserEvent * Event );
+bool SetupScene ( RenderStruct & Data );
+void DestroyScene ( RenderStruct & Data );
+void Render ( RenderStruct & Data );
 void MouseMoveListener ( SDL_MouseMotionEvent * Event, void * Data );
 
 void KeyListener ( int32_t ScanCode, int32_t KeyCode, bool Down, void * Data );
@@ -53,31 +60,21 @@ void KeyListener ( int32_t ScanCode, int32_t KeyCode, bool Down, void * Data );
 #define WINDOW_WIDTH_1 2000
 #define WINDOW_HEIGHT_1 1400
 
-typedef struct
+struct RenderStruct_Struct
 {
 	
 	Xenon::GPU :: Context * Cont; 
 	SDLX :: Window * Win;
 	SDLX :: Timer * RTimer;
 	
-	Xenon::Geometry :: Mesh * Cube;
-	
-	Xenon::GPU :: VertexArray * ColorArray;
-	Xenon::GPU :: ShaderProgram * ColorProgram;
-	Xenon::GPU :: UniformSet * ColorUniforms;
-	
-	Xenon::Math :: Transform3D * Transform;
-	Xenon::Math :: Matrix4x4 * Projection;
-	Xenon::Math :: RawMatrix4x4UniformSource * ProjectionSource;
-	
-	Xenon::Math :: Quaternion Rotation;
+	Xenon::Geometry::Mesh * QuadMesh;
 	
 	int32_t X;
 	int32_t Y;
 	
 	uint32_t Frame;
 	
-} RenderStruct;
+};
 
 typedef struct 
 {
@@ -109,40 +106,6 @@ int main ( int argc, const char * argv [] )
 	( void ) argv;
 	
 	uint32_t Status;
-	
-	
-	RAUX :: ObjFile MyObj ( "Cube.obj", RAUX::ObjFile :: kFlags_StoreComments );
-	MyObj.Load ( & Status );
-	
-	if ( Status != 0 )
-		std :: cout << "Obj load failed: " << Status << std :: endl;
-	
-	for ( uint32_t I = 0; I < MyObj.GetGroupCount (); I ++ )
-	{
-		
-		const RAUX::ObjFile :: Group * const ObjGroup = MyObj.GetGroup ( I );
-		
-		if ( ObjGroup != NULL )
-		{
-			
-			std :: cout << "Group " << ObjGroup -> Name << ": " << ObjGroup -> FaceIndecies.size () << " faces: " << std :: endl;
-			
-			for ( uint32_t F = 0; F < ObjGroup -> FaceIndecies.size (); F ++ )
-				std :: cout << "*	Face " << F << ": " << MyObj.GetFace ( ObjGroup -> FaceIndecies [ F ] ).VertexCount << " vertecies." << std :: endl;
-				
-			
-		}
-		
-	}
-	
-	if ( Status != RAUX::StlFile :: kStatus_Success )
-	{
-		
-		std :: cout << "Failed to load obj file" << std :: endl;
-		
-		return - 1;
-		
-	}
 	
 	SDLX::Lib :: Init ( & Status, SDLX::Lib :: kSDLFlag_Video );
 	
@@ -179,6 +142,8 @@ int main ( int argc, const char * argv [] )
 		
 		SDLX::Lib :: DeInit ();
 		
+		return - 1;
+		
 	}
 	
 	SDLX::Mouse :: Lock ();
@@ -188,155 +153,23 @@ int main ( int argc, const char * argv [] )
 	Cont -> MakeCurrent ();
 	Cont -> GetDefaultFrameBuffer () -> SetClearColor ( 0.0f, 0.0f, 0.0f );
 	
-	Xenon::Geometry :: Mesh * TestMesh = NULL;
-	
-	/*Xenon::Geometry::Primitives :: CubeSpec CubeGenerationSpec;
-	
-	CubeGenerationSpec.WindOutwardFacesClockwise = true;
-	CubeGenerationSpec.CompositionMode = Xenon::Geometry::Primitives :: kStaticAttributeCompositionMode_Interleaved;
-	CubeGenerationSpec.Attributes = Xenon::Geometry::Primitives :: kAttributeFlags_Position | Xenon::Geometry::Primitives :: kAttributeFlags_Normal;
-	
-	Xenon::Geometry::Primitives :: SetupUnitCubeVertexPositionSpec ( CubeGenerationSpec.PositionSpec, "Position", true );
-	//Xenon::Geometry::Primitives :: SetupRadialCubeVertexNormalSpec ( CubeGenerationSpec.NormalSpec, "Normal", true );
-	Xenon::Geometry::Primitives :: SetupRealCubeFaceNormalSpec ( CubeGenerationSpec.NormalSpec, "Normal", true );
-	bool Generated = Xenon::Geometry::Primitives :: GenerateCubeMesh ( & TestMesh, CubeGenerationSpec );
-	
-	if ( ! Generated )
-	{
-		
-		std :: cout << "Failed to generate cube mesh" << std :: endl;
-		
-		delete Cont;
-		
-		Win -> Disown ();
-		SDLX::Lib :: DeInit ();
-		
-		return - 1;
-		
-	}*/
-	
-	RAUX :: StlFile MySTL ( "CCube.stl" );
-	MySTL.Load ( & Status, RAUX::StlFile :: kFlags_ReplaceNormalsForced | RAUX::StlFile :: kFlags_CenterPositions | RAUX::StlFile :: kFlags_NormalizePositions );
-	
-	RAUX::StlFile :: MeshParameters STLParams ( RAUX::StlFile :: kMeshParameterFlags_Normals | RAUX::StlFile :: kMeshParameterFlags_ReverseWindingOrder | RAUX::StlFile :: kMeshParameterFlags_InterleavedAttributes, "Position", "Normal" );
-	
-	TestMesh = MySTL.CreateMesh ( STLParams );
-	
-	if ( TestMesh == NULL )
-		std :: cout << "Failed to create mesh from STL data " << std :: endl;
-	
-	GLchar VShaderSource [] =
-	"#version 150\n\n"
-	
-	"in vec3 Position;\n\n"
-	
-	"in vec3 Normal;\n\n"
-	
-	"uniform mat4 NormalTransform;\n\n"
-	"uniform mat4 InverseNormalTransform;\n\n"
-	"uniform mat4 ModelTransform;\n\n"
-	"uniform mat4 ProjectionTransform;\n\n"
-	
-	"out vec3 FragmentNormal;\n\n"
-	"out vec3 FragmentWorldPosition;\n\n"
-	
-	"void main ()\n"
-	"{\n\n"
-	
-	"	float OffsetX = ( gl_InstanceID % 4 ) - 1.5;\n"
-	"	float OffsetY = ( ( gl_InstanceID - ( gl_InstanceID % 4 ) ) / 4.0 ) - 1.0;\n\n"
-	
-	"	FragmentNormal = normalize ( vec3 ( InverseNormalTransform * vec4 ( Normal, 1.0 ) ) );\n\n"
-	
-	"	vec4 ModelPosition = ( ModelTransform * vec4 ( Position, 1.0 ) ) + vec4 ( OffsetX, OffsetY, 0.0f, 0.0f );\n"
-	//"	ModelPosition += ModelPosition;\n\n"
-	"	FragmentWorldPosition = ModelPosition.xyz;\n"
-	"	gl_Position = ProjectionTransform * ModelPosition;\n\n"
-	
-	"}\n";
-	
-	Xenon::GPU :: VertexShader ColorVShader ( VShaderSource, "VertexShader_Color" );
-	
-	GLchar FShaderSource [] =
-	"#version 150\n\n"
-	
-	"in vec3 FragmentNormal;\n\n"
-	"in vec3 FragmentWorldPosition;\n\n"
-	
-	"out vec4 Color;\n\n"
-	
-	"void main ()\n"
-	"{\n\n"
-	
-	"	vec3 LightPosition = vec3 ( 0.0, 0.0, 0.0 );\n"
-	"	vec3 LightColor = vec3 ( 0.5, 0.5, 1.0 );\n"
-	"	float DiffuseStrength = 1.0f;\n"
-	"	float SpecularStrength = 0.5f;\n"
-	"	float AmbiantStrength = 0.1f;\n\n"
-	
-	"	vec3 CameraPosition = vec3 ( 0.0, 0.0, 0.0 );\n\n"
-	
-	"	vec3 LightDirection = normalize ( LightPosition - FragmentWorldPosition );\n"
-	"	vec3 ViewDirection = normalize ( CameraPosition - FragmentWorldPosition );\n"
-	"	vec3 ReflectionDirection = reflect ( - LightDirection, FragmentNormal );\n\n"
-	
-	"	float SpecularCoefficient = pow ( max ( dot ( ViewDirection, ReflectionDirection ), 0.0 ), 16 );\n"
-	"	float DiffuseCoefficient = max ( dot ( FragmentNormal, LightDirection ), 0.0 );\n\n"
-	
-	"	float LightStrength = DiffuseStrength * DiffuseCoefficient + SpecularStrength * SpecularCoefficient + AmbiantStrength;\n\n"
-	"	LightStrength = LightStrength * 100.0;\n"
-	"	LightStrength = ( LightStrength - mod ( LightStrength, 1.0 ) ) / 100.0;\n"
-	
-	"	Color = vec4 ( LightColor * LightStrength, 1.0 );\n\n"
-	
-	"}\n";
-	
-	Xenon::GPU :: FragmentShader ColorFShader ( FShaderSource, "FragmentShader_Color" );
-	
-	if ( ! ColorVShader.Compile ( true ) )
-		std :: cout << "VertexShader_Color failed to compile: " << std :: endl << ColorVShader.GetCompilationLog () << std :: endl;
-	
-	if ( ! ColorFShader.Compile ( true ) )
-		std :: cout << "FragmentShader_Color failed to compile: " << std :: endl << ColorFShader.GetCompilationLog () << std :: endl;
-	
-	Xenon::Math :: Matrix4x4 Projection ( Xenon::Math::Matrix4x4 :: NO_INIT );
-	
-	//Xenon::Math::Matrix4x4 :: SetAsPerspectiveProjectionFieldOfView ( Projection, 0.1, 4.0, 60.0 / 180.0 * 3.1415926, WINDOW_WIDTH_0 / WINDOW_HEIGHT_0 );
-	Xenon::Math::Matrix4x4 :: SetAsOrthographicProjection ( Projection, 0.1, 4.0, -2.0, 2.0, 2.0 * WINDOW_HEIGHT_0 / WINDOW_WIDTH_0, - 2.0 * WINDOW_HEIGHT_0 / WINDOW_WIDTH_0 );
-	
-	Xenon::Math::RawMatrix4x4UniformSource PerspeciveProjectionUniformSource ( & Projection, true );
-	
-	Xenon::Math :: Transform3D Transform ( Xenon::Math :: Vec3 ( 0.0f, 0.0f, - 1.5f ), Xenon::Math :: Vec3 ( 0.3f, 0.3f, 0.3f ) );
-	
-	Xenon::GPU :: ShaderProgram ColorProgram ( "ShaderProgram_Color" );
-	ColorProgram.AddShader ( ColorVShader );
-	ColorProgram.AddShader ( ColorFShader );
-	ColorProgram.Link ();
-	
-	Xenon::GPU :: VertexArray ColorVAO;
-	TestMesh -> BuildVertexArray ( ColorVAO );
-	ColorVAO.SetProgram ( & ColorProgram );
-	ColorVAO.Build ();
-	
-	Xenon::GPU :: UniformSet ColorUniforms ( & ColorProgram );
-	ColorUniforms.AddMatrix4x4Uniform ( "ModelTransform", & Transform.GetModelUniformSource () );
-	ColorUniforms.AddMatrix4x4Uniform ( "NormalTransform", & Transform.GetNormalUniformSource () );
-	ColorUniforms.AddMatrix4x4Uniform ( "InverseNormalTransform", & Transform.GetInverseNormalUniformSource () );
-	ColorUniforms.AddMatrix4x4Uniform ( "ProjectionTransform", & PerspeciveProjectionUniformSource );
-	ColorUniforms.Link ();
-	
 	RenderStruct RData;
 	
 	RData.Cont = Cont;
 	RData.Win = Win;
-	RData.Cube = TestMesh;
-	RData.ColorProgram = & ColorProgram;
-	RData.ColorArray = & ColorVAO;
-	RData.ColorUniforms = & ColorUniforms;
-	RData.Transform = & Transform;
-	RData.Projection = & Projection;
-	RData.ProjectionSource = & PerspeciveProjectionUniformSource;
-	RData.Rotation = Xenon::Math::Quaternion :: IDENTITY;
+	
+	if ( ! SetupScene ( RData ) )
+	{
+		
+		DestroyScene ( RData );
+		
+		delete Cont;
+		
+		Win -> Disown ();
+		
+		SDLX::Lib :: DeInit ();
+		
+	}
 	
 	RData.Frame = 0;
 	
@@ -367,7 +200,7 @@ int main ( int argc, const char * argv [] )
 	Win -> Disown ();
 	SDLX::Lib :: DeInit ();
 	
-	delete TestMesh;
+	DestroyScene ( RData );
 	
 	return 0;
 	
@@ -376,13 +209,8 @@ int main ( int argc, const char * argv [] )
 void MouseMoveListener ( SDL_MouseMotionEvent * Event, void * Data )
 {
 	
-	Xenon::Math::Quaternion Delta ( Xenon::Math::Quaternion :: NO_INIT );
-	
-	Xenon::Math::Quaternion :: FromAxisAngle ( Delta, Xenon::Math::Vec3 :: UP, Event -> xrel / 100.0f );
-	reinterpret_cast <RenderStruct *> ( Data ) -> Transform -> AppendRotation ( Delta );
-	
-	Xenon::Math::Quaternion :: FromAxisAngle ( Delta, Xenon::Math::Vec3 :: RIGHT, Event -> yrel / 100.0f );
-	reinterpret_cast <RenderStruct *> ( Data ) -> Transform -> AppendRotation ( Delta );
+	(void) Event;
+	(void) Data;
 	
 }
 
@@ -410,27 +238,18 @@ void KeyListener ( int32_t ScanCode, int32_t KeyCode, bool Down, void * Data )
 		{
 			
 			reinterpret_cast <KeyboardStruct *> ( Data ) -> Resized = false;
-			
 			reinterpret_cast <KeyboardStruct *> ( Data ) -> RenderData -> Win -> Resize ( WINDOW_WIDTH_0, WINDOW_HEIGHT_0 );
-			
-			//Xenon::Math::Matrix4x4 :: SetAsPerspectiveProjectionFieldOfView ( * reinterpret_cast <KeyboardStruct *> ( Data ) -> RenderData -> Projection, 0.1, 4.0, 60.0 / 180.0 * 3.1415926, static_cast <float> ( WINDOW_WIDTH_0 ) / static_cast <float> ( WINDOW_HEIGHT_0 ) );
-			Xenon::Math::Matrix4x4 :: SetAsOrthographicProjection ( * reinterpret_cast <KeyboardStruct *> ( Data ) -> RenderData -> Projection, 0.1, 4.0, -2.0, 2.0, 2.0 * WINDOW_HEIGHT_0 / WINDOW_WIDTH_0, - 2.0 * WINDOW_HEIGHT_0 / WINDOW_WIDTH_0 );
 			
 		}
 		else
 		{
 			
 			reinterpret_cast <KeyboardStruct *> ( Data ) -> Resized = true;
-			
 			reinterpret_cast <KeyboardStruct *> ( Data ) -> RenderData -> Win -> Resize ( WINDOW_WIDTH_1, WINDOW_HEIGHT_1 );
 			
-			//Xenon::Math::Matrix4x4 :: SetAsPerspectiveProjectionFieldOfView ( * reinterpret_cast <KeyboardStruct *> ( Data ) -> RenderData -> Projection, 0.1, 4.0, 60.0 / 180.0 * 3.1415926, static_cast <float> ( WINDOW_WIDTH_1 ) / static_cast <float> ( WINDOW_HEIGHT_1 ) );
-			Xenon::Math::Matrix4x4 :: SetAsOrthographicProjection ( * reinterpret_cast <KeyboardStruct *> ( Data ) -> RenderData -> Projection, 0.1, 4.0, -2.0, 2.0, 2.0 * WINDOW_HEIGHT_1 / WINDOW_WIDTH_1, - 2.0 * WINDOW_HEIGHT_1 / WINDOW_WIDTH_1 );
 		}
 		
 	}
-	
-	reinterpret_cast <KeyboardStruct *> ( Data ) -> RenderData -> ProjectionSource -> SetDirty ();
 	
 }
 
@@ -474,20 +293,7 @@ void DrawEvent ( SDL_UserEvent * Event )
 	if ( RData == NULL )
 		return;
 	
-	RData -> Cont -> MakeCurrent ();
-	RData -> Cont -> SetCullingEnabled ( true );
-	RData -> Cont -> SetDepthTestEnabled ( true );
-	RData -> Cont -> SetFrontFace ( Xenon::GPU::Context :: kFrontFace_Clockwise );
-	
-	RData -> Cont -> GetDefaultFrameBuffer () -> Clear ( Xenon::GPU::FrameBuffer :: kFrameBufferComponent_Color | Xenon::GPU::FrameBuffer :: kFrameBufferComponent_Depth );
-	
-	RData -> Cont -> SetCullingFace ( Xenon::GPU::Context :: kCullingFace_Back );
-	
-	RData -> ColorProgram -> Bind ();
-	RData -> ColorArray -> Bind ();
-	RData -> ColorUniforms -> UpdateUniforms ( false );
-	
-	glDrawElementsInstanced ( GL_TRIANGLES, RData -> Cube -> GetIndexCount (), RData -> Cube -> GetIndexType (), 0, 12 );
+	Render ( * RData );
 	
 	RData -> Win -> GLSwap ();
 	
@@ -502,5 +308,55 @@ void DrawEvent ( SDL_UserEvent * Event )
 		TimerLock -> Unlock ();
 	
 	RData -> RTimer -> Start ( 1000 / 120 );
+	
+}
+
+
+bool SetupScene ( RenderStruct & Data )
+{
+	
+	Xenon::Geometry::Primitives :: Quad2DSpec QuadSpec;
+	Xenon::Geometry::Primitives :: Quad2DTexturePositionSpec TextureSpec;
+	
+	QuadSpec.WindOutwardFacesClockwise = true;
+	QuadSpec.Attributes = Xenon::Geometry::Primitives :: kAttributeFlags_Position;// | Xenon::Geometry::Primitives :: kAttributeFlags_TexturePositions;
+	QuadSpec.CompositionMode = Xenon::Geometry::Primitives :: kStaticAttributeCompositionMode_Interleaved;
+	Xenon::Geometry::Primitives :: SetupNormalQuad2DPositionSpec ( QuadSpec.PositionSpec, "Positions", true );
+	Xenon::Geometry::Primitives :: SetupNormalQuad2DTexturePositionSpec ( TextureSpec, "TexturePositions", true );
+	QuadSpec.TexturePositionCount = 1;
+	QuadSpec.TexturePositionSpecs = & TextureSpec;
+	
+	Data.QuadMesh = NULL;
+	if ( ! Xenon::Geometry::Primitives :: GenerateQuad2DMesh ( & Data.QuadMesh, QuadSpec ) )
+	{
+		
+		std :: cout << "failed to generate quad mesh!" << std :: endl;
+		return false;
+		
+	}
+	
+	return true;
+	
+}
+
+void DestroyScene ( RenderStruct & Data )
+{
+	
+	if ( Data.QuadMesh != NULL )
+	{
+		
+		delete Data.QuadMesh;
+		Data.QuadMesh = NULL;
+		
+	}
+	
+}
+
+void Render ( RenderStruct & Data )
+{
+	
+	Data.Cont -> GetDefaultFrameBuffer () -> Clear ();
+	
+	
 	
 }

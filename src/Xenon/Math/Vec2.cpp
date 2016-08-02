@@ -20,13 +20,16 @@ Xenon::Math::Vec2 :: Vec2 ( const float X, const float Y ):
 Xenon::Math::Vec2 :: Vec2 ( const Vec2 & CopyFrom )
 {
 	
-	this -> X = X;
-	this -> Y = Y;
+	this -> X = CopyFrom.X;
+	this -> Y = CopyFrom.Y;
 	
 }
 
 Xenon::Math::Vec2 :: Vec2 ( NoInit NO_INIT )
 {
+	
+	(void) NO_INIT;
+	
 }
 
 Xenon::Math::Vec2 :: ~Vec2 ()

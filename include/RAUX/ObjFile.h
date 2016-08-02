@@ -187,8 +187,8 @@ namespace RAUX
 		const TexturePosition GetVertexTexturePosition ( uint32_t Index ) const;
 		
 		uint32_t GetGroupCount () const;
-		const Group * const GetGroup ( uint32_t Index ) const;
-		const Group * const GetGroup ( const std :: string & Name ) const;
+		const Group * GetGroup ( uint32_t Index ) const;
+		const Group * GetGroup ( const std :: string & Name ) const;
 		
 		uint32_t GetVertexCount () const;
 		const Vertex GetVertex ( uint32_t Index ) const;
@@ -197,7 +197,7 @@ namespace RAUX
 		const Face GetFace ( uint32_t Index ) const;
 		
 		uint32_t GetMaterialCount () const;
-		const MtlFile :: Material * const GetMaterial ( uint32_t Index ) const;
+		const MtlFile :: Material * GetMaterial ( uint32_t Index ) const;
 		
 #ifdef RAUX_XENON_INTERFACE
 		

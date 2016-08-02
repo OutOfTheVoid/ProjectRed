@@ -6,11 +6,11 @@ const char * Xenon::GPU::VertexShader :: kErrorLog_GPUResourceFreedAfterShaderCo
 Xenon::GPU::VertexShader :: VertexShader ( const GLchar * Source, const char * Name ):
 	ShaderCode ( Source ),
 	DiscardableSource ( false ),
+	SHandle ( 0 ),
 	Allocated ( false ),
 	Compiled ( false ),
 	CompileLog ( "" ),
-	Name ( Name ),
-	SHandle ( 0 )
+	Name ( Name )
 {
 }
 

@@ -189,8 +189,6 @@ bool Xenon::Geometry::Primitives :: GenerateCubeMesh ( Mesh ** Target, const Cub
 	
 	* Target = NULL;
 	
-	bool SingleStaticBuffer = Spec.CompositionMode != kStaticAttributeCompositionMode_SeperateBuffers;
-	
 	bool CommonVertexMode = true;
 	
 	uint32_t AttributeCount = 0;
@@ -1136,6 +1134,12 @@ bool Xenon::Geometry::Primitives :: GenerateCubeMesh ( Mesh ** Target, const Cub
 					Math::Vec3 :: Copy ( * reinterpret_cast <Math :: Vec3 *> ( reinterpret_cast <char *> ( TexturePositionData ) + ( TexturePositionOffset + TexturePositionStride * ( kCubeFaceIndex_XNeg * kCubeFaceVertexIndex_Modulus + kCubeFaceVertexIndex_XPos_YNeg ) ) ), Spec.TexturePositionSpecs [ I ].PerCommonVertexCubeTexturePositions [ kCubeVertexPositionIndex_ZNeg_XNeg_YNeg ] );
 					
 				}
+				else
+				{
+					
+					// TODO: Other Texture Position Layouts.
+					
+				}
 				
 			}
 			
@@ -1145,8 +1149,8 @@ bool Xenon::Geometry::Primitives :: GenerateCubeMesh ( Mesh ** Target, const Cub
 	
 	// TODO: Other attributes
 	
-	Util :: RCMem * IndexDataBuffer = new Util :: RCMem ( sizeof ( GLuint ) * 36 );
-	GLuint * IndexData = reinterpret_cast <GLuint *> ( IndexDataBuffer -> GetData () );
+	Util :: RCMem * IndexDataBuffer = new Util :: RCMem ( sizeof ( GLubyte ) * 36 );
+	GLubyte * IndexData = reinterpret_cast <GLubyte *> ( IndexDataBuffer -> GetData () );
 	
 	if ( ! CommonVertexMode )
 	{
@@ -1343,7 +1347,441 @@ bool Xenon::Geometry::Primitives :: GenerateCubeMesh ( Mesh ** Target, const Cub
 		
 	}
 	
-	* Target = new Mesh ( Mesh :: kDrawMode_Triangle, IndexDataBuffer, 36, GPU::IndexBuffer :: kIndexType_UInts, GPU::IndexBuffer :: kUsageType_Static_Draw );
+	* Target = new Mesh ( Mesh :: kDrawMode_Triangle, IndexDataBuffer, 36, GPU::IndexBuffer :: kIndexType_UBytes, GPU::IndexBuffer :: kUsageType_Static_Draw );
+	
+	uint32_t I;
+	
+	for ( I = 0; I < AttributeDataCount; I ++ )
+		( * Target ) -> AddAttributeData ( AttributeDataList [ I ] );
+	
+	for ( I = 0; I < AttributeCount; I ++ )
+		( * Target ) -> AddAttribute ( AttributeTrackers [ I ].Attribute );
+	
+	return true;
+	
+}
+
+void Xenon::Geometry::Primitives :: SetupNormalQuad2DPositionSpec ( Quad2DPositionSpec & Spec, const std :: string AttributeName, bool Static )
+{
+	
+	Spec.AttributeName = AttributeName;
+	Spec.Static = Static;
+	
+	Spec.Positions [ kQuad2DVertexIndex_XNeg_YNeg ] = Math :: Vec2 ( - 1.0f, - 1.0f );
+	Spec.Positions [ kQuad2DVertexIndex_XPos_YNeg ] = Math :: Vec2 ( + 1.0f, - 1.0f );
+	Spec.Positions [ kQuad2DVertexIndex_XNeg_YPos ] = Math :: Vec2 ( - 1.0f, + 1.0f );
+	Spec.Positions [ kQuad2DVertexIndex_XPos_YPos ] = Math :: Vec2 ( + 1.0f, + 1.0f );
+	
+}
+
+void Xenon::Geometry::Primitives :: SetupNormalQuad2DTexturePositionSpec ( Quad2DTexturePositionSpec & Spec, const std :: string AttributeName, bool Static )
+{
+	
+	Spec.AttributeName = AttributeName;
+	Spec.Static = Static;
+	
+	Spec.Positions [ kQuad2DVertexIndex_XNeg_YNeg ] = Math :: Vec2 ( 0.0f, 1.0f );
+	Spec.Positions [ kQuad2DVertexIndex_XPos_YNeg ] = Math :: Vec2 ( 1.0f, 1.0f );
+	Spec.Positions [ kQuad2DVertexIndex_XNeg_YPos ] = Math :: Vec2 ( 0.0f, 0.0f );
+	Spec.Positions [ kQuad2DVertexIndex_XPos_YPos ] = Math :: Vec2 ( 1.0f, 0.0f );
+	
+}
+
+bool Xenon::Geometry::Primitives :: GenerateQuad2DMesh ( Mesh ** Target, const Quad2DSpec & Spec )
+{
+	
+	* Target = NULL;
+	
+	uint32_t AttributeCount = 0;
+	uint32_t AttributeDataCount = 0;
+	
+	if ( Spec.Attributes & kAttributeFlags_Position )
+		AttributeCount ++;
+	
+	if ( Spec.Attributes & kAttributeFlags_Color )
+		AttributeCount ++;
+	
+	if ( Spec.Attributes & kAttributeFlags_TexturePositions )
+		AttributeCount += Spec.TexturePositionCount;
+	
+	typedef struct AttributeGenTracker_Struct
+	{
+		
+		inline AttributeGenTracker_Struct ():
+		Attribute ( NULL )
+		{
+		};
+		
+		size_t Offset;
+		size_t Stride;
+		
+		MeshAttribute * Attribute;
+		
+	} AttributeGenTracker;
+	
+	if ( AttributeCount > 20 ) // Something obviously went wrong, we shouldn't have more than 20 attributes for a simple quad.
+		return NULL;
+	
+	AttributeGenTracker AttributeTrackers [ 20 ];
+	
+	uint32_t AttributeTrackerIndex;
+	
+	AttributeTrackerIndex = 0;
+	
+	size_t CommonStaticBufferAttributeStride = 0;
+	size_t CommonStaticBufferAttributeTotal = 0;
+	
+	if ( Spec.Attributes & kAttributeFlags_Position )
+	{
+		
+		AttributeTrackers [ AttributeTrackerIndex ].Offset = ( Spec.PositionSpec.Static && ( Spec.CompositionMode == kStaticAttributeCompositionMode_Interleaved ) ) ? CommonStaticBufferAttributeStride : 0;
+		AttributeTrackerIndex ++;
+		
+		if ( Spec.PositionSpec.Static )
+		{
+			
+			CommonStaticBufferAttributeTotal += sizeof ( GLfloat ) * 8;
+			CommonStaticBufferAttributeStride += sizeof ( GLfloat ) * 2;
+			
+		}
+		else
+			AttributeDataCount ++;
+		
+	}
+	
+	if ( Spec.Attributes & kAttributeFlags_Color )
+	{
+		
+		AttributeTrackers [ AttributeTrackerIndex ].Offset = ( Spec.ColorSpec.Static && ( Spec.CompositionMode == kStaticAttributeCompositionMode_Interleaved ) ) ? CommonStaticBufferAttributeStride : 0;
+		
+		AttributeTrackerIndex ++;
+		
+		if ( Spec.ColorSpec.Static )
+		{
+			
+			CommonStaticBufferAttributeTotal += sizeof ( GLfloat ) * 12;
+			CommonStaticBufferAttributeStride += sizeof ( GLfloat ) * 3;
+			
+		}
+		else
+			AttributeDataCount ++;
+		
+	}
+	
+	if ( Spec.Attributes & kAttributeFlags_TexturePositions )
+	{
+		
+		for ( uint32_t I = 0; I < Spec.TexturePositionCount; I ++ )
+		{
+			
+			AttributeTrackers [ AttributeTrackerIndex ].Offset = ( Spec.TexturePositionSpecs [ I ].Static && ( Spec.CompositionMode == kStaticAttributeCompositionMode_Interleaved ) ) ? CommonStaticBufferAttributeStride : 0;
+			
+			AttributeTrackerIndex ++;
+			
+			if ( Spec.TexturePositionSpecs [ I ].Static )
+			{
+				
+				CommonStaticBufferAttributeTotal += sizeof ( GLfloat ) * 8;
+				CommonStaticBufferAttributeStride += sizeof ( GLfloat ) * 2;
+				
+			}
+			else
+				AttributeDataCount ++;
+			
+		}
+		
+	}
+	
+	if ( Spec.CompositionMode == kStaticAttributeCompositionMode_Interleaved )
+	{
+		
+		AttributeTrackerIndex = 0;
+		
+		if ( Spec.Attributes & kAttributeFlags_Position )
+		{
+			
+			AttributeTrackers [ AttributeTrackerIndex ].Stride = Spec.PositionSpec.Static ? CommonStaticBufferAttributeStride : 2 * sizeof ( GLfloat );
+			
+			AttributeTrackerIndex ++;
+			
+		}
+		
+		if ( Spec.Attributes & kAttributeFlags_Color )
+		{
+			
+			AttributeTrackers [ AttributeTrackerIndex ].Stride = Spec.ColorSpec.Static ? CommonStaticBufferAttributeStride : 3 * sizeof ( GLfloat );
+			
+			AttributeTrackerIndex ++;
+			
+		}
+		
+		if ( Spec.Attributes & kAttributeFlags_TexturePositions )
+		{
+			
+			for ( uint32_t I = 0; I < Spec.TexturePositionCount; I ++ )
+			{
+				
+				AttributeTrackers [ AttributeTrackerIndex ].Stride = Spec.TexturePositionSpecs [ I ].Static ? CommonStaticBufferAttributeStride : ( 2 * sizeof ( GLfloat ) );
+				
+				AttributeTrackerIndex ++;
+				
+			}
+			
+		}
+		
+	}
+	else
+	{
+		
+		AttributeTrackerIndex = 0;
+		
+		if ( Spec.Attributes & kAttributeFlags_Position )
+		{
+			
+			AttributeTrackers [ AttributeTrackerIndex ].Stride = 3 * sizeof ( GLfloat );
+			
+			AttributeTrackerIndex ++;
+			
+		}
+		
+		if ( Spec.Attributes & kAttributeFlags_Color )
+		{
+			
+			AttributeTrackers [ AttributeTrackerIndex ].Stride = 3 * sizeof ( GLfloat );
+			
+			AttributeTrackerIndex ++;
+			
+		}
+		
+		if ( Spec.Attributes & kAttributeFlags_TexturePositions )
+		{
+			
+			for ( uint32_t I = 0; I < Spec.TexturePositionCount; I ++ )
+			{
+				
+				AttributeTrackers [ AttributeTrackerIndex ].Stride = 2 * sizeof ( GLfloat );
+				
+				AttributeTrackerIndex ++;
+				
+			}
+			
+		}
+		
+	}
+	
+	if ( CommonStaticBufferAttributeTotal != 0 )
+		AttributeDataCount ++;
+	
+	if ( AttributeDataCount > 40 )
+		return NULL;
+	
+	uint32_t AttributeDataIndex = 0;
+	MeshAttributeData * AttributeDataList [ 40 ];
+	
+	Util :: RCMem * StaticDataBuffer = ( CommonStaticBufferAttributeTotal != 0 ) ? new Util :: RCMem ( CommonStaticBufferAttributeTotal ) : NULL;
+	void * StaticData = ( CommonStaticBufferAttributeTotal != 0 ) ? StaticDataBuffer -> GetData () : NULL;
+	
+	MeshAttributeData * StaticAttributeData = ( CommonStaticBufferAttributeTotal != 0 ) ? new MeshAttributeData ( StaticDataBuffer, CommonStaticBufferAttributeTotal, GPU::VertexBuffer :: kUsageType_Static_Draw, false ) : NULL;
+	
+	if ( ( CommonStaticBufferAttributeTotal != 0 ) )
+	{
+		
+		AttributeDataList [ AttributeDataIndex ] = StaticAttributeData;
+		AttributeDataIndex ++;
+		
+		if ( StaticData == NULL )
+		{
+			
+			delete StaticDataBuffer;
+			
+			return false;
+			
+		}
+		
+	}
+	
+	AttributeTrackerIndex = 0;
+	
+	if ( Spec.Attributes & kAttributeFlags_Position )
+	{
+		
+		void * PositionData;
+		size_t PositionOffset = AttributeTrackers [ AttributeTrackerIndex ].Offset;
+		size_t PositionStride = AttributeTrackers [ AttributeTrackerIndex ].Stride;
+		
+		if ( Spec.PositionSpec.Static && ( Spec.CompositionMode != kStaticAttributeCompositionMode_SeperateBuffers ) )
+		{
+			
+			PositionData = StaticData;
+			
+			AttributeTrackers [ AttributeTrackerIndex ].Attribute = new MeshAttribute ( Spec.PositionSpec.AttributeName, GPU::VertexArray :: kFPAttributeInputType_Float, false, 2, PositionStride, reinterpret_cast <void *> ( PositionOffset ), StaticAttributeData );
+			AttributeTrackerIndex ++;
+			
+		}
+		else
+		{
+			
+			Util :: RCMem * PositionDataBuffer = new Util :: RCMem ( sizeof ( GLfloat ) * 2 );
+			PositionData = PositionDataBuffer -> GetData ();
+			
+			MeshAttributeData * PositionAttributeData =  new MeshAttributeData ( PositionDataBuffer, sizeof ( GLfloat ) * 8, Spec.ColorSpec.Static ? GPU::VertexBuffer :: kUsageType_Static_Draw : GPU::VertexBuffer :: kUsageType_Dynamic_Draw, true );
+			
+			AttributeDataList [ AttributeDataIndex ] = PositionAttributeData;
+			AttributeDataIndex ++;
+			
+			if ( PositionData == NULL )
+			{
+				
+				delete StaticDataBuffer;
+				delete PositionDataBuffer;
+				
+				return false;
+				
+			}
+			
+			AttributeTrackers [ AttributeTrackerIndex ].Attribute = new MeshAttribute ( Spec.PositionSpec.AttributeName, GPU::VertexArray :: kFPAttributeInputType_Float, false, 2, PositionStride, reinterpret_cast <void *> ( PositionOffset ), PositionAttributeData );
+			AttributeTrackerIndex ++;
+			
+		}
+		
+		Math::Vec2 :: Copy ( * reinterpret_cast <Math :: Vec2 *> ( reinterpret_cast <char *> ( PositionData ) + ( PositionOffset + PositionStride * kQuad2DVertexIndex_XNeg_YNeg ) ), Spec.PositionSpec.Positions [ kQuad2DVertexIndex_XNeg_YNeg ] );
+		Math::Vec2 :: Copy ( * reinterpret_cast <Math :: Vec2 *> ( reinterpret_cast <char *> ( PositionData ) + ( PositionOffset + PositionStride * kQuad2DVertexIndex_XPos_YNeg ) ), Spec.PositionSpec.Positions [ kQuad2DVertexIndex_XPos_YNeg ] );
+		Math::Vec2 :: Copy ( * reinterpret_cast <Math :: Vec2 *> ( reinterpret_cast <char *> ( PositionData ) + ( PositionOffset + PositionStride * kQuad2DVertexIndex_XNeg_YPos ) ), Spec.PositionSpec.Positions [ kQuad2DVertexIndex_XNeg_YPos ] );
+		Math::Vec2 :: Copy ( * reinterpret_cast <Math :: Vec2 *> ( reinterpret_cast <char *> ( PositionData ) + ( PositionOffset + PositionStride * kQuad2DVertexIndex_XPos_YPos ) ), Spec.PositionSpec.Positions [ kQuad2DVertexIndex_XPos_YPos ] );
+		
+	}
+	
+	if ( Spec.Attributes & kAttributeFlags_Color )
+	{
+		
+		void * ColorData;
+		size_t ColorOffset = AttributeTrackers [ AttributeTrackerIndex ].Offset;
+		size_t ColorStride = AttributeTrackers [ AttributeTrackerIndex ].Stride;
+		
+		if ( Spec.ColorSpec.Static && ( Spec.CompositionMode != kStaticAttributeCompositionMode_SeperateBuffers ) )
+		{
+			
+			ColorData = StaticData;
+			
+			AttributeTrackers [ AttributeTrackerIndex ].Attribute = new MeshAttribute ( Spec.ColorSpec.AttributeName, GPU::VertexArray :: kFPAttributeInputType_Float, false, 3, ColorStride, reinterpret_cast <void *> ( ColorOffset ), StaticAttributeData );
+			AttributeTrackerIndex ++;
+			
+		}
+		else
+		{
+			
+			Util :: RCMem * ColorDataBuffer = new Util :: RCMem ( sizeof ( GLfloat ) * 12 );
+			ColorData = ColorDataBuffer -> GetData ();
+			
+			MeshAttributeData * ColorAttributeData =  new MeshAttributeData ( ColorDataBuffer, sizeof ( GLfloat ) * 12, Spec.ColorSpec.Static ? GPU::VertexBuffer :: kUsageType_Static_Draw : GPU::VertexBuffer :: kUsageType_Dynamic_Draw, true );
+			
+			AttributeDataList [ AttributeDataIndex ] = ColorAttributeData;
+			AttributeDataIndex ++;
+			
+			if ( ColorData == NULL )
+			{
+				
+				delete StaticDataBuffer;
+				delete ColorDataBuffer;
+				
+				return false;
+				
+			}
+			
+			AttributeTrackers [ AttributeTrackerIndex ].Attribute = new MeshAttribute ( Spec.ColorSpec.AttributeName, GPU::VertexArray :: kFPAttributeInputType_Float, false, 3, ColorStride, reinterpret_cast <void *> ( ColorOffset ), ColorAttributeData );
+			AttributeTrackerIndex ++;
+			
+		}
+		
+		Math::Vec3 :: Copy ( * reinterpret_cast <Math :: Vec3 *> ( reinterpret_cast <char *> ( ColorData ) + ( ColorOffset + ColorStride * kQuad2DVertexIndex_XNeg_YNeg ) ), Spec.ColorSpec.Colors [ kQuad2DVertexIndex_XNeg_YNeg ] );
+		Math::Vec3 :: Copy ( * reinterpret_cast <Math :: Vec3 *> ( reinterpret_cast <char *> ( ColorData ) + ( ColorOffset + ColorStride * kQuad2DVertexIndex_XPos_YNeg ) ), Spec.ColorSpec.Colors [ kQuad2DVertexIndex_XPos_YNeg ] );
+		Math::Vec3 :: Copy ( * reinterpret_cast <Math :: Vec3 *> ( reinterpret_cast <char *> ( ColorData ) + ( ColorOffset + ColorStride * kQuad2DVertexIndex_XNeg_YPos ) ), Spec.ColorSpec.Colors [ kQuad2DVertexIndex_XNeg_YPos ] );
+		Math::Vec3 :: Copy ( * reinterpret_cast <Math :: Vec3 *> ( reinterpret_cast <char *> ( ColorData ) + ( ColorOffset + ColorStride * kQuad2DVertexIndex_XPos_YPos ) ), Spec.ColorSpec.Colors [ kQuad2DVertexIndex_XPos_YPos ] );
+		
+	}
+	
+	if ( Spec.Attributes & kAttributeFlags_TexturePositions )
+	{
+		
+		AttributeCount += Spec.TexturePositionCount;
+		
+		for ( uint32_t I = 0; I < Spec.TexturePositionCount; I ++ )
+		{
+			
+			void * TexturePositionData;
+			size_t TexturePositionOffset = AttributeTrackers [ AttributeTrackerIndex ].Offset;
+			size_t TexturePositionStride = AttributeTrackers [ AttributeTrackerIndex ].Stride;
+			
+			if ( Spec.TexturePositionSpecs [ I ].Static && ( Spec.CompositionMode != kStaticAttributeCompositionMode_SeperateBuffers ) )
+			{
+				
+				TexturePositionData = StaticData;
+				
+				AttributeTrackers [ AttributeTrackerIndex ].Attribute = new MeshAttribute ( Spec.TexturePositionSpecs [ I ].AttributeName, GPU::VertexArray :: kFPAttributeInputType_Float, false, 2, TexturePositionStride, reinterpret_cast <void *> ( TexturePositionOffset ), StaticAttributeData );
+				AttributeTrackerIndex ++;
+				
+			}
+			else
+			{
+				
+				Util :: RCMem * TexturePositionDataBuffer = new Util :: RCMem ( 8 * sizeof ( float ) );
+				TexturePositionData = TexturePositionDataBuffer -> GetData ();
+				
+				MeshAttributeData * TexturePositionAttributeData =  new MeshAttributeData ( TexturePositionDataBuffer, 8 * sizeof ( float ), Spec.TexturePositionSpecs [ I ].Static ? GPU::VertexBuffer :: kUsageType_Static_Draw : GPU::VertexBuffer :: kUsageType_Dynamic_Draw, true );
+				
+				AttributeDataList [ AttributeDataIndex ] = TexturePositionAttributeData;
+				AttributeDataIndex ++;
+				
+				if ( TexturePositionData == NULL )
+				{
+					
+					delete StaticDataBuffer;
+					delete TexturePositionDataBuffer;
+					
+					return false;
+					
+				}
+				
+			}
+			
+			Math::Vec2 :: Copy ( * reinterpret_cast <Math :: Vec2 *> ( reinterpret_cast <char *> ( TexturePositionData ) + ( TexturePositionOffset + TexturePositionStride * kQuad2DVertexIndex_XNeg_YNeg ) ), Spec.TexturePositionSpecs [ I ].Positions [ kQuad2DVertexIndex_XNeg_YNeg ] );
+			Math::Vec2 :: Copy ( * reinterpret_cast <Math :: Vec2 *> ( reinterpret_cast <char *> ( TexturePositionData ) + ( TexturePositionOffset + TexturePositionStride * kQuad2DVertexIndex_XPos_YNeg ) ), Spec.TexturePositionSpecs [ I ].Positions [ kQuad2DVertexIndex_XPos_YNeg ] );
+			Math::Vec2 :: Copy ( * reinterpret_cast <Math :: Vec2 *> ( reinterpret_cast <char *> ( TexturePositionData ) + ( TexturePositionOffset + TexturePositionStride * kQuad2DVertexIndex_XNeg_YPos ) ), Spec.TexturePositionSpecs [ I ].Positions [ kQuad2DVertexIndex_XNeg_YPos ] );
+			Math::Vec2 :: Copy ( * reinterpret_cast <Math :: Vec2 *> ( reinterpret_cast <char *> ( TexturePositionData ) + ( TexturePositionOffset + TexturePositionStride * kQuad2DVertexIndex_XPos_YPos ) ), Spec.TexturePositionSpecs [ I ].Positions [ kQuad2DVertexIndex_XPos_YPos ] );
+			
+		}
+		
+	}
+	
+	Util :: RCMem * IndexDataBuffer = new Util :: RCMem ( sizeof ( GLubyte ) * 6 );
+	GLubyte * IndexData = reinterpret_cast <GLubyte *> ( IndexDataBuffer -> GetData () );
+	
+	if ( Spec.WindOutwardFacesClockwise )
+	{
+		
+		IndexData [ 0 ] = kQuad2DVertexIndex_XNeg_YNeg;
+		IndexData [ 1 ] = kQuad2DVertexIndex_XNeg_YPos;
+		IndexData [ 2 ] = kQuad2DVertexIndex_XPos_YPos;
+		
+		IndexData [ 3 ] = kQuad2DVertexIndex_XPos_YPos;
+		IndexData [ 4 ] = kQuad2DVertexIndex_XPos_YNeg;
+		IndexData [ 5 ] = kQuad2DVertexIndex_XNeg_YNeg;
+		
+	}
+	else
+	{
+		
+		IndexData [ 0 ] = kQuad2DVertexIndex_XNeg_YNeg;
+		IndexData [ 2 ] = kQuad2DVertexIndex_XNeg_YPos;
+		IndexData [ 1 ] = kQuad2DVertexIndex_XPos_YPos;
+		
+		IndexData [ 3 ] = kQuad2DVertexIndex_XPos_YPos;
+		IndexData [ 5 ] = kQuad2DVertexIndex_XPos_YNeg;
+		IndexData [ 4 ] = kQuad2DVertexIndex_XNeg_YNeg;
+		
+	}
+	
+	* Target = new Mesh ( Mesh :: kDrawMode_Triangle, IndexDataBuffer, 6, GPU::IndexBuffer :: kIndexType_UBytes, GPU::IndexBuffer :: kUsageType_Static_Draw );
 	
 	uint32_t I;
 	

@@ -2,7 +2,7 @@ CXX=g++-mp-4.9
 LD=g++-mp-4.9
 
 LINK_FLAGS=-framework SDL2 -framework OpenGL -L/opt/local/lib -lpng -lgcc -march=nehalem -flto
-CXX_FLAGS=$(LINK_FLAGS) -Iinclude -std=c++11 -pedantic-errors
+CXX_FLAGS=$(LINK_FLAGS) -Iinclude -std=c++11 -pedantic-errors -Wextra -Wall
 
 all: build test
 

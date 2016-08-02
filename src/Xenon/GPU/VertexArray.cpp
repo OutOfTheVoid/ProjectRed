@@ -10,8 +10,8 @@ Xenon::GPU::VertexArray :: VertexArray ( uint32_t PreAllocFPAttributeCount, uint
 	AHandle ( 0 ),
 	FPAttributes ( PreAllocFPAttributeCount ),
 	IntegerAttributes ( PreAllocIntegerAttributeCount ),
-	Program ( NULL ),
-	IBuffer ( NULL )
+	IBuffer ( NULL ),
+	Program ( NULL )
 {
 }
 

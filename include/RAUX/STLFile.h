@@ -182,7 +182,7 @@ namespace RAUX
 		void CloseFile ();
 		
 		uint32_t GetTriangleCount () const;
-		const Triangle * const GetTriangle ( uint32_t Index ) const;
+		const Triangle * GetTriangle ( uint32_t Index ) const;
 		
 #ifdef RAUX_XENON_INTERFACE
 		

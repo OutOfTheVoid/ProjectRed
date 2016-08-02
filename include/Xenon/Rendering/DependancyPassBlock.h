@@ -12,8 +12,13 @@ namespace Xenon
 		
 		class DependancyPassBlock
 		{
+		public:
 			
 			
+			
+		private:
+			
+			int64_t CurrentPass;
 			
 		};
 		

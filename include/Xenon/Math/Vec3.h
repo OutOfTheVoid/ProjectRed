@@ -37,7 +37,7 @@ namespace Xenon
 			explicit Vec3 ( const float X = 0.0, const float Y = 0.0, const float Z = 0.0 );
 			Vec3 ( const Vec3 & CopyFrom );
 			explicit Vec3 ( const Vec2 & Lower, const float Z );
-			inline explicit Vec3 ( NoInit NO_INIT ) {};
+			inline explicit Vec3 ( NoInit NO_INIT ) { (void) NO_INIT; };
 			~Vec3 ();
 			
 			static void Set ( Vec3 & Target, const float X, const float Y, const float Z );

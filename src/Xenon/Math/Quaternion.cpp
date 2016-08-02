@@ -7,7 +7,10 @@ const Xenon::Math :: Quaternion Xenon::Math::Quaternion :: IDENTITY ( 0.0f, 0.0f
 
 Xenon::Math::Quaternion :: Quaternion ( NoInit NO_INIT ):
 	Vec4 ( Vec4 :: NO_INIT )
-{	
+{
+	
+	(void) NO_INIT;
+	
 }
 
 Xenon::Math::Quaternion :: Quaternion ( float X, float Y, float Z, float W ):

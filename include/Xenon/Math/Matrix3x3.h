@@ -47,7 +47,7 @@ namespace Xenon
 			
 			static float Determinant ( const Matrix3x3 & Source );
 			
-			static const float GetElement ( const Matrix3x3 & Source, uint32_t X, uint32_t Y );
+			static float GetElement ( const Matrix3x3 & Source, uint32_t X, uint32_t Y );
 			static float & GetElementMutable ( Matrix3x3 & Source, uint32_t X, uint32_t Y );
 			
 			static void MultiplyScalar ( Matrix3x3 & Target, const float Scalar );

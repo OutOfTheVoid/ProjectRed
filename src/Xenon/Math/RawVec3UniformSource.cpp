@@ -2,7 +2,7 @@
 
 Xenon::Math::RawVec3UniformSource :: RawVec3UniformSource ( const Vec3 * Source ):
 	Source ( Source ),
-	Iteration ( Iteration )
+	Iteration ( 0 )
 {
 }
 

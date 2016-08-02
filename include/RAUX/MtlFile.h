@@ -146,9 +146,9 @@ namespace RAUX
 		const std :: string & GetMaterialName ( uint32_t Index ) const;
 		
 		// Returns a pointer to a material structure at < Index >, or returns NULL if < Index > is out of bounds.
-		const Material * const GetMaterial ( uint32_t Index ) const;
+		const Material * GetMaterial ( uint32_t Index ) const;
 		// Returns a pointer to a material structure specified by the name < Name >, or returns NULL if a material by that name doesn't exist.
-		const Material * const GetMaterial ( const std :: string & Name ) const;
+		const Material * GetMaterial ( const std :: string & Name ) const;
 		
 		// Returns the number of comments recorded.
 		uint32_t GetCommentCount () const;

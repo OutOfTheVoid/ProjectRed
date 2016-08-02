@@ -156,7 +156,7 @@ void RAUX::StlFile :: Load ( uint32_t * Status, uint32_t Flags )
 		
 #endif
 		
-		if ( ( ( Flags & kFlags_ReplaceNormalsForced ) != 0 ) || ( ( ( Flags & kFlags_ReplaceNormalsConditional ) != 0 ) && ( TriangleList [ I ].Normal.X == TriangleList [ I ].Normal.Y == TriangleList [ I ].Normal.Z == 0.0 ) ) )
+		if ( ( ( Flags & kFlags_ReplaceNormalsForced ) != 0 ) || ( ( ( Flags & kFlags_ReplaceNormalsConditional ) != 0 ) && ( ( TriangleList [ I ].Normal.X == TriangleList [ I ].Normal.Y ) && ( TriangleList [ I ].Normal.Y == TriangleList [ I ].Normal.Z ) && ( TriangleList [ I ].Normal.Z == 0.0f ) ) ) )
 		{
 			
 			Vec3 D1 ( STLFILE_VEC3_NOINIT );
@@ -499,7 +499,7 @@ uint32_t RAUX::StlFile :: GetTriangleCount () const
 	
 }
 
-const RAUX::StlFile :: Triangle * const RAUX::StlFile :: GetTriangle ( uint32_t Index ) const
+const RAUX::StlFile :: Triangle * RAUX::StlFile :: GetTriangle ( uint32_t Index ) const
 {
 	
 	if ( Index < TriangleCount )

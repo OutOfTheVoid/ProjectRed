@@ -26,13 +26,16 @@ Xenon::Math::Matrix3x3 :: Matrix3x3 ( const Matrix3x3 & CopyFrom ):
 
 Xenon::Math::Matrix3x3 :: Matrix3x3 ( NoInit NO_INIT )
 {
+	
+	(void) NO_INIT;
+	
 }
 
 Xenon::Math::Matrix3x3 :: ~Matrix3x3 ()
 {
 }
 
-const float Xenon::Math::Matrix3x3 :: GetElement ( const Matrix3x3 & Source, uint32_t X, uint32_t Y )
+float Xenon::Math::Matrix3x3 :: GetElement ( const Matrix3x3 & Source, uint32_t X, uint32_t Y )
 {
 	
 	if ( X < 3 && Y < 3 )

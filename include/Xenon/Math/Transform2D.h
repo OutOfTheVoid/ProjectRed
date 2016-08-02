@@ -31,7 +31,7 @@ namespace Xenon
 			
 			const Vec2 & ReadTranslation ();
 			const Vec2 & ReadScale ();
-			const float ReadRotation ();
+			float ReadRotation ();
 			
 			Vec2 & ReadTranslationMutable ();
 			Vec2 & ReadScaleMutable ();
@@ -54,7 +54,7 @@ namespace Xenon
 				
 				const GLfloat * GetFloatArray () const;
 				
-				const bool IsTransposed () const;
+				bool IsTransposed () const;
 				
 				int64_t GetIteration () const;
 				
