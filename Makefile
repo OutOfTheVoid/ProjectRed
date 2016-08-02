@@ -56,7 +56,8 @@ OBJECTS=obj/SDLX/Lib.o \
 		obj/RAUX/TextFile.o \
 		obj/RAUX/ObjFile.o \
 		obj/RAUX/MtlFile.o \
-		obj/RAUX/StlFile.o
+		obj/RAUX/StlFile.o \
+		obj/RAUX/VertexShaderFile.o
 	
 bin/main: obj/Main.o
 	$(LD) $(LINK_FLAGS) $(OBJECTS) obj/Main.o -o bin/Main
@@ -207,6 +208,9 @@ obj/RAUX/MtlFile.o: include/RAUX/MtlFile.h src/RAUX/MtlFile.cpp include/RAUX/Tex
 	
 obj/RAUX/StlFile.o: include/RAUX/StlFile.h src/RAUX/StlFile.cpp include/RAUX/File.h include/RAUX/RAUX.h include/Xenon/Math/Vec3.h include/Xenon/Geometry/Mesh.h include/Xenon/Geometry/MeshAttribute.h include/Xenon/Geometry/MeshAttributeData.h
 	$(CXX) -c $(CXX_FLAGS) src/RAUX/StlFile.cpp -o obj/RAUX/StlFile.o
+	
+obj/RAUX/VertexShaderFile.o: include/RAUX/VertexShaderFile.h src/RAUX/VertexShaderFile.cpp include/RAUX/TextFile.h include/RAUX/RAUX.h include/Xenon/GPU/VertexShader.h
+	$(CXX) -c $(CXX_FLAGS) src/RAUX/VertexShaderFile.cpp -o obj/RAUX/VertexShaderFile.o
 	
 clean:
 	-@rm -r obj/*

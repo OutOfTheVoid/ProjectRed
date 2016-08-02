@@ -2,6 +2,7 @@
 #include <iostream>
 
 Xenon::GPU::UniformSet :: UniformSet ( ShaderProgram * Program, uint32_t Matrix4x4Prealloc, uint32_t Matrix3x3Prealloc, uint32_t FloatVec4Prealloc, uint32_t FloatVec3Prealloc, uint32_t FloatVec2Prealloc, uint32_t FloatPrealloc ):
+	RefCounted ( 0 ),
 	Program ( Program ),
 	LastLinkIteration ( - 1 ),
 	FloatUniforms ( FloatPrealloc ),

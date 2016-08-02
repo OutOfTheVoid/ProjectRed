@@ -1,6 +1,7 @@
 #include <Xenon/GPU/Texture2D.h>
 
 Xenon::GPU::Texture2D :: Texture2D ():
+	RefCounted ( 0 ),
 	Allocated ( false ),
 	THandle ( 0 )
 {	

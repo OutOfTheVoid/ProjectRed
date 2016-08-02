@@ -5,6 +5,7 @@
 #include <Xenon/GPU/GPU.h>
 
 #include <Xenon/GPU/GLInclude.h>
+#include <Xenon/Util/IRefCounted.h>
 
 #include <string>
 
@@ -16,7 +17,7 @@ namespace Xenon
 		
 		class ShaderProgram;
 		
-		class IShader
+		class IShader : public Util :: IRefCounted
 		{
 		public:
 			

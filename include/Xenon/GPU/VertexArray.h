@@ -7,6 +7,7 @@
 #include <Xenon/GPU/IGPUResourceUser.h>
 #include <Xenon/GPU/GLInclude.h>
 #include <Xenon/GPU/IndexBuffer.h>
+#include <Xenon/Util/RefCounted.h>
 
 #include <string>
 #include <vector>
@@ -20,7 +21,7 @@ namespace Xenon
 		class ShaderProgram;
 		class VertexBuffer;
 		
-		class VertexArray : public IGPUResourceUser
+		class VertexArray : public IGPUResourceUser, public Util :: RefCounted
 		{
 		public:
 			

@@ -2,12 +2,14 @@
 #include <Xenon/GPU/Context.h>
 
 Xenon::GPU::FrameBuffer :: FrameBuffer ():
+	RefCounted ( 0 ),
 	Allocated ( false ),
 	FHandle ( 0 )
 {
 }
 
 Xenon::GPU::FrameBuffer :: FrameBuffer ( GLuint FHandle ):
+	RefCounted ( 0 ),
 	Allocated ( true ),
 	FHandle ( FHandle )
 {

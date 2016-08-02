@@ -5,7 +5,7 @@
 #include <Xenon/GPU/GPU.h>
 #include <Xenon/GPU/IShader.h>
 #include <Xenon/GPU/GLInclude.h>
-
+#include <Xenon/Util/RefCounted.h>
 
 namespace Xenon
 {
@@ -13,7 +13,7 @@ namespace Xenon
 	namespace GPU
 	{
 		
-		class VertexShader : public IShader
+		class VertexShader : public IShader, public Util :: RefCounted
 		{
 		public:
 			

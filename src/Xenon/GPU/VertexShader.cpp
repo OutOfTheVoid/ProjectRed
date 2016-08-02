@@ -4,6 +4,7 @@
 const char * Xenon::GPU::VertexShader :: kErrorLog_GPUResourceFreedAfterShaderCodeFreed = "VertexShader: Shader code was freed before compilation ( Likely an early call to VertexShader :: GPUResourceFree () ).";
 
 Xenon::GPU::VertexShader :: VertexShader ( const GLchar * Source, const char * Name ):
+	RefCounted ( 0 ),
 	ShaderCode ( Source ),
 	DiscardableSource ( false ),
 	SHandle ( 0 ),

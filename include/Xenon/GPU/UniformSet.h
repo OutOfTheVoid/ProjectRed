@@ -3,17 +3,15 @@
 
 #include <Xenon/Xenon.h>
 #include <Xenon/GPU/GPU.h>
-
 #include <Xenon/GPU/GLInclude.h>
 #include <Xenon/GPU/ShaderProgram.h>
-
 #include <Xenon/GPU/IFloatUniformSource.h>
 #include <Xenon/GPU/IFloatVec2UniformSource.h>
 #include <Xenon/GPU/IFloatVec3UniformSource.h>
 #include <Xenon/GPU/IFloatVec4UniformSource.h>
-
 #include <Xenon/GPU/IMatrix3x3UniformSource.h>
 #include <Xenon/GPU/IMatrix4x4UniformSource.h>
+#include <Xenon/Util/RefCounted.h>
 
 #include <string>
 #include <vector>
@@ -24,7 +22,7 @@ namespace Xenon
 	namespace GPU
 	{
 		
-		class UniformSet
+		class UniformSet : public Util :: RefCounted
 		{
 		public:
 			

@@ -3,6 +3,7 @@
 #include <Xenon/GPU/Context.h>
 
 Xenon::GPU::VertexBuffer :: VertexBuffer ( UsageType Usage ):
+	RefCounted ( 0 ),
 	Usage ( Usage ),
 	Allocated ( false ),
 	Size ( 0 ),

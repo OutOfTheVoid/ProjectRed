@@ -53,6 +53,13 @@ void RAUX::TextFile :: Open ( uint32_t * Status )
 	
 }
 
+bool RAUX::TextFile :: IsOpen () const
+{
+	
+	return FileInstance.IsOpen ();
+	
+}
+
 void RAUX::TextFile :: Close ()
 {
 	

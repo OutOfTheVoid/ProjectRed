@@ -2,6 +2,7 @@
 #include <stdlib.h>
 
 Xenon::GPU::FragmentShader :: FragmentShader ( const std :: string Source, std :: string Name ):
+	RefCounted ( 0 ),
 	ShaderCode ( Source ),
 	SHandle ( 0 ),
 	Allocated ( false ),

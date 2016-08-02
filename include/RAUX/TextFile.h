@@ -32,6 +32,8 @@ namespace RAUX
 		void Open ( uint32_t * Status );
 		void Close ();
 		
+		bool IsOpen () const;
+		
 		void LoadToString ( uint32_t * Status, std :: string & String, uint64_t Offset, uint64_t Length = 0xFFFFFFFFFFFFFFFF, bool TrimToFileEdge = true );
 		
 	private:

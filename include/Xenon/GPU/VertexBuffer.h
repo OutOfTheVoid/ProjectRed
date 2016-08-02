@@ -5,6 +5,7 @@
 #include <Xenon/GPU/GPU.h>
 #include <Xenon/GPU/IGPUResourceUser.h>
 #include <Xenon/GPU/GLInclude.h>
+#include <Xenon/Util/RefCounted.h>
 
 namespace Xenon
 {
@@ -12,7 +13,7 @@ namespace Xenon
 	namespace GPU
 	{
 		
-		class VertexBuffer : public IGPUResourceUser
+		class VertexBuffer : public IGPUResourceUser, public Util :: RefCounted
 		{
 		public:
 			

@@ -14,6 +14,7 @@
 #include <Xenon/GPU/VertexBuffer.h>
 
 #include <Xenon/Util/RCMem.h>
+#include <Xenon/Util/RefCounted.h>
 
 #include <stdint.h>
 
@@ -23,7 +24,7 @@ namespace Xenon
 	namespace Geometry
 	{
 		
-		class Mesh : public GPU :: IGPUResourceUser
+		class Mesh : public GPU :: IGPUResourceUser, public Util :: RefCounted
 		{
 		public:
 			

@@ -20,6 +20,9 @@ Xenon::GPU::Context :: Context ( IGLContext * GLContext ):
 	FrontFaceCurrent ( kFrontFace_CounterClockwise ),
 	DepthTestEnabledCurrent ( false )
 {
+	
+	DefaultFrameBuffer.Reference ();
+	
 }
 
 Xenon::GPU::Context :: ~Context ()

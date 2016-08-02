@@ -4,6 +4,7 @@
 #include <Xenon/Xenon.h>
 #include <Xenon/GPU/GPU.h>
 #include <Xenon/GPU/IGPUResourceUser.h>
+#include <Xenon/Util/IRefCounted.h>
 
 namespace Xenon
 {
@@ -11,7 +12,7 @@ namespace Xenon
 	namespace GPU
 	{
 		
-		class ITexture : public IGPUResourceUser
+		class ITexture : public IGPUResourceUser, public Util :: IRefCounted
 		{
 		public:
 			

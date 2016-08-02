@@ -1,6 +1,7 @@
 #include <Xenon/Geometry/Mesh.h>
 
 Xenon::Geometry::Mesh :: Mesh ( DrawMode Mode, Util :: RCMem * IndexData, uint32_t IndexCount, GPU::IndexBuffer :: IndexType IType, GPU::IndexBuffer :: UsageType IUsage ):
+	RefCounted ( 0 ),
 	IndexBuff ( IUsage, IType ),
 	IndexData ( IndexData ),
 	IndexCount ( IndexCount ),
@@ -17,6 +18,7 @@ Xenon::Geometry::Mesh :: Mesh ( DrawMode Mode, Util :: RCMem * IndexData, uint32
 }
 
 Xenon::Geometry::Mesh :: Mesh ( MemMapIndexData MAP_INDEXBUFFER, DrawMode Mode, uint32_t IndexCount, GPU::IndexBuffer :: IndexType IType, bool Draw ):
+	RefCounted ( 0 ),
 	IndexBuff ( Draw ? GPU::IndexBuffer :: kUsageType_Stream_Draw : GPU::IndexBuffer :: kUsageType_Stream_Copy, IType ),
 	IndexData ( NULL ),
 	IndexCount ( IndexCount ),
@@ -45,9 +47,18 @@ Xenon::Geometry::Mesh :: ~Mesh ()
 	while ( AttributeDataList.size () > 0 )
 	{
 		
-		AttributeList [ AttributeDataList.size () - 1 ] -> Dereference ();
+		AttributeDataList [ AttributeDataList.size () - 1 ] -> Dereference ();
 		
 		AttributeDataList.pop_back ();
+		
+	}
+	
+	while ( AttributeList.size () > 0 )
+	{
+		
+		AttributeList [ AttributeList.size () - 1 ] -> Dereference ();
+		
+		AttributeList.pop_back ();
 		
 	}
 	
@@ -217,12 +228,16 @@ void Xenon::Geometry::Mesh :: AddAttribute ( MeshAttribute * Attribute )
 	
 	AttributeList.push_back ( Attribute );
 	
+	Attribute -> Reference ();
+	
 }
 
 void Xenon::Geometry::Mesh :: AddAttributeData ( MeshAttributeData * AttributeData )
 {
 	
 	AttributeDataList.push_back ( AttributeData );
+	
+	AttributeData -> Reference ();
 	
 }
 

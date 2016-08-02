@@ -335,6 +335,8 @@ bool SetupScene ( RenderStruct & Data )
 		
 	}
 	
+	Data.QuadMesh -> Reference ();
+	
 	return true;
 	
 }
@@ -345,7 +347,7 @@ void DestroyScene ( RenderStruct & Data )
 	if ( Data.QuadMesh != NULL )
 	{
 		
-		delete Data.QuadMesh;
+		Data.QuadMesh -> Dereference ();
 		Data.QuadMesh = NULL;
 		
 	}

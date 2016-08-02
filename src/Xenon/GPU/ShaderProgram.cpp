@@ -2,6 +2,7 @@
 #include <Xenon/GPU/Context.h>
 
 Xenon::GPU::ShaderProgram :: ShaderProgram ( std :: string Name ):
+	RefCounted ( 0 ),
 	Name ( Name ),
 	Allocated ( false ),
 	SHandle ( 0 ),

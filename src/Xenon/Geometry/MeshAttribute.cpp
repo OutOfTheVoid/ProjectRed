@@ -2,6 +2,7 @@
 #include <Xenon/Geometry/MeshAttributeData.h>
 
 Xenon::Geometry::MeshAttribute :: MeshAttribute ( const std :: string Name, GPU::VertexArray :: FPAttributeInputType FloatingType, bool Normalized, GLuint Size, GLuint Stride, GLvoid * Offset, MeshAttributeData * Data ):
+	RefCounted ( 0 ),
 	Name ( Name ),
 	FloatingPointInput ( true ),
 	FloatingType ( FloatingType ),
@@ -18,6 +19,7 @@ Xenon::Geometry::MeshAttribute :: MeshAttribute ( const std :: string Name, GPU:
 }
 
 Xenon::Geometry::MeshAttribute :: MeshAttribute ( const std :: string Name, GPU::VertexArray :: IntegerAttributeInputType IntegerType, GLuint Size, GLuint Stride, GLvoid * Offset, MeshAttributeData * Data ):
+	RefCounted ( 0 ),
 	Name ( Name ),
 	FloatingPointInput ( false ),
 	IntegerType ( IntegerType ),

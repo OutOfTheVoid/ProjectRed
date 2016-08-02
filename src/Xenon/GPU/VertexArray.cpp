@@ -6,6 +6,7 @@
 #include <iostream>
 
 Xenon::GPU::VertexArray :: VertexArray ( uint32_t PreAllocFPAttributeCount, uint32_t PreAllocIntegerAttributeCount ):
+	RefCounted ( 0 ),
 	Allocated ( false ),
 	AHandle ( 0 ),
 	FPAttributes ( PreAllocFPAttributeCount ),

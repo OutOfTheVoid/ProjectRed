@@ -2,6 +2,7 @@
 #include <Xenon/GPU/Context.h>
 
 Xenon::GPU::IndexBuffer :: IndexBuffer ( UsageType Usage, IndexType Type ):
+	RefCounted ( 0 ),
 	Usage ( Usage ),
 	Type ( Type ),
 	Allocated ( false ),
