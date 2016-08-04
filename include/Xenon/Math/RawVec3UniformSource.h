@@ -7,13 +7,15 @@
 #include <Xenon/GPU/GLinclude.h>
 #include <Xenon/GPU/IFloatVec3UniformSource.h>
 
+#include <Xenon/Util/RefCounted.h>
+
 namespace Xenon
 {
 	
 	namespace Math
 	{
 		
-		class RawVec3UniformSource : public GPU :: IFloatVec3UniformSource
+		class RawVec3UniformSource : public GPU :: IFloatVec3UniformSource, public Util :: RefCounted
 		{
 		public:
 			

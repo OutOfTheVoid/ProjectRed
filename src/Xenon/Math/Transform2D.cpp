@@ -1,6 +1,7 @@
 #include <Xenon/Math/Transform2D.h>
 
 Xenon::Math::Transform2D :: Transform2D ():
+	RefCounted ( 0 ),
 	Translation ( Vec2 :: ZERO ),
 	Scale ( Vec2 :: IDENTITY ),
 	Rotation ( 0.0f ),
@@ -12,6 +13,7 @@ Xenon::Math::Transform2D :: Transform2D ():
 }
 
 Xenon::Math::Transform2D :: Transform2D ( const Vec2 & Translation ):
+	RefCounted ( 0 ),
 	Translation ( Translation ),
 	Scale ( Vec2 :: IDENTITY ),
 	Rotation ( 0.0f ),
@@ -23,6 +25,7 @@ Xenon::Math::Transform2D :: Transform2D ( const Vec2 & Translation ):
 }
 
 Xenon::Math::Transform2D :: Transform2D ( const Vec2 & Translation, const Vec2 & Scale ):
+	RefCounted ( 0 ),
 	Translation ( Translation ),
 	Scale ( Scale ),
 	Rotation ( 0.0f ),
@@ -34,6 +37,7 @@ Xenon::Math::Transform2D :: Transform2D ( const Vec2 & Translation, const Vec2 &
 }
 
 Xenon::Math::Transform2D :: Transform2D ( const Vec2 & Translation, const Vec2 & Scale, const float Rotation ):
+	RefCounted ( 0 ),
 	Translation ( Translation ),
 	Scale ( Scale ),
 	Rotation ( Rotation ),
@@ -55,6 +59,20 @@ Xenon::Math::Transform2D::InternalMatrix3x3UniformSource :: InternalMatrix3x3Uni
 
 Xenon::Math::Transform2D::InternalMatrix3x3UniformSource :: ~InternalMatrix3x3UniformSource ()
 {
+}
+
+void Xenon::Math::Transform2D::InternalMatrix3x3UniformSource :: Reference ()
+{
+	
+	Source.Reference ();
+	
+}
+
+void Xenon::Math::Transform2D::InternalMatrix3x3UniformSource :: Dereference ()
+{
+	
+	Source.Dereference ();
+	
 }
 
 const GLfloat * Xenon::Math::Transform2D::InternalMatrix3x3UniformSource :: GetFloatArray () const

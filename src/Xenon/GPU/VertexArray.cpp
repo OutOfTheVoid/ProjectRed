@@ -5,12 +5,12 @@
 
 #include <iostream>
 
-Xenon::GPU::VertexArray :: VertexArray ( uint32_t PreAllocFPAttributeCount, uint32_t PreAllocIntegerAttributeCount ):
+Xenon::GPU::VertexArray :: VertexArray ():
 	RefCounted ( 0 ),
 	Allocated ( false ),
 	AHandle ( 0 ),
-	FPAttributes ( PreAllocFPAttributeCount ),
-	IntegerAttributes ( PreAllocIntegerAttributeCount ),
+	FPAttributes (),
+	IntegerAttributes (),
 	IBuffer ( NULL ),
 	Program ( NULL )
 {
@@ -76,11 +76,15 @@ void Xenon::GPU::VertexArray :: SetProgram ( ShaderProgram * Program )
 		
 	}
 	
+	if ( this -> Program != NULL )
+		this -> Program -> Dereference ();
 	this -> Program = Program;
+	if ( this -> Program != NULL )
+		this -> Program -> Reference ();
 	
 }
 
-void Xenon::GPU::VertexArray :: AddFPAttribute ( const std :: string Name, GLint Size, FPAttributeInputType InputType, bool Normalized, GLsizei Stride, GLvoid * Offset, VertexBuffer * Data )
+void Xenon::GPU::VertexArray :: AddFPAttribute ( const std :: string & Name, GLint Size, FPAttributeInputType InputType, bool Normalized, GLsizei Stride, GLvoid * Offset, VertexBuffer * Data )
 {
 	
 	FPAttributeStruct Attribute;
@@ -103,7 +107,7 @@ void Xenon::GPU::VertexArray :: AddFPAttribute ( const std :: string Name, GLint
 	
 }
 
-void Xenon::GPU::VertexArray :: AddIntegerAttribute ( const std :: string Name, GLint Size, FPAttributeInputType InputType, GLsizei Stride, GLvoid * Offset, VertexBuffer * Data )
+void Xenon::GPU::VertexArray :: AddIntegerAttribute ( const std :: string & Name, GLint Size, FPAttributeInputType InputType, GLsizei Stride, GLvoid * Offset, VertexBuffer * Data )
 {
 	
 	IntegerAttributeStruct Attribute;

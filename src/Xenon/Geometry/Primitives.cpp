@@ -3,7 +3,7 @@
 
 #include <iostream>
 
-void Xenon::Geometry::Primitives :: SetupRealCubeFaceNormalSpec ( CubeNormalSpec & Spec, const std :: string AttributeName, bool Static )
+void Xenon::Geometry::Primitives :: SetupRealCubeFaceNormalSpec ( CubeNormalSpec & Spec, const std :: string & AttributeName, bool Static )
 {
 	
 	Spec.Layout = CubeNormalSpec::NormalLayout :: kNormalLayout_Face;
@@ -20,7 +20,7 @@ void Xenon::Geometry::Primitives :: SetupRealCubeFaceNormalSpec ( CubeNormalSpec
 	
 }
 
-void Xenon::Geometry::Primitives :: SetupRadialCubeVertexNormalSpec ( CubeNormalSpec & Spec, const std :: string AttributeName, bool Static )
+void Xenon::Geometry::Primitives :: SetupRadialCubeVertexNormalSpec ( CubeNormalSpec & Spec, const std :: string & AttributeName, bool Static )
 {
 	
 	Spec.Layout = CubeNormalSpec::NormalLayout :: kNormalLayout_CommonVertex;
@@ -39,7 +39,7 @@ void Xenon::Geometry::Primitives :: SetupRadialCubeVertexNormalSpec ( CubeNormal
 	
 }
 
-void Xenon::Geometry::Primitives :: SetupUnitCubeVertexPositionSpec ( CubePositionSpec & Spec, const std :: string AttributeName, bool Static )
+void Xenon::Geometry::Primitives :: SetupUnitCubeVertexPositionSpec ( CubePositionSpec & Spec, const std :: string & AttributeName, bool Static )
 {
 	
 	Spec.Scale = Math::Vec3 :: IDENTITY;
@@ -52,7 +52,7 @@ void Xenon::Geometry::Primitives :: SetupUnitCubeVertexPositionSpec ( CubePositi
 	
 }
 
-void Xenon::Geometry::Primitives :: SetupRealCubeFaceTangentSpec ( CubeTangentSpec & Spec, const std :: string Name, const CubeTexturePositionSpec & DirectionReference, bool Clockwise )
+void Xenon::Geometry::Primitives :: SetupRealCubeFaceTangentSpec ( CubeTangentSpec & Spec, const std :: string & Name, const CubeTexturePositionSpec & DirectionReference, bool Clockwise )
 {
 	
 	Spec.AttributeName = Name;
@@ -1361,7 +1361,7 @@ bool Xenon::Geometry::Primitives :: GenerateCubeMesh ( Mesh ** Target, const Cub
 	
 }
 
-void Xenon::Geometry::Primitives :: SetupNormalQuad2DPositionSpec ( Quad2DPositionSpec & Spec, const std :: string AttributeName, bool Static )
+void Xenon::Geometry::Primitives :: SetupNormalQuad2DPositionSpec ( Quad2DPositionSpec & Spec, const std :: string & AttributeName, bool Static )
 {
 	
 	Spec.AttributeName = AttributeName;
@@ -1374,7 +1374,7 @@ void Xenon::Geometry::Primitives :: SetupNormalQuad2DPositionSpec ( Quad2DPositi
 	
 }
 
-void Xenon::Geometry::Primitives :: SetupNormalQuad2DTexturePositionSpec ( Quad2DTexturePositionSpec & Spec, const std :: string AttributeName, bool Static )
+void Xenon::Geometry::Primitives :: SetupNormalQuad2DTexturePositionSpec ( Quad2DTexturePositionSpec & Spec, const std :: string & AttributeName, bool Static )
 {
 	
 	Spec.AttributeName = AttributeName;
@@ -1408,7 +1408,7 @@ bool Xenon::Geometry::Primitives :: GenerateQuad2DMesh ( Mesh ** Target, const Q
 	{
 		
 		inline AttributeGenTracker_Struct ():
-		Attribute ( NULL )
+			Attribute ( NULL )
 		{
 		};
 		
@@ -1419,10 +1419,10 @@ bool Xenon::Geometry::Primitives :: GenerateQuad2DMesh ( Mesh ** Target, const Q
 		
 	} AttributeGenTracker;
 	
-	if ( AttributeCount > 20 ) // Something obviously went wrong, we shouldn't have more than 20 attributes for a simple quad.
+	if ( AttributeCount > 40 ) // Something obviously went wrong, we shouldn't have more than 40 attributes for a simple quad.
 		return NULL;
 	
-	AttributeGenTracker AttributeTrackers [ 20 ];
+	AttributeGenTracker AttributeTrackers [ 40 ];
 	
 	uint32_t AttributeTrackerIndex;
 	
@@ -1702,8 +1702,6 @@ bool Xenon::Geometry::Primitives :: GenerateQuad2DMesh ( Mesh ** Target, const Q
 	
 	if ( Spec.Attributes & kAttributeFlags_TexturePositions )
 	{
-		
-		AttributeCount += Spec.TexturePositionCount;
 		
 		for ( uint32_t I = 0; I < Spec.TexturePositionCount; I ++ )
 		{

@@ -283,12 +283,12 @@ namespace Xenon
 				
 			} CubeSpec;
 			
-			static void SetupUnitCubeVertexPositionSpec ( CubePositionSpec & Spec, const std :: string AttributeName, bool Static );
+			static void SetupUnitCubeVertexPositionSpec ( CubePositionSpec & Spec, const std :: string & AttributeName, bool Static );
 			
-			static void SetupRealCubeFaceNormalSpec ( CubeNormalSpec & Spec, const std :: string AttributeName, bool Static );
-			static void SetupRadialCubeVertexNormalSpec ( CubeNormalSpec & Spec, const std :: string AttributeName, bool Static );
+			static void SetupRealCubeFaceNormalSpec ( CubeNormalSpec & Spec, const std :: string & AttributeName, bool Static );
+			static void SetupRadialCubeVertexNormalSpec ( CubeNormalSpec & Spec, const std :: string & AttributeName, bool Static );
 			
-			static void SetupRealCubeFaceTangentSpec ( CubeTangentSpec & Spec, const std :: string AttributeName, const CubeTexturePositionSpec & DirectionReference, bool Clockwise = true );
+			static void SetupRealCubeFaceTangentSpec ( CubeTangentSpec & Spec, const std :: string & AttributeName, const CubeTexturePositionSpec & DirectionReference, bool Clockwise = true );
 			
 			static void SetupRegularCubeFaceTexturePositionSpec ( CubeTexturePositionSpec & Spec, CubeTexturePositionSpec::CommonFaceRightAngleTexturePositions :: RightFaceRotation FaceRotations [ 6 ] = NULL );
 			
@@ -385,8 +385,8 @@ namespace Xenon
 				
 			} Quad2DSpec;
 			
-			static void SetupNormalQuad2DPositionSpec ( Quad2DPositionSpec & Spec, const std :: string AttributeName, bool Static );
-			static void SetupNormalQuad2DTexturePositionSpec ( Quad2DTexturePositionSpec & Spec, const std :: string AttributeName, bool Static );
+			static void SetupNormalQuad2DPositionSpec ( Quad2DPositionSpec & Spec, const std :: string & AttributeName, bool Static );
+			static void SetupNormalQuad2DTexturePositionSpec ( Quad2DTexturePositionSpec & Spec, const std :: string & AttributeName, bool Static );
 			
 			static bool GenerateQuad2DMesh ( Mesh ** Target, const Quad2DSpec & Spec );
 			

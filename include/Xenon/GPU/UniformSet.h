@@ -11,6 +11,7 @@
 #include <Xenon/GPU/IFloatVec4UniformSource.h>
 #include <Xenon/GPU/IMatrix3x3UniformSource.h>
 #include <Xenon/GPU/IMatrix4x4UniformSource.h>
+#include <Xenon/GPU/IUIntUniformSource.h>
 #include <Xenon/Util/RefCounted.h>
 
 #include <string>
@@ -26,16 +27,18 @@ namespace Xenon
 		{
 		public:
 			
-			explicit UniformSet ( ShaderProgram * Program = NULL, uint32_t Matrix4x4Prealloc = 0, uint32_t Matrix3x3Prealloc = 0, uint32_t Vec4Prealloc = 0, uint32_t Vec3Prealloc = 0, uint32_t Vec2Prealloc = 0, uint32_t FloatPrealloc = 0 );
+			explicit UniformSet ( ShaderProgram * Program = NULL );
 			~UniformSet ();
 			
-			void AddFloatUniform ( const std :: string Name, const IFloatUniformSource * Source, bool LocateImmediately = true );
-			void AddFloatVec2Uniform ( const std :: string Name, const IFloatVec2UniformSource * Source, bool LocateImmediately = true );
-			void AddFloatVec3Uniform ( const std :: string Name, const IFloatVec3UniformSource * Source, bool LocateImmediately = true );
-			void AddFloatVec4Uniform ( const std :: string Name, const IFloatVec4UniformSource * Source, bool LocateImmediately = true );
+			void AddFloatUniform ( const std :: string & Name, IFloatUniformSource * Source, bool LocateImmediately = true );
+			void AddFloatVec2Uniform ( const std :: string & Name, IFloatVec2UniformSource * Source, bool LocateImmediately = true );
+			void AddFloatVec3Uniform ( const std :: string & Name, IFloatVec3UniformSource * Source, bool LocateImmediately = true );
+			void AddFloatVec4Uniform ( const std :: string & Name, IFloatVec4UniformSource * Source, bool LocateImmediately = true );
 			
-			void AddMatrix3x3Uniform ( const std :: string Name, const IMatrix3x3UniformSource * Source, bool LocateImmediately = true );
-			void AddMatrix4x4Uniform ( const std :: string Name, const Xenon::GPU::IMatrix4x4UniformSource * Source, bool LocateImmediately = true );
+			void AddMatrix3x3Uniform ( const std :: string & Name, IMatrix3x3UniformSource * Source, bool LocateImmediately = true );
+			void AddMatrix4x4Uniform ( const std :: string & Name, Xenon::GPU::IMatrix4x4UniformSource * Source, bool LocateImmediately = true );
+			
+			void AddUIntUniform ( const std :: string & Name, IUIntUniformSource * Source, bool LocateImmediately = true );
 			
 			void Link ();
 			
@@ -49,7 +52,7 @@ namespace Xenon
 			typedef struct
 			{
 				
-				const IFloatUniformSource * Source;
+				IFloatUniformSource * Source;
 				std :: string Name;
 				
 				GLint UniformLocation;
@@ -61,7 +64,7 @@ namespace Xenon
 			typedef struct
 			{
 				
-				const IFloatVec2UniformSource * Source;
+				IFloatVec2UniformSource * Source;
 				std :: string Name;
 				
 				GLint UniformLocation;
@@ -73,7 +76,7 @@ namespace Xenon
 			typedef struct
 			{
 				
-				const IFloatVec3UniformSource * Source;
+				IFloatVec3UniformSource * Source;
 				std :: string Name;
 				
 				GLint UniformLocation;
@@ -85,7 +88,7 @@ namespace Xenon
 			typedef struct
 			{
 				
-				const IFloatVec4UniformSource * Source;
+				IFloatVec4UniformSource * Source;
 				std :: string Name;
 				
 				GLint UniformLocation;
@@ -97,7 +100,7 @@ namespace Xenon
 			typedef struct
 			{
 				
-				const IMatrix3x3UniformSource * Source;
+				IMatrix3x3UniformSource * Source;
 				std :: string Name;
 				
 				GLint UniformLocation;
@@ -106,10 +109,10 @@ namespace Xenon
 				
 			} Matrix3x3UniformTracker;
 			
-			typedef struct Matrix4x4UniformTracker_Struct
+			typedef struct
 			{
 				
-				const IMatrix4x4UniformSource * Source;
+				IMatrix4x4UniformSource * Source;
 				std :: string Name;
 				
 				GLint UniformLocation;
@@ -117,6 +120,18 @@ namespace Xenon
 				int64_t LastUploadedIteration;
 				
 			} Matrix4x4UniformTracker;
+			
+			typedef struct
+			{
+				
+				IUIntUniformSource * Source;
+				std :: string Name;
+				
+				GLint UniformLocation;
+				
+				int64_t LastUploadedIteration;
+				
+			} UIntUniformTracker;
 			
 			ShaderProgram * Program;
 			
@@ -129,6 +144,8 @@ namespace Xenon
 			
 			std :: vector <Matrix3x3UniformTracker> Matrix3x3Uniforms;
 			std :: vector <Matrix4x4UniformTracker> Matrix4x4Uniforms;
+			
+			std :: vector <UIntUniformTracker> UIntUniforms;
 			
 		};
 		

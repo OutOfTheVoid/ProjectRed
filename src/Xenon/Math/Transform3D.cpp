@@ -1,6 +1,7 @@
 #include <Xenon/Math/Transform3D.h>
 
 Xenon::Math::Transform3D :: Transform3D ():
+	RefCounted ( 0 ),
 	Translation ( Vec3 :: ZERO ),
 	Scale ( Vec3 :: IDENTITY ),
 	Rotation ( Quaternion :: IDENTITY ),
@@ -20,6 +21,7 @@ Xenon::Math::Transform3D :: Transform3D ():
 }
 
 Xenon::Math::Transform3D :: Transform3D ( const Vec3 & Translation ):
+	RefCounted ( 0 ),
 	Translation ( Translation ),
 	Scale ( Vec3 :: IDENTITY ),
 	Rotation ( Quaternion :: IDENTITY ),
@@ -39,6 +41,7 @@ Xenon::Math::Transform3D :: Transform3D ( const Vec3 & Translation ):
 }
 
 Xenon::Math::Transform3D :: Transform3D ( const Vec3 & Translation, const Vec3 & Scale ):
+	RefCounted ( 0 ),
 	Translation ( Translation ),
 	Scale ( Scale ),
 	Rotation ( Quaternion :: IDENTITY ),
@@ -58,6 +61,7 @@ Xenon::Math::Transform3D :: Transform3D ( const Vec3 & Translation, const Vec3 &
 }
 
 Xenon::Math::Transform3D :: Transform3D ( const Vec3 & Translation, const Vec3 & Scale, const Quaternion & Rotation ):
+	RefCounted ( 0 ),
 	Translation ( Translation ),
 	Scale ( Scale ),
 	Rotation ( Rotation ),
@@ -109,6 +113,20 @@ int64_t Xenon::Math::Transform3D::InternalMatrix4x4UniformSource :: GetIteration
 {
 	
 	return * IterationPTR;
+	
+}
+
+void Xenon::Math::Transform3D::InternalMatrix4x4UniformSource :: Reference ()
+{
+	
+	Source -> Reference ();
+	
+}
+
+void Xenon::Math::Transform3D::InternalMatrix4x4UniformSource :: Dereference ()
+{
+	
+	Source -> Dereference ();
 	
 }
 

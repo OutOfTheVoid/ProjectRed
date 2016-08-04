@@ -4,6 +4,7 @@
 #include <Xenon/Math/RawMatrix4x4UniformSource.h>
 
 Xenon::Math::RawMatrix4x4UniformSource :: RawMatrix4x4UniformSource ( const Matrix4x4 * Source, bool Transposed ):
+	RefCounted ( 0 ),
 	Source ( Source ),
 	Transposed ( Transposed ),
 	Iteration ( 0 )

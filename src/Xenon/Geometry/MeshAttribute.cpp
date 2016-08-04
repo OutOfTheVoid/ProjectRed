@@ -1,7 +1,7 @@
 #include <Xenon/Geometry/MeshAttribute.h>
 #include <Xenon/Geometry/MeshAttributeData.h>
 
-Xenon::Geometry::MeshAttribute :: MeshAttribute ( const std :: string Name, GPU::VertexArray :: FPAttributeInputType FloatingType, bool Normalized, GLuint Size, GLuint Stride, GLvoid * Offset, MeshAttributeData * Data ):
+Xenon::Geometry::MeshAttribute :: MeshAttribute ( const std :: string & Name, GPU::VertexArray :: FPAttributeInputType FloatingType, bool Normalized, GLuint Size, GLuint Stride, GLvoid * Offset, MeshAttributeData * Data ):
 	RefCounted ( 0 ),
 	Name ( Name ),
 	FloatingPointInput ( true ),
@@ -18,7 +18,7 @@ Xenon::Geometry::MeshAttribute :: MeshAttribute ( const std :: string Name, GPU:
 	
 }
 
-Xenon::Geometry::MeshAttribute :: MeshAttribute ( const std :: string Name, GPU::VertexArray :: IntegerAttributeInputType IntegerType, GLuint Size, GLuint Stride, GLvoid * Offset, MeshAttributeData * Data ):
+Xenon::Geometry::MeshAttribute :: MeshAttribute ( const std :: string & Name, GPU::VertexArray :: IntegerAttributeInputType IntegerType, GLuint Size, GLuint Stride, GLvoid * Offset, MeshAttributeData * Data ):
 	RefCounted ( 0 ),
 	Name ( Name ),
 	FloatingPointInput ( false ),

@@ -1,5 +1,5 @@
-#ifndef XENON_GPU_IFLOATUNIFORMSOURCE_H
-#define XENON_GPU_IFLOATUNIFORMSOURCE_H
+#ifndef XENON_GPU_IUINTUNIFORMSOURCE_H
+#define XENON_GPU_IUINTUNIFORMSOURCE_H
 
 #include <Xenon/Xenon.h>
 #include <Xenon/GPU/GPU.h>
@@ -14,11 +14,11 @@ namespace Xenon
 	namespace GPU
 	{
 		
-		class IFloatUniformSource : public virtual Util :: IRefCounted
+		class IUIntUniformSource : public virtual Util :: IRefCounted
 		{
 		public:
 			
-			virtual GLfloat GetValue () const = 0;
+			virtual GLuint GetValue () const = 0;
 			
 			virtual int64_t GetIteration () const = 0;
 			

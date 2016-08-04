@@ -6,6 +6,7 @@ Xenon::GPU :: Context Xenon::GPU::Context :: NullContext ( NULL );
 thread_local Xenon::GPU :: Context * Xenon::GPU::Context :: CurrentBoundContext = & NullContext;
 
 Xenon::GPU::Context :: Context ( IGLContext * GLContext ):
+	RefCounted ( 0 ),
 	GLContext ( GLContext ),
 	CurrentBoundShader ( NULL ),
 	CurrentBoundArrayBuffer ( NULL ),

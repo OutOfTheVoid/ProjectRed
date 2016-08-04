@@ -1,25 +1,66 @@
 #include <Xenon/GPU/UniformSet.h>
 #include <iostream>
 
-Xenon::GPU::UniformSet :: UniformSet ( ShaderProgram * Program, uint32_t Matrix4x4Prealloc, uint32_t Matrix3x3Prealloc, uint32_t FloatVec4Prealloc, uint32_t FloatVec3Prealloc, uint32_t FloatVec2Prealloc, uint32_t FloatPrealloc ):
+Xenon::GPU::UniformSet :: UniformSet ( ShaderProgram * Program ):
 	RefCounted ( 0 ),
 	Program ( Program ),
 	LastLinkIteration ( - 1 ),
-	FloatUniforms ( FloatPrealloc ),
-	FloatVec2Uniforms ( FloatVec2Prealloc ),
-	FloatVec3Uniforms ( FloatVec3Prealloc ),
-	FloatVec4Uniforms ( FloatVec4Prealloc ),
-	Matrix3x3Uniforms ( Matrix3x3Prealloc ),
-	Matrix4x4Uniforms ( Matrix4x4Prealloc )
+	FloatUniforms (),
+	FloatVec2Uniforms (),
+	FloatVec3Uniforms (),
+	FloatVec4Uniforms (),
+	Matrix3x3Uniforms (),
+	Matrix4x4Uniforms (),
+	UIntUniforms ()
 {
+	
+	if ( Program != NULL )
+		Program -> Reference ();
+	
 }
 
 Xenon::GPU::UniformSet :: ~UniformSet ()
 {
+	
+	if ( Program != NULL )
+	{
+		
+		Program -> Dereference ();
+		
+		Program = NULL;
+		
+	}
+	
+	uint32_t I;
+	
+	for ( I = 0; I < FloatUniforms.size (); I ++ )
+		FloatUniforms [ I ].Source -> Dereference ();
+	
+	for ( I = 0; I < FloatVec2Uniforms.size (); I ++ )
+		FloatVec2Uniforms [ I ].Source -> Dereference ();
+	
+	for ( I = 0; I < FloatVec3Uniforms.size (); I ++ )
+		FloatVec3Uniforms [ I ].Source -> Dereference ();
+	
+	for ( I = 0; I < FloatVec4Uniforms.size (); I ++ )
+		FloatVec4Uniforms [ I ].Source -> Dereference ();
+	
+	for ( I = 0; I < Matrix3x3Uniforms.size (); I ++ )
+		Matrix3x3Uniforms [ I ].Source -> Dereference ();
+	
+	for ( I = 0; I < Matrix4x4Uniforms.size (); I ++ )
+		Matrix4x4Uniforms [ I ].Source -> Dereference ();
+	
+	for ( I = 0; I < UIntUniforms.size (); I ++ )
+		UIntUniforms [ I ].Source -> Dereference ();
+	
 }
 
-void Xenon::GPU::UniformSet :: AddFloatUniform ( const std :: string Name, const IFloatUniformSource * Source, bool LocateImmediately )
+void Xenon::GPU::UniformSet :: AddFloatUniform ( const std :: string & Name, IFloatUniformSource * Source, bool LocateImmediately )
 {
+	
+	if ( Source == NULL )
+		return;
 	
 	FloatUniformTracker Tracker;
 	
@@ -28,12 +69,17 @@ void Xenon::GPU::UniformSet :: AddFloatUniform ( const std :: string Name, const
 	Tracker.LastUploadedIteration = - 1;
 	Tracker.UniformLocation = ( ( Program != NULL ) && LocateImmediately ) ? Program -> GetUniformLocation ( Name.c_str () ) : - 1;
 	
+	Source -> Reference ();
+	
 	FloatUniforms.push_back ( Tracker );
 	
 }
 
-void Xenon::GPU::UniformSet :: AddFloatVec2Uniform ( const std :: string Name, const IFloatVec2UniformSource * Source, bool LocateImmediately )
+void Xenon::GPU::UniformSet :: AddFloatVec2Uniform ( const std :: string & Name, IFloatVec2UniformSource * Source, bool LocateImmediately )
 {
+	
+	if ( Source == NULL )
+		return;
 	
 	FloatVec2UniformTracker Tracker;
 	
@@ -42,12 +88,17 @@ void Xenon::GPU::UniformSet :: AddFloatVec2Uniform ( const std :: string Name, c
 	Tracker.LastUploadedIteration = - 1;
 	Tracker.UniformLocation = ( ( Program != NULL ) && LocateImmediately ) ? Program -> GetUniformLocation ( Name.c_str () ) : - 1;
 	
+	Source -> Reference ();
+	
 	FloatVec2Uniforms.push_back ( Tracker );
 	
 }
 
-void Xenon::GPU::UniformSet :: AddFloatVec3Uniform ( const std :: string Name, const IFloatVec3UniformSource * Source, bool LocateImmediately )
+void Xenon::GPU::UniformSet :: AddFloatVec3Uniform ( const std :: string & Name, IFloatVec3UniformSource * Source, bool LocateImmediately )
 {
+	
+	if ( Source == NULL )
+		return;
 	
 	FloatVec3UniformTracker Tracker;
 	
@@ -56,12 +107,17 @@ void Xenon::GPU::UniformSet :: AddFloatVec3Uniform ( const std :: string Name, c
 	Tracker.LastUploadedIteration = - 1;
 	Tracker.UniformLocation = ( ( Program != NULL ) && LocateImmediately ) ? Program -> GetUniformLocation ( Name.c_str () ) : - 1;
 	
+	Source -> Reference ();
+	
 	FloatVec3Uniforms.push_back ( Tracker );
 	
 }
 
-void Xenon::GPU::UniformSet :: AddFloatVec4Uniform ( const std :: string Name, const IFloatVec4UniformSource * Source, bool LocateImmediately )
+void Xenon::GPU::UniformSet :: AddFloatVec4Uniform ( const std :: string & Name, IFloatVec4UniformSource * Source, bool LocateImmediately )
 {
+	
+	if ( Source == NULL )
+		return;
 	
 	FloatVec4UniformTracker Tracker;
 	
@@ -70,12 +126,17 @@ void Xenon::GPU::UniformSet :: AddFloatVec4Uniform ( const std :: string Name, c
 	Tracker.LastUploadedIteration = - 1;
 	Tracker.UniformLocation = ( ( Program != NULL ) && LocateImmediately ) ? Program -> GetUniformLocation ( Name.c_str () ) : - 1;
 	
+	Source -> Reference ();
+	
 	FloatVec4Uniforms.push_back ( Tracker );
 	
 }
 
-void Xenon::GPU::UniformSet :: AddMatrix3x3Uniform ( const std :: string Name, const IMatrix3x3UniformSource * Source, bool LocateImmediately )
+void Xenon::GPU::UniformSet :: AddMatrix3x3Uniform ( const std :: string & Name, IMatrix3x3UniformSource * Source, bool LocateImmediately )
 {
+	
+	if ( Source == NULL )
+		return;
 	
 	Matrix3x3UniformTracker Tracker;
 	
@@ -84,12 +145,17 @@ void Xenon::GPU::UniformSet :: AddMatrix3x3Uniform ( const std :: string Name, c
 	Tracker.LastUploadedIteration = - 1;
 	Tracker.UniformLocation = ( ( Program != NULL ) && LocateImmediately ) ? Program -> GetUniformLocation ( Name.c_str () ) : - 1;
 	
+	Source -> Reference ();
+	
 	Matrix3x3Uniforms.push_back ( Tracker );
 	
 }
 
-void Xenon::GPU::UniformSet :: AddMatrix4x4Uniform ( const std :: string Name, const IMatrix4x4UniformSource * Source, bool LocateImmediately )
+void Xenon::GPU::UniformSet :: AddMatrix4x4Uniform ( const std :: string & Name, IMatrix4x4UniformSource * Source, bool LocateImmediately )
 {
+	
+	if ( Source == NULL )
+		return;
 	
 	Matrix4x4UniformTracker Tracker;
 	
@@ -98,7 +164,28 @@ void Xenon::GPU::UniformSet :: AddMatrix4x4Uniform ( const std :: string Name, c
 	Tracker.LastUploadedIteration = - 1;
 	Tracker.UniformLocation = ( ( Program != NULL ) && LocateImmediately ) ? Program -> GetUniformLocation ( Name.c_str () ) : - 1;
 	
+	Source -> Reference ();
+	
 	Matrix4x4Uniforms.push_back ( Tracker );
+	
+}
+
+void Xenon::GPU::UniformSet :: AddUIntUniform ( const std :: string & Name, IUIntUniformSource * Source, bool LocateImmediately )
+{
+	
+	if ( Source == NULL )
+		return;
+	
+	UIntUniformTracker Tracker;
+	
+	Tracker.Name = Name;
+	Tracker.Source = Source;
+	Tracker.LastUploadedIteration = - 1;
+	Tracker.UniformLocation = ( ( Program != NULL ) && LocateImmediately ) ? Program -> GetUniformLocation ( Name.c_str () ) : - 1;
+	
+	Source -> Reference ();
+	
+	UIntUniforms.push_back ( Tracker );
 	
 }
 
@@ -154,6 +241,14 @@ void Xenon::GPU::UniformSet :: ResetUniformStates ()
 		
 		Matrix4x4Uniforms [ I ].UniformLocation = - 1;
 		Matrix4x4Uniforms [ I ].LastUploadedIteration = - 1;
+		
+	}
+	
+	for ( I = 0; I < UIntUniforms.size (); I ++ )
+	{
+		
+		UIntUniforms [ I ].UniformLocation = - 1;
+		UIntUniforms [ I ].LastUploadedIteration = - 1;
 		
 	}
 	
@@ -269,6 +364,22 @@ void Xenon::GPU::UniformSet :: UpdateUniforms ( bool Relink )
 		
 	}
 	
+	for ( I = 0; I < UIntUniforms.size (); I ++ )
+	{
+		
+		int64_t CurrentIteration = UIntUniforms [ I ].Source -> GetIteration ();
+		
+		if ( ( UIntUniforms [ I ].UniformLocation != - 1 ) && ( UIntUniforms [ I ].LastUploadedIteration < CurrentIteration ) )
+		{
+			
+			glUniform1ui ( UIntUniforms [ I ].UniformLocation, UIntUniforms [ I ].Source -> GetValue () );
+			
+			UIntUniforms [ I ].LastUploadedIteration = CurrentIteration;
+			
+		}
+		
+	}
+	
 }
 
 void Xenon::GPU::UniformSet :: Link ()
@@ -339,6 +450,14 @@ void Xenon::GPU::UniformSet :: Link ()
 		
 	}
 	
+	for ( I = 0; I < UIntUniforms.size (); I ++ )
+	{
+		
+		if ( UIntUniforms [ I ].UniformLocation == - 1 )
+			UIntUniforms [ I ].UniformLocation = Program -> GetUniformLocation ( UIntUniforms [ I ].Name.c_str () );
+		
+	}
+	
 }
 
 void Xenon::GPU::UniformSet :: SetProgram ( ShaderProgram * Program )
@@ -347,6 +466,10 @@ void Xenon::GPU::UniformSet :: SetProgram ( ShaderProgram * Program )
 	if ( this -> Program != Program )
 		ResetUniformStates ();
 	
+	if ( this -> Program != NULL )
+		this -> Program -> Dereference ();
 	this -> Program = Program;
+	if ( this -> Program != NULL )
+		this -> Program -> Reference ();
 	
 }

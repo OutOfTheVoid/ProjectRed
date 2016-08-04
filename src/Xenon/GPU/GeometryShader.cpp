@@ -1,10 +1,9 @@
 #include <Xenon/GPU/GeometryShader.h>
 #include <stdlib.h>
 
-Xenon::GPU::GeometryShader :: GeometryShader ( const std :: string Source, const std :: string Name ):
+Xenon::GPU::GeometryShader :: GeometryShader ( const std :: string & Source, const std :: string & Name ):
 	RefCounted ( 0 ),
 	ShaderCode ( Source ),
-	DiscardableSource ( false ),
 	SHandle ( 0 ),
 	Allocated ( false ),
 	Compiled ( false ),

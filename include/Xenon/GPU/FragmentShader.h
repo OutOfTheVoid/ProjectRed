@@ -19,7 +19,7 @@ namespace Xenon
 		{
 		public:
 			
-			FragmentShader ( const std :: string Source, std :: string Name = "FragmentShader_Undefined" );
+			FragmentShader ( const std :: string & Source, const std :: string & Name = "FragmentShader_Undefined" );
 			
 			~FragmentShader ();
 			
@@ -40,7 +40,6 @@ namespace Xenon
 			GLuint GetSHandle ();
 			
 			std :: string ShaderCode;
-			bool DiscardableSource;
 			
 			GLuint SHandle;
 			

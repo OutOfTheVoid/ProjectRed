@@ -4,6 +4,7 @@
 #include <Xenon/Xenon.h>
 #include <Xenon/GPU/GPU.h>
 #include <Xenon/GPU/GLInclude.h>
+#include <Xenon/Util/IRefCounted.h>
 
 namespace Xenon
 {
@@ -11,7 +12,7 @@ namespace Xenon
 	namespace GPU
 	{
 		
-		class IMatrix4x4UniformSource
+		class IMatrix4x4UniformSource : public virtual Util :: IRefCounted
 		{
 		public:
 			

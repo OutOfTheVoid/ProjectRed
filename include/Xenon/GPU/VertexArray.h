@@ -48,7 +48,7 @@ namespace Xenon
 			static const IntegerAttributeInputType kIntegerAttributeInputType_Int = GL_INT;
 			static const IntegerAttributeInputType kIntegerAttributeInputType_UInt = GL_UNSIGNED_INT;
 			
-			VertexArray ( uint32_t PreAllocFPAttributeCount = 4, uint32_t PreAllocIntegerAttributeCount = 0 );
+			VertexArray ();
 			~VertexArray ();
 			
 			void GPUResourceAlloc ();
@@ -58,8 +58,8 @@ namespace Xenon
 			
 			void SetProgram ( ShaderProgram * Program );
 			
-			void AddFPAttribute ( const std :: string Name, GLint Size, FPAttributeInputType InputType, bool Normalized, GLsizei Stride, GLvoid * Offset, VertexBuffer * Data );
-			void AddIntegerAttribute ( const std :: string Name, GLint Size, IntegerAttributeInputType InputType, GLsizei Stride, GLvoid * Offset, VertexBuffer * Data );
+			void AddFPAttribute ( const std :: string & Name, GLint Size, FPAttributeInputType InputType, bool Normalized, GLsizei Stride, GLvoid * Offset, VertexBuffer * Data );
+			void AddIntegerAttribute ( const std :: string & Name, GLint Size, IntegerAttributeInputType InputType, GLsizei Stride, GLvoid * Offset, VertexBuffer * Data );
 			
 			void SetIndexBuffer ( IndexBuffer * IBuffer );
 			

@@ -14,7 +14,7 @@ namespace Xenon
 	namespace Util
 	{
 		
-		class RefCounted : public IRefCounted
+		class RefCounted : public virtual IRefCounted
 		{
 		public:
 			

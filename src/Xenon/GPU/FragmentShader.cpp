@@ -1,7 +1,7 @@
 #include <Xenon/GPU/FragmentShader.h>
 #include <stdlib.h>
 
-Xenon::GPU::FragmentShader :: FragmentShader ( const std :: string Source, std :: string Name ):
+Xenon::GPU::FragmentShader :: FragmentShader ( const std :: string & Source, const std :: string & Name ):
 	RefCounted ( 0 ),
 	ShaderCode ( Source ),
 	SHandle ( 0 ),

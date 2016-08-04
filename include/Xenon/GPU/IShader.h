@@ -17,7 +17,7 @@ namespace Xenon
 		
 		class ShaderProgram;
 		
-		class IShader : public Util :: IRefCounted
+		class IShader : public virtual Util :: IRefCounted
 		{
 		public:
 			

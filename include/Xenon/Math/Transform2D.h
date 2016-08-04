@@ -7,6 +7,7 @@
 #include <Xenon/Math/Matrix3x3.h>
 #include <Xenon/GPU/GLInclude.h>
 #include <Xenon/GPU/IMatrix3x3UniformSource.h>
+#include <Xenon/Util/RefCounted.h>
 
 namespace Xenon
 {
@@ -14,7 +15,7 @@ namespace Xenon
 	namespace Math
 	{
 		
-		class Transform2D
+		class Transform2D : public Util :: RefCounted
 		{
 		public:
 			
@@ -51,6 +52,9 @@ namespace Xenon
 				
 				InternalMatrix3x3UniformSource ( Transform2D & Source );
 				~InternalMatrix3x3UniformSource ();
+				
+				void Reference ();
+				void Dereference ();
 				
 				const GLfloat * GetFloatArray () const;
 				

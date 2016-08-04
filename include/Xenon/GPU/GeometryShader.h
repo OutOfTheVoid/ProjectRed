@@ -19,7 +19,7 @@ namespace Xenon
 		{
 		public:
 			
-			GeometryShader ( const std :: string Source, const std :: string Name = "GeometryShader_Undefined" );
+			GeometryShader ( const std :: string & Source, const std :: string & Name = "GeometryShader_Undefined" );
 			
 			~GeometryShader ();
 			
@@ -40,7 +40,6 @@ namespace Xenon
 			GLuint GetSHandle ();
 			
 			std :: string ShaderCode;
-			bool DiscardableSource;
 			
 			GLuint SHandle;
 			

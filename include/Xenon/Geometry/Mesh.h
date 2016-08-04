@@ -75,7 +75,7 @@ namespace Xenon
 			
 			DrawMode GetDrawMode ();
 			
-			void BindForDraw ();
+			void FlushData ();
 			
 			void BuildVertexArray ( GPU :: VertexArray & Target );
 			

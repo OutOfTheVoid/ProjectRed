@@ -407,6 +407,8 @@ void RAUX::File :: Flush ( uint32_t * Status )
 int64_t RAUX::File :: GetLength ( uint32_t * Status ) const
 {
 	
+	* Status = kStatus_Success;
+	
 	#if defined ( __APPLE__ )
 	
 	struct stat FStatData;

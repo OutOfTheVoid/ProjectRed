@@ -17,10 +17,9 @@ namespace Xenon
 		{
 		public:
 			
-			VertexShader ( const GLchar * Source, const char * Name = "VertexShader_Undefined" );
-			VertexShader ( const GLchar * Source, bool FreeOnCompile, const char * Name = "VertexShader_Undefined" );
+			VertexShader ( const std :: string & Source, const std :: string & Name = "VertexShader_Undefined" );
 			
-			~VertexShader ();
+			virtual ~VertexShader ();
 			
 			void GPUResourceAlloc ();
 			void GPUResourceFree ();
@@ -41,7 +40,6 @@ namespace Xenon
 			GLuint GetSHandle ();
 			
 			std :: string ShaderCode;
-			bool DiscardableSource;
 			
 			GLuint SHandle;
 			

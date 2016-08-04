@@ -1,14 +1,14 @@
-#include <RAUX/VertexShaderFile.h>
+#include <RAUX/FragmentShaderFile.h>
 
 #ifdef RAUX_XENON_INTERFACE
 
-RAUX::VertexShaderFile :: VertexShaderFile ( const std :: string & Name ):
+RAUX::FragmentShaderFile :: FragmentShaderFile ( const std :: string & Name ):
 	FileInstance ( Name ),
 	ShaderName ( "" )
 {
 }
 
-RAUX::VertexShaderFile :: VertexShaderFile ( const std :: string & Name, const std :: string & ShaderName ):
+RAUX::FragmentShaderFile :: FragmentShaderFile ( const std :: string & Name, const std :: string & ShaderName ):
 	FileInstance ( Name ),
 	ShaderName ( ShaderName )
 {
@@ -17,25 +17,25 @@ RAUX::VertexShaderFile :: VertexShaderFile ( const std :: string & Name, const s
 	
 }
 
-RAUX::VertexShaderFile :: ~VertexShaderFile ()
+RAUX::FragmentShaderFile :: ~FragmentShaderFile ()
 {
 }
 
-bool RAUX::VertexShaderFile :: Exists () const
+bool RAUX::FragmentShaderFile :: Exists () const
 {
 	
 	return FileInstance.Exists ();
 	
 }
 
-const std :: string & RAUX::VertexShaderFile :: GetName () const
+const std :: string & RAUX::FragmentShaderFile :: GetName () const
 {
 	
 	return FileInstance.GetName ();
 	
 }
 
-void RAUX::VertexShaderFile :: Open ( uint32_t * Status )
+void RAUX::FragmentShaderFile :: Open ( uint32_t * Status )
 {
 	
 	uint32_t SubStatus;
@@ -55,21 +55,18 @@ void RAUX::VertexShaderFile :: Open ( uint32_t * Status )
 	
 }
 
-void RAUX::VertexShaderFile :: Close ()
+void RAUX::FragmentShaderFile :: Close ()
 {
 	
 	FileInstance.Close ();
 	
 }
 
-Xenon::GPU :: VertexShader * RAUX::VertexShaderFile :: LoadToShader ( uint32_t * Status )
+Xenon::GPU :: FragmentShader * RAUX::FragmentShaderFile :: LoadToShader ( uint32_t * Status )
 {
 	
 	if ( ! FileInstance.IsOpen () )
 		Open ( Status );
-	
-	if ( * Status != kStatus_Success )
-		return NULL;
 	
 	uint32_t SubStatus;
 	
@@ -87,9 +84,9 @@ Xenon::GPU :: VertexShader * RAUX::VertexShaderFile :: LoadToShader ( uint32_t *
 	}
 	
 	if ( ShaderName == "" )
-		return new Xenon::GPU :: VertexShader ( Buffer.c_str () );
+		return new Xenon::GPU :: FragmentShader ( Buffer.c_str () );
 	
-	return new Xenon::GPU :: VertexShader ( Buffer.c_str (), ShaderName.c_str () );
+	return new Xenon::GPU :: FragmentShader ( Buffer.c_str (), ShaderName.c_str () );
 	
 }
 

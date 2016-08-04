@@ -1,7 +1,7 @@
 #include <Xenon/GPU/ShaderProgram.h>
 #include <Xenon/GPU/Context.h>
 
-Xenon::GPU::ShaderProgram :: ShaderProgram ( std :: string Name ):
+Xenon::GPU::ShaderProgram :: ShaderProgram ( const std :: string & Name ):
 	RefCounted ( 0 ),
 	Name ( Name ),
 	Allocated ( false ),

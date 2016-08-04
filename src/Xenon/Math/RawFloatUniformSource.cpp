@@ -1,6 +1,7 @@
 #include <Xenon/Math/RawFloatUniformSource.h>
 
 Xenon::Math::RawFloatUniformSource :: RawFloatUniformSource ( GLfloat ValueInitial ):
+	RefCounted ( 0 ),
 	Value ( ValueInitial ),
 	Iteration ( 0 )
 {

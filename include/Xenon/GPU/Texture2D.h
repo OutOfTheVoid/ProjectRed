@@ -168,8 +168,8 @@ namespace Xenon
 			
 			bool GPUResourceAllocated ();
 			
-			void BlankTextureImage ( GLint DetailLevel, InternalFormat FInternal, GLsizei Width, GLsizei Height, ExternalFormat EFormat, ExternalLayout ELayout );
-			void TextureImage ( GLint DetailLevel, InternalFormat FInternal, GLsizei Width, GLsizei Height, ExternalFormat EFormat, ExternalLayout ELayout, GLvoid * Data, GLuint Alignment = 1 );
+			void BlankTextureImage ( GLint DetailLevel, InternalFormat FInternal, GLsizei Width, GLsizei Height, ExternalLayout ELayout, ExternalFormat EFormat );
+			void TextureImage ( GLint DetailLevel, InternalFormat FInternal, GLsizei Width, GLsizei Height, ExternalFormat EFormat, ExternalLayout ELayout, const GLvoid * Data, GLuint Alignment = 1 );
 			
 			void GenerateMipMaps ();
 			

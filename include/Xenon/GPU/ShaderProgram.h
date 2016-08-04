@@ -20,7 +20,7 @@ namespace Xenon
 		{
 		public:
 			
-			ShaderProgram ( const std :: string Name = "Undefined" );
+			ShaderProgram ( const std :: string & Name = "Undefined" );
 			~ShaderProgram ();
 			
 			void GPUResourceAlloc ();

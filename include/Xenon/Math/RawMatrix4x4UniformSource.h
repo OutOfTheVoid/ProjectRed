@@ -7,13 +7,15 @@
 #include <Xenon/GPU/GLinclude.h>
 #include <Xenon/GPU/IMatrix4x4UniformSource.h>
 
+#include <Xenon/Util/RefCounted.h>
+
 namespace Xenon
 {
 	
 	namespace Math
 	{
 		
-		class RawMatrix4x4UniformSource : public GPU :: IMatrix4x4UniformSource
+		class RawMatrix4x4UniformSource : public GPU :: IMatrix4x4UniformSource, public Util :: RefCounted
 		{
 		public:
 			

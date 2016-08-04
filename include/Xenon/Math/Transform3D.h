@@ -8,6 +8,7 @@
 #include <Xenon/Math/Matrix4x4.h>
 #include <Xenon/GPU/GLInclude.h>
 #include <Xenon/GPU/IMatrix4x4UniformSource.h>
+#include <Xenon/Util/RefCounted.h>
 
 namespace Xenon
 {
@@ -15,7 +16,7 @@ namespace Xenon
 	namespace Math
 	{
 		
-		class Transform3D
+		class Transform3D : public Util :: RefCounted
 		{
 		public:
 			
@@ -63,6 +64,9 @@ namespace Xenon
 				
 				const GLfloat * GetFloatArray () const;
 				bool IsTransposed () const;
+				
+				void Reference ();
+				void Dereference ();
 				
 				int64_t GetIteration () const;
 				

@@ -192,7 +192,7 @@ Xenon::Geometry::Mesh :: DrawMode Xenon::Geometry::Mesh :: GetDrawMode ()
 	
 }
 
-void Xenon::Geometry::Mesh :: BindForDraw ()
+void Xenon::Geometry::Mesh :: FlushData ()
 {
 	
 	FlushIndexes ( false );
@@ -214,7 +214,7 @@ void Xenon::Geometry::Mesh :: BuildVertexArray ( GPU :: VertexArray & Target )
 	if ( ! GPUAllocated )
 		GPUResourceAlloc ();
 	
-	BindForDraw ();
+	FlushData ();
 	
 	for ( uint32_t I = 0; I < AttributeList.size (); I ++ )
 		AttributeList [ I ] -> ApplyToVertexArray ( Target );

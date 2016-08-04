@@ -1,6 +1,7 @@
 #include <Xenon/Math/RawVec4UniformSource.h>
 
 Xenon::Math::RawVec4UniformSource :: RawVec4UniformSource ( const Vec4 * Source ):
+	RefCounted ( 0 ),
 	Source ( Source ),
 	Iteration ( 0 )
 {

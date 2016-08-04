@@ -67,13 +67,13 @@ void Xenon::GPU::Texture2D :: BlankTextureImage ( GLint DetailLevel, InternalFor
 	
 }
 
-void Xenon::GPU::Texture2D :: TextureImage ( GLint DetailLevel, InternalFormat FInternal, GLsizei Width, GLsizei Height, ExternalFormat EFormat, ExternalLayout ELayout, GLvoid * Data, GLuint Alignment )
+void Xenon::GPU::Texture2D :: TextureImage ( GLint DetailLevel, InternalFormat FInternal, GLsizei Width, GLsizei Height, ExternalLayout ELayout, ExternalFormat EFormat, const GLvoid * Data, GLuint Alignment )
 {
 	
 	Bind ();
 	
 	glPixelStorei ( GL_UNPACK_ALIGNMENT, Alignment );
-	glTexImage2D ( GL_TEXTURE_2D, DetailLevel, FInternal, Width, Height, 0, ELayout, EFormat, Data );
+	glTexImage2D ( GL_TEXTURE_2D, DetailLevel, FInternal, Width, Height, 0, EFormat, ELayout, Data );
 	
 }
 

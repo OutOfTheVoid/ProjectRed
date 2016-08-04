@@ -12,7 +12,7 @@ namespace Xenon
 	namespace GPU
 	{
 		
-		class ITexture : public IGPUResourceUser, public Util :: IRefCounted
+		class ITexture : public IGPUResourceUser, public virtual Util :: IRefCounted
 		{
 		public:
 			
