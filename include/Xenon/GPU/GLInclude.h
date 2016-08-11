@@ -15,7 +15,7 @@
 	
 	#endif
 	
-	#include <GL/glcorearb.h> // assert GL 3.2 core profile available...
+	#include <GL/glcorearb.h>
 	
 #endif
 

@@ -28,6 +28,9 @@ namespace SDLX
 		static const char * GetKeyName ( int32_t Key );
 		static const char * GetScanName ( int32_t ScanCode );
 		
+		static void InjectKeyPress ( SDL_Scancode ScanCode, SDL_Keycode KeyCode );
+		static void InjectKeyRelease ( SDL_Scancode ScanCode, SDL_Keycode KeyCode );
+		
 	private:
 		
 		static void Init ();

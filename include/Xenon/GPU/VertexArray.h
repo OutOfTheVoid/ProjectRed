@@ -58,8 +58,8 @@ namespace Xenon
 			
 			void SetProgram ( ShaderProgram * Program );
 			
-			void AddFPAttribute ( const std :: string & Name, GLint Size, FPAttributeInputType InputType, bool Normalized, GLsizei Stride, GLvoid * Offset, VertexBuffer * Data );
-			void AddIntegerAttribute ( const std :: string & Name, GLint Size, IntegerAttributeInputType InputType, GLsizei Stride, GLvoid * Offset, VertexBuffer * Data );
+			void AddFPAttribute ( const std :: string & Name, GLint Size, FPAttributeInputType InputType, bool Normalized, GLsizei Stride, GLvoid * Offset, VertexBuffer * Data, GLuint InstanceDivisor = 0 );
+			void AddIntegerAttribute ( const std :: string & Name, GLint Size, IntegerAttributeInputType InputType, GLsizei Stride, GLvoid * Offset, VertexBuffer * Data, GLuint InstanceDivisor = 0 );
 			
 			void SetIndexBuffer ( IndexBuffer * IBuffer );
 			
@@ -84,6 +84,8 @@ namespace Xenon
 				GLsizei Stride;
 				GLvoid * Offset;
 				
+				GLuint InstanceDivisor;
+				
 				VertexBuffer * Data;
 				
 				GLint AttributeLocation;
@@ -100,6 +102,8 @@ namespace Xenon
 				GLint Size;
 				GLsizei Stride;
 				GLvoid * Offset;
+				
+				GLuint InstanceDivisor;
 				
 				VertexBuffer * Data;
 				

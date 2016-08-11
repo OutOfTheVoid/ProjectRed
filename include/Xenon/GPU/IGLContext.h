@@ -20,6 +20,8 @@ namespace Xenon
 			
 			virtual int32_t MakeCurrent () = 0;
 			
+			//virtual void * GetGLProcAddress ( const char * Proc );
+			
 		};
 		
 	}

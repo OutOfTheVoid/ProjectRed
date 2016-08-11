@@ -17,6 +17,7 @@ namespace SDLX
 	class Surface;
 	class GLContext;
 	class Renderer;
+	class Mouse;
 
 	class Window : public RefCounted
 	{
@@ -80,6 +81,7 @@ namespace SDLX
 		friend class Surface;
 		friend class GLContext;
 		friend class Renderer;
+		friend class Mouse;
 		
 		static bool EventMatch ( CallbackPair & A, CallbackPair & B );
 		

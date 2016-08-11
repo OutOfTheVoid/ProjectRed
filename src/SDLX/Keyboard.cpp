@@ -69,6 +69,32 @@ void SDLX::Keyboard :: RemoveKeyListener ( void ( * Listener ) ( int32_t ScanCod
 	
 }
 
+void SDLX::Keyboard :: InjectKeyPress ( SDL_Scancode ScanCode, SDL_Keycode KeyCode )
+{
+	
+	SDL_KeyboardEvent Event;
+	
+	Event.keysym.scancode = ScanCode;
+	Event.keysym.sym = KeyCode;
+	Event.type = SDL_KEYDOWN;
+	
+	EventInternal ( & Event );
+	
+}
+
+void SDLX::Keyboard :: InjectKeyRelease ( SDL_Scancode ScanCode, SDL_Keycode KeyCode )
+{
+	
+	SDL_KeyboardEvent Event;
+	
+	Event.keysym.scancode = ScanCode;
+	Event.keysym.sym = KeyCode;
+	Event.type = SDL_KEYUP;
+	
+	EventInternal ( & Event );
+	
+}
+
 void SDLX::Keyboard :: EventInternal ( SDL_KeyboardEvent * Event )
 {
 	

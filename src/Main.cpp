@@ -124,7 +124,7 @@ int main ( int argc, const char * argv [] )
 	
 	SDLX::Window * Win = SDLX::Window :: CreateWindow ( & Status, "Test", WINDOW_WIDTH_0, WINDOW_HEIGHT_0, SDLX::Window :: kCreateFlag_Shown | SDLX::Window :: kCreateFlag_HighDPI | SDLX::Window :: kCreateFlag_OpenGL );
 	
-	SDLX::GLContext :: RequestGLContextVersion ( SDLX::GLContext :: kGLProfile_Core, 3, 2 );
+	SDLX::GLContext :: RequestGLContextVersion ( SDLX::GLContext :: kGLProfile_Core, 3, 3 );
 	SDLX::GLContext :: RequestDepthBufferSize ( 24 );
 	SDLX::GLContext :: RequestStencilBufferSize ( 8 );
 	SDLX::GLContext :: RequestDoubleBuffering ( true );
@@ -496,7 +496,7 @@ void Render ( RenderStruct & Data )
 	
 	Data.Cont -> GetDefaultFrameBuffer () -> Clear ();
 	
-	//Data.QuadTexture -> Bind ();
+	Data.QuadTexture -> Bind ();
 	Data.QuadVAO -> Bind ();
 	Data.QuadUniforms -> UpdateUniforms ();
 	

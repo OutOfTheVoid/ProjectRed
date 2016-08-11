@@ -84,7 +84,7 @@ void Xenon::GPU::VertexArray :: SetProgram ( ShaderProgram * Program )
 	
 }
 
-void Xenon::GPU::VertexArray :: AddFPAttribute ( const std :: string & Name, GLint Size, FPAttributeInputType InputType, bool Normalized, GLsizei Stride, GLvoid * Offset, VertexBuffer * Data )
+void Xenon::GPU::VertexArray :: AddFPAttribute ( const std :: string & Name, GLint Size, FPAttributeInputType InputType, bool Normalized, GLsizei Stride, GLvoid * Offset, VertexBuffer * Data, GLuint InstanceDivisor )
 {
 	
 	FPAttributeStruct Attribute;
@@ -97,6 +97,7 @@ void Xenon::GPU::VertexArray :: AddFPAttribute ( const std :: string & Name, GLi
 	Attribute.Offset = Offset;
 	Attribute.Data = Data;
 	Attribute.Normalized = Normalized;
+	Attribute.InstanceDivisor = InstanceDivisor;
 	
 	if ( Program != NULL )
 		Attribute.AttributeLocation = Program -> GetAttributeLocation ( Name.c_str () );
@@ -107,7 +108,7 @@ void Xenon::GPU::VertexArray :: AddFPAttribute ( const std :: string & Name, GLi
 	
 }
 
-void Xenon::GPU::VertexArray :: AddIntegerAttribute ( const std :: string & Name, GLint Size, FPAttributeInputType InputType, GLsizei Stride, GLvoid * Offset, VertexBuffer * Data )
+void Xenon::GPU::VertexArray :: AddIntegerAttribute ( const std :: string & Name, GLint Size, FPAttributeInputType InputType, GLsizei Stride, GLvoid * Offset, VertexBuffer * Data, GLuint InstanceDivisor )
 {
 	
 	IntegerAttributeStruct Attribute;
@@ -119,6 +120,7 @@ void Xenon::GPU::VertexArray :: AddIntegerAttribute ( const std :: string & Name
 	Attribute.Stride = Stride;
 	Attribute.Offset = Offset;
 	Attribute.Data = Data;
+	Attribute.InstanceDivisor = InstanceDivisor;
 	
 	if ( Program != NULL )
 		Attribute.AttributeLocation = Program -> GetAttributeLocation ( Name.c_str () );
@@ -160,8 +162,9 @@ void Xenon::GPU::VertexArray :: Build ()
 			
 			FPAttributes [ I ].Data -> Bind ();
 			
-			glVertexAttribPointer ( FPAttributes [ I ].AttributeLocation, FPAttributes [ I ].Size, FPAttributes [ I ].InputType, FPAttributes [ I ].Normalized, FPAttributes [ I ].Stride, FPAttributes [ I ].Offset );
 			glEnableVertexAttribArray ( FPAttributes [ I ].AttributeLocation );
+			glVertexAttribPointer ( FPAttributes [ I ].AttributeLocation, FPAttributes [ I ].Size, FPAttributes [ I ].InputType, FPAttributes [ I ].Normalized, FPAttributes [ I ].Stride, FPAttributes [ I ].Offset );
+			glVertexAttribDivisor ( FPAttributes [ I ].AttributeLocation, FPAttributes [ I ].InstanceDivisor );
 			
 		}
 		
@@ -177,8 +180,9 @@ void Xenon::GPU::VertexArray :: Build ()
 			
 			IntegerAttributes [ I ].Data -> Bind ();
 			
-			glVertexAttribIPointer ( IntegerAttributes [ I ].AttributeLocation, IntegerAttributes [ I ].Size, IntegerAttributes [ I ].InputType, IntegerAttributes [ I ].Stride, IntegerAttributes [ I ].Offset );
 			glEnableVertexAttribArray ( IntegerAttributes [ I ].AttributeLocation );
+			glVertexAttribIPointer ( IntegerAttributes [ I ].AttributeLocation, IntegerAttributes [ I ].Size, IntegerAttributes [ I ].InputType, IntegerAttributes [ I ].Stride, IntegerAttributes [ I ].Offset );
+			glVertexAttribDivisor ( IntegerAttributes [ I ].AttributeLocation, IntegerAttributes [ I ].InstanceDivisor );
 			
 		}
 		

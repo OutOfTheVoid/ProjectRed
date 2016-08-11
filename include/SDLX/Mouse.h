@@ -11,6 +11,7 @@ namespace SDLX
 {
 	
 	class Lib;
+	class Window;
 	
 	class Mouse
 	{
@@ -26,6 +27,9 @@ namespace SDLX
 		
 		static void AddButtonListener ( void ( * Listener ) ( SDL_MouseButtonEvent * Event, void * Data ), void * Data );
 		static void RemoveButtonListener ( void ( * Listener ) ( SDL_MouseButtonEvent * Event, void * Data ) );
+		
+		static void InjectMouseMotionEvent ( int32_t X, int32_t Y, int32_t DX, int32_t DY, uint32_t TimeStamp = 0, Window * Source = NULL, uint32_t ButtonState = 0, bool Touch = false );
+		static void InjectButtonEvent ( SDL_MouseButtonEvent * Event );
 		
 	private:
 		

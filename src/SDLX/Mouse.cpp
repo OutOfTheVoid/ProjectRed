@@ -1,5 +1,7 @@
 #include <SDLX/Mouse.h>
 
+#include <SDLX/Window.h>
+
 std :: vector <SDLX::Mouse :: MotionListenerStruct> SDLX::Mouse :: MotionListeners;
 SDLX :: Mutex * SDLX::Mouse :: MotionListenerLock;
 
@@ -57,6 +59,32 @@ void SDLX::Mouse :: MotionEventInternal ( SDL_MouseMotionEvent * Event )
 	
 	for ( I = 0; I < Length; I ++ )
 		MotionListenersCopy [ I ].Listener ( Event, MotionListenersCopy [ I ].Data );
+	
+}
+
+void SDLX::Mouse :: InjectMouseMotionEvent ( int32_t X, int32_t Y, int32_t DX, int32_t DY, uint32_t TimeStamp, Window * Source, uint32_t ButtonState, bool Touch )
+{
+	
+	SDL_MouseMotionEvent Event;
+	
+	Event.x = X;
+	Event.y = Y;
+	Event.xrel = DX;
+	Event.yrel = DY;
+	Event.state = ButtonState;
+	Event.windowID = ( Source != NULL ) ? SDL_GetWindowID ( Source -> WHandle ) : 0;
+	Event.which = Touch ? SDL_TOUCH_MOUSEID : 0;
+	Event.timestamp = TimeStamp;
+	Event.type = SDL_MOUSEMOTION;
+	
+	MotionEventInternal ( & Event );
+	
+}
+
+void SDLX::Mouse :: InjectButtonEvent ( SDL_MouseButtonEvent * Event )
+{
+	
+	(void) Event;
 	
 }
 
