@@ -187,13 +187,11 @@ namespace Red
 		{
 		public:
 			
-			
 			inline Closure3_1 ( Return ( * FAddress ) ( Arg1, Arg2, Arg3 ), Arg1 Default1 ):
 				FAddress ( FAddress ),
 				Default1 ( Default1 )
 			{
 			};
-			
 			
 			inline Closure3_1 ( const Closure3_1 & CopyFrom ):
 				FAddress ( CopyFrom.FAddress ),
@@ -232,13 +230,11 @@ namespace Red
 		{
 		public:
 			
-			
 			inline Closure3_2 ( Return ( * FAddress ) ( Arg1, Arg2, Arg3 ), Arg2 Default2 ):
 				FAddress ( FAddress ),
 				Default2 ( Default2 )
 			{
 			};
-			
 			
 			inline Closure3_2 ( const Closure3_2 & CopyFrom ):
 				FAddress ( CopyFrom.FAddress ),
@@ -277,13 +273,11 @@ namespace Red
 		{
 		public:
 			
-			
 			inline Closure3_3 ( Return ( * FAddress ) ( Arg1, Arg2, Arg3 ), Arg3 Default3 ):
 				FAddress ( FAddress ),
 				Default3 ( Default3 )
 			{
 			};
-			
 			
 			inline Closure3_3 ( const Closure3_3 & CopyFrom ):
 				FAddress ( CopyFrom.FAddress ),
@@ -322,14 +316,12 @@ namespace Red
 		{
 		public:
 			
-			
 			inline Closure3_12 ( Return ( * FAddress ) ( Arg1, Arg2, Arg3 ), Arg1 Default1, Arg2 Default2 ):
 				FAddress ( FAddress ),
 				Default1 ( Default1 ),
 				Default2 ( Default2 )
 			{
 			};
-			
 			
 			inline Closure3_12 ( const Closure3_12 & CopyFrom ):
 				FAddress ( CopyFrom.FAddress ),
@@ -370,14 +362,12 @@ namespace Red
 		{
 		public:
 			
-			
 			inline Closure3_13 ( Return ( * FAddress ) ( Arg1, Arg2, Arg3 ), Arg1 Default1, Arg3 Default3 ):
 				FAddress ( FAddress ),
 				Default1 ( Default1 ),
 				Default3 ( Default3 )
 			{
 			};
-			
 			
 			inline Closure3_13 ( const Closure3_13 & CopyFrom ):
 				FAddress ( CopyFrom.FAddress ),
@@ -418,14 +408,12 @@ namespace Red
 		{
 		public:
 			
-			
 			inline Closure3_23 ( Return ( * FAddress ) ( Arg1, Arg2, Arg3 ), Arg2 Default2, Arg3 Default3 ):
 				FAddress ( FAddress ),
 				Default2 ( Default2 ),
 				Default3 ( Default3 )
 			{
 			};
-			
 			
 			inline Closure3_23 ( const Closure3_23 & CopyFrom ):
 				FAddress ( CopyFrom.FAddress ),
@@ -466,7 +454,6 @@ namespace Red
 		{
 		public:
 			
-			
 			inline Closure3_123 ( Return ( * FAddress ) ( Arg1, Arg2, Arg3 ), Arg1 Default1, Arg2 Default2, Arg3 Default3 ):
 				FAddress ( FAddress ),
 				Default1 ( Default1 ),
@@ -474,7 +461,6 @@ namespace Red
 				Default3 ( Default3 )
 			{
 			};
-			
 			
 			inline Closure3_123 ( const Closure3_123 & CopyFrom ):
 				FAddress ( CopyFrom.FAddress ),
@@ -517,13 +503,11 @@ namespace Red
 		{
 		public:
 			
-			
 			inline Closure4_1 ( Return ( * FAddress ) ( Arg1, Arg2, Arg3, Arg4 ), Arg1 Default1 ):
 				FAddress ( FAddress ),
 				Default1 ( Default1 )
 			{
 			};
-			
 			
 			inline Closure4_1 ( const Closure4_1 & CopyFrom ):
 				FAddress ( CopyFrom.FAddress ),
@@ -562,13 +546,11 @@ namespace Red
 		{
 		public:
 			
-			
 			inline Closure4_2 ( Return ( * FAddress ) ( Arg1, Arg2, Arg3, Arg4 ), Arg2 Default2 ):
 				FAddress ( FAddress ),
 				Default2 ( Default2 )
 			{
 			};
-			
 			
 			inline Closure4_2 ( const Closure4_2 & CopyFrom ):
 				FAddress ( CopyFrom.FAddress ),
@@ -607,13 +589,11 @@ namespace Red
 		{
 		public:
 			
-			
 			inline Closure4_3 ( Return ( * FAddress ) ( Arg1, Arg2, Arg3, Arg4 ), Arg3 Default3 ):
 				FAddress ( FAddress ),
 				Default3 ( Default3 )
 			{
 			};
-			
 			
 			inline Closure4_3 ( const Closure4_3 & CopyFrom ):
 				FAddress ( CopyFrom.FAddress ),
@@ -652,13 +632,11 @@ namespace Red
 		{
 		public:
 			
-			
 			inline Closure4_4 ( Return ( * FAddress ) ( Arg1, Arg2, Arg3, Arg4 ), Arg4 Default4 ):
 				FAddress ( FAddress ),
 				Default4 ( Default4 )
 			{
 			};
-			
 			
 			inline Closure4_4 ( const Closure4_4 & CopyFrom ):
 				FAddress ( CopyFrom.FAddress ),
@@ -697,14 +675,12 @@ namespace Red
 		{
 		public:
 			
-			
 			inline Closure4_12 ( Return ( * FAddress ) ( Arg1, Arg2, Arg3, Arg4 ), Arg1 Default1, Arg2 Default2 ):
 				FAddress ( FAddress ),
 				Default1 ( Default1 ),
 				Default2 ( Default2 )
 			{
 			};
-			
 			
 			inline Closure4_12 ( const Closure4_12 & CopyFrom ):
 				FAddress ( CopyFrom.FAddress ),
@@ -745,14 +721,12 @@ namespace Red
 		{
 		public:
 			
-			
 			inline Closure4_13 ( Return ( * FAddress ) ( Arg1, Arg2, Arg3, Arg4 ), Arg1 Default1, Arg3 Default3 ):
 				FAddress ( FAddress ),
 				Default1 ( Default1 ),
 				Default3 ( Default3 )
 			{
 			};
-			
 			
 			inline Closure4_13 ( const Closure4_13 & CopyFrom ):
 				FAddress ( CopyFrom.FAddress ),
@@ -793,14 +767,12 @@ namespace Red
 		{
 		public:
 			
-			
 			inline Closure4_14 ( Return ( * FAddress ) ( Arg1, Arg2, Arg3, Arg4 ), Arg1 Default1, Arg4 Default4 ):
 				FAddress ( FAddress ),
 				Default1 ( Default1 ),
 				Default4 ( Default4 )
 			{
 			};
-			
 			
 			inline Closure4_14 ( const Closure4_14 & CopyFrom ):
 				FAddress ( CopyFrom.FAddress ),
@@ -841,14 +813,12 @@ namespace Red
 		{
 		public:
 			
-			
 			inline Closure4_23 ( Return ( * FAddress ) ( Arg1, Arg2, Arg3, Arg4 ), Arg2 Default2, Arg3 Default3 ):
 				FAddress ( FAddress ),
 				Default2 ( Default2 ),
 				Default3 ( Default3 )
 			{
 			};
-			
 			
 			inline Closure4_23 ( const Closure4_23 & CopyFrom ):
 				FAddress ( CopyFrom.FAddress ),
@@ -889,14 +859,12 @@ namespace Red
 		{
 		public:
 			
-			
 			inline Closure4_24 ( Return ( * FAddress ) ( Arg1, Arg2, Arg3, Arg4 ), Arg2 Default2, Arg4 Default4 ):
 				FAddress ( FAddress ),
 				Default2 ( Default2 ),
 				Default4 ( Default4 )
 			{
 			};
-			
 			
 			inline Closure4_24 ( const Closure4_24 & CopyFrom ):
 				FAddress ( CopyFrom.FAddress ),
@@ -937,14 +905,12 @@ namespace Red
 		{
 		public:
 			
-			
 			inline Closure4_34 ( Return ( * FAddress ) ( Arg1, Arg2, Arg3, Arg4 ), Arg3 Default3, Arg4 Default4 ):
 				FAddress ( FAddress ),
 				Default3 ( Default3 ),
 				Default4 ( Default4 )
 			{
 			};
-			
 			
 			inline Closure4_34 ( const Closure4_34 & CopyFrom ):
 				FAddress ( CopyFrom.FAddress ),
@@ -985,7 +951,6 @@ namespace Red
 		{
 		public:
 			
-			
 			inline Closure4_123 ( Return ( * FAddress ) ( Arg1, Arg2, Arg3, Arg4 ), Arg1 Default1, Arg2 Default2, Arg3 Default3 ):
 				FAddress ( FAddress ),
 				Default1 ( Default1 ),
@@ -993,7 +958,6 @@ namespace Red
 				Default3 ( Default3 )
 			{
 			};
-			
 			
 			inline Closure4_123 ( const Closure4_123 & CopyFrom ):
 				FAddress ( CopyFrom.FAddress ),
@@ -1036,7 +1000,6 @@ namespace Red
 		{
 		public:
 			
-			
 			inline Closure4_124 ( Return ( * FAddress ) ( Arg1, Arg2, Arg3, Arg4 ), Arg1 Default1, Arg2 Default2, Arg4 Default4 ):
 				FAddress ( FAddress ),
 				Default1 ( Default1 ),
@@ -1044,7 +1007,6 @@ namespace Red
 				Default4 ( Default4 )
 			{
 			};
-			
 			
 			inline Closure4_124 ( const Closure4_124 & CopyFrom ):
 				FAddress ( CopyFrom.FAddress ),
@@ -1087,7 +1049,6 @@ namespace Red
 		{
 		public:
 			
-			
 			inline Closure4_134 ( Return ( * FAddress ) ( Arg1, Arg2, Arg3, Arg4 ), Arg1 Default1, Arg3 Default3, Arg4 Default4 ):
 				FAddress ( FAddress ),
 				Default1 ( Default1 ),
@@ -1095,7 +1056,6 @@ namespace Red
 				Default4 ( Default4 )
 			{
 			};
-			
 			
 			inline Closure4_134 ( const Closure4_134 & CopyFrom ):
 				FAddress ( CopyFrom.FAddress ),
@@ -1138,7 +1098,6 @@ namespace Red
 		{
 		public:
 			
-			
 			inline Closure4_234 ( Return ( * FAddress ) ( Arg1, Arg2, Arg3, Arg4 ), Arg2 Default2, Arg3 Default3, Arg4 Default4 ):
 				FAddress ( FAddress ),
 				Default2 ( Default2 ),
@@ -1146,7 +1105,6 @@ namespace Red
 				Default4 ( Default4 )
 			{
 			};
-			
 			
 			inline Closure4_234 ( const Closure4_234 & CopyFrom ):
 				FAddress ( CopyFrom.FAddress ),
@@ -1189,7 +1147,6 @@ namespace Red
 		{
 		public:
 			
-			
 			inline Closure4_1234 ( Return ( * FAddress ) ( Arg1, Arg2, Arg3, Arg4 ), Arg1 Default1, Arg2 Default2, Arg3 Default3, Arg4 Default4 ):
 				FAddress ( FAddress ),
 				Default1 ( Default1 ),
@@ -1198,7 +1155,6 @@ namespace Red
 				Default4 ( Default4 )
 			{
 			};
-			
 			
 			inline Closure4_1234 ( const Closure4_1234 & CopyFrom ):
 				FAddress ( CopyFrom.FAddress ),
@@ -1243,13 +1199,11 @@ namespace Red
 		{
 		public:
 			
-			
 			inline Closure5_1 ( Return ( * FAddress ) ( Arg1, Arg2, Arg3, Arg4, Arg5 ), Arg1 Default1 ):
 				FAddress ( FAddress ),
 				Default1 ( Default1 )
 			{
 			};
-			
 			
 			inline Closure5_1 ( const Closure5_1 & CopyFrom ):
 				FAddress ( CopyFrom.FAddress ),
@@ -1288,13 +1242,11 @@ namespace Red
 		{
 		public:
 			
-			
 			inline Closure5_2 ( Return ( * FAddress ) ( Arg1, Arg2, Arg3, Arg4, Arg5 ), Arg2 Default2 ):
 				FAddress ( FAddress ),
 				Default2 ( Default2 )
 			{
 			};
-			
 			
 			inline Closure5_2 ( const Closure5_2 & CopyFrom ):
 				FAddress ( CopyFrom.FAddress ),
@@ -1333,13 +1285,11 @@ namespace Red
 		{
 		public:
 			
-			
 			inline Closure5_3 ( Return ( * FAddress ) ( Arg1, Arg2, Arg3, Arg4, Arg5 ), Arg3 Default3 ):
 				FAddress ( FAddress ),
 				Default3 ( Default3 )
 			{
 			};
-			
 			
 			inline Closure5_3 ( const Closure5_3 & CopyFrom ):
 				FAddress ( CopyFrom.FAddress ),
@@ -1378,13 +1328,11 @@ namespace Red
 		{
 		public:
 			
-			
 			inline Closure5_4 ( Return ( * FAddress ) ( Arg1, Arg2, Arg3, Arg4, Arg5 ), Arg4 Default4 ):
 				FAddress ( FAddress ),
 				Default4 ( Default4 )
 			{
 			};
-			
 			
 			inline Closure5_4 ( const Closure5_4 & CopyFrom ):
 				FAddress ( CopyFrom.FAddress ),
@@ -1423,13 +1371,11 @@ namespace Red
 		{
 		public:
 			
-			
 			inline Closure5_5 ( Return ( * FAddress ) ( Arg1, Arg2, Arg3, Arg4, Arg5 ), Arg5 Default5 ):
 				FAddress ( FAddress ),
 				Default5 ( Default5 )
 			{
 			};
-			
 			
 			inline Closure5_5 ( const Closure5_5 & CopyFrom ):
 				FAddress ( CopyFrom.FAddress ),
@@ -1468,14 +1414,12 @@ namespace Red
 		{
 		public:
 			
-			
 			inline Closure5_12 ( Return ( * FAddress ) ( Arg1, Arg2, Arg3, Arg4, Arg5 ), Arg1 Default1, Arg2 Default2 ):
 				FAddress ( FAddress ),
 				Default1 ( Default1 ),
 				Default2 ( Default2 )
 			{
 			};
-			
 			
 			inline Closure5_12 ( const Closure5_12 & CopyFrom ):
 				FAddress ( CopyFrom.FAddress ),
@@ -1516,14 +1460,12 @@ namespace Red
 		{
 		public:
 			
-			
 			inline Closure5_13 ( Return ( * FAddress ) ( Arg1, Arg2, Arg3, Arg4, Arg5 ), Arg1 Default1, Arg3 Default3 ):
 				FAddress ( FAddress ),
 				Default1 ( Default1 ),
 				Default3 ( Default3 )
 			{
 			};
-			
 			
 			inline Closure5_13 ( const Closure5_13 & CopyFrom ):
 				FAddress ( CopyFrom.FAddress ),
@@ -1564,14 +1506,12 @@ namespace Red
 		{
 		public:
 			
-			
 			inline Closure5_14 ( Return ( * FAddress ) ( Arg1, Arg2, Arg3, Arg4, Arg5 ), Arg1 Default1, Arg4 Default4 ):
 				FAddress ( FAddress ),
 				Default1 ( Default1 ),
 				Default4 ( Default4 )
 			{
 			};
-			
 			
 			inline Closure5_14 ( const Closure5_14 & CopyFrom ):
 				FAddress ( CopyFrom.FAddress ),
@@ -1612,14 +1552,12 @@ namespace Red
 		{
 		public:
 			
-			
 			inline Closure5_15 ( Return ( * FAddress ) ( Arg1, Arg2, Arg3, Arg4, Arg5 ), Arg1 Default1, Arg5 Default5 ):
 				FAddress ( FAddress ),
 				Default1 ( Default1 ),
 				Default5 ( Default5 )
 			{
 			};
-			
 			
 			inline Closure5_15 ( const Closure5_15 & CopyFrom ):
 				FAddress ( CopyFrom.FAddress ),
@@ -1660,14 +1598,12 @@ namespace Red
 		{
 		public:
 			
-			
 			inline Closure5_23 ( Return ( * FAddress ) ( Arg1, Arg2, Arg3, Arg4, Arg5 ), Arg2 Default2, Arg3 Default3 ):
 				FAddress ( FAddress ),
 				Default2 ( Default2 ),
 				Default3 ( Default3 )
 			{
 			};
-			
 			
 			inline Closure5_23 ( const Closure5_23 & CopyFrom ):
 				FAddress ( CopyFrom.FAddress ),
@@ -1708,14 +1644,12 @@ namespace Red
 		{
 		public:
 			
-			
 			inline Closure5_24 ( Return ( * FAddress ) ( Arg1, Arg2, Arg3, Arg4, Arg5 ), Arg2 Default2, Arg4 Default4 ):
 				FAddress ( FAddress ),
 				Default2 ( Default2 ),
 				Default4 ( Default4 )
 			{
 			};
-			
 			
 			inline Closure5_24 ( const Closure5_24 & CopyFrom ):
 				FAddress ( CopyFrom.FAddress ),
@@ -1756,14 +1690,12 @@ namespace Red
 		{
 		public:
 			
-			
 			inline Closure5_25 ( Return ( * FAddress ) ( Arg1, Arg2, Arg3, Arg4, Arg5 ), Arg2 Default2, Arg5 Default5 ):
 				FAddress ( FAddress ),
 				Default2 ( Default2 ),
 				Default5 ( Default5 )
 			{
 			};
-			
 			
 			inline Closure5_25 ( const Closure5_25 & CopyFrom ):
 				FAddress ( CopyFrom.FAddress ),
@@ -1804,14 +1736,12 @@ namespace Red
 		{
 		public:
 			
-			
 			inline Closure5_34 ( Return ( * FAddress ) ( Arg1, Arg2, Arg3, Arg4, Arg5 ), Arg3 Default3, Arg4 Default4 ):
 				FAddress ( FAddress ),
 				Default3 ( Default3 ),
 				Default4 ( Default4 )
 			{
 			};
-			
 			
 			inline Closure5_34 ( const Closure5_34 & CopyFrom ):
 				FAddress ( CopyFrom.FAddress ),
@@ -1852,14 +1782,12 @@ namespace Red
 		{
 		public:
 			
-			
 			inline Closure5_35 ( Return ( * FAddress ) ( Arg1, Arg2, Arg3, Arg4, Arg5 ), Arg3 Default3, Arg5 Default5 ):
 				FAddress ( FAddress ),
 				Default3 ( Default3 ),
 				Default5 ( Default5 )
 			{
 			};
-			
 			
 			inline Closure5_35 ( const Closure5_35 & CopyFrom ):
 				FAddress ( CopyFrom.FAddress ),
@@ -1900,14 +1828,12 @@ namespace Red
 		{
 		public:
 			
-			
 			inline Closure5_45 ( Return ( * FAddress ) ( Arg1, Arg2, Arg3, Arg4, Arg5 ), Arg4 Default4, Arg5 Default5 ):
 				FAddress ( FAddress ),
 				Default4 ( Default4 ),
 				Default5 ( Default5 )
 			{
 			};
-			
 			
 			inline Closure5_45 ( const Closure5_45 & CopyFrom ):
 				FAddress ( CopyFrom.FAddress ),
@@ -1948,7 +1874,6 @@ namespace Red
 		{
 		public:
 			
-			
 			inline Closure5_123 ( Return ( * FAddress ) ( Arg1, Arg2, Arg3, Arg4, Arg5 ), Arg1 Default1, Arg2 Default2, Arg3 Default3 ):
 				FAddress ( FAddress ),
 				Default1 ( Default1 ),
@@ -1956,7 +1881,6 @@ namespace Red
 				Default3 ( Default3 )
 			{
 			};
-			
 			
 			inline Closure5_123 ( const Closure5_123 & CopyFrom ):
 				FAddress ( CopyFrom.FAddress ),
@@ -1999,7 +1923,6 @@ namespace Red
 		{
 		public:
 			
-			
 			inline Closure5_124 ( Return ( * FAddress ) ( Arg1, Arg2, Arg3, Arg4, Arg5 ), Arg1 Default1, Arg2 Default2, Arg4 Default4 ):
 				FAddress ( FAddress ),
 				Default1 ( Default1 ),
@@ -2007,7 +1930,6 @@ namespace Red
 				Default4 ( Default4 )
 			{
 			};
-			
 			
 			inline Closure5_124 ( const Closure5_124 & CopyFrom ):
 				FAddress ( CopyFrom.FAddress ),
@@ -2050,7 +1972,6 @@ namespace Red
 		{
 		public:
 			
-			
 			inline Closure5_125 ( Return ( * FAddress ) ( Arg1, Arg2, Arg3, Arg4, Arg5 ), Arg1 Default1, Arg2 Default2, Arg5 Default5 ):
 				FAddress ( FAddress ),
 				Default1 ( Default1 ),
@@ -2058,7 +1979,6 @@ namespace Red
 				Default5 ( Default5 )
 			{
 			};
-			
 			
 			inline Closure5_125 ( const Closure5_125 & CopyFrom ):
 				FAddress ( CopyFrom.FAddress ),
@@ -2101,7 +2021,6 @@ namespace Red
 		{
 		public:
 			
-			
 			inline Closure5_134 ( Return ( * FAddress ) ( Arg1, Arg2, Arg3, Arg4, Arg5 ), Arg1 Default1, Arg3 Default3, Arg4 Default4 ):
 				FAddress ( FAddress ),
 				Default1 ( Default1 ),
@@ -2109,7 +2028,6 @@ namespace Red
 				Default4 ( Default4 )
 			{
 			};
-			
 			
 			inline Closure5_134 ( const Closure5_134 & CopyFrom ):
 				FAddress ( CopyFrom.FAddress ),
@@ -2152,7 +2070,6 @@ namespace Red
 		{
 		public:
 			
-			
 			inline Closure5_135 ( Return ( * FAddress ) ( Arg1, Arg2, Arg3, Arg4, Arg5 ), Arg1 Default1, Arg3 Default3, Arg5 Default5 ):
 				FAddress ( FAddress ),
 				Default1 ( Default1 ),
@@ -2160,7 +2077,6 @@ namespace Red
 				Default5 ( Default5 )
 			{
 			};
-			
 			
 			inline Closure5_135 ( const Closure5_135 & CopyFrom ):
 				FAddress ( CopyFrom.FAddress ),
@@ -2203,7 +2119,6 @@ namespace Red
 		{
 		public:
 			
-			
 			inline Closure5_145 ( Return ( * FAddress ) ( Arg1, Arg2, Arg3, Arg4, Arg5 ), Arg1 Default1, Arg4 Default4, Arg5 Default5 ):
 				FAddress ( FAddress ),
 				Default1 ( Default1 ),
@@ -2211,7 +2126,6 @@ namespace Red
 				Default5 ( Default5 )
 			{
 			};
-			
 			
 			inline Closure5_145 ( const Closure5_145 & CopyFrom ):
 				FAddress ( CopyFrom.FAddress ),
@@ -2254,7 +2168,6 @@ namespace Red
 		{
 		public:
 			
-			
 			inline Closure5_234 ( Return ( * FAddress ) ( Arg1, Arg2, Arg3, Arg4, Arg5 ), Arg2 Default2, Arg3 Default3, Arg4 Default4 ):
 				FAddress ( FAddress ),
 				Default2 ( Default2 ),
@@ -2262,7 +2175,6 @@ namespace Red
 				Default4 ( Default4 )
 			{
 			};
-			
 			
 			inline Closure5_234 ( const Closure5_234 & CopyFrom ):
 				FAddress ( CopyFrom.FAddress ),
@@ -2305,7 +2217,6 @@ namespace Red
 		{
 		public:
 			
-			
 			inline Closure5_235 ( Return ( * FAddress ) ( Arg1, Arg2, Arg3, Arg4, Arg5 ), Arg2 Default2, Arg3 Default3, Arg5 Default5 ):
 				FAddress ( FAddress ),
 				Default2 ( Default2 ),
@@ -2313,7 +2224,6 @@ namespace Red
 				Default5 ( Default5 )
 			{
 			};
-			
 			
 			inline Closure5_235 ( const Closure5_235 & CopyFrom ):
 				FAddress ( CopyFrom.FAddress ),
@@ -2356,7 +2266,6 @@ namespace Red
 		{
 		public:
 			
-			
 			inline Closure5_245 ( Return ( * FAddress ) ( Arg1, Arg2, Arg3, Arg4, Arg5 ), Arg2 Default2, Arg4 Default4, Arg5 Default5 ):
 				FAddress ( FAddress ),
 				Default2 ( Default2 ),
@@ -2364,7 +2273,6 @@ namespace Red
 				Default5 ( Default5 )
 			{
 			};
-			
 			
 			inline Closure5_245 ( const Closure5_245 & CopyFrom ):
 				FAddress ( CopyFrom.FAddress ),
@@ -2407,7 +2315,6 @@ namespace Red
 		{
 		public:
 			
-			
 			inline Closure5_345 ( Return ( * FAddress ) ( Arg1, Arg2, Arg3, Arg4, Arg5 ), Arg3 Default3, Arg4 Default4, Arg5 Default5 ):
 				FAddress ( FAddress ),
 				Default3 ( Default3 ),
@@ -2415,7 +2322,6 @@ namespace Red
 				Default5 ( Default5 )
 			{
 			};
-			
 			
 			inline Closure5_345 ( const Closure5_345 & CopyFrom ):
 				FAddress ( CopyFrom.FAddress ),
@@ -2458,7 +2364,6 @@ namespace Red
 		{
 		public:
 			
-			
 			inline Closure5_1234 ( Return ( * FAddress ) ( Arg1, Arg2, Arg3, Arg4, Arg5 ), Arg1 Default1, Arg2 Default2, Arg3 Default3, Arg4 Default4 ):
 				FAddress ( FAddress ),
 				Default1 ( Default1 ),
@@ -2467,7 +2372,6 @@ namespace Red
 				Default4 ( Default4 )
 			{
 			};
-			
 			
 			inline Closure5_1234 ( const Closure5_1234 & CopyFrom ):
 				FAddress ( CopyFrom.FAddress ),
@@ -2512,7 +2416,6 @@ namespace Red
 		{
 		public:
 			
-			
 			inline Closure5_1235 ( Return ( * FAddress ) ( Arg1, Arg2, Arg3, Arg4, Arg5 ), Arg1 Default1, Arg2 Default2, Arg3 Default3, Arg5 Default5 ):
 				FAddress ( FAddress ),
 				Default1 ( Default1 ),
@@ -2521,7 +2424,6 @@ namespace Red
 				Default5 ( Default5 )
 			{
 			};
-			
 			
 			inline Closure5_1235 ( const Closure5_1235 & CopyFrom ):
 				FAddress ( CopyFrom.FAddress ),
@@ -2566,7 +2468,6 @@ namespace Red
 		{
 		public:
 			
-			
 			inline Closure5_1245 ( Return ( * FAddress ) ( Arg1, Arg2, Arg3, Arg4, Arg5 ), Arg1 Default1, Arg2 Default2, Arg4 Default4, Arg5 Default5 ):
 				FAddress ( FAddress ),
 				Default1 ( Default1 ),
@@ -2575,7 +2476,6 @@ namespace Red
 				Default5 ( Default5 )
 			{
 			};
-			
 			
 			inline Closure5_1245 ( const Closure5_1245 & CopyFrom ):
 				FAddress ( CopyFrom.FAddress ),
@@ -2620,7 +2520,6 @@ namespace Red
 		{
 		public:
 			
-			
 			inline Closure5_1345 ( Return ( * FAddress ) ( Arg1, Arg2, Arg3, Arg4, Arg5 ), Arg1 Default1, Arg3 Default3, Arg4 Default4, Arg5 Default5 ):
 				FAddress ( FAddress ),
 				Default1 ( Default1 ),
@@ -2629,7 +2528,6 @@ namespace Red
 				Default5 ( Default5 )
 			{
 			};
-			
 			
 			inline Closure5_1345 ( const Closure5_1345 & CopyFrom ):
 				FAddress ( CopyFrom.FAddress ),
@@ -2674,7 +2572,6 @@ namespace Red
 		{
 		public:
 			
-			
 			inline Closure5_2345 ( Return ( * FAddress ) ( Arg1, Arg2, Arg3, Arg4, Arg5 ), Arg2 Default2, Arg3 Default3, Arg4 Default4, Arg5 Default5 ):
 				FAddress ( FAddress ),
 				Default2 ( Default2 ),
@@ -2683,7 +2580,6 @@ namespace Red
 				Default5 ( Default5 )
 			{
 			};
-			
 			
 			inline Closure5_2345 ( const Closure5_2345 & CopyFrom ):
 				FAddress ( CopyFrom.FAddress ),
@@ -2728,7 +2624,6 @@ namespace Red
 		{
 		public:
 			
-			
 			inline Closure5_12345 ( Return ( * FAddress ) ( Arg1, Arg2, Arg3, Arg4, Arg5 ), Arg1 Default1, Arg2 Default2, Arg3 Default3, Arg4 Default4, Arg5 Default5 ):
 				FAddress ( FAddress ),
 				Default1 ( Default1 ),
@@ -2738,7 +2633,6 @@ namespace Red
 				Default5 ( Default5 )
 			{
 			};
-			
 			
 			inline Closure5_12345 ( const Closure5_12345 & CopyFrom ):
 				FAddress ( CopyFrom.FAddress ),
@@ -2785,13 +2679,11 @@ namespace Red
 		{
 		public:
 			
-			
 			inline Closure6_1 ( Return ( * FAddress ) ( Arg1, Arg2, Arg3, Arg4, Arg5, Arg6 ), Arg1 Default1 ):
 				FAddress ( FAddress ),
 				Default1 ( Default1 )
 			{
 			};
-			
 			
 			inline Closure6_1 ( const Closure6_1 & CopyFrom ):
 				FAddress ( CopyFrom.FAddress ),
@@ -2830,13 +2722,11 @@ namespace Red
 		{
 		public:
 			
-			
 			inline Closure6_2 ( Return ( * FAddress ) ( Arg1, Arg2, Arg3, Arg4, Arg5, Arg6 ), Arg2 Default2 ):
 				FAddress ( FAddress ),
 				Default2 ( Default2 )
 			{
 			};
-			
 			
 			inline Closure6_2 ( const Closure6_2 & CopyFrom ):
 				FAddress ( CopyFrom.FAddress ),
@@ -2875,13 +2765,11 @@ namespace Red
 		{
 		public:
 			
-			
 			inline Closure6_3 ( Return ( * FAddress ) ( Arg1, Arg2, Arg3, Arg4, Arg5, Arg6 ), Arg3 Default3 ):
 				FAddress ( FAddress ),
 				Default3 ( Default3 )
 			{
 			};
-			
 			
 			inline Closure6_3 ( const Closure6_3 & CopyFrom ):
 				FAddress ( CopyFrom.FAddress ),
@@ -2920,13 +2808,11 @@ namespace Red
 		{
 		public:
 			
-			
 			inline Closure6_4 ( Return ( * FAddress ) ( Arg1, Arg2, Arg3, Arg4, Arg5, Arg6 ), Arg4 Default4 ):
 				FAddress ( FAddress ),
 				Default4 ( Default4 )
 			{
 			};
-			
 			
 			inline Closure6_4 ( const Closure6_4 & CopyFrom ):
 				FAddress ( CopyFrom.FAddress ),
@@ -2965,13 +2851,11 @@ namespace Red
 		{
 		public:
 			
-			
 			inline Closure6_5 ( Return ( * FAddress ) ( Arg1, Arg2, Arg3, Arg4, Arg5, Arg6 ), Arg5 Default5 ):
 				FAddress ( FAddress ),
 				Default5 ( Default5 )
 			{
 			};
-			
 			
 			inline Closure6_5 ( const Closure6_5 & CopyFrom ):
 				FAddress ( CopyFrom.FAddress ),
@@ -3010,13 +2894,11 @@ namespace Red
 		{
 		public:
 			
-			
 			inline Closure6_6 ( Return ( * FAddress ) ( Arg1, Arg2, Arg3, Arg4, Arg5, Arg6 ), Arg6 Default6 ):
 				FAddress ( FAddress ),
 				Default6 ( Default6 )
 			{
 			};
-			
 			
 			inline Closure6_6 ( const Closure6_6 & CopyFrom ):
 				FAddress ( CopyFrom.FAddress ),
@@ -3055,14 +2937,12 @@ namespace Red
 		{
 		public:
 			
-			
 			inline Closure6_12 ( Return ( * FAddress ) ( Arg1, Arg2, Arg3, Arg4, Arg5, Arg6 ), Arg1 Default1, Arg2 Default2 ):
 				FAddress ( FAddress ),
 				Default1 ( Default1 ),
 				Default2 ( Default2 )
 			{
 			};
-			
 			
 			inline Closure6_12 ( const Closure6_12 & CopyFrom ):
 				FAddress ( CopyFrom.FAddress ),
@@ -3103,14 +2983,12 @@ namespace Red
 		{
 		public:
 			
-			
 			inline Closure6_13 ( Return ( * FAddress ) ( Arg1, Arg2, Arg3, Arg4, Arg5, Arg6 ), Arg1 Default1, Arg3 Default3 ):
 				FAddress ( FAddress ),
 				Default1 ( Default1 ),
 				Default3 ( Default3 )
 			{
 			};
-			
 			
 			inline Closure6_13 ( const Closure6_13 & CopyFrom ):
 				FAddress ( CopyFrom.FAddress ),
@@ -3151,14 +3029,12 @@ namespace Red
 		{
 		public:
 			
-			
 			inline Closure6_14 ( Return ( * FAddress ) ( Arg1, Arg2, Arg3, Arg4, Arg5, Arg6 ), Arg1 Default1, Arg4 Default4 ):
 				FAddress ( FAddress ),
 				Default1 ( Default1 ),
 				Default4 ( Default4 )
 			{
 			};
-			
 			
 			inline Closure6_14 ( const Closure6_14 & CopyFrom ):
 				FAddress ( CopyFrom.FAddress ),
@@ -3199,14 +3075,12 @@ namespace Red
 		{
 		public:
 			
-			
 			inline Closure6_15 ( Return ( * FAddress ) ( Arg1, Arg2, Arg3, Arg4, Arg5, Arg6 ), Arg1 Default1, Arg5 Default5 ):
 				FAddress ( FAddress ),
 				Default1 ( Default1 ),
 				Default5 ( Default5 )
 			{
 			};
-			
 			
 			inline Closure6_15 ( const Closure6_15 & CopyFrom ):
 				FAddress ( CopyFrom.FAddress ),
@@ -3247,14 +3121,12 @@ namespace Red
 		{
 		public:
 			
-			
 			inline Closure6_16 ( Return ( * FAddress ) ( Arg1, Arg2, Arg3, Arg4, Arg5, Arg6 ), Arg1 Default1, Arg6 Default6 ):
 				FAddress ( FAddress ),
 				Default1 ( Default1 ),
 				Default6 ( Default6 )
 			{
 			};
-			
 			
 			inline Closure6_16 ( const Closure6_16 & CopyFrom ):
 				FAddress ( CopyFrom.FAddress ),
@@ -3295,14 +3167,12 @@ namespace Red
 		{
 		public:
 			
-			
 			inline Closure6_23 ( Return ( * FAddress ) ( Arg1, Arg2, Arg3, Arg4, Arg5, Arg6 ), Arg2 Default2, Arg3 Default3 ):
 				FAddress ( FAddress ),
 				Default2 ( Default2 ),
 				Default3 ( Default3 )
 			{
 			};
-			
 			
 			inline Closure6_23 ( const Closure6_23 & CopyFrom ):
 				FAddress ( CopyFrom.FAddress ),
@@ -3343,14 +3213,12 @@ namespace Red
 		{
 		public:
 			
-			
 			inline Closure6_24 ( Return ( * FAddress ) ( Arg1, Arg2, Arg3, Arg4, Arg5, Arg6 ), Arg2 Default2, Arg4 Default4 ):
 				FAddress ( FAddress ),
 				Default2 ( Default2 ),
 				Default4 ( Default4 )
 			{
 			};
-			
 			
 			inline Closure6_24 ( const Closure6_24 & CopyFrom ):
 				FAddress ( CopyFrom.FAddress ),
@@ -3391,14 +3259,12 @@ namespace Red
 		{
 		public:
 			
-			
 			inline Closure6_25 ( Return ( * FAddress ) ( Arg1, Arg2, Arg3, Arg4, Arg5, Arg6 ), Arg2 Default2, Arg5 Default5 ):
 				FAddress ( FAddress ),
 				Default2 ( Default2 ),
 				Default5 ( Default5 )
 			{
 			};
-			
 			
 			inline Closure6_25 ( const Closure6_25 & CopyFrom ):
 				FAddress ( CopyFrom.FAddress ),
@@ -3439,14 +3305,12 @@ namespace Red
 		{
 		public:
 			
-			
 			inline Closure6_26 ( Return ( * FAddress ) ( Arg1, Arg2, Arg3, Arg4, Arg5, Arg6 ), Arg2 Default2, Arg6 Default6 ):
 				FAddress ( FAddress ),
 				Default2 ( Default2 ),
 				Default6 ( Default6 )
 			{
 			};
-			
 			
 			inline Closure6_26 ( const Closure6_26 & CopyFrom ):
 				FAddress ( CopyFrom.FAddress ),
@@ -3487,14 +3351,12 @@ namespace Red
 		{
 		public:
 			
-			
 			inline Closure6_34 ( Return ( * FAddress ) ( Arg1, Arg2, Arg3, Arg4, Arg5, Arg6 ), Arg3 Default3, Arg4 Default4 ):
 				FAddress ( FAddress ),
 				Default3 ( Default3 ),
 				Default4 ( Default4 )
 			{
 			};
-			
 			
 			inline Closure6_34 ( const Closure6_34 & CopyFrom ):
 				FAddress ( CopyFrom.FAddress ),
@@ -3535,14 +3397,12 @@ namespace Red
 		{
 		public:
 			
-			
 			inline Closure6_35 ( Return ( * FAddress ) ( Arg1, Arg2, Arg3, Arg4, Arg5, Arg6 ), Arg3 Default3, Arg5 Default5 ):
 				FAddress ( FAddress ),
 				Default3 ( Default3 ),
 				Default5 ( Default5 )
 			{
 			};
-			
 			
 			inline Closure6_35 ( const Closure6_35 & CopyFrom ):
 				FAddress ( CopyFrom.FAddress ),
@@ -3583,14 +3443,12 @@ namespace Red
 		{
 		public:
 			
-			
 			inline Closure6_36 ( Return ( * FAddress ) ( Arg1, Arg2, Arg3, Arg4, Arg5, Arg6 ), Arg3 Default3, Arg6 Default6 ):
 				FAddress ( FAddress ),
 				Default3 ( Default3 ),
 				Default6 ( Default6 )
 			{
 			};
-			
 			
 			inline Closure6_36 ( const Closure6_36 & CopyFrom ):
 				FAddress ( CopyFrom.FAddress ),
@@ -3631,14 +3489,12 @@ namespace Red
 		{
 		public:
 			
-			
 			inline Closure6_45 ( Return ( * FAddress ) ( Arg1, Arg2, Arg3, Arg4, Arg5, Arg6 ), Arg4 Default4, Arg5 Default5 ):
 				FAddress ( FAddress ),
 				Default4 ( Default4 ),
 				Default5 ( Default5 )
 			{
 			};
-			
 			
 			inline Closure6_45 ( const Closure6_45 & CopyFrom ):
 				FAddress ( CopyFrom.FAddress ),
@@ -3679,14 +3535,12 @@ namespace Red
 		{
 		public:
 			
-			
 			inline Closure6_46 ( Return ( * FAddress ) ( Arg1, Arg2, Arg3, Arg4, Arg5, Arg6 ), Arg4 Default4, Arg6 Default6 ):
 				FAddress ( FAddress ),
 				Default4 ( Default4 ),
 				Default6 ( Default6 )
 			{
 			};
-			
 			
 			inline Closure6_46 ( const Closure6_46 & CopyFrom ):
 				FAddress ( CopyFrom.FAddress ),
@@ -3727,14 +3581,12 @@ namespace Red
 		{
 		public:
 			
-			
 			inline Closure6_56 ( Return ( * FAddress ) ( Arg1, Arg2, Arg3, Arg4, Arg5, Arg6 ), Arg5 Default5, Arg6 Default6 ):
 				FAddress ( FAddress ),
 				Default5 ( Default5 ),
 				Default6 ( Default6 )
 			{
 			};
-			
 			
 			inline Closure6_56 ( const Closure6_56 & CopyFrom ):
 				FAddress ( CopyFrom.FAddress ),
@@ -3775,7 +3627,6 @@ namespace Red
 		{
 		public:
 			
-			
 			inline Closure6_123 ( Return ( * FAddress ) ( Arg1, Arg2, Arg3, Arg4, Arg5, Arg6 ), Arg1 Default1, Arg2 Default2, Arg3 Default3 ):
 				FAddress ( FAddress ),
 				Default1 ( Default1 ),
@@ -3783,7 +3634,6 @@ namespace Red
 				Default3 ( Default3 )
 			{
 			};
-			
 			
 			inline Closure6_123 ( const Closure6_123 & CopyFrom ):
 				FAddress ( CopyFrom.FAddress ),
@@ -3826,7 +3676,6 @@ namespace Red
 		{
 		public:
 			
-			
 			inline Closure6_124 ( Return ( * FAddress ) ( Arg1, Arg2, Arg3, Arg4, Arg5, Arg6 ), Arg1 Default1, Arg2 Default2, Arg4 Default4 ):
 				FAddress ( FAddress ),
 				Default1 ( Default1 ),
@@ -3834,7 +3683,6 @@ namespace Red
 				Default4 ( Default4 )
 			{
 			};
-			
 			
 			inline Closure6_124 ( const Closure6_124 & CopyFrom ):
 				FAddress ( CopyFrom.FAddress ),
@@ -3877,7 +3725,6 @@ namespace Red
 		{
 		public:
 			
-			
 			inline Closure6_125 ( Return ( * FAddress ) ( Arg1, Arg2, Arg3, Arg4, Arg5, Arg6 ), Arg1 Default1, Arg2 Default2, Arg5 Default5 ):
 				FAddress ( FAddress ),
 				Default1 ( Default1 ),
@@ -3885,7 +3732,6 @@ namespace Red
 				Default5 ( Default5 )
 			{
 			};
-			
 			
 			inline Closure6_125 ( const Closure6_125 & CopyFrom ):
 				FAddress ( CopyFrom.FAddress ),
@@ -3928,7 +3774,6 @@ namespace Red
 		{
 		public:
 			
-			
 			inline Closure6_126 ( Return ( * FAddress ) ( Arg1, Arg2, Arg3, Arg4, Arg5, Arg6 ), Arg1 Default1, Arg2 Default2, Arg6 Default6 ):
 				FAddress ( FAddress ),
 				Default1 ( Default1 ),
@@ -3936,7 +3781,6 @@ namespace Red
 				Default6 ( Default6 )
 			{
 			};
-			
 			
 			inline Closure6_126 ( const Closure6_126 & CopyFrom ):
 				FAddress ( CopyFrom.FAddress ),
@@ -3979,7 +3823,6 @@ namespace Red
 		{
 		public:
 			
-			
 			inline Closure6_134 ( Return ( * FAddress ) ( Arg1, Arg2, Arg3, Arg4, Arg5, Arg6 ), Arg1 Default1, Arg3 Default3, Arg4 Default4 ):
 				FAddress ( FAddress ),
 				Default1 ( Default1 ),
@@ -3987,7 +3830,6 @@ namespace Red
 				Default4 ( Default4 )
 			{
 			};
-			
 			
 			inline Closure6_134 ( const Closure6_134 & CopyFrom ):
 				FAddress ( CopyFrom.FAddress ),
@@ -4030,7 +3872,6 @@ namespace Red
 		{
 		public:
 			
-			
 			inline Closure6_135 ( Return ( * FAddress ) ( Arg1, Arg2, Arg3, Arg4, Arg5, Arg6 ), Arg1 Default1, Arg3 Default3, Arg5 Default5 ):
 				FAddress ( FAddress ),
 				Default1 ( Default1 ),
@@ -4038,7 +3879,6 @@ namespace Red
 				Default5 ( Default5 )
 			{
 			};
-			
 			
 			inline Closure6_135 ( const Closure6_135 & CopyFrom ):
 				FAddress ( CopyFrom.FAddress ),
@@ -4081,7 +3921,6 @@ namespace Red
 		{
 		public:
 			
-			
 			inline Closure6_136 ( Return ( * FAddress ) ( Arg1, Arg2, Arg3, Arg4, Arg5, Arg6 ), Arg1 Default1, Arg3 Default3, Arg6 Default6 ):
 				FAddress ( FAddress ),
 				Default1 ( Default1 ),
@@ -4089,7 +3928,6 @@ namespace Red
 				Default6 ( Default6 )
 			{
 			};
-			
 			
 			inline Closure6_136 ( const Closure6_136 & CopyFrom ):
 				FAddress ( CopyFrom.FAddress ),
@@ -4132,7 +3970,6 @@ namespace Red
 		{
 		public:
 			
-			
 			inline Closure6_145 ( Return ( * FAddress ) ( Arg1, Arg2, Arg3, Arg4, Arg5, Arg6 ), Arg1 Default1, Arg4 Default4, Arg5 Default5 ):
 				FAddress ( FAddress ),
 				Default1 ( Default1 ),
@@ -4140,7 +3977,6 @@ namespace Red
 				Default5 ( Default5 )
 			{
 			};
-			
 			
 			inline Closure6_145 ( const Closure6_145 & CopyFrom ):
 				FAddress ( CopyFrom.FAddress ),
@@ -4183,7 +4019,6 @@ namespace Red
 		{
 		public:
 			
-			
 			inline Closure6_146 ( Return ( * FAddress ) ( Arg1, Arg2, Arg3, Arg4, Arg5, Arg6 ), Arg1 Default1, Arg4 Default4, Arg6 Default6 ):
 				FAddress ( FAddress ),
 				Default1 ( Default1 ),
@@ -4191,7 +4026,6 @@ namespace Red
 				Default6 ( Default6 )
 			{
 			};
-			
 			
 			inline Closure6_146 ( const Closure6_146 & CopyFrom ):
 				FAddress ( CopyFrom.FAddress ),
@@ -4234,7 +4068,6 @@ namespace Red
 		{
 		public:
 			
-			
 			inline Closure6_156 ( Return ( * FAddress ) ( Arg1, Arg2, Arg3, Arg4, Arg5, Arg6 ), Arg1 Default1, Arg5 Default5, Arg6 Default6 ):
 				FAddress ( FAddress ),
 				Default1 ( Default1 ),
@@ -4242,7 +4075,6 @@ namespace Red
 				Default6 ( Default6 )
 			{
 			};
-			
 			
 			inline Closure6_156 ( const Closure6_156 & CopyFrom ):
 				FAddress ( CopyFrom.FAddress ),
@@ -4285,7 +4117,6 @@ namespace Red
 		{
 		public:
 			
-			
 			inline Closure6_234 ( Return ( * FAddress ) ( Arg1, Arg2, Arg3, Arg4, Arg5, Arg6 ), Arg2 Default2, Arg3 Default3, Arg4 Default4 ):
 				FAddress ( FAddress ),
 				Default2 ( Default2 ),
@@ -4293,7 +4124,6 @@ namespace Red
 				Default4 ( Default4 )
 			{
 			};
-			
 			
 			inline Closure6_234 ( const Closure6_234 & CopyFrom ):
 				FAddress ( CopyFrom.FAddress ),
@@ -4336,7 +4166,6 @@ namespace Red
 		{
 		public:
 			
-			
 			inline Closure6_235 ( Return ( * FAddress ) ( Arg1, Arg2, Arg3, Arg4, Arg5, Arg6 ), Arg2 Default2, Arg3 Default3, Arg5 Default5 ):
 				FAddress ( FAddress ),
 				Default2 ( Default2 ),
@@ -4344,7 +4173,6 @@ namespace Red
 				Default5 ( Default5 )
 			{
 			};
-			
 			
 			inline Closure6_235 ( const Closure6_235 & CopyFrom ):
 				FAddress ( CopyFrom.FAddress ),
@@ -4387,7 +4215,6 @@ namespace Red
 		{
 		public:
 			
-			
 			inline Closure6_236 ( Return ( * FAddress ) ( Arg1, Arg2, Arg3, Arg4, Arg5, Arg6 ), Arg2 Default2, Arg3 Default3, Arg6 Default6 ):
 				FAddress ( FAddress ),
 				Default2 ( Default2 ),
@@ -4395,7 +4222,6 @@ namespace Red
 				Default6 ( Default6 )
 			{
 			};
-			
 			
 			inline Closure6_236 ( const Closure6_236 & CopyFrom ):
 				FAddress ( CopyFrom.FAddress ),
@@ -4438,7 +4264,6 @@ namespace Red
 		{
 		public:
 			
-			
 			inline Closure6_245 ( Return ( * FAddress ) ( Arg1, Arg2, Arg3, Arg4, Arg5, Arg6 ), Arg2 Default2, Arg4 Default4, Arg5 Default5 ):
 				FAddress ( FAddress ),
 				Default2 ( Default2 ),
@@ -4446,7 +4271,6 @@ namespace Red
 				Default5 ( Default5 )
 			{
 			};
-			
 			
 			inline Closure6_245 ( const Closure6_245 & CopyFrom ):
 				FAddress ( CopyFrom.FAddress ),
@@ -4489,7 +4313,6 @@ namespace Red
 		{
 		public:
 			
-			
 			inline Closure6_246 ( Return ( * FAddress ) ( Arg1, Arg2, Arg3, Arg4, Arg5, Arg6 ), Arg2 Default2, Arg4 Default4, Arg6 Default6 ):
 				FAddress ( FAddress ),
 				Default2 ( Default2 ),
@@ -4497,7 +4320,6 @@ namespace Red
 				Default6 ( Default6 )
 			{
 			};
-			
 			
 			inline Closure6_246 ( const Closure6_246 & CopyFrom ):
 				FAddress ( CopyFrom.FAddress ),
@@ -4540,7 +4362,6 @@ namespace Red
 		{
 		public:
 			
-			
 			inline Closure6_256 ( Return ( * FAddress ) ( Arg1, Arg2, Arg3, Arg4, Arg5, Arg6 ), Arg2 Default2, Arg5 Default5, Arg6 Default6 ):
 				FAddress ( FAddress ),
 				Default2 ( Default2 ),
@@ -4548,7 +4369,6 @@ namespace Red
 				Default6 ( Default6 )
 			{
 			};
-			
 			
 			inline Closure6_256 ( const Closure6_256 & CopyFrom ):
 				FAddress ( CopyFrom.FAddress ),
@@ -4591,7 +4411,6 @@ namespace Red
 		{
 		public:
 			
-			
 			inline Closure6_345 ( Return ( * FAddress ) ( Arg1, Arg2, Arg3, Arg4, Arg5, Arg6 ), Arg3 Default3, Arg4 Default4, Arg5 Default5 ):
 				FAddress ( FAddress ),
 				Default3 ( Default3 ),
@@ -4599,7 +4418,6 @@ namespace Red
 				Default5 ( Default5 )
 			{
 			};
-			
 			
 			inline Closure6_345 ( const Closure6_345 & CopyFrom ):
 				FAddress ( CopyFrom.FAddress ),
@@ -4642,7 +4460,6 @@ namespace Red
 		{
 		public:
 			
-			
 			inline Closure6_346 ( Return ( * FAddress ) ( Arg1, Arg2, Arg3, Arg4, Arg5, Arg6 ), Arg3 Default3, Arg4 Default4, Arg6 Default6 ):
 				FAddress ( FAddress ),
 				Default3 ( Default3 ),
@@ -4650,7 +4467,6 @@ namespace Red
 				Default6 ( Default6 )
 			{
 			};
-			
 			
 			inline Closure6_346 ( const Closure6_346 & CopyFrom ):
 				FAddress ( CopyFrom.FAddress ),
@@ -4693,7 +4509,6 @@ namespace Red
 		{
 		public:
 			
-			
 			inline Closure6_356 ( Return ( * FAddress ) ( Arg1, Arg2, Arg3, Arg4, Arg5, Arg6 ), Arg3 Default3, Arg5 Default5, Arg6 Default6 ):
 				FAddress ( FAddress ),
 				Default3 ( Default3 ),
@@ -4701,7 +4516,6 @@ namespace Red
 				Default6 ( Default6 )
 			{
 			};
-			
 			
 			inline Closure6_356 ( const Closure6_356 & CopyFrom ):
 				FAddress ( CopyFrom.FAddress ),
@@ -4744,7 +4558,6 @@ namespace Red
 		{
 		public:
 			
-			
 			inline Closure6_456 ( Return ( * FAddress ) ( Arg1, Arg2, Arg3, Arg4, Arg5, Arg6 ), Arg4 Default4, Arg5 Default5, Arg6 Default6 ):
 				FAddress ( FAddress ),
 				Default4 ( Default4 ),
@@ -4752,7 +4565,6 @@ namespace Red
 				Default6 ( Default6 )
 			{
 			};
-			
 			
 			inline Closure6_456 ( const Closure6_456 & CopyFrom ):
 				FAddress ( CopyFrom.FAddress ),
@@ -4795,7 +4607,6 @@ namespace Red
 		{
 		public:
 			
-			
 			inline Closure6_1234 ( Return ( * FAddress ) ( Arg1, Arg2, Arg3, Arg4, Arg5, Arg6 ), Arg1 Default1, Arg2 Default2, Arg3 Default3, Arg4 Default4 ):
 				FAddress ( FAddress ),
 				Default1 ( Default1 ),
@@ -4804,7 +4615,6 @@ namespace Red
 				Default4 ( Default4 )
 			{
 			};
-			
 			
 			inline Closure6_1234 ( const Closure6_1234 & CopyFrom ):
 				FAddress ( CopyFrom.FAddress ),
@@ -4849,7 +4659,6 @@ namespace Red
 		{
 		public:
 			
-			
 			inline Closure6_1235 ( Return ( * FAddress ) ( Arg1, Arg2, Arg3, Arg4, Arg5, Arg6 ), Arg1 Default1, Arg2 Default2, Arg3 Default3, Arg5 Default5 ):
 				FAddress ( FAddress ),
 				Default1 ( Default1 ),
@@ -4858,7 +4667,6 @@ namespace Red
 				Default5 ( Default5 )
 			{
 			};
-			
 			
 			inline Closure6_1235 ( const Closure6_1235 & CopyFrom ):
 				FAddress ( CopyFrom.FAddress ),
@@ -4903,7 +4711,6 @@ namespace Red
 		{
 		public:
 			
-			
 			inline Closure6_1236 ( Return ( * FAddress ) ( Arg1, Arg2, Arg3, Arg4, Arg5, Arg6 ), Arg1 Default1, Arg2 Default2, Arg3 Default3, Arg6 Default6 ):
 				FAddress ( FAddress ),
 				Default1 ( Default1 ),
@@ -4912,7 +4719,6 @@ namespace Red
 				Default6 ( Default6 )
 			{
 			};
-			
 			
 			inline Closure6_1236 ( const Closure6_1236 & CopyFrom ):
 				FAddress ( CopyFrom.FAddress ),
@@ -4957,7 +4763,6 @@ namespace Red
 		{
 		public:
 			
-			
 			inline Closure6_1245 ( Return ( * FAddress ) ( Arg1, Arg2, Arg3, Arg4, Arg5, Arg6 ), Arg1 Default1, Arg2 Default2, Arg4 Default4, Arg5 Default5 ):
 				FAddress ( FAddress ),
 				Default1 ( Default1 ),
@@ -4966,7 +4771,6 @@ namespace Red
 				Default5 ( Default5 )
 			{
 			};
-			
 			
 			inline Closure6_1245 ( const Closure6_1245 & CopyFrom ):
 				FAddress ( CopyFrom.FAddress ),
@@ -5011,7 +4815,6 @@ namespace Red
 		{
 		public:
 			
-			
 			inline Closure6_1246 ( Return ( * FAddress ) ( Arg1, Arg2, Arg3, Arg4, Arg5, Arg6 ), Arg1 Default1, Arg2 Default2, Arg4 Default4, Arg6 Default6 ):
 				FAddress ( FAddress ),
 				Default1 ( Default1 ),
@@ -5020,7 +4823,6 @@ namespace Red
 				Default6 ( Default6 )
 			{
 			};
-			
 			
 			inline Closure6_1246 ( const Closure6_1246 & CopyFrom ):
 				FAddress ( CopyFrom.FAddress ),
@@ -5065,7 +4867,6 @@ namespace Red
 		{
 		public:
 			
-			
 			inline Closure6_1256 ( Return ( * FAddress ) ( Arg1, Arg2, Arg3, Arg4, Arg5, Arg6 ), Arg1 Default1, Arg2 Default2, Arg5 Default5, Arg6 Default6 ):
 				FAddress ( FAddress ),
 				Default1 ( Default1 ),
@@ -5074,7 +4875,6 @@ namespace Red
 				Default6 ( Default6 )
 			{
 			};
-			
 			
 			inline Closure6_1256 ( const Closure6_1256 & CopyFrom ):
 				FAddress ( CopyFrom.FAddress ),
@@ -5119,7 +4919,6 @@ namespace Red
 		{
 		public:
 			
-			
 			inline Closure6_1345 ( Return ( * FAddress ) ( Arg1, Arg2, Arg3, Arg4, Arg5, Arg6 ), Arg1 Default1, Arg3 Default3, Arg4 Default4, Arg5 Default5 ):
 				FAddress ( FAddress ),
 				Default1 ( Default1 ),
@@ -5128,7 +4927,6 @@ namespace Red
 				Default5 ( Default5 )
 			{
 			};
-			
 			
 			inline Closure6_1345 ( const Closure6_1345 & CopyFrom ):
 				FAddress ( CopyFrom.FAddress ),
@@ -5173,7 +4971,6 @@ namespace Red
 		{
 		public:
 			
-			
 			inline Closure6_1346 ( Return ( * FAddress ) ( Arg1, Arg2, Arg3, Arg4, Arg5, Arg6 ), Arg1 Default1, Arg3 Default3, Arg4 Default4, Arg6 Default6 ):
 				FAddress ( FAddress ),
 				Default1 ( Default1 ),
@@ -5182,7 +4979,6 @@ namespace Red
 				Default6 ( Default6 )
 			{
 			};
-			
 			
 			inline Closure6_1346 ( const Closure6_1346 & CopyFrom ):
 				FAddress ( CopyFrom.FAddress ),
@@ -5227,7 +5023,6 @@ namespace Red
 		{
 		public:
 			
-			
 			inline Closure6_1356 ( Return ( * FAddress ) ( Arg1, Arg2, Arg3, Arg4, Arg5, Arg6 ), Arg1 Default1, Arg3 Default3, Arg5 Default5, Arg6 Default6 ):
 				FAddress ( FAddress ),
 				Default1 ( Default1 ),
@@ -5236,7 +5031,6 @@ namespace Red
 				Default6 ( Default6 )
 			{
 			};
-			
 			
 			inline Closure6_1356 ( const Closure6_1356 & CopyFrom ):
 				FAddress ( CopyFrom.FAddress ),
@@ -5281,7 +5075,6 @@ namespace Red
 		{
 		public:
 			
-			
 			inline Closure6_1456 ( Return ( * FAddress ) ( Arg1, Arg2, Arg3, Arg4, Arg5, Arg6 ), Arg1 Default1, Arg4 Default4, Arg5 Default5, Arg6 Default6 ):
 				FAddress ( FAddress ),
 				Default1 ( Default1 ),
@@ -5290,7 +5083,6 @@ namespace Red
 				Default6 ( Default6 )
 			{
 			};
-			
 			
 			inline Closure6_1456 ( const Closure6_1456 & CopyFrom ):
 				FAddress ( CopyFrom.FAddress ),
@@ -5335,7 +5127,6 @@ namespace Red
 		{
 		public:
 			
-			
 			inline Closure6_2345 ( Return ( * FAddress ) ( Arg1, Arg2, Arg3, Arg4, Arg5, Arg6 ), Arg2 Default2, Arg3 Default3, Arg4 Default4, Arg5 Default5 ):
 				FAddress ( FAddress ),
 				Default2 ( Default2 ),
@@ -5344,7 +5135,6 @@ namespace Red
 				Default5 ( Default5 )
 			{
 			};
-			
 			
 			inline Closure6_2345 ( const Closure6_2345 & CopyFrom ):
 				FAddress ( CopyFrom.FAddress ),
@@ -5389,7 +5179,6 @@ namespace Red
 		{
 		public:
 			
-			
 			inline Closure6_2346 ( Return ( * FAddress ) ( Arg1, Arg2, Arg3, Arg4, Arg5, Arg6 ), Arg2 Default2, Arg3 Default3, Arg4 Default4, Arg6 Default6 ):
 				FAddress ( FAddress ),
 				Default2 ( Default2 ),
@@ -5398,7 +5187,6 @@ namespace Red
 				Default6 ( Default6 )
 			{
 			};
-			
 			
 			inline Closure6_2346 ( const Closure6_2346 & CopyFrom ):
 				FAddress ( CopyFrom.FAddress ),
@@ -5443,7 +5231,6 @@ namespace Red
 		{
 		public:
 			
-			
 			inline Closure6_2356 ( Return ( * FAddress ) ( Arg1, Arg2, Arg3, Arg4, Arg5, Arg6 ), Arg2 Default2, Arg3 Default3, Arg5 Default5, Arg6 Default6 ):
 				FAddress ( FAddress ),
 				Default2 ( Default2 ),
@@ -5452,7 +5239,6 @@ namespace Red
 				Default6 ( Default6 )
 			{
 			};
-			
 			
 			inline Closure6_2356 ( const Closure6_2356 & CopyFrom ):
 				FAddress ( CopyFrom.FAddress ),
@@ -5497,7 +5283,6 @@ namespace Red
 		{
 		public:
 			
-			
 			inline Closure6_2456 ( Return ( * FAddress ) ( Arg1, Arg2, Arg3, Arg4, Arg5, Arg6 ), Arg2 Default2, Arg4 Default4, Arg5 Default5, Arg6 Default6 ):
 				FAddress ( FAddress ),
 				Default2 ( Default2 ),
@@ -5506,7 +5291,6 @@ namespace Red
 				Default6 ( Default6 )
 			{
 			};
-			
 			
 			inline Closure6_2456 ( const Closure6_2456 & CopyFrom ):
 				FAddress ( CopyFrom.FAddress ),
@@ -5551,7 +5335,6 @@ namespace Red
 		{
 		public:
 			
-			
 			inline Closure6_3456 ( Return ( * FAddress ) ( Arg1, Arg2, Arg3, Arg4, Arg5, Arg6 ), Arg3 Default3, Arg4 Default4, Arg5 Default5, Arg6 Default6 ):
 				FAddress ( FAddress ),
 				Default3 ( Default3 ),
@@ -5560,7 +5343,6 @@ namespace Red
 				Default6 ( Default6 )
 			{
 			};
-			
 			
 			inline Closure6_3456 ( const Closure6_3456 & CopyFrom ):
 				FAddress ( CopyFrom.FAddress ),
@@ -5605,7 +5387,6 @@ namespace Red
 		{
 		public:
 			
-			
 			inline Closure6_12345 ( Return ( * FAddress ) ( Arg1, Arg2, Arg3, Arg4, Arg5, Arg6 ), Arg1 Default1, Arg2 Default2, Arg3 Default3, Arg4 Default4, Arg5 Default5 ):
 				FAddress ( FAddress ),
 				Default1 ( Default1 ),
@@ -5615,7 +5396,6 @@ namespace Red
 				Default5 ( Default5 )
 			{
 			};
-			
 			
 			inline Closure6_12345 ( const Closure6_12345 & CopyFrom ):
 				FAddress ( CopyFrom.FAddress ),
@@ -5662,7 +5442,6 @@ namespace Red
 		{
 		public:
 			
-			
 			inline Closure6_12346 ( Return ( * FAddress ) ( Arg1, Arg2, Arg3, Arg4, Arg5, Arg6 ), Arg1 Default1, Arg2 Default2, Arg3 Default3, Arg4 Default4, Arg6 Default6 ):
 				FAddress ( FAddress ),
 				Default1 ( Default1 ),
@@ -5672,7 +5451,6 @@ namespace Red
 				Default6 ( Default6 )
 			{
 			};
-			
 			
 			inline Closure6_12346 ( const Closure6_12346 & CopyFrom ):
 				FAddress ( CopyFrom.FAddress ),
@@ -5719,7 +5497,6 @@ namespace Red
 		{
 		public:
 			
-			
 			inline Closure6_12356 ( Return ( * FAddress ) ( Arg1, Arg2, Arg3, Arg4, Arg5, Arg6 ), Arg1 Default1, Arg2 Default2, Arg3 Default3, Arg5 Default5, Arg6 Default6 ):
 				FAddress ( FAddress ),
 				Default1 ( Default1 ),
@@ -5729,7 +5506,6 @@ namespace Red
 				Default6 ( Default6 )
 			{
 			};
-			
 			
 			inline Closure6_12356 ( const Closure6_12356 & CopyFrom ):
 				FAddress ( CopyFrom.FAddress ),
@@ -5776,7 +5552,6 @@ namespace Red
 		{
 		public:
 			
-			
 			inline Closure6_12456 ( Return ( * FAddress ) ( Arg1, Arg2, Arg3, Arg4, Arg5, Arg6 ), Arg1 Default1, Arg2 Default2, Arg4 Default4, Arg5 Default5, Arg6 Default6 ):
 				FAddress ( FAddress ),
 				Default1 ( Default1 ),
@@ -5786,7 +5561,6 @@ namespace Red
 				Default6 ( Default6 )
 			{
 			};
-			
 			
 			inline Closure6_12456 ( const Closure6_12456 & CopyFrom ):
 				FAddress ( CopyFrom.FAddress ),
@@ -5833,7 +5607,6 @@ namespace Red
 		{
 		public:
 			
-			
 			inline Closure6_13456 ( Return ( * FAddress ) ( Arg1, Arg2, Arg3, Arg4, Arg5, Arg6 ), Arg1 Default1, Arg3 Default3, Arg4 Default4, Arg5 Default5, Arg6 Default6 ):
 				FAddress ( FAddress ),
 				Default1 ( Default1 ),
@@ -5843,7 +5616,6 @@ namespace Red
 				Default6 ( Default6 )
 			{
 			};
-			
 			
 			inline Closure6_13456 ( const Closure6_13456 & CopyFrom ):
 				FAddress ( CopyFrom.FAddress ),
@@ -5890,7 +5662,6 @@ namespace Red
 		{
 		public:
 			
-			
 			inline Closure6_23456 ( Return ( * FAddress ) ( Arg1, Arg2, Arg3, Arg4, Arg5, Arg6 ), Arg2 Default2, Arg3 Default3, Arg4 Default4, Arg5 Default5, Arg6 Default6 ):
 				FAddress ( FAddress ),
 				Default2 ( Default2 ),
@@ -5900,7 +5671,6 @@ namespace Red
 				Default6 ( Default6 )
 			{
 			};
-			
 			
 			inline Closure6_23456 ( const Closure6_23456 & CopyFrom ):
 				FAddress ( CopyFrom.FAddress ),
@@ -5947,7 +5717,6 @@ namespace Red
 		{
 		public:
 			
-			
 			inline Closure6_123456 ( Return ( * FAddress ) ( Arg1, Arg2, Arg3, Arg4, Arg5, Arg6 ), Arg1 Default1, Arg2 Default2, Arg3 Default3, Arg4 Default4, Arg5 Default5, Arg6 Default6 ):
 				FAddress ( FAddress ),
 				Default1 ( Default1 ),
@@ -5958,7 +5727,6 @@ namespace Red
 				Default6 ( Default6 )
 			{
 			};
-			
 			
 			inline Closure6_123456 ( const Closure6_123456 & CopyFrom ):
 				FAddress ( CopyFrom.FAddress ),
