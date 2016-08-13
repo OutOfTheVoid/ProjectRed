@@ -215,7 +215,7 @@ namespace Red
 			inline Return operator() ( Arg2 A2, Arg3 A3 )
 			{
 				
-				Call ( A2, A3 );
+				return Call ( A2, A3 );
 				
 			};
 			
@@ -260,7 +260,7 @@ namespace Red
 			inline Return operator() ( Arg1 A1, Arg3 A3 )
 			{
 				
-				Call ( A1, A3 );
+				return Call ( A1, A3 );
 				
 			};
 			
@@ -305,7 +305,7 @@ namespace Red
 			inline Return operator() ( Arg1 A1, Arg2 A2 )
 			{
 				
-				Call ( A1, A2 );
+				return Call ( A1, A2 );
 				
 			};
 			
@@ -352,7 +352,7 @@ namespace Red
 			inline Return operator() ( Arg3 A3 )
 			{
 				
-				Call ( A3 );
+				return Call ( A3 );
 				
 			};
 			
@@ -400,7 +400,7 @@ namespace Red
 			inline Return operator() ( Arg2 A2 )
 			{
 				
-				Call ( A2 );
+				return Call ( A2 );
 				
 			};
 			
@@ -448,7 +448,7 @@ namespace Red
 			inline Return operator() ( Arg1 A1 )
 			{
 				
-				Call ( A1 );
+				return Call ( A1 );
 				
 			};
 			
@@ -498,7 +498,7 @@ namespace Red
 			inline Return operator() ()
 			{
 				
-				Call ();
+				return Call ();
 				
 			};
 			
@@ -545,7 +545,7 @@ namespace Red
 			inline Return operator() ( Arg2 A2, Arg3 A3, Arg4 A4 )
 			{
 				
-				Call ( A2, A3, A4 );
+				return Call ( A2, A3, A4 );
 				
 			};
 			
@@ -590,7 +590,7 @@ namespace Red
 			inline Return operator() ( Arg1 A1, Arg3 A3, Arg4 A4 )
 			{
 				
-				Call ( A1, A3, A4 );
+				return Call ( A1, A3, A4 );
 				
 			};
 			
@@ -635,7 +635,7 @@ namespace Red
 			inline Return operator() ( Arg1 A1, Arg2 A2, Arg4 A4 )
 			{
 				
-				Call ( A1, A2, A4 );
+				return Call ( A1, A2, A4 );
 				
 			};
 			
@@ -680,7 +680,7 @@ namespace Red
 			inline Return operator() ( Arg1 A1, Arg2 A2, Arg3 A3 )
 			{
 				
-				Call ( A1, A2, A3 );
+				return Call ( A1, A2, A3 );
 				
 			};
 			
@@ -727,7 +727,7 @@ namespace Red
 			inline Return operator() ( Arg3 A3, Arg4 A4 )
 			{
 				
-				Call ( A3, A4 );
+				return Call ( A3, A4 );
 				
 			};
 			
@@ -775,7 +775,7 @@ namespace Red
 			inline Return operator() ( Arg2 A2, Arg4 A4 )
 			{
 				
-				Call ( A2, A4 );
+				return Call ( A2, A4 );
 				
 			};
 			
@@ -823,7 +823,7 @@ namespace Red
 			inline Return operator() ( Arg2 A2, Arg3 A3 )
 			{
 				
-				Call ( A2, A3 );
+				return Call ( A2, A3 );
 				
 			};
 			
@@ -871,7 +871,7 @@ namespace Red
 			inline Return operator() ( Arg1 A1, Arg4 A4 )
 			{
 				
-				Call ( A1, A4 );
+				return Call ( A1, A4 );
 				
 			};
 			
@@ -919,7 +919,7 @@ namespace Red
 			inline Return operator() ( Arg1 A1, Arg3 A3 )
 			{
 				
-				Call ( A1, A3 );
+				return Call ( A1, A3 );
 				
 			};
 			
@@ -967,7 +967,7 @@ namespace Red
 			inline Return operator() ( Arg1 A1, Arg2 A2 )
 			{
 				
-				Call ( A1, A2 );
+				return Call ( A1, A2 );
 				
 			};
 			
@@ -1017,7 +1017,7 @@ namespace Red
 			inline Return operator() ( Arg4 A4 )
 			{
 				
-				Call ( A4 );
+				return Call ( A4 );
 				
 			};
 			
@@ -1068,7 +1068,7 @@ namespace Red
 			inline Return operator() ( Arg3 A3 )
 			{
 				
-				Call ( A3 );
+				return Call ( A3 );
 				
 			};
 			
@@ -1119,7 +1119,7 @@ namespace Red
 			inline Return operator() ( Arg2 A2 )
 			{
 				
-				Call ( A2 );
+				return Call ( A2 );
 				
 			};
 			
@@ -1170,7 +1170,7 @@ namespace Red
 			inline Return operator() ( Arg1 A1 )
 			{
 				
-				Call ( A1 );
+				return Call ( A1 );
 				
 			};
 			
@@ -1223,7 +1223,7 @@ namespace Red
 			inline Return operator() ()
 			{
 				
-				Call ();
+				return Call ();
 				
 			};
 			
@@ -1271,7 +1271,7 @@ namespace Red
 			inline Return operator() ( Arg2 A2, Arg3 A3, Arg4 A4, Arg5 A5 )
 			{
 				
-				Call ( A2, A3, A4, A5 );
+				return Call ( A2, A3, A4, A5 );
 				
 			};
 			
@@ -1316,7 +1316,7 @@ namespace Red
 			inline Return operator() ( Arg1 A1, Arg3 A3, Arg4 A4, Arg5 A5 )
 			{
 				
-				Call ( A1, A3, A4, A5 );
+				return Call ( A1, A3, A4, A5 );
 				
 			};
 			
@@ -1361,7 +1361,7 @@ namespace Red
 			inline Return operator() ( Arg1 A1, Arg2 A2, Arg4 A4, Arg5 A5 )
 			{
 				
-				Call ( A1, A2, A4, A5 );
+				return Call ( A1, A2, A4, A5 );
 				
 			};
 			
@@ -1406,7 +1406,7 @@ namespace Red
 			inline Return operator() ( Arg1 A1, Arg2 A2, Arg3 A3, Arg5 A5 )
 			{
 				
-				Call ( A1, A2, A3, A5 );
+				return Call ( A1, A2, A3, A5 );
 				
 			};
 			
@@ -1451,7 +1451,7 @@ namespace Red
 			inline Return operator() ( Arg1 A1, Arg2 A2, Arg3 A3, Arg4 A4 )
 			{
 				
-				Call ( A1, A2, A3, A4 );
+				return Call ( A1, A2, A3, A4 );
 				
 			};
 			
@@ -1498,7 +1498,7 @@ namespace Red
 			inline Return operator() ( Arg3 A3, Arg4 A4, Arg5 A5 )
 			{
 				
-				Call ( A3, A4, A5 );
+				return Call ( A3, A4, A5 );
 				
 			};
 			
@@ -1546,7 +1546,7 @@ namespace Red
 			inline Return operator() ( Arg2 A2, Arg4 A4, Arg5 A5 )
 			{
 				
-				Call ( A2, A4, A5 );
+				return Call ( A2, A4, A5 );
 				
 			};
 			
@@ -1594,7 +1594,7 @@ namespace Red
 			inline Return operator() ( Arg2 A2, Arg3 A3, Arg5 A5 )
 			{
 				
-				Call ( A2, A3, A5 );
+				return Call ( A2, A3, A5 );
 				
 			};
 			
@@ -1642,7 +1642,7 @@ namespace Red
 			inline Return operator() ( Arg2 A2, Arg3 A3, Arg4 A4 )
 			{
 				
-				Call ( A2, A3, A4 );
+				return Call ( A2, A3, A4 );
 				
 			};
 			
@@ -1690,7 +1690,7 @@ namespace Red
 			inline Return operator() ( Arg1 A1, Arg4 A4, Arg5 A5 )
 			{
 				
-				Call ( A1, A4, A5 );
+				return Call ( A1, A4, A5 );
 				
 			};
 			
@@ -1738,7 +1738,7 @@ namespace Red
 			inline Return operator() ( Arg1 A1, Arg3 A3, Arg5 A5 )
 			{
 				
-				Call ( A1, A3, A5 );
+				return Call ( A1, A3, A5 );
 				
 			};
 			
@@ -1786,7 +1786,7 @@ namespace Red
 			inline Return operator() ( Arg1 A1, Arg3 A3, Arg4 A4 )
 			{
 				
-				Call ( A1, A3, A4 );
+				return Call ( A1, A3, A4 );
 				
 			};
 			
@@ -1834,7 +1834,7 @@ namespace Red
 			inline Return operator() ( Arg1 A1, Arg2 A2, Arg5 A5 )
 			{
 				
-				Call ( A1, A2, A5 );
+				return Call ( A1, A2, A5 );
 				
 			};
 			
@@ -1882,7 +1882,7 @@ namespace Red
 			inline Return operator() ( Arg1 A1, Arg2 A2, Arg4 A4 )
 			{
 				
-				Call ( A1, A2, A4 );
+				return Call ( A1, A2, A4 );
 				
 			};
 			
@@ -1930,7 +1930,7 @@ namespace Red
 			inline Return operator() ( Arg1 A1, Arg2 A2, Arg3 A3 )
 			{
 				
-				Call ( A1, A2, A3 );
+				return Call ( A1, A2, A3 );
 				
 			};
 			
@@ -1980,7 +1980,7 @@ namespace Red
 			inline Return operator() ( Arg4 A4, Arg5 A5 )
 			{
 				
-				Call ( A4, A5 );
+				return Call ( A4, A5 );
 				
 			};
 			
@@ -2031,7 +2031,7 @@ namespace Red
 			inline Return operator() ( Arg3 A3, Arg5 A5 )
 			{
 				
-				Call ( A3, A5 );
+				return Call ( A3, A5 );
 				
 			};
 			
@@ -2082,7 +2082,7 @@ namespace Red
 			inline Return operator() ( Arg3 A3, Arg4 A4 )
 			{
 				
-				Call ( A3, A4 );
+				return Call ( A3, A4 );
 				
 			};
 			
@@ -2133,7 +2133,7 @@ namespace Red
 			inline Return operator() ( Arg2 A2, Arg5 A5 )
 			{
 				
-				Call ( A2, A5 );
+				return Call ( A2, A5 );
 				
 			};
 			
@@ -2184,7 +2184,7 @@ namespace Red
 			inline Return operator() ( Arg2 A2, Arg4 A4 )
 			{
 				
-				Call ( A2, A4 );
+				return Call ( A2, A4 );
 				
 			};
 			
@@ -2235,7 +2235,7 @@ namespace Red
 			inline Return operator() ( Arg2 A2, Arg3 A3 )
 			{
 				
-				Call ( A2, A3 );
+				return Call ( A2, A3 );
 				
 			};
 			
@@ -2286,7 +2286,7 @@ namespace Red
 			inline Return operator() ( Arg1 A1, Arg5 A5 )
 			{
 				
-				Call ( A1, A5 );
+				return Call ( A1, A5 );
 				
 			};
 			
@@ -2337,7 +2337,7 @@ namespace Red
 			inline Return operator() ( Arg1 A1, Arg4 A4 )
 			{
 				
-				Call ( A1, A4 );
+				return Call ( A1, A4 );
 				
 			};
 			
@@ -2388,7 +2388,7 @@ namespace Red
 			inline Return operator() ( Arg1 A1, Arg3 A3 )
 			{
 				
-				Call ( A1, A3 );
+				return Call ( A1, A3 );
 				
 			};
 			
@@ -2439,7 +2439,7 @@ namespace Red
 			inline Return operator() ( Arg1 A1, Arg2 A2 )
 			{
 				
-				Call ( A1, A2 );
+				return Call ( A1, A2 );
 				
 			};
 			
@@ -2492,7 +2492,7 @@ namespace Red
 			inline Return operator() ( Arg5 A5 )
 			{
 				
-				Call ( A5 );
+				return Call ( A5 );
 				
 			};
 			
@@ -2546,7 +2546,7 @@ namespace Red
 			inline Return operator() ( Arg4 A4 )
 			{
 				
-				Call ( A4 );
+				return Call ( A4 );
 				
 			};
 			
@@ -2600,7 +2600,7 @@ namespace Red
 			inline Return operator() ( Arg3 A3 )
 			{
 				
-				Call ( A3 );
+				return Call ( A3 );
 				
 			};
 			
@@ -2654,7 +2654,7 @@ namespace Red
 			inline Return operator() ( Arg2 A2 )
 			{
 				
-				Call ( A2 );
+				return Call ( A2 );
 				
 			};
 			
@@ -2708,7 +2708,7 @@ namespace Red
 			inline Return operator() ( Arg1 A1 )
 			{
 				
-				Call ( A1 );
+				return Call ( A1 );
 				
 			};
 			
@@ -2764,7 +2764,7 @@ namespace Red
 			inline Return operator() ()
 			{
 				
-				Call ();
+				return Call ();
 				
 			};
 			
@@ -2813,7 +2813,7 @@ namespace Red
 			inline Return operator() ( Arg2 A2, Arg3 A3, Arg4 A4, Arg5 A5, Arg6 A6 )
 			{
 				
-				Call ( A2, A3, A4, A5, A6 );
+				return Call ( A2, A3, A4, A5, A6 );
 				
 			};
 			
@@ -2858,7 +2858,7 @@ namespace Red
 			inline Return operator() ( Arg1 A1, Arg3 A3, Arg4 A4, Arg5 A5, Arg6 A6 )
 			{
 				
-				Call ( A1, A3, A4, A5, A6 );
+				return Call ( A1, A3, A4, A5, A6 );
 				
 			};
 			
@@ -2903,7 +2903,7 @@ namespace Red
 			inline Return operator() ( Arg1 A1, Arg2 A2, Arg4 A4, Arg5 A5, Arg6 A6 )
 			{
 				
-				Call ( A1, A2, A4, A5, A6 );
+				return Call ( A1, A2, A4, A5, A6 );
 				
 			};
 			
@@ -2948,7 +2948,7 @@ namespace Red
 			inline Return operator() ( Arg1 A1, Arg2 A2, Arg3 A3, Arg5 A5, Arg6 A6 )
 			{
 				
-				Call ( A1, A2, A3, A5, A6 );
+				return Call ( A1, A2, A3, A5, A6 );
 				
 			};
 			
@@ -2993,7 +2993,7 @@ namespace Red
 			inline Return operator() ( Arg1 A1, Arg2 A2, Arg3 A3, Arg4 A4, Arg6 A6 )
 			{
 				
-				Call ( A1, A2, A3, A4, A6 );
+				return Call ( A1, A2, A3, A4, A6 );
 				
 			};
 			
@@ -3038,7 +3038,7 @@ namespace Red
 			inline Return operator() ( Arg1 A1, Arg2 A2, Arg3 A3, Arg4 A4, Arg5 A5 )
 			{
 				
-				Call ( A1, A2, A3, A4, A5 );
+				return Call ( A1, A2, A3, A4, A5 );
 				
 			};
 			
@@ -3085,7 +3085,7 @@ namespace Red
 			inline Return operator() ( Arg3 A3, Arg4 A4, Arg5 A5, Arg6 A6 )
 			{
 				
-				Call ( A3, A4, A5, A6 );
+				return Call ( A3, A4, A5, A6 );
 				
 			};
 			
@@ -3133,7 +3133,7 @@ namespace Red
 			inline Return operator() ( Arg2 A2, Arg4 A4, Arg5 A5, Arg6 A6 )
 			{
 				
-				Call ( A2, A4, A5, A6 );
+				return Call ( A2, A4, A5, A6 );
 				
 			};
 			
@@ -3181,7 +3181,7 @@ namespace Red
 			inline Return operator() ( Arg2 A2, Arg3 A3, Arg5 A5, Arg6 A6 )
 			{
 				
-				Call ( A2, A3, A5, A6 );
+				return Call ( A2, A3, A5, A6 );
 				
 			};
 			
@@ -3229,7 +3229,7 @@ namespace Red
 			inline Return operator() ( Arg2 A2, Arg3 A3, Arg4 A4, Arg6 A6 )
 			{
 				
-				Call ( A2, A3, A4, A6 );
+				return Call ( A2, A3, A4, A6 );
 				
 			};
 			
@@ -3277,7 +3277,7 @@ namespace Red
 			inline Return operator() ( Arg2 A2, Arg3 A3, Arg4 A4, Arg5 A5 )
 			{
 				
-				Call ( A2, A3, A4, A5 );
+				return Call ( A2, A3, A4, A5 );
 				
 			};
 			
@@ -3325,7 +3325,7 @@ namespace Red
 			inline Return operator() ( Arg1 A1, Arg4 A4, Arg5 A5, Arg6 A6 )
 			{
 				
-				Call ( A1, A4, A5, A6 );
+				return Call ( A1, A4, A5, A6 );
 				
 			};
 			
@@ -3373,7 +3373,7 @@ namespace Red
 			inline Return operator() ( Arg1 A1, Arg3 A3, Arg5 A5, Arg6 A6 )
 			{
 				
-				Call ( A1, A3, A5, A6 );
+				return Call ( A1, A3, A5, A6 );
 				
 			};
 			
@@ -3421,7 +3421,7 @@ namespace Red
 			inline Return operator() ( Arg1 A1, Arg3 A3, Arg4 A4, Arg6 A6 )
 			{
 				
-				Call ( A1, A3, A4, A6 );
+				return Call ( A1, A3, A4, A6 );
 				
 			};
 			
@@ -3469,7 +3469,7 @@ namespace Red
 			inline Return operator() ( Arg1 A1, Arg3 A3, Arg4 A4, Arg5 A5 )
 			{
 				
-				Call ( A1, A3, A4, A5 );
+				return Call ( A1, A3, A4, A5 );
 				
 			};
 			
@@ -3517,7 +3517,7 @@ namespace Red
 			inline Return operator() ( Arg1 A1, Arg2 A2, Arg5 A5, Arg6 A6 )
 			{
 				
-				Call ( A1, A2, A5, A6 );
+				return Call ( A1, A2, A5, A6 );
 				
 			};
 			
@@ -3565,7 +3565,7 @@ namespace Red
 			inline Return operator() ( Arg1 A1, Arg2 A2, Arg4 A4, Arg6 A6 )
 			{
 				
-				Call ( A1, A2, A4, A6 );
+				return Call ( A1, A2, A4, A6 );
 				
 			};
 			
@@ -3613,7 +3613,7 @@ namespace Red
 			inline Return operator() ( Arg1 A1, Arg2 A2, Arg4 A4, Arg5 A5 )
 			{
 				
-				Call ( A1, A2, A4, A5 );
+				return Call ( A1, A2, A4, A5 );
 				
 			};
 			
@@ -3661,7 +3661,7 @@ namespace Red
 			inline Return operator() ( Arg1 A1, Arg2 A2, Arg3 A3, Arg6 A6 )
 			{
 				
-				Call ( A1, A2, A3, A6 );
+				return Call ( A1, A2, A3, A6 );
 				
 			};
 			
@@ -3709,7 +3709,7 @@ namespace Red
 			inline Return operator() ( Arg1 A1, Arg2 A2, Arg3 A3, Arg5 A5 )
 			{
 				
-				Call ( A1, A2, A3, A5 );
+				return Call ( A1, A2, A3, A5 );
 				
 			};
 			
@@ -3757,7 +3757,7 @@ namespace Red
 			inline Return operator() ( Arg1 A1, Arg2 A2, Arg3 A3, Arg4 A4 )
 			{
 				
-				Call ( A1, A2, A3, A4 );
+				return Call ( A1, A2, A3, A4 );
 				
 			};
 			
@@ -3807,7 +3807,7 @@ namespace Red
 			inline Return operator() ( Arg4 A4, Arg5 A5, Arg6 A6 )
 			{
 				
-				Call ( A4, A5, A6 );
+				return Call ( A4, A5, A6 );
 				
 			};
 			
@@ -3858,7 +3858,7 @@ namespace Red
 			inline Return operator() ( Arg3 A3, Arg5 A5, Arg6 A6 )
 			{
 				
-				Call ( A3, A5, A6 );
+				return Call ( A3, A5, A6 );
 				
 			};
 			
@@ -3909,7 +3909,7 @@ namespace Red
 			inline Return operator() ( Arg3 A3, Arg4 A4, Arg6 A6 )
 			{
 				
-				Call ( A3, A4, A6 );
+				return Call ( A3, A4, A6 );
 				
 			};
 			
@@ -3960,7 +3960,7 @@ namespace Red
 			inline Return operator() ( Arg3 A3, Arg4 A4, Arg5 A5 )
 			{
 				
-				Call ( A3, A4, A5 );
+				return Call ( A3, A4, A5 );
 				
 			};
 			
@@ -4011,7 +4011,7 @@ namespace Red
 			inline Return operator() ( Arg2 A2, Arg5 A5, Arg6 A6 )
 			{
 				
-				Call ( A2, A5, A6 );
+				return Call ( A2, A5, A6 );
 				
 			};
 			
@@ -4062,7 +4062,7 @@ namespace Red
 			inline Return operator() ( Arg2 A2, Arg4 A4, Arg6 A6 )
 			{
 				
-				Call ( A2, A4, A6 );
+				return Call ( A2, A4, A6 );
 				
 			};
 			
@@ -4113,7 +4113,7 @@ namespace Red
 			inline Return operator() ( Arg2 A2, Arg4 A4, Arg5 A5 )
 			{
 				
-				Call ( A2, A4, A5 );
+				return Call ( A2, A4, A5 );
 				
 			};
 			
@@ -4164,7 +4164,7 @@ namespace Red
 			inline Return operator() ( Arg2 A2, Arg3 A3, Arg6 A6 )
 			{
 				
-				Call ( A2, A3, A6 );
+				return Call ( A2, A3, A6 );
 				
 			};
 			
@@ -4215,7 +4215,7 @@ namespace Red
 			inline Return operator() ( Arg2 A2, Arg3 A3, Arg5 A5 )
 			{
 				
-				Call ( A2, A3, A5 );
+				return Call ( A2, A3, A5 );
 				
 			};
 			
@@ -4266,7 +4266,7 @@ namespace Red
 			inline Return operator() ( Arg2 A2, Arg3 A3, Arg4 A4 )
 			{
 				
-				Call ( A2, A3, A4 );
+				return Call ( A2, A3, A4 );
 				
 			};
 			
@@ -4317,7 +4317,7 @@ namespace Red
 			inline Return operator() ( Arg1 A1, Arg5 A5, Arg6 A6 )
 			{
 				
-				Call ( A1, A5, A6 );
+				return Call ( A1, A5, A6 );
 				
 			};
 			
@@ -4368,7 +4368,7 @@ namespace Red
 			inline Return operator() ( Arg1 A1, Arg4 A4, Arg6 A6 )
 			{
 				
-				Call ( A1, A4, A6 );
+				return Call ( A1, A4, A6 );
 				
 			};
 			
@@ -4419,7 +4419,7 @@ namespace Red
 			inline Return operator() ( Arg1 A1, Arg4 A4, Arg5 A5 )
 			{
 				
-				Call ( A1, A4, A5 );
+				return Call ( A1, A4, A5 );
 				
 			};
 			
@@ -4470,7 +4470,7 @@ namespace Red
 			inline Return operator() ( Arg1 A1, Arg3 A3, Arg6 A6 )
 			{
 				
-				Call ( A1, A3, A6 );
+				return Call ( A1, A3, A6 );
 				
 			};
 			
@@ -4521,7 +4521,7 @@ namespace Red
 			inline Return operator() ( Arg1 A1, Arg3 A3, Arg5 A5 )
 			{
 				
-				Call ( A1, A3, A5 );
+				return Call ( A1, A3, A5 );
 				
 			};
 			
@@ -4572,7 +4572,7 @@ namespace Red
 			inline Return operator() ( Arg1 A1, Arg3 A3, Arg4 A4 )
 			{
 				
-				Call ( A1, A3, A4 );
+				return Call ( A1, A3, A4 );
 				
 			};
 			
@@ -4623,7 +4623,7 @@ namespace Red
 			inline Return operator() ( Arg1 A1, Arg2 A2, Arg6 A6 )
 			{
 				
-				Call ( A1, A2, A6 );
+				return Call ( A1, A2, A6 );
 				
 			};
 			
@@ -4674,7 +4674,7 @@ namespace Red
 			inline Return operator() ( Arg1 A1, Arg2 A2, Arg5 A5 )
 			{
 				
-				Call ( A1, A2, A5 );
+				return Call ( A1, A2, A5 );
 				
 			};
 			
@@ -4725,7 +4725,7 @@ namespace Red
 			inline Return operator() ( Arg1 A1, Arg2 A2, Arg4 A4 )
 			{
 				
-				Call ( A1, A2, A4 );
+				return Call ( A1, A2, A4 );
 				
 			};
 			
@@ -4776,7 +4776,7 @@ namespace Red
 			inline Return operator() ( Arg1 A1, Arg2 A2, Arg3 A3 )
 			{
 				
-				Call ( A1, A2, A3 );
+				return Call ( A1, A2, A3 );
 				
 			};
 			
@@ -4829,7 +4829,7 @@ namespace Red
 			inline Return operator() ( Arg5 A5, Arg6 A6 )
 			{
 				
-				Call ( A5, A6 );
+				return Call ( A5, A6 );
 				
 			};
 			
@@ -4883,7 +4883,7 @@ namespace Red
 			inline Return operator() ( Arg4 A4, Arg6 A6 )
 			{
 				
-				Call ( A4, A6 );
+				return Call ( A4, A6 );
 				
 			};
 			
@@ -4937,7 +4937,7 @@ namespace Red
 			inline Return operator() ( Arg4 A4, Arg5 A5 )
 			{
 				
-				Call ( A4, A5 );
+				return Call ( A4, A5 );
 				
 			};
 			
@@ -4991,7 +4991,7 @@ namespace Red
 			inline Return operator() ( Arg3 A3, Arg6 A6 )
 			{
 				
-				Call ( A3, A6 );
+				return Call ( A3, A6 );
 				
 			};
 			
@@ -5045,7 +5045,7 @@ namespace Red
 			inline Return operator() ( Arg3 A3, Arg5 A5 )
 			{
 				
-				Call ( A3, A5 );
+				return Call ( A3, A5 );
 				
 			};
 			
@@ -5099,7 +5099,7 @@ namespace Red
 			inline Return operator() ( Arg3 A3, Arg4 A4 )
 			{
 				
-				Call ( A3, A4 );
+				return Call ( A3, A4 );
 				
 			};
 			
@@ -5153,7 +5153,7 @@ namespace Red
 			inline Return operator() ( Arg2 A2, Arg6 A6 )
 			{
 				
-				Call ( A2, A6 );
+				return Call ( A2, A6 );
 				
 			};
 			
@@ -5207,7 +5207,7 @@ namespace Red
 			inline Return operator() ( Arg2 A2, Arg5 A5 )
 			{
 				
-				Call ( A2, A5 );
+				return Call ( A2, A5 );
 				
 			};
 			
@@ -5261,7 +5261,7 @@ namespace Red
 			inline Return operator() ( Arg2 A2, Arg4 A4 )
 			{
 				
-				Call ( A2, A4 );
+				return Call ( A2, A4 );
 				
 			};
 			
@@ -5315,7 +5315,7 @@ namespace Red
 			inline Return operator() ( Arg2 A2, Arg3 A3 )
 			{
 				
-				Call ( A2, A3 );
+				return Call ( A2, A3 );
 				
 			};
 			
@@ -5369,7 +5369,7 @@ namespace Red
 			inline Return operator() ( Arg1 A1, Arg6 A6 )
 			{
 				
-				Call ( A1, A6 );
+				return Call ( A1, A6 );
 				
 			};
 			
@@ -5423,7 +5423,7 @@ namespace Red
 			inline Return operator() ( Arg1 A1, Arg5 A5 )
 			{
 				
-				Call ( A1, A5 );
+				return Call ( A1, A5 );
 				
 			};
 			
@@ -5477,7 +5477,7 @@ namespace Red
 			inline Return operator() ( Arg1 A1, Arg4 A4 )
 			{
 				
-				Call ( A1, A4 );
+				return Call ( A1, A4 );
 				
 			};
 			
@@ -5531,7 +5531,7 @@ namespace Red
 			inline Return operator() ( Arg1 A1, Arg3 A3 )
 			{
 				
-				Call ( A1, A3 );
+				return Call ( A1, A3 );
 				
 			};
 			
@@ -5585,7 +5585,7 @@ namespace Red
 			inline Return operator() ( Arg1 A1, Arg2 A2 )
 			{
 				
-				Call ( A1, A2 );
+				return Call ( A1, A2 );
 				
 			};
 			
@@ -5641,7 +5641,7 @@ namespace Red
 			inline Return operator() ( Arg6 A6 )
 			{
 				
-				Call ( A6 );
+				return Call ( A6 );
 				
 			};
 			
@@ -5698,7 +5698,7 @@ namespace Red
 			inline Return operator() ( Arg5 A5 )
 			{
 				
-				Call ( A5 );
+				return Call ( A5 );
 				
 			};
 			
@@ -5755,7 +5755,7 @@ namespace Red
 			inline Return operator() ( Arg4 A4 )
 			{
 				
-				Call ( A4 );
+				return Call ( A4 );
 				
 			};
 			
@@ -5812,7 +5812,7 @@ namespace Red
 			inline Return operator() ( Arg3 A3 )
 			{
 				
-				Call ( A3 );
+				return Call ( A3 );
 				
 			};
 			
@@ -5869,7 +5869,7 @@ namespace Red
 			inline Return operator() ( Arg2 A2 )
 			{
 				
-				Call ( A2 );
+				return Call ( A2 );
 				
 			};
 			
@@ -5926,7 +5926,7 @@ namespace Red
 			inline Return operator() ( Arg1 A1 )
 			{
 				
-				Call ( A1 );
+				return Call ( A1 );
 				
 			};
 			
@@ -5985,7 +5985,7 @@ namespace Red
 			inline Return operator() ()
 			{
 				
-				Call ();
+				return Call ();
 				
 			};
 			
