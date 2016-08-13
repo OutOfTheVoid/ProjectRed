@@ -39,6 +39,10 @@
 #include <RAUX/VertexShaderFile.h>
 #include <RAUX/FragmentShaderFile.h>
 
+#include <Red/Util/Function.h>
+#include <Red/Util/Closure.h>
+#include <Red/Util/Method.h>
+
 #include <math.h>
 
 #include <string>
@@ -51,7 +55,7 @@ void WindowCloseEvent ( SDL_WindowEvent * Event, SDLX::Window * Win, void * Data
 void DrawEventPush ( SDLX :: Timer * Source, void * Data );
 void DrawEvent ( SDL_UserEvent * Event );
 bool SetupScene ( RenderStruct & Data );
-void DestroyScene ( RenderStruct & Data );
+void DestroyScene ( RenderStruct & Data ); 
 void Render ( RenderStruct & Data );
 void MouseMoveListener ( SDL_MouseMotionEvent * Event, void * Data );
 
@@ -69,18 +73,6 @@ struct RenderStruct_Struct
 	Xenon::GPU :: Context * Cont; 
 	SDLX :: Window * Win;
 	SDLX :: Timer * RTimer;
-	
-	Xenon::Geometry :: Mesh * QuadMesh;
-	Xenon::GPU :: ShaderProgram * QuadProgram;
-	Xenon::GPU :: VertexArray * QuadVAO;
-	Xenon::Math :: RawMatrix3x3UniformSource * QuadTransformSource;
-	Xenon::Math :: ConstantUIntUniformSource * QuadTextureSamplerSource;
-	Xenon::Math :: Matrix3x3 QuadTransform;
-	Xenon::GPU :: UniformSet * QuadUniforms;
-	Xenon::GPU :: Texture2D * QuadTexture;
-	
-	int32_t X;
-	int32_t Y;
 	
 	uint32_t Frame;
 	
@@ -109,11 +101,23 @@ typedef struct
 * NOTE: This file is simply a test case for the engine. I've left it in the repository so people can see what I'm working on at the moment.
 */
 
+void PrintHello ( int I, int J, int K, int L )
+{
+	
+	std :: cout << "Hello world! [ " << I << ", " << J << ", " << K << ", " << L << " ]" << std :: endl;
+	
+}
+
 int main ( int argc, const char * argv [] )
 {
 	
 	( void ) argc;
 	( void ) argv;
+	
+	Red::Util :: Closure4_13 <void, int, int, int, int> PrintHelloClosure_120_E_240_E ( & PrintHello, 1, 3 );
+	Red::Util :: IFunction2 <void, int, int> * PrintHelloPTR = & PrintHelloClosure_120_E_240_E;
+	
+	PrintHelloPTR -> Call ( 2, 4 );
 	
 	uint32_t Status;
 	
@@ -331,136 +335,7 @@ void DrawEvent ( SDL_UserEvent * Event )
 bool SetupScene ( RenderStruct & Data )
 {
 	
-	uint32_t Status;
-	
-	Xenon::Geometry::Primitives :: Quad2DSpec QuadSpec;
-	Xenon::Geometry::Primitives :: Quad2DTexturePositionSpec TextureSpec;
-	
-	QuadSpec.WindOutwardFacesClockwise = true;
-	QuadSpec.Attributes = Xenon::Geometry::Primitives :: kAttributeFlags_Position | Xenon::Geometry::Primitives :: kAttributeFlags_TexturePositions;
-	QuadSpec.CompositionMode = Xenon::Geometry::Primitives :: kStaticAttributeCompositionMode_Interleaved;
-	Xenon::Geometry::Primitives :: SetupNormalQuad2DPositionSpec ( QuadSpec.PositionSpec, "Position", true );
-	Xenon::Geometry::Primitives :: SetupNormalQuad2DTexturePositionSpec ( TextureSpec, "TexturePosition", true );
-	QuadSpec.TexturePositionCount = 1;
-	QuadSpec.TexturePositionSpecs = & TextureSpec;
-	
-	Data.QuadMesh = NULL;
-	if ( ! Xenon::Geometry::Primitives :: GenerateQuad2DMesh ( & Data.QuadMesh, QuadSpec ) )
-	{
-		
-		std :: cout << "failed to generate quad mesh!" << std :: endl;
-		return false;
-		
-	}
-	
-	Data.QuadMesh -> Reference ();
-	
-	RAUX :: VertexShaderFile VSFile ( "Quad2DVertex.glsl", "Quad2D_Vertex" );
-	Xenon::GPU :: VertexShader * VShader = VSFile.LoadToShader ( & Status );
-	
-	if ( Status != RAUX::VertexShaderFile :: kStatus_Success )
-	{
-		
-		std :: cout << "Vertex shader load failed: " << Status << std :: endl;
-		
-		Data.QuadMesh -> Dereference ();
-		Data.QuadMesh = NULL;
-		
-		return false;
-		
-	}
-	
-	RAUX :: FragmentShaderFile FSFile ( "Quad2DFragment.glsl", "Quad2D_Fragment" );
-	Xenon::GPU :: FragmentShader * FShader = FSFile.LoadToShader ( & Status );
-	
-	if ( Status != RAUX::FragmentShaderFile :: kStatus_Success )
-	{
-		
-		VShader -> Dereference ();
-		VShader = NULL;
-		
-		Data.QuadMesh -> Dereference ();
-		Data.QuadMesh = NULL;
-		
-		return false;
-		
-	}
-	
-	if ( ! VShader -> Compile ( true ) )
-	{
-		
-		std :: cout << VSFile.GetName () << ": " << VShader -> GetCompilationLog () << std :: endl;
-		
-		Data.QuadMesh -> Dereference ();
-		Data.QuadMesh = NULL;
-		
-		return false;
-		
-	}
-	
-	if ( ! FShader -> Compile ( true ) )
-	{
-		
-		std :: cout << "" << FSFile.GetName () << ": " << FShader -> GetCompilationLog () << std :: endl;
-		
-		Data.QuadMesh -> Dereference ();
-		Data.QuadMesh = NULL;
-		
-		return false;
-		
-	}
-	
-	Data.QuadProgram = new Xenon::GPU :: ShaderProgram ( "Quad2D_Program" );
-	Data.QuadProgram -> AddShader ( * VShader );
-	Data.QuadProgram -> AddShader ( * FShader );
-	Data.QuadProgram -> Reference ();
-	Data.QuadProgram -> Link ();
-	Data.QuadProgram -> Reference ();
-	
-	RAUX :: PNGFile TextureFile ( "RockTexture.png" );
-	TextureFile.Load ( & Status );
-	
-	if ( ! TextureFile.Valid () )
-	{
-		
-		Data.QuadProgram -> Dereference ();
-		Data.QuadProgram = NULL;
-		
-		Data.QuadMesh -> Dereference ();
-		Data.QuadMesh = NULL;
-		
-		return false;
-		
-	}
-	
-	Data.QuadTexture = new Xenon::GPU::Texture2D ();
-	Data.QuadTexture -> TextureImage ( 0, Xenon::GPU::Texture2D :: kInternalFormat_RGBA, TextureFile.GetWidth (), TextureFile.GetHeight (), Xenon::GPU::Texture2D :: kExternalLayout_UByte, Xenon::GPU::Texture2D :: kExternalFormat_RGB, TextureFile.GetBitmapData (), 3 );
-	Data.QuadTexture -> SetWrapMode ( Xenon::GPU::Texture2D :: kWrapMode_Repeat );
-	Data.QuadTexture -> SetFiltering ( Xenon::GPU::Texture2D :: kMinimizingFilter_Linear, Xenon::GPU::Texture2D :: kMagnificationFilter_Linear );
-	Data.QuadTexture -> GenerateMipMaps ();
-	Data.QuadTexture -> AssignToTextureUnit ( 0 );
-	Data.QuadTexture -> Reference ();
-	
-	Xenon::Math::Matrix3x3 :: Identity ( Data.QuadTransform );
-	
-	Data.QuadTransformSource = new Xenon::Math :: RawMatrix3x3UniformSource ( & Data.QuadTransform, true );
-	Data.QuadTransformSource -> Reference ();
-	
-	Data.QuadTextureSamplerSource = new Xenon::Math :: ConstantUIntUniformSource ( 0 );
-	Data.QuadTextureSamplerSource -> Reference ();
-	
-	Data.QuadUniforms = new Xenon::GPU :: UniformSet ( Data.QuadProgram );
-	Data.QuadUniforms -> AddMatrix3x3Uniform ( "Transform", Data.QuadTransformSource );
-	Data.QuadUniforms -> AddUIntUniform ( "TextureID", Data.QuadTextureSamplerSource );
-	Data.QuadUniforms -> SetProgram ( Data.QuadProgram );
-	Data.QuadUniforms -> Link ();
-	Data.QuadUniforms -> Reference ();
-	
-	Data.QuadVAO = new Xenon::GPU :: VertexArray ();
-	Data.QuadVAO -> SetProgram ( Data.QuadProgram );
-	Data.QuadMesh -> BuildVertexArray ( * Data.QuadVAO );
-	Data.QuadVAO -> Build ();
-	Data.QuadVAO -> Reference ();
+	(void) Data;
 	
 	return true;
 	
@@ -469,25 +344,7 @@ bool SetupScene ( RenderStruct & Data )
 void DestroyScene ( RenderStruct & Data )
 {
 	
-	if ( Data.QuadMesh != NULL )
-		Data.QuadMesh -> Dereference ();
-	Data.QuadMesh = NULL;
-	
-	if ( Data.QuadProgram != NULL )
-		Data.QuadProgram -> Dereference ();
-	Data.QuadProgram = NULL;
-	
-	if ( Data.QuadTransformSource != NULL )
-		Data.QuadTransformSource -> Dereference ();
-	Data.QuadTransformSource = NULL;
-	
-	if ( Data.QuadUniforms != NULL )
-		Data.QuadUniforms -> Dereference ();
-	Data.QuadUniforms = NULL;
-	
-	if ( Data.QuadVAO != NULL )
-		Data.QuadVAO -> Dereference ();
-	Data.QuadVAO = NULL;
+	(void) Data;
 	
 }
 
@@ -495,11 +352,5 @@ void Render ( RenderStruct & Data )
 {
 	
 	Data.Cont -> GetDefaultFrameBuffer () -> Clear ();
-	
-	Data.QuadTexture -> Bind ();
-	Data.QuadVAO -> Bind ();
-	Data.QuadUniforms -> UpdateUniforms ();
-	
-	glDrawElements ( Data.QuadMesh -> GetDrawMode (), Data.QuadMesh -> GetIndexCount (), Data.QuadMesh -> GetIndexType (), NULL );
 	
 }

@@ -992,8 +992,11 @@ Xenon::Geometry :: Mesh * RAUX::ObjFile :: CreateMesh ( const MeshParameters & P
 {
 	
 	uint32_t IndexCount = 0;
+	uint32_t TriCount = 0;
 	
-	for ( uint32_t I = 0; I < Parameters.GroupCount; I ++ )
+	uint32_t I;
+	
+	for ( I = 0; I < Parameters.GroupCount; I ++ )
 	{
 		
 		const Group * FGroup = GetGroup ( Parameters.GroupIndexes [ I ] );
@@ -1007,17 +1010,44 @@ Xenon::Geometry :: Mesh * RAUX::ObjFile :: CreateMesh ( const MeshParameters & P
 			
 		}
 		
-		for ( uint32_t F = 0; F < FGroup -> FaceIndecies.size (); F ++ )
-			IndexCount += GetFace ( FGroup -> FaceIndecies [ F ] ).VertexCount;
+		TriCount += FGroup -> FaceIndecies.size ();
 		
 	}
+	
+	IndexCount = TriCount * 3;
 	
 	if ( ! IndexCount )
 		return NULL;
 	
-	//Xenon::Util :: RCMem * IndexMemory = new Xenon::Util :: RCMem ( sizeof ( GLshort ) * IndexCount );
+	Xenon::Util :: RCMem * IndexMemory = new Xenon::Util :: RCMem ( sizeof ( GLuint ) * IndexCount );
+	GLuint * Indexies = reinterpret_cast <GLuint *> ( IndexMemory -> GetData () );
 	
-	// TODO:: Fill mesh
+	if ( Parameters.WindCounterClockwise )
+	{
+		
+		for ( I = 0; I < TriCount; I ++ )
+		{
+			
+			Indexies [ I * 3 ] = I * 3;
+			Indexies [ I * 3 + 1 ] = I * 3 + 1;
+			Indexies [ I * 3 + 2 ] = I * 3 + 2;
+			
+		}
+		
+	}
+	else
+	{
+		
+		for ( I = 0; I < TriCount; I ++ )
+		{
+			
+			Indexies [ I * 3 ] = I * 3 + 2;
+			Indexies [ I * 3 + 1 ] = I * 3 + 1;
+			Indexies [ I * 3 + 2 ] = I * 3;
+			
+		}
+		
+	}
 	
 	return NULL;
 	

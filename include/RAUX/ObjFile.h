@@ -141,6 +141,8 @@ namespace RAUX
 		typedef struct MeshParameters_Struct
 		{
 			
+			bool WindCounterClockwise;
+			
 			// Pointer to an array of group indexes.
 			const uint32_t * GroupIndexes;
 			// Count of the number of groups to include in this mesh.
