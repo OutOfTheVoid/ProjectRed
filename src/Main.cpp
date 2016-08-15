@@ -42,6 +42,7 @@
 #include <Red/Util/Function.h>
 #include <Red/Util/Closure.h>
 #include <Red/Util/Method.h>
+#include <Red/Util/MethodObjectClosure.h>
 
 #include <math.h>
 
@@ -101,12 +102,31 @@ typedef struct
 * NOTE: This file is simply a test case for the engine. I've left it in the repository so people can see what I'm working on at the moment.
 */
 
-void PrintHello ( int I, int J, int K, int L )
+class Test
 {
+public:
 	
-	std :: cout << "Hello world! [ " << I << ", " << J << ", " << K << ", " << L << " ]" << std :: endl;
+	Test ( const std :: string & Sample ):
+		Sample ( Sample )
+	{
+	};
 	
-}
+	~Test ()
+	{
+	};
+	
+	void TestFunc ( int I ) const
+	{
+		
+		std :: cout << "Test :: TestFunc (): \"" << Sample << "\", " << I << std :: endl;
+		
+	};
+	
+private:
+	
+	const std :: string Sample;
+	
+};
 
 int main ( int argc, const char * argv [] )
 {
@@ -114,10 +134,12 @@ int main ( int argc, const char * argv [] )
 	( void ) argc;
 	( void ) argv;
 	
-	Red::Util :: Closure4_13 <void, int, int, int, int> PrintHelloClosure_120_E_240_E ( & PrintHello, 1, 3 );
-	Red::Util :: IFunction2 <void, int, int> * PrintHelloPTR = & PrintHelloClosure_120_E_240_E;
+	const Test MyTest ( "Hello world" );
 	
-	PrintHelloPTR -> Call ( 2, 4 );
+	Red::Util :: MethodObjectClosure1 <const Test, void, int> TestClosure ( & Test :: TestFunc, & MyTest );
+	Red::Util :: IFunction1 <void, int> * TestFunctionFromMethodClosure = & TestClosure;
+	
+	( * TestFunctionFromMethodClosure ) ( 666 );
 	
 	uint32_t Status;
 	

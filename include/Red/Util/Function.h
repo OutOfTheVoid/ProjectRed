@@ -17,8 +17,8 @@ namespace Red
 			
 			inline virtual ~IFunction () {};
 			
-			virtual Return Call () = 0;
-			virtual Return operator() () = 0;
+			virtual Return Call () const = 0;
+			virtual Return operator() () const = 0;
 			
 		};
 		
@@ -29,8 +29,8 @@ namespace Red
 			
 			inline virtual ~IFunction1 () {};
 			
-			virtual Return Call ( Arg1 ) = 0;
-			virtual Return operator() ( Arg1 ) = 0;
+			virtual Return Call ( Arg1 ) const = 0;
+			virtual Return operator() ( Arg1 ) const = 0;
 			
 		};
 		
@@ -41,8 +41,8 @@ namespace Red
 			
 			inline virtual ~IFunction2 () {};
 			
-			virtual Return Call ( Arg1, Arg2 ) = 0;
-			virtual Return operator() ( Arg1, Arg2 ) = 0;
+			virtual Return Call ( Arg1, Arg2 ) const = 0;
+			virtual Return operator() ( Arg1, Arg2 ) const = 0;
 			
 		};
 		
@@ -53,8 +53,8 @@ namespace Red
 			
 			inline virtual ~IFunction3 () {};
 			
-			virtual Return Call ( Arg1, Arg2, Arg3 ) = 0;
-			virtual Return operator() ( Arg1, Arg2, Arg3 ) = 0;
+			virtual Return Call ( Arg1, Arg2, Arg3 ) const = 0;
+			virtual Return operator() ( Arg1, Arg2, Arg3 ) const = 0;
 			
 		};
 		
@@ -65,8 +65,8 @@ namespace Red
 			
 			inline virtual ~IFunction4 () {};
 			
-			virtual Return Call ( Arg1, Arg2, Arg3, Arg4 ) = 0;
-			virtual Return operator() ( Arg1, Arg2, Arg3, Arg4 ) = 0;
+			virtual Return Call ( Arg1, Arg2, Arg3, Arg4 ) const = 0;
+			virtual Return operator() ( Arg1, Arg2, Arg3, Arg4 ) const = 0;
 			
 		};
 		
@@ -77,8 +77,8 @@ namespace Red
 			
 			inline virtual ~IFunction5 () {};
 			
-			virtual Return Call ( Arg1, Arg2, Arg3, Arg4, Arg5 ) = 0;
-			virtual Return operator() ( Arg1, Arg2, Arg3, Arg4, Arg5 ) = 0;
+			virtual Return Call ( Arg1, Arg2, Arg3, Arg4, Arg5 ) const = 0;
+			virtual Return operator() ( Arg1, Arg2, Arg3, Arg4, Arg5 ) const = 0;
 			
 		};
 		
@@ -89,8 +89,8 @@ namespace Red
 			
 			inline virtual ~IFunction6 () {};
 			
-			virtual Return Call ( Arg1, Arg2, Arg3, Arg4, Arg5, Arg6 ) = 0;
-			virtual Return operator() ( Arg1, Arg2, Arg3, Arg4, Arg5, Arg6 ) = 0;
+			virtual Return Call ( Arg1, Arg2, Arg3, Arg4, Arg5, Arg6 ) const = 0;
+			virtual Return operator() ( Arg1, Arg2, Arg3, Arg4, Arg5, Arg6 ) const = 0;
 			
 		};
 		
@@ -113,14 +113,14 @@ namespace Red
 			{
 			};
 			
-			inline Return Call ()
+			inline Return Call () const
 			{
 				
 				return ( * FAddress ) ();
 				
 			};
 			
-			inline Return operator() ()
+			inline Return operator() () const
 			{
 				
 				return Call ();
@@ -152,14 +152,14 @@ namespace Red
 			{
 			};
 			
-			inline Return Call ( Arg1 A1 )
+			inline Return Call ( Arg1 A1 ) const
 			{
 				
 				return ( * FAddress ) ( A1 );
 				
 			};
 			
-			inline Return operator() ( Arg1 A1 )
+			inline Return operator() ( Arg1 A1 ) const
 			{
 				
 				return Call ( A1 );
@@ -191,14 +191,14 @@ namespace Red
 			{
 			};
 			
-			inline Return Call ( Arg1 A1, Arg2 A2 )
+			inline Return Call ( Arg1 A1, Arg2 A2 ) const
 			{
 				
 				return ( * FAddress ) ( A1, A2 );
 				
 			};
 			
-			inline Return operator() ( Arg1 A1, Arg2 A2 )
+			inline Return operator() ( Arg1 A1, Arg2 A2 ) const
 			{
 				
 				return Call ( A1, A2 );
@@ -230,14 +230,14 @@ namespace Red
 			{
 			};
 			
-			inline Return Call ( Arg1 A1, Arg2 A2, Arg3 A3 )
+			inline Return Call ( Arg1 A1, Arg2 A2, Arg3 A3 ) const
 			{
 				
 				return ( * FAddress ) ( A1, A2, A3 );
 				
 			};
 			
-			inline Return operator() ( Arg1 A1, Arg2 A2, Arg3 A3 )
+			inline Return operator() ( Arg1 A1, Arg2 A2, Arg3 A3 ) const
 			{
 				
 				return Call ( A1, A2, A3 );
@@ -269,14 +269,14 @@ namespace Red
 			{
 			};
 			
-			inline Return Call ( Arg1 A1, Arg2 A2, Arg3 A3, Arg4 A4 )
+			inline Return Call ( Arg1 A1, Arg2 A2, Arg3 A3, Arg4 A4 ) const
 			{
 				
 				return ( * FAddress ) ( A1, A2, A3, A4 );
 				
 			};
 			
-			inline Return operator() ( Arg1 A1, Arg2 A2, Arg3 A3, Arg4 A4 )
+			inline Return operator() ( Arg1 A1, Arg2 A2, Arg3 A3, Arg4 A4 ) const
 			{
 				
 				return Call ( A1, A2, A3, A4 );
@@ -308,14 +308,14 @@ namespace Red
 			{
 			};
 			
-			inline Return Call ( Arg1 A1, Arg2 A2, Arg3 A3, Arg4 A4, Arg5 A5 )
+			inline Return Call ( Arg1 A1, Arg2 A2, Arg3 A3, Arg4 A4, Arg5 A5 ) const
 			{
 				
 				return ( * FAddress ) ( A1, A2, A3, A4, A5 );
 				
 			};
 			
-			inline Return operator() ( Arg1 A1, Arg2 A2, Arg3 A3, Arg4 A4, Arg5 A5 )
+			inline Return operator() ( Arg1 A1, Arg2 A2, Arg3 A3, Arg4 A4, Arg5 A5 ) const
 			{
 				
 				return Call ( A1, A2, A3, A4, A5 );
@@ -347,14 +347,14 @@ namespace Red
 			{
 			};
 			
-			inline Return Call ( Arg1 A1, Arg2 A2, Arg3 A3, Arg4 A4, Arg5 A5, Arg6 A6 )
+			inline Return Call ( Arg1 A1, Arg2 A2, Arg3 A3, Arg4 A4, Arg5 A5, Arg6 A6 ) const
 			{
 				
 				return ( * FAddress ) ( A1, A2, A3, A4, A5 );
 				
 			};
 			
-			inline Return operator() ( Arg1 A1, Arg2 A2, Arg3 A3, Arg4 A4, Arg5 A5, Arg6 A6 )
+			inline Return operator() ( Arg1 A1, Arg2 A2, Arg3 A3, Arg4 A4, Arg5 A5, Arg6 A6 ) const
 			{
 				
 				return Call ( A1, A2, A3, A4, A5, A6 );

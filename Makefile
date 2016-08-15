@@ -65,7 +65,7 @@ OBJECTS=obj/SDLX/Lib.o \
 bin/main: obj/Main.o
 	$(LD) $(LINK_FLAGS) $(OBJECTS) obj/Main.o -o bin/Main
 
-obj/Main.o: src/Main.cpp $(OBJECTS) include/Red/Util/Function.h include/Red/Util/Method.h include/Red/Util/Closure.h
+obj/Main.o: src/Main.cpp $(OBJECTS) include/Red/Util/Function.h include/Red/Util/Method.h include/Red/Util/Closure.h include/Red/Util/MethodObjectClosure.h
 	$(CXX) -c $(CXX_FLAGS) src/Main.cpp -o obj/Main.o
 	
 # ======================== SDLX ======================== #

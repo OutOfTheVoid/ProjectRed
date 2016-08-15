@@ -32,14 +32,14 @@ namespace Red
 			{
 			};
 			
-			inline Return Call ()
+			inline Return Call () const
 			{
 				
 				return ( * FAddress ) ( Default1 );
 				
 			}
 			
-			inline Return operator() ()
+			inline Return operator() () const
 			{
 				
 				return Call ();
@@ -74,14 +74,14 @@ namespace Red
 			{
 			};
 			
-			inline Return Call ( Arg2 A2 )
+			inline Return Call ( Arg2 A2 ) const
 			{
 				
 				return ( * FAddress ) ( Default1, A2 );
 				
 			}
 			
-			inline Return operator() ( Arg2 A2 )
+			inline Return operator() ( Arg2 A2 ) const
 			{
 				
 				return Call ( A2 );
@@ -116,14 +116,14 @@ namespace Red
 			{
 			};
 			
-			inline Return Call ( Arg1 A1 )
+			inline Return Call ( Arg1 A1 ) const
 			{
 				
 				return ( * FAddress ) ( A1, Default2 );
 				
 			}
 			
-			inline Return operator() ( Arg2 A1 )
+			inline Return operator() ( Arg2 A1 ) const
 			{
 				
 				return Call ( A1 );
@@ -160,14 +160,14 @@ namespace Red
 			{
 			};
 			
-			inline Return Call ()
+			inline Return Call () const
 			{
 				
 				return ( * FAddress ) ( Default1, Default2 );
 				
 			}
 			
-			inline Return operator() ()
+			inline Return operator() () const
 			{
 				
 				return Call ();
@@ -203,14 +203,14 @@ namespace Red
 			{
 			};
 			
-			inline Return Call ( Arg2 A2, Arg3 A3 )
+			inline Return Call ( Arg2 A2, Arg3 A3 ) const
 			{
 				
 				return ( * FAddress ) ( Default1, A2, A3 );
 				
 			};
 			
-			inline Return operator() ( Arg2 A2, Arg3 A3 )
+			inline Return operator() ( Arg2 A2, Arg3 A3 ) const
 			{
 				
 				return Call ( A2, A3 );
@@ -246,14 +246,14 @@ namespace Red
 			{
 			};
 			
-			inline Return Call ( Arg1 A1, Arg3 A3 )
+			inline Return Call ( Arg1 A1, Arg3 A3 ) const
 			{
 				
 				return ( * FAddress ) ( A1, Default2, A3 );
 				
 			};
 			
-			inline Return operator() ( Arg1 A1, Arg3 A3 )
+			inline Return operator() ( Arg1 A1, Arg3 A3 ) const
 			{
 				
 				return Call ( A1, A3 );
@@ -289,14 +289,14 @@ namespace Red
 			{
 			};
 			
-			inline Return Call ( Arg1 A1, Arg2 A2 )
+			inline Return Call ( Arg1 A1, Arg2 A2 ) const
 			{
 				
 				return ( * FAddress ) ( A1, A2, Default3 );
 				
 			};
 			
-			inline Return operator() ( Arg1 A1, Arg2 A2 )
+			inline Return operator() ( Arg1 A1, Arg2 A2 ) const
 			{
 				
 				return Call ( A1, A2 );
@@ -334,14 +334,14 @@ namespace Red
 			{
 			};
 			
-			inline Return Call ( Arg3 A3 )
+			inline Return Call ( Arg3 A3 ) const
 			{
 				
 				return ( * FAddress ) ( Default1, Default2, A3 );
 				
 			};
 			
-			inline Return operator() ( Arg3 A3 )
+			inline Return operator() ( Arg3 A3 ) const
 			{
 				
 				return Call ( A3 );
@@ -380,14 +380,14 @@ namespace Red
 			{
 			};
 			
-			inline Return Call ( Arg2 A2 )
+			inline Return Call ( Arg2 A2 ) const
 			{
 				
 				return ( * FAddress ) ( Default1, A2, Default3 );
 				
 			};
 			
-			inline Return operator() ( Arg2 A2 )
+			inline Return operator() ( Arg2 A2 ) const
 			{
 				
 				return Call ( A2 );
@@ -426,14 +426,14 @@ namespace Red
 			{
 			};
 			
-			inline Return Call ( Arg1 A1 )
+			inline Return Call ( Arg1 A1 ) const
 			{
 				
 				return ( * FAddress ) ( A1, Default2, Default3 );
 				
 			};
 			
-			inline Return operator() ( Arg1 A1 )
+			inline Return operator() ( Arg1 A1 ) const
 			{
 				
 				return Call ( A1 );
@@ -474,14 +474,14 @@ namespace Red
 			{
 			};
 			
-			inline Return Call ()
+			inline Return Call () const
 			{
 				
 				return ( * FAddress ) ( Default1, Default2, Default3 );
 				
 			};
 			
-			inline Return operator() ()
+			inline Return operator() () const
 			{
 				
 				return Call ();
@@ -519,14 +519,14 @@ namespace Red
 			{
 			};
 			
-			inline Return Call ( Arg2 A2, Arg3 A3, Arg4 A4 )
+			inline Return Call ( Arg2 A2, Arg3 A3, Arg4 A4 ) const
 			{
 				
 				return ( * FAddress ) ( Default1, A2, A3, A4 );
 				
 			};
 			
-			inline Return operator() ( Arg2 A2, Arg3 A3, Arg4 A4 )
+			inline Return operator() ( Arg2 A2, Arg3 A3, Arg4 A4 ) const
 			{
 				
 				return Call ( A2, A3, A4 );
@@ -562,14 +562,14 @@ namespace Red
 			{
 			};
 			
-			inline Return Call ( Arg1 A1, Arg3 A3, Arg4 A4 )
+			inline Return Call ( Arg1 A1, Arg3 A3, Arg4 A4 ) const
 			{
 				
 				return ( * FAddress ) ( A1, Default2, A3, A4 );
 				
 			};
 			
-			inline Return operator() ( Arg1 A1, Arg3 A3, Arg4 A4 )
+			inline Return operator() ( Arg1 A1, Arg3 A3, Arg4 A4 ) const
 			{
 				
 				return Call ( A1, A3, A4 );
@@ -605,14 +605,14 @@ namespace Red
 			{
 			};
 			
-			inline Return Call ( Arg1 A1, Arg2 A2, Arg4 A4 )
+			inline Return Call ( Arg1 A1, Arg2 A2, Arg4 A4 ) const
 			{
 				
 				return ( * FAddress ) ( A1, A2, Default3, A4 );
 				
 			};
 			
-			inline Return operator() ( Arg1 A1, Arg2 A2, Arg4 A4 )
+			inline Return operator() ( Arg1 A1, Arg2 A2, Arg4 A4 ) const
 			{
 				
 				return Call ( A1, A2, A4 );
@@ -648,14 +648,14 @@ namespace Red
 			{
 			};
 			
-			inline Return Call ( Arg1 A1, Arg2 A2, Arg3 A3 )
+			inline Return Call ( Arg1 A1, Arg2 A2, Arg3 A3 ) const
 			{
 				
 				return ( * FAddress ) ( A1, A2, A3, Default4 );
 				
 			};
 			
-			inline Return operator() ( Arg1 A1, Arg2 A2, Arg3 A3 )
+			inline Return operator() ( Arg1 A1, Arg2 A2, Arg3 A3 ) const
 			{
 				
 				return Call ( A1, A2, A3 );
@@ -693,14 +693,14 @@ namespace Red
 			{
 			};
 			
-			inline Return Call ( Arg3 A3, Arg4 A4 )
+			inline Return Call ( Arg3 A3, Arg4 A4 ) const
 			{
 				
 				return ( * FAddress ) ( Default1, Default2, A3, A4 );
 				
 			};
 			
-			inline Return operator() ( Arg3 A3, Arg4 A4 )
+			inline Return operator() ( Arg3 A3, Arg4 A4 ) const
 			{
 				
 				return Call ( A3, A4 );
@@ -739,14 +739,14 @@ namespace Red
 			{
 			};
 			
-			inline Return Call ( Arg2 A2, Arg4 A4 )
+			inline Return Call ( Arg2 A2, Arg4 A4 ) const
 			{
 				
 				return ( * FAddress ) ( Default1, A2, Default3, A4 );
 				
 			};
 			
-			inline Return operator() ( Arg2 A2, Arg4 A4 )
+			inline Return operator() ( Arg2 A2, Arg4 A4 ) const
 			{
 				
 				return Call ( A2, A4 );
@@ -785,14 +785,14 @@ namespace Red
 			{
 			};
 			
-			inline Return Call ( Arg2 A2, Arg3 A3 )
+			inline Return Call ( Arg2 A2, Arg3 A3 ) const
 			{
 				
 				return ( * FAddress ) ( Default1, A2, A3, Default4 );
 				
 			};
 			
-			inline Return operator() ( Arg2 A2, Arg3 A3 )
+			inline Return operator() ( Arg2 A2, Arg3 A3 ) const
 			{
 				
 				return Call ( A2, A3 );
@@ -831,14 +831,14 @@ namespace Red
 			{
 			};
 			
-			inline Return Call ( Arg1 A1, Arg4 A4 )
+			inline Return Call ( Arg1 A1, Arg4 A4 ) const
 			{
 				
 				return ( * FAddress ) ( A1, Default2, Default3, A4 );
 				
 			};
 			
-			inline Return operator() ( Arg1 A1, Arg4 A4 )
+			inline Return operator() ( Arg1 A1, Arg4 A4 ) const
 			{
 				
 				return Call ( A1, A4 );
@@ -877,14 +877,14 @@ namespace Red
 			{
 			};
 			
-			inline Return Call ( Arg1 A1, Arg3 A3 )
+			inline Return Call ( Arg1 A1, Arg3 A3 ) const
 			{
 				
 				return ( * FAddress ) ( A1, Default2, A3, Default4 );
 				
 			};
 			
-			inline Return operator() ( Arg1 A1, Arg3 A3 )
+			inline Return operator() ( Arg1 A1, Arg3 A3 ) const
 			{
 				
 				return Call ( A1, A3 );
@@ -923,14 +923,14 @@ namespace Red
 			{
 			};
 			
-			inline Return Call ( Arg1 A1, Arg2 A2 )
+			inline Return Call ( Arg1 A1, Arg2 A2 ) const
 			{
 				
 				return ( * FAddress ) ( A1, A2, Default3, Default4 );
 				
 			};
 			
-			inline Return operator() ( Arg1 A1, Arg2 A2 )
+			inline Return operator() ( Arg1 A1, Arg2 A2 ) const
 			{
 				
 				return Call ( A1, A2 );
@@ -971,14 +971,14 @@ namespace Red
 			{
 			};
 			
-			inline Return Call ( Arg4 A4 )
+			inline Return Call ( Arg4 A4 ) const
 			{
 				
 				return ( * FAddress ) ( Default1, Default2, Default3, A4 );
 				
 			};
 			
-			inline Return operator() ( Arg4 A4 )
+			inline Return operator() ( Arg4 A4 ) const
 			{
 				
 				return Call ( A4 );
@@ -1020,14 +1020,14 @@ namespace Red
 			{
 			};
 			
-			inline Return Call ( Arg3 A3 )
+			inline Return Call ( Arg3 A3 ) const
 			{
 				
 				return ( * FAddress ) ( Default1, Default2, A3, Default4 );
 				
 			};
 			
-			inline Return operator() ( Arg3 A3 )
+			inline Return operator() ( Arg3 A3 ) const
 			{
 				
 				return Call ( A3 );
@@ -1069,14 +1069,14 @@ namespace Red
 			{
 			};
 			
-			inline Return Call ( Arg2 A2 )
+			inline Return Call ( Arg2 A2 ) const
 			{
 				
 				return ( * FAddress ) ( Default1, A2, Default3, Default4 );
 				
 			};
 			
-			inline Return operator() ( Arg2 A2 )
+			inline Return operator() ( Arg2 A2 ) const
 			{
 				
 				return Call ( A2 );
@@ -1118,14 +1118,14 @@ namespace Red
 			{
 			};
 			
-			inline Return Call ( Arg1 A1 )
+			inline Return Call ( Arg1 A1 ) const
 			{
 				
 				return ( * FAddress ) ( A1, Default2, Default3, Default4 );
 				
 			};
 			
-			inline Return operator() ( Arg1 A1 )
+			inline Return operator() ( Arg1 A1 ) const
 			{
 				
 				return Call ( A1 );
@@ -1169,14 +1169,14 @@ namespace Red
 			{
 			};
 			
-			inline Return Call ()
+			inline Return Call () const
 			{
 				
 				return ( * FAddress ) ( Default1, Default2, Default3, Default4 );
 				
 			};
 			
-			inline Return operator() ()
+			inline Return operator() () const
 			{
 				
 				return Call ();
@@ -1215,14 +1215,14 @@ namespace Red
 			{
 			};
 			
-			inline Return Call ( Arg2 A2, Arg3 A3, Arg4 A4, Arg5 A5 )
+			inline Return Call ( Arg2 A2, Arg3 A3, Arg4 A4, Arg5 A5 ) const
 			{
 				
 				return ( * FAddress ) ( Default1, A2, A3, A4, A5 );
 				
 			};
 			
-			inline Return operator() ( Arg2 A2, Arg3 A3, Arg4 A4, Arg5 A5 )
+			inline Return operator() ( Arg2 A2, Arg3 A3, Arg4 A4, Arg5 A5 ) const
 			{
 				
 				return Call ( A2, A3, A4, A5 );
@@ -1258,14 +1258,14 @@ namespace Red
 			{
 			};
 			
-			inline Return Call ( Arg1 A1, Arg3 A3, Arg4 A4, Arg5 A5 )
+			inline Return Call ( Arg1 A1, Arg3 A3, Arg4 A4, Arg5 A5 ) const
 			{
 				
 				return ( * FAddress ) ( A1, Default2, A3, A4, A5 );
 				
 			};
 			
-			inline Return operator() ( Arg1 A1, Arg3 A3, Arg4 A4, Arg5 A5 )
+			inline Return operator() ( Arg1 A1, Arg3 A3, Arg4 A4, Arg5 A5 ) const
 			{
 				
 				return Call ( A1, A3, A4, A5 );
@@ -1301,14 +1301,14 @@ namespace Red
 			{
 			};
 			
-			inline Return Call ( Arg1 A1, Arg2 A2, Arg4 A4, Arg5 A5 )
+			inline Return Call ( Arg1 A1, Arg2 A2, Arg4 A4, Arg5 A5 ) const
 			{
 				
 				return ( * FAddress ) ( A1, A2, Default3, A4, A5 );
 				
 			};
 			
-			inline Return operator() ( Arg1 A1, Arg2 A2, Arg4 A4, Arg5 A5 )
+			inline Return operator() ( Arg1 A1, Arg2 A2, Arg4 A4, Arg5 A5 ) const
 			{
 				
 				return Call ( A1, A2, A4, A5 );
@@ -1344,14 +1344,14 @@ namespace Red
 			{
 			};
 			
-			inline Return Call ( Arg1 A1, Arg2 A2, Arg3 A3, Arg5 A5 )
+			inline Return Call ( Arg1 A1, Arg2 A2, Arg3 A3, Arg5 A5 ) const
 			{
 				
 				return ( * FAddress ) ( A1, A2, A3, Default4, A5 );
 				
 			};
 			
-			inline Return operator() ( Arg1 A1, Arg2 A2, Arg3 A3, Arg5 A5 )
+			inline Return operator() ( Arg1 A1, Arg2 A2, Arg3 A3, Arg5 A5 ) const
 			{
 				
 				return Call ( A1, A2, A3, A5 );
@@ -1387,14 +1387,14 @@ namespace Red
 			{
 			};
 			
-			inline Return Call ( Arg1 A1, Arg2 A2, Arg3 A3, Arg4 A4 )
+			inline Return Call ( Arg1 A1, Arg2 A2, Arg3 A3, Arg4 A4 ) const
 			{
 				
 				return ( * FAddress ) ( A1, A2, A3, A4, Default5 );
 				
 			};
 			
-			inline Return operator() ( Arg1 A1, Arg2 A2, Arg3 A3, Arg4 A4 )
+			inline Return operator() ( Arg1 A1, Arg2 A2, Arg3 A3, Arg4 A4 ) const
 			{
 				
 				return Call ( A1, A2, A3, A4 );
@@ -1432,14 +1432,14 @@ namespace Red
 			{
 			};
 			
-			inline Return Call ( Arg3 A3, Arg4 A4, Arg5 A5 )
+			inline Return Call ( Arg3 A3, Arg4 A4, Arg5 A5 ) const
 			{
 				
 				return ( * FAddress ) ( Default1, Default2, A3, A4, A5 );
 				
 			};
 			
-			inline Return operator() ( Arg3 A3, Arg4 A4, Arg5 A5 )
+			inline Return operator() ( Arg3 A3, Arg4 A4, Arg5 A5 ) const
 			{
 				
 				return Call ( A3, A4, A5 );
@@ -1478,14 +1478,14 @@ namespace Red
 			{
 			};
 			
-			inline Return Call ( Arg2 A2, Arg4 A4, Arg5 A5 )
+			inline Return Call ( Arg2 A2, Arg4 A4, Arg5 A5 ) const
 			{
 				
 				return ( * FAddress ) ( Default1, A2, Default3, A4, A5 );
 				
 			};
 			
-			inline Return operator() ( Arg2 A2, Arg4 A4, Arg5 A5 )
+			inline Return operator() ( Arg2 A2, Arg4 A4, Arg5 A5 ) const
 			{
 				
 				return Call ( A2, A4, A5 );
@@ -1524,14 +1524,14 @@ namespace Red
 			{
 			};
 			
-			inline Return Call ( Arg2 A2, Arg3 A3, Arg5 A5 )
+			inline Return Call ( Arg2 A2, Arg3 A3, Arg5 A5 ) const
 			{
 				
 				return ( * FAddress ) ( Default1, A2, A3, Default4, A5 );
 				
 			};
 			
-			inline Return operator() ( Arg2 A2, Arg3 A3, Arg5 A5 )
+			inline Return operator() ( Arg2 A2, Arg3 A3, Arg5 A5 ) const
 			{
 				
 				return Call ( A2, A3, A5 );
@@ -1570,14 +1570,14 @@ namespace Red
 			{
 			};
 			
-			inline Return Call ( Arg2 A2, Arg3 A3, Arg4 A4 )
+			inline Return Call ( Arg2 A2, Arg3 A3, Arg4 A4 ) const
 			{
 				
 				return ( * FAddress ) ( Default1, A2, A3, A4, Default5 );
 				
 			};
 			
-			inline Return operator() ( Arg2 A2, Arg3 A3, Arg4 A4 )
+			inline Return operator() ( Arg2 A2, Arg3 A3, Arg4 A4 ) const
 			{
 				
 				return Call ( A2, A3, A4 );
@@ -1616,14 +1616,14 @@ namespace Red
 			{
 			};
 			
-			inline Return Call ( Arg1 A1, Arg4 A4, Arg5 A5 )
+			inline Return Call ( Arg1 A1, Arg4 A4, Arg5 A5 ) const
 			{
 				
 				return ( * FAddress ) ( A1, Default2, Default3, A4, A5 );
 				
 			};
 			
-			inline Return operator() ( Arg1 A1, Arg4 A4, Arg5 A5 )
+			inline Return operator() ( Arg1 A1, Arg4 A4, Arg5 A5 ) const
 			{
 				
 				return Call ( A1, A4, A5 );
@@ -1662,14 +1662,14 @@ namespace Red
 			{
 			};
 			
-			inline Return Call ( Arg1 A1, Arg3 A3, Arg5 A5 )
+			inline Return Call ( Arg1 A1, Arg3 A3, Arg5 A5 ) const
 			{
 				
 				return ( * FAddress ) ( A1, Default2, A3, Default4, A5 );
 				
 			};
 			
-			inline Return operator() ( Arg1 A1, Arg3 A3, Arg5 A5 )
+			inline Return operator() ( Arg1 A1, Arg3 A3, Arg5 A5 ) const
 			{
 				
 				return Call ( A1, A3, A5 );
@@ -1708,14 +1708,14 @@ namespace Red
 			{
 			};
 			
-			inline Return Call ( Arg1 A1, Arg3 A3, Arg4 A4 )
+			inline Return Call ( Arg1 A1, Arg3 A3, Arg4 A4 ) const
 			{
 				
 				return ( * FAddress ) ( A1, Default2, A3, A4, Default5 );
 				
 			};
 			
-			inline Return operator() ( Arg1 A1, Arg3 A3, Arg4 A4 )
+			inline Return operator() ( Arg1 A1, Arg3 A3, Arg4 A4 ) const
 			{
 				
 				return Call ( A1, A3, A4 );
@@ -1754,14 +1754,14 @@ namespace Red
 			{
 			};
 			
-			inline Return Call ( Arg1 A1, Arg2 A2, Arg5 A5 )
+			inline Return Call ( Arg1 A1, Arg2 A2, Arg5 A5 ) const
 			{
 				
 				return ( * FAddress ) ( A1, A2, Default3, Default4, A5 );
 				
 			};
 			
-			inline Return operator() ( Arg1 A1, Arg2 A2, Arg5 A5 )
+			inline Return operator() ( Arg1 A1, Arg2 A2, Arg5 A5 ) const
 			{
 				
 				return Call ( A1, A2, A5 );
@@ -1800,14 +1800,14 @@ namespace Red
 			{
 			};
 			
-			inline Return Call ( Arg1 A1, Arg2 A2, Arg4 A4 )
+			inline Return Call ( Arg1 A1, Arg2 A2, Arg4 A4 ) const
 			{
 				
 				return ( * FAddress ) ( A1, A2, Default3, A4, Default5 );
 				
 			};
 			
-			inline Return operator() ( Arg1 A1, Arg2 A2, Arg4 A4 )
+			inline Return operator() ( Arg1 A1, Arg2 A2, Arg4 A4 ) const
 			{
 				
 				return Call ( A1, A2, A4 );
@@ -1846,14 +1846,14 @@ namespace Red
 			{
 			};
 			
-			inline Return Call ( Arg1 A1, Arg2 A2, Arg3 A3 )
+			inline Return Call ( Arg1 A1, Arg2 A2, Arg3 A3 ) const
 			{
 				
 				return ( * FAddress ) ( A1, A2, A3, Default4, Default5 );
 				
 			};
 			
-			inline Return operator() ( Arg1 A1, Arg2 A2, Arg3 A3 )
+			inline Return operator() ( Arg1 A1, Arg2 A2, Arg3 A3 ) const
 			{
 				
 				return Call ( A1, A2, A3 );
@@ -1894,14 +1894,14 @@ namespace Red
 			{
 			};
 			
-			inline Return Call ( Arg4 A4, Arg5 A5 )
+			inline Return Call ( Arg4 A4, Arg5 A5 ) const
 			{
 				
 				return ( * FAddress ) ( Default1, Default2, Default3, A4, A5 );
 				
 			};
 			
-			inline Return operator() ( Arg4 A4, Arg5 A5 )
+			inline Return operator() ( Arg4 A4, Arg5 A5 ) const
 			{
 				
 				return Call ( A4, A5 );
@@ -1943,14 +1943,14 @@ namespace Red
 			{
 			};
 			
-			inline Return Call ( Arg3 A3, Arg5 A5 )
+			inline Return Call ( Arg3 A3, Arg5 A5 ) const
 			{
 				
 				return ( * FAddress ) ( Default1, Default2, A3, Default4, A5 );
 				
 			};
 			
-			inline Return operator() ( Arg3 A3, Arg5 A5 )
+			inline Return operator() ( Arg3 A3, Arg5 A5 ) const
 			{
 				
 				return Call ( A3, A5 );
@@ -1992,14 +1992,14 @@ namespace Red
 			{
 			};
 			
-			inline Return Call ( Arg3 A3, Arg4 A4 )
+			inline Return Call ( Arg3 A3, Arg4 A4 ) const
 			{
 				
 				return ( * FAddress ) ( Default1, Default2, A3, A4, Default5 );
 				
 			};
 			
-			inline Return operator() ( Arg3 A3, Arg4 A4 )
+			inline Return operator() ( Arg3 A3, Arg4 A4 ) const
 			{
 				
 				return Call ( A3, A4 );
@@ -2041,14 +2041,14 @@ namespace Red
 			{
 			};
 			
-			inline Return Call ( Arg2 A2, Arg5 A5 )
+			inline Return Call ( Arg2 A2, Arg5 A5 ) const
 			{
 				
 				return ( * FAddress ) ( Default1, A2, Default3, Default4, A5 );
 				
 			};
 			
-			inline Return operator() ( Arg2 A2, Arg5 A5 )
+			inline Return operator() ( Arg2 A2, Arg5 A5 ) const
 			{
 				
 				return Call ( A2, A5 );
@@ -2090,14 +2090,14 @@ namespace Red
 			{
 			};
 			
-			inline Return Call ( Arg2 A2, Arg4 A4 )
+			inline Return Call ( Arg2 A2, Arg4 A4 ) const
 			{
 				
 				return ( * FAddress ) ( Default1, A2, Default3, A4, Default5 );
 				
 			};
 			
-			inline Return operator() ( Arg2 A2, Arg4 A4 )
+			inline Return operator() ( Arg2 A2, Arg4 A4 ) const
 			{
 				
 				return Call ( A2, A4 );
@@ -2139,14 +2139,14 @@ namespace Red
 			{
 			};
 			
-			inline Return Call ( Arg2 A2, Arg3 A3 )
+			inline Return Call ( Arg2 A2, Arg3 A3 ) const
 			{
 				
 				return ( * FAddress ) ( Default1, A2, A3, Default4, Default5 );
 				
 			};
 			
-			inline Return operator() ( Arg2 A2, Arg3 A3 )
+			inline Return operator() ( Arg2 A2, Arg3 A3 ) const
 			{
 				
 				return Call ( A2, A3 );
@@ -2188,14 +2188,14 @@ namespace Red
 			{
 			};
 			
-			inline Return Call ( Arg1 A1, Arg5 A5 )
+			inline Return Call ( Arg1 A1, Arg5 A5 ) const
 			{
 				
 				return ( * FAddress ) ( A1, Default2, Default3, Default4, A5 );
 				
 			};
 			
-			inline Return operator() ( Arg1 A1, Arg5 A5 )
+			inline Return operator() ( Arg1 A1, Arg5 A5 ) const
 			{
 				
 				return Call ( A1, A5 );
@@ -2237,14 +2237,14 @@ namespace Red
 			{
 			};
 			
-			inline Return Call ( Arg1 A1, Arg4 A4 )
+			inline Return Call ( Arg1 A1, Arg4 A4 ) const
 			{
 				
 				return ( * FAddress ) ( A1, Default2, Default3, A4, Default5 );
 				
 			};
 			
-			inline Return operator() ( Arg1 A1, Arg4 A4 )
+			inline Return operator() ( Arg1 A1, Arg4 A4 ) const
 			{
 				
 				return Call ( A1, A4 );
@@ -2286,14 +2286,14 @@ namespace Red
 			{
 			};
 			
-			inline Return Call ( Arg1 A1, Arg3 A3 )
+			inline Return Call ( Arg1 A1, Arg3 A3 ) const
 			{
 				
 				return ( * FAddress ) ( A1, Default2, A3, Default4, Default5 );
 				
 			};
 			
-			inline Return operator() ( Arg1 A1, Arg3 A3 )
+			inline Return operator() ( Arg1 A1, Arg3 A3 ) const
 			{
 				
 				return Call ( A1, A3 );
@@ -2335,14 +2335,14 @@ namespace Red
 			{
 			};
 			
-			inline Return Call ( Arg1 A1, Arg2 A2 )
+			inline Return Call ( Arg1 A1, Arg2 A2 ) const
 			{
 				
 				return ( * FAddress ) ( A1, A2, Default3, Default4, Default5 );
 				
 			};
 			
-			inline Return operator() ( Arg1 A1, Arg2 A2 )
+			inline Return operator() ( Arg1 A1, Arg2 A2 ) const
 			{
 				
 				return Call ( A1, A2 );
@@ -2386,14 +2386,14 @@ namespace Red
 			{
 			};
 			
-			inline Return Call ( Arg5 A5 )
+			inline Return Call ( Arg5 A5 ) const
 			{
 				
 				return ( * FAddress ) ( Default1, Default2, Default3, Default4, A5 );
 				
 			};
 			
-			inline Return operator() ( Arg5 A5 )
+			inline Return operator() ( Arg5 A5 ) const
 			{
 				
 				return Call ( A5 );
@@ -2438,14 +2438,14 @@ namespace Red
 			{
 			};
 			
-			inline Return Call ( Arg4 A4 )
+			inline Return Call ( Arg4 A4 ) const
 			{
 				
 				return ( * FAddress ) ( Default1, Default2, Default3, A4, Default5 );
 				
 			};
 			
-			inline Return operator() ( Arg4 A4 )
+			inline Return operator() ( Arg4 A4 ) const
 			{
 				
 				return Call ( A4 );
@@ -2490,14 +2490,14 @@ namespace Red
 			{
 			};
 			
-			inline Return Call ( Arg3 A3 )
+			inline Return Call ( Arg3 A3 ) const
 			{
 				
 				return ( * FAddress ) ( Default1, Default2, A3, Default4, Default5 );
 				
 			};
 			
-			inline Return operator() ( Arg3 A3 )
+			inline Return operator() ( Arg3 A3 ) const
 			{
 				
 				return Call ( A3 );
@@ -2542,14 +2542,14 @@ namespace Red
 			{
 			};
 			
-			inline Return Call ( Arg2 A2 )
+			inline Return Call ( Arg2 A2 ) const
 			{
 				
 				return ( * FAddress ) ( Default1, A2, Default3, Default4, Default5 );
 				
 			};
 			
-			inline Return operator() ( Arg2 A2 )
+			inline Return operator() ( Arg2 A2 ) const
 			{
 				
 				return Call ( A2 );
@@ -2594,14 +2594,14 @@ namespace Red
 			{
 			};
 			
-			inline Return Call ( Arg1 A1 )
+			inline Return Call ( Arg1 A1 ) const
 			{
 				
 				return ( * FAddress ) ( A1, Default2, Default3, Default4, Default5 );
 				
 			};
 			
-			inline Return operator() ( Arg1 A1 )
+			inline Return operator() ( Arg1 A1 ) const
 			{
 				
 				return Call ( A1 );
@@ -2648,14 +2648,14 @@ namespace Red
 			{
 			};
 			
-			inline Return Call ()
+			inline Return Call () const
 			{
 				
 				return ( * FAddress ) ( Default1, Default2, Default3, Default4, Default5 );
 				
 			};
 			
-			inline Return operator() ()
+			inline Return operator() () const
 			{
 				
 				return Call ();
@@ -2695,14 +2695,14 @@ namespace Red
 			{
 			};
 			
-			inline Return Call ( Arg2 A2, Arg3 A3, Arg4 A4, Arg5 A5, Arg6 A6 )
+			inline Return Call ( Arg2 A2, Arg3 A3, Arg4 A4, Arg5 A5, Arg6 A6 ) const
 			{
 				
 				return ( * FAddress ) ( Default1, A2, A3, A4, A5, A6 );
 				
 			};
 			
-			inline Return operator() ( Arg2 A2, Arg3 A3, Arg4 A4, Arg5 A5, Arg6 A6 )
+			inline Return operator() ( Arg2 A2, Arg3 A3, Arg4 A4, Arg5 A5, Arg6 A6 ) const
 			{
 				
 				return Call ( A2, A3, A4, A5, A6 );
@@ -2738,14 +2738,14 @@ namespace Red
 			{
 			};
 			
-			inline Return Call ( Arg1 A1, Arg3 A3, Arg4 A4, Arg5 A5, Arg6 A6 )
+			inline Return Call ( Arg1 A1, Arg3 A3, Arg4 A4, Arg5 A5, Arg6 A6 ) const
 			{
 				
 				return ( * FAddress ) ( A1, Default2, A3, A4, A5, A6 );
 				
 			};
 			
-			inline Return operator() ( Arg1 A1, Arg3 A3, Arg4 A4, Arg5 A5, Arg6 A6 )
+			inline Return operator() ( Arg1 A1, Arg3 A3, Arg4 A4, Arg5 A5, Arg6 A6 ) const
 			{
 				
 				return Call ( A1, A3, A4, A5, A6 );
@@ -2781,14 +2781,14 @@ namespace Red
 			{
 			};
 			
-			inline Return Call ( Arg1 A1, Arg2 A2, Arg4 A4, Arg5 A5, Arg6 A6 )
+			inline Return Call ( Arg1 A1, Arg2 A2, Arg4 A4, Arg5 A5, Arg6 A6 ) const
 			{
 				
 				return ( * FAddress ) ( A1, A2, Default3, A4, A5, A6 );
 				
 			};
 			
-			inline Return operator() ( Arg1 A1, Arg2 A2, Arg4 A4, Arg5 A5, Arg6 A6 )
+			inline Return operator() ( Arg1 A1, Arg2 A2, Arg4 A4, Arg5 A5, Arg6 A6 ) const
 			{
 				
 				return Call ( A1, A2, A4, A5, A6 );
@@ -2824,14 +2824,14 @@ namespace Red
 			{
 			};
 			
-			inline Return Call ( Arg1 A1, Arg2 A2, Arg3 A3, Arg5 A5, Arg6 A6 )
+			inline Return Call ( Arg1 A1, Arg2 A2, Arg3 A3, Arg5 A5, Arg6 A6 ) const
 			{
 				
 				return ( * FAddress ) ( A1, A2, A3, Default4, A5, A6 );
 				
 			};
 			
-			inline Return operator() ( Arg1 A1, Arg2 A2, Arg3 A3, Arg5 A5, Arg6 A6 )
+			inline Return operator() ( Arg1 A1, Arg2 A2, Arg3 A3, Arg5 A5, Arg6 A6 ) const
 			{
 				
 				return Call ( A1, A2, A3, A5, A6 );
@@ -2867,14 +2867,14 @@ namespace Red
 			{
 			};
 			
-			inline Return Call ( Arg1 A1, Arg2 A2, Arg3 A3, Arg4 A4, Arg6 A6 )
+			inline Return Call ( Arg1 A1, Arg2 A2, Arg3 A3, Arg4 A4, Arg6 A6 ) const
 			{
 				
 				return ( * FAddress ) ( A1, A2, A3, A4, Default5, A6 );
 				
 			};
 			
-			inline Return operator() ( Arg1 A1, Arg2 A2, Arg3 A3, Arg4 A4, Arg6 A6 )
+			inline Return operator() ( Arg1 A1, Arg2 A2, Arg3 A3, Arg4 A4, Arg6 A6 ) const
 			{
 				
 				return Call ( A1, A2, A3, A4, A6 );
@@ -2910,14 +2910,14 @@ namespace Red
 			{
 			};
 			
-			inline Return Call ( Arg1 A1, Arg2 A2, Arg3 A3, Arg4 A4, Arg5 A5 )
+			inline Return Call ( Arg1 A1, Arg2 A2, Arg3 A3, Arg4 A4, Arg5 A5 ) const
 			{
 				
 				return ( * FAddress ) ( A1, A2, A3, A4, A5, Default6 );
 				
 			};
 			
-			inline Return operator() ( Arg1 A1, Arg2 A2, Arg3 A3, Arg4 A4, Arg5 A5 )
+			inline Return operator() ( Arg1 A1, Arg2 A2, Arg3 A3, Arg4 A4, Arg5 A5 ) const
 			{
 				
 				return Call ( A1, A2, A3, A4, A5 );
@@ -2955,14 +2955,14 @@ namespace Red
 			{
 			};
 			
-			inline Return Call ( Arg3 A3, Arg4 A4, Arg5 A5, Arg6 A6 )
+			inline Return Call ( Arg3 A3, Arg4 A4, Arg5 A5, Arg6 A6 ) const
 			{
 				
 				return ( * FAddress ) ( Default1, Default2, A3, A4, A5, A6 );
 				
 			};
 			
-			inline Return operator() ( Arg3 A3, Arg4 A4, Arg5 A5, Arg6 A6 )
+			inline Return operator() ( Arg3 A3, Arg4 A4, Arg5 A5, Arg6 A6 ) const
 			{
 				
 				return Call ( A3, A4, A5, A6 );
@@ -3001,14 +3001,14 @@ namespace Red
 			{
 			};
 			
-			inline Return Call ( Arg2 A2, Arg4 A4, Arg5 A5, Arg6 A6 )
+			inline Return Call ( Arg2 A2, Arg4 A4, Arg5 A5, Arg6 A6 ) const
 			{
 				
 				return ( * FAddress ) ( Default1, A2, Default3, A4, A5, A6 );
 				
 			};
 			
-			inline Return operator() ( Arg2 A2, Arg4 A4, Arg5 A5, Arg6 A6 )
+			inline Return operator() ( Arg2 A2, Arg4 A4, Arg5 A5, Arg6 A6 ) const
 			{
 				
 				return Call ( A2, A4, A5, A6 );
@@ -3047,14 +3047,14 @@ namespace Red
 			{
 			};
 			
-			inline Return Call ( Arg2 A2, Arg3 A3, Arg5 A5, Arg6 A6 )
+			inline Return Call ( Arg2 A2, Arg3 A3, Arg5 A5, Arg6 A6 ) const
 			{
 				
 				return ( * FAddress ) ( Default1, A2, A3, Default4, A5, A6 );
 				
 			};
 			
-			inline Return operator() ( Arg2 A2, Arg3 A3, Arg5 A5, Arg6 A6 )
+			inline Return operator() ( Arg2 A2, Arg3 A3, Arg5 A5, Arg6 A6 ) const
 			{
 				
 				return Call ( A2, A3, A5, A6 );
@@ -3093,14 +3093,14 @@ namespace Red
 			{
 			};
 			
-			inline Return Call ( Arg2 A2, Arg3 A3, Arg4 A4, Arg6 A6 )
+			inline Return Call ( Arg2 A2, Arg3 A3, Arg4 A4, Arg6 A6 ) const
 			{
 				
 				return ( * FAddress ) ( Default1, A2, A3, A4, Default5, A6 );
 				
 			};
 			
-			inline Return operator() ( Arg2 A2, Arg3 A3, Arg4 A4, Arg6 A6 )
+			inline Return operator() ( Arg2 A2, Arg3 A3, Arg4 A4, Arg6 A6 ) const
 			{
 				
 				return Call ( A2, A3, A4, A6 );
@@ -3139,14 +3139,14 @@ namespace Red
 			{
 			};
 			
-			inline Return Call ( Arg2 A2, Arg3 A3, Arg4 A4, Arg5 A5 )
+			inline Return Call ( Arg2 A2, Arg3 A3, Arg4 A4, Arg5 A5 ) const
 			{
 				
 				return ( * FAddress ) ( Default1, A2, A3, A4, A5, Default6 );
 				
 			};
 			
-			inline Return operator() ( Arg2 A2, Arg3 A3, Arg4 A4, Arg5 A5 )
+			inline Return operator() ( Arg2 A2, Arg3 A3, Arg4 A4, Arg5 A5 ) const
 			{
 				
 				return Call ( A2, A3, A4, A5 );
@@ -3185,14 +3185,14 @@ namespace Red
 			{
 			};
 			
-			inline Return Call ( Arg1 A1, Arg4 A4, Arg5 A5, Arg6 A6 )
+			inline Return Call ( Arg1 A1, Arg4 A4, Arg5 A5, Arg6 A6 ) const
 			{
 				
 				return ( * FAddress ) ( A1, Default2, Default3, A4, A5, A6 );
 				
 			};
 			
-			inline Return operator() ( Arg1 A1, Arg4 A4, Arg5 A5, Arg6 A6 )
+			inline Return operator() ( Arg1 A1, Arg4 A4, Arg5 A5, Arg6 A6 ) const
 			{
 				
 				return Call ( A1, A4, A5, A6 );
@@ -3231,14 +3231,14 @@ namespace Red
 			{
 			};
 			
-			inline Return Call ( Arg1 A1, Arg3 A3, Arg5 A5, Arg6 A6 )
+			inline Return Call ( Arg1 A1, Arg3 A3, Arg5 A5, Arg6 A6 ) const
 			{
 				
 				return ( * FAddress ) ( A1, Default2, A3, Default4, A5, A6 );
 				
 			};
 			
-			inline Return operator() ( Arg1 A1, Arg3 A3, Arg5 A5, Arg6 A6 )
+			inline Return operator() ( Arg1 A1, Arg3 A3, Arg5 A5, Arg6 A6 ) const
 			{
 				
 				return Call ( A1, A3, A5, A6 );
@@ -3277,14 +3277,14 @@ namespace Red
 			{
 			};
 			
-			inline Return Call ( Arg1 A1, Arg3 A3, Arg4 A4, Arg6 A6 )
+			inline Return Call ( Arg1 A1, Arg3 A3, Arg4 A4, Arg6 A6 ) const
 			{
 				
 				return ( * FAddress ) ( A1, Default2, A3, A4, Default5, A6 );
 				
 			};
 			
-			inline Return operator() ( Arg1 A1, Arg3 A3, Arg4 A4, Arg6 A6 )
+			inline Return operator() ( Arg1 A1, Arg3 A3, Arg4 A4, Arg6 A6 ) const
 			{
 				
 				return Call ( A1, A3, A4, A6 );
@@ -3323,14 +3323,14 @@ namespace Red
 			{
 			};
 			
-			inline Return Call ( Arg1 A1, Arg3 A3, Arg4 A4, Arg5 A5 )
+			inline Return Call ( Arg1 A1, Arg3 A3, Arg4 A4, Arg5 A5 ) const
 			{
 				
 				return ( * FAddress ) ( A1, Default2, A3, A4, A5, Default6 );
 				
 			};
 			
-			inline Return operator() ( Arg1 A1, Arg3 A3, Arg4 A4, Arg5 A5 )
+			inline Return operator() ( Arg1 A1, Arg3 A3, Arg4 A4, Arg5 A5 ) const
 			{
 				
 				return Call ( A1, A3, A4, A5 );
@@ -3369,14 +3369,14 @@ namespace Red
 			{
 			};
 			
-			inline Return Call ( Arg1 A1, Arg2 A2, Arg5 A5, Arg6 A6 )
+			inline Return Call ( Arg1 A1, Arg2 A2, Arg5 A5, Arg6 A6 ) const
 			{
 				
 				return ( * FAddress ) ( A1, A2, Default3, Default4, A5, A6 );
 				
 			};
 			
-			inline Return operator() ( Arg1 A1, Arg2 A2, Arg5 A5, Arg6 A6 )
+			inline Return operator() ( Arg1 A1, Arg2 A2, Arg5 A5, Arg6 A6 ) const
 			{
 				
 				return Call ( A1, A2, A5, A6 );
@@ -3415,14 +3415,14 @@ namespace Red
 			{
 			};
 			
-			inline Return Call ( Arg1 A1, Arg2 A2, Arg4 A4, Arg6 A6 )
+			inline Return Call ( Arg1 A1, Arg2 A2, Arg4 A4, Arg6 A6 ) const
 			{
 				
 				return ( * FAddress ) ( A1, A2, Default3, A4, Default5, A6 );
 				
 			};
 			
-			inline Return operator() ( Arg1 A1, Arg2 A2, Arg4 A4, Arg6 A6 )
+			inline Return operator() ( Arg1 A1, Arg2 A2, Arg4 A4, Arg6 A6 ) const
 			{
 				
 				return Call ( A1, A2, A4, A6 );
@@ -3461,14 +3461,14 @@ namespace Red
 			{
 			};
 			
-			inline Return Call ( Arg1 A1, Arg2 A2, Arg4 A4, Arg5 A5 )
+			inline Return Call ( Arg1 A1, Arg2 A2, Arg4 A4, Arg5 A5 ) const
 			{
 				
 				return ( * FAddress ) ( A1, A2, Default3, A4, A5, Default6 );
 				
 			};
 			
-			inline Return operator() ( Arg1 A1, Arg2 A2, Arg4 A4, Arg5 A5 )
+			inline Return operator() ( Arg1 A1, Arg2 A2, Arg4 A4, Arg5 A5 ) const
 			{
 				
 				return Call ( A1, A2, A4, A5 );
@@ -3507,14 +3507,14 @@ namespace Red
 			{
 			};
 			
-			inline Return Call ( Arg1 A1, Arg2 A2, Arg3 A3, Arg6 A6 )
+			inline Return Call ( Arg1 A1, Arg2 A2, Arg3 A3, Arg6 A6 ) const
 			{
 				
 				return ( * FAddress ) ( A1, A2, A3, Default4, Default5, A6 );
 				
 			};
 			
-			inline Return operator() ( Arg1 A1, Arg2 A2, Arg3 A3, Arg6 A6 )
+			inline Return operator() ( Arg1 A1, Arg2 A2, Arg3 A3, Arg6 A6 ) const
 			{
 				
 				return Call ( A1, A2, A3, A6 );
@@ -3553,14 +3553,14 @@ namespace Red
 			{
 			};
 			
-			inline Return Call ( Arg1 A1, Arg2 A2, Arg3 A3, Arg5 A5 )
+			inline Return Call ( Arg1 A1, Arg2 A2, Arg3 A3, Arg5 A5 ) const
 			{
 				
 				return ( * FAddress ) ( A1, A2, A3, Default4, A5, Default6 );
 				
 			};
 			
-			inline Return operator() ( Arg1 A1, Arg2 A2, Arg3 A3, Arg5 A5 )
+			inline Return operator() ( Arg1 A1, Arg2 A2, Arg3 A3, Arg5 A5 ) const
 			{
 				
 				return Call ( A1, A2, A3, A5 );
@@ -3599,14 +3599,14 @@ namespace Red
 			{
 			};
 			
-			inline Return Call ( Arg1 A1, Arg2 A2, Arg3 A3, Arg4 A4 )
+			inline Return Call ( Arg1 A1, Arg2 A2, Arg3 A3, Arg4 A4 ) const
 			{
 				
 				return ( * FAddress ) ( A1, A2, A3, A4, Default5, Default6 );
 				
 			};
 			
-			inline Return operator() ( Arg1 A1, Arg2 A2, Arg3 A3, Arg4 A4 )
+			inline Return operator() ( Arg1 A1, Arg2 A2, Arg3 A3, Arg4 A4 ) const
 			{
 				
 				return Call ( A1, A2, A3, A4 );
@@ -3647,14 +3647,14 @@ namespace Red
 			{
 			};
 			
-			inline Return Call ( Arg4 A4, Arg5 A5, Arg6 A6 )
+			inline Return Call ( Arg4 A4, Arg5 A5, Arg6 A6 ) const
 			{
 				
 				return ( * FAddress ) ( Default1, Default2, Default3, A4, A5, A6 );
 				
 			};
 			
-			inline Return operator() ( Arg4 A4, Arg5 A5, Arg6 A6 )
+			inline Return operator() ( Arg4 A4, Arg5 A5, Arg6 A6 ) const
 			{
 				
 				return Call ( A4, A5, A6 );
@@ -3696,14 +3696,14 @@ namespace Red
 			{
 			};
 			
-			inline Return Call ( Arg3 A3, Arg5 A5, Arg6 A6 )
+			inline Return Call ( Arg3 A3, Arg5 A5, Arg6 A6 ) const
 			{
 				
 				return ( * FAddress ) ( Default1, Default2, A3, Default4, A5, A6 );
 				
 			};
 			
-			inline Return operator() ( Arg3 A3, Arg5 A5, Arg6 A6 )
+			inline Return operator() ( Arg3 A3, Arg5 A5, Arg6 A6 ) const
 			{
 				
 				return Call ( A3, A5, A6 );
@@ -3745,14 +3745,14 @@ namespace Red
 			{
 			};
 			
-			inline Return Call ( Arg3 A3, Arg4 A4, Arg6 A6 )
+			inline Return Call ( Arg3 A3, Arg4 A4, Arg6 A6 ) const
 			{
 				
 				return ( * FAddress ) ( Default1, Default2, A3, A4, Default5, A6 );
 				
 			};
 			
-			inline Return operator() ( Arg3 A3, Arg4 A4, Arg6 A6 )
+			inline Return operator() ( Arg3 A3, Arg4 A4, Arg6 A6 ) const
 			{
 				
 				return Call ( A3, A4, A6 );
@@ -3794,14 +3794,14 @@ namespace Red
 			{
 			};
 			
-			inline Return Call ( Arg3 A3, Arg4 A4, Arg5 A5 )
+			inline Return Call ( Arg3 A3, Arg4 A4, Arg5 A5 ) const
 			{
 				
 				return ( * FAddress ) ( Default1, Default2, A3, A4, A5, Default6 );
 				
 			};
 			
-			inline Return operator() ( Arg3 A3, Arg4 A4, Arg5 A5 )
+			inline Return operator() ( Arg3 A3, Arg4 A4, Arg5 A5 ) const
 			{
 				
 				return Call ( A3, A4, A5 );
@@ -3843,14 +3843,14 @@ namespace Red
 			{
 			};
 			
-			inline Return Call ( Arg2 A2, Arg5 A5, Arg6 A6 )
+			inline Return Call ( Arg2 A2, Arg5 A5, Arg6 A6 ) const
 			{
 				
 				return ( * FAddress ) ( Default1, A2, Default3, Default4, A5, A6 );
 				
 			};
 			
-			inline Return operator() ( Arg2 A2, Arg5 A5, Arg6 A6 )
+			inline Return operator() ( Arg2 A2, Arg5 A5, Arg6 A6 ) const
 			{
 				
 				return Call ( A2, A5, A6 );
@@ -3892,14 +3892,14 @@ namespace Red
 			{
 			};
 			
-			inline Return Call ( Arg2 A2, Arg4 A4, Arg6 A6 )
+			inline Return Call ( Arg2 A2, Arg4 A4, Arg6 A6 ) const
 			{
 				
 				return ( * FAddress ) ( Default1, A2, Default3, A4, Default5, A6 );
 				
 			};
 			
-			inline Return operator() ( Arg2 A2, Arg4 A4, Arg6 A6 )
+			inline Return operator() ( Arg2 A2, Arg4 A4, Arg6 A6 ) const
 			{
 				
 				return Call ( A2, A4, A6 );
@@ -3941,14 +3941,14 @@ namespace Red
 			{
 			};
 			
-			inline Return Call ( Arg2 A2, Arg4 A4, Arg5 A5 )
+			inline Return Call ( Arg2 A2, Arg4 A4, Arg5 A5 ) const
 			{
 				
 				return ( * FAddress ) ( Default1, A2, Default3, A4, A5, Default6 );
 				
 			};
 			
-			inline Return operator() ( Arg2 A2, Arg4 A4, Arg5 A5 )
+			inline Return operator() ( Arg2 A2, Arg4 A4, Arg5 A5 ) const
 			{
 				
 				return Call ( A2, A4, A5 );
@@ -3990,14 +3990,14 @@ namespace Red
 			{
 			};
 			
-			inline Return Call ( Arg2 A2, Arg3 A3, Arg6 A6 )
+			inline Return Call ( Arg2 A2, Arg3 A3, Arg6 A6 ) const
 			{
 				
 				return ( * FAddress ) ( Default1, A2, A3, Default4, Default5, A6 );
 				
 			};
 			
-			inline Return operator() ( Arg2 A2, Arg3 A3, Arg6 A6 )
+			inline Return operator() ( Arg2 A2, Arg3 A3, Arg6 A6 ) const
 			{
 				
 				return Call ( A2, A3, A6 );
@@ -4039,14 +4039,14 @@ namespace Red
 			{
 			};
 			
-			inline Return Call ( Arg2 A2, Arg3 A3, Arg5 A5 )
+			inline Return Call ( Arg2 A2, Arg3 A3, Arg5 A5 ) const
 			{
 				
 				return ( * FAddress ) ( Default1, A2, A3, Default4, A5, Default6 );
 				
 			};
 			
-			inline Return operator() ( Arg2 A2, Arg3 A3, Arg5 A5 )
+			inline Return operator() ( Arg2 A2, Arg3 A3, Arg5 A5 ) const
 			{
 				
 				return Call ( A2, A3, A5 );
@@ -4088,14 +4088,14 @@ namespace Red
 			{
 			};
 			
-			inline Return Call ( Arg2 A2, Arg3 A3, Arg4 A4 )
+			inline Return Call ( Arg2 A2, Arg3 A3, Arg4 A4 ) const
 			{
 				
 				return ( * FAddress ) ( Default1, A2, A3, A4, Default5, Default6 );
 				
 			};
 			
-			inline Return operator() ( Arg2 A2, Arg3 A3, Arg4 A4 )
+			inline Return operator() ( Arg2 A2, Arg3 A3, Arg4 A4 ) const
 			{
 				
 				return Call ( A2, A3, A4 );
@@ -4137,14 +4137,14 @@ namespace Red
 			{
 			};
 			
-			inline Return Call ( Arg1 A1, Arg5 A5, Arg6 A6 )
+			inline Return Call ( Arg1 A1, Arg5 A5, Arg6 A6 ) const
 			{
 				
 				return ( * FAddress ) ( A1, Default2, Default3, Default4, A5, A6 );
 				
 			};
 			
-			inline Return operator() ( Arg1 A1, Arg5 A5, Arg6 A6 )
+			inline Return operator() ( Arg1 A1, Arg5 A5, Arg6 A6 ) const
 			{
 				
 				return Call ( A1, A5, A6 );
@@ -4186,14 +4186,14 @@ namespace Red
 			{
 			};
 			
-			inline Return Call ( Arg1 A1, Arg4 A4, Arg6 A6 )
+			inline Return Call ( Arg1 A1, Arg4 A4, Arg6 A6 ) const
 			{
 				
 				return ( * FAddress ) ( A1, Default2, Default3, A4, Default5, A6 );
 				
 			};
 			
-			inline Return operator() ( Arg1 A1, Arg4 A4, Arg6 A6 )
+			inline Return operator() ( Arg1 A1, Arg4 A4, Arg6 A6 ) const
 			{
 				
 				return Call ( A1, A4, A6 );
@@ -4235,14 +4235,14 @@ namespace Red
 			{
 			};
 			
-			inline Return Call ( Arg1 A1, Arg4 A4, Arg5 A5 )
+			inline Return Call ( Arg1 A1, Arg4 A4, Arg5 A5 ) const
 			{
 				
 				return ( * FAddress ) ( A1, Default2, Default3, A4, A5, Default6 );
 				
 			};
 			
-			inline Return operator() ( Arg1 A1, Arg4 A4, Arg5 A5 )
+			inline Return operator() ( Arg1 A1, Arg4 A4, Arg5 A5 ) const
 			{
 				
 				return Call ( A1, A4, A5 );
@@ -4284,14 +4284,14 @@ namespace Red
 			{
 			};
 			
-			inline Return Call ( Arg1 A1, Arg3 A3, Arg6 A6 )
+			inline Return Call ( Arg1 A1, Arg3 A3, Arg6 A6 ) const
 			{
 				
 				return ( * FAddress ) ( A1, Default2, A3, Default4, Default5, A6 );
 				
 			};
 			
-			inline Return operator() ( Arg1 A1, Arg3 A3, Arg6 A6 )
+			inline Return operator() ( Arg1 A1, Arg3 A3, Arg6 A6 ) const
 			{
 				
 				return Call ( A1, A3, A6 );
@@ -4333,14 +4333,14 @@ namespace Red
 			{
 			};
 			
-			inline Return Call ( Arg1 A1, Arg3 A3, Arg5 A5 )
+			inline Return Call ( Arg1 A1, Arg3 A3, Arg5 A5 ) const
 			{
 				
 				return ( * FAddress ) ( A1, Default2, A3, Default4, A5, Default6 );
 				
 			};
 			
-			inline Return operator() ( Arg1 A1, Arg3 A3, Arg5 A5 )
+			inline Return operator() ( Arg1 A1, Arg3 A3, Arg5 A5 ) const
 			{
 				
 				return Call ( A1, A3, A5 );
@@ -4382,14 +4382,14 @@ namespace Red
 			{
 			};
 			
-			inline Return Call ( Arg1 A1, Arg3 A3, Arg4 A4 )
+			inline Return Call ( Arg1 A1, Arg3 A3, Arg4 A4 ) const
 			{
 				
 				return ( * FAddress ) ( A1, Default2, A3, A4, Default5, Default6 );
 				
 			};
 			
-			inline Return operator() ( Arg1 A1, Arg3 A3, Arg4 A4 )
+			inline Return operator() ( Arg1 A1, Arg3 A3, Arg4 A4 ) const
 			{
 				
 				return Call ( A1, A3, A4 );
@@ -4431,14 +4431,14 @@ namespace Red
 			{
 			};
 			
-			inline Return Call ( Arg1 A1, Arg2 A2, Arg6 A6 )
+			inline Return Call ( Arg1 A1, Arg2 A2, Arg6 A6 ) const
 			{
 				
 				return ( * FAddress ) ( A1, A2, Default3, Default4, Default5, A6 );
 				
 			};
 			
-			inline Return operator() ( Arg1 A1, Arg2 A2, Arg6 A6 )
+			inline Return operator() ( Arg1 A1, Arg2 A2, Arg6 A6 ) const
 			{
 				
 				return Call ( A1, A2, A6 );
@@ -4480,14 +4480,14 @@ namespace Red
 			{
 			};
 			
-			inline Return Call ( Arg1 A1, Arg2 A2, Arg5 A5 )
+			inline Return Call ( Arg1 A1, Arg2 A2, Arg5 A5 ) const
 			{
 				
 				return ( * FAddress ) ( A1, A2, Default3, Default4, A5, Default6 );
 				
 			};
 			
-			inline Return operator() ( Arg1 A1, Arg2 A2, Arg5 A5 )
+			inline Return operator() ( Arg1 A1, Arg2 A2, Arg5 A5 ) const
 			{
 				
 				return Call ( A1, A2, A5 );
@@ -4529,14 +4529,14 @@ namespace Red
 			{
 			};
 			
-			inline Return Call ( Arg1 A1, Arg2 A2, Arg4 A4 )
+			inline Return Call ( Arg1 A1, Arg2 A2, Arg4 A4 ) const
 			{
 				
 				return ( * FAddress ) ( A1, A2, Default3, A4, Default5, Default6 );
 				
 			};
 			
-			inline Return operator() ( Arg1 A1, Arg2 A2, Arg4 A4 )
+			inline Return operator() ( Arg1 A1, Arg2 A2, Arg4 A4 ) const
 			{
 				
 				return Call ( A1, A2, A4 );
@@ -4578,14 +4578,14 @@ namespace Red
 			{
 			};
 			
-			inline Return Call ( Arg1 A1, Arg2 A2, Arg3 A3 )
+			inline Return Call ( Arg1 A1, Arg2 A2, Arg3 A3 ) const
 			{
 				
 				return ( * FAddress ) ( A1, A2, A3, Default4, Default5, Default6 );
 				
 			};
 			
-			inline Return operator() ( Arg1 A1, Arg2 A2, Arg3 A3 )
+			inline Return operator() ( Arg1 A1, Arg2 A2, Arg3 A3 ) const
 			{
 				
 				return Call ( A1, A2, A3 );
@@ -4629,14 +4629,14 @@ namespace Red
 			{
 			};
 			
-			inline Return Call ( Arg5 A5, Arg6 A6 )
+			inline Return Call ( Arg5 A5, Arg6 A6 ) const
 			{
 				
 				return ( * FAddress ) ( Default1, Default2, Default3, Default4, A5, A6 );
 				
 			};
 			
-			inline Return operator() ( Arg5 A5, Arg6 A6 )
+			inline Return operator() ( Arg5 A5, Arg6 A6 ) const
 			{
 				
 				return Call ( A5, A6 );
@@ -4681,14 +4681,14 @@ namespace Red
 			{
 			};
 			
-			inline Return Call ( Arg4 A4, Arg6 A6 )
+			inline Return Call ( Arg4 A4, Arg6 A6 ) const
 			{
 				
 				return ( * FAddress ) ( Default1, Default2, Default3, A4, Default5, A6 );
 				
 			};
 			
-			inline Return operator() ( Arg4 A4, Arg6 A6 )
+			inline Return operator() ( Arg4 A4, Arg6 A6 ) const
 			{
 				
 				return Call ( A4, A6 );
@@ -4733,14 +4733,14 @@ namespace Red
 			{
 			};
 			
-			inline Return Call ( Arg4 A4, Arg5 A5 )
+			inline Return Call ( Arg4 A4, Arg5 A5 ) const
 			{
 				
 				return ( * FAddress ) ( Default1, Default2, Default3, A4, A5, Default6 );
 				
 			};
 			
-			inline Return operator() ( Arg4 A4, Arg5 A5 )
+			inline Return operator() ( Arg4 A4, Arg5 A5 ) const
 			{
 				
 				return Call ( A4, A5 );
@@ -4785,14 +4785,14 @@ namespace Red
 			{
 			};
 			
-			inline Return Call ( Arg3 A3, Arg6 A6 )
+			inline Return Call ( Arg3 A3, Arg6 A6 ) const
 			{
 				
 				return ( * FAddress ) ( Default1, Default2, A3, Default4, Default5, A6 );
 				
 			};
 			
-			inline Return operator() ( Arg3 A3, Arg6 A6 )
+			inline Return operator() ( Arg3 A3, Arg6 A6 ) const
 			{
 				
 				return Call ( A3, A6 );
@@ -4837,14 +4837,14 @@ namespace Red
 			{
 			};
 			
-			inline Return Call ( Arg3 A3, Arg5 A5 )
+			inline Return Call ( Arg3 A3, Arg5 A5 ) const
 			{
 				
 				return ( * FAddress ) ( Default1, Default2, A3, Default4, A5, Default6 );
 				
 			};
 			
-			inline Return operator() ( Arg3 A3, Arg5 A5 )
+			inline Return operator() ( Arg3 A3, Arg5 A5 ) const
 			{
 				
 				return Call ( A3, A5 );
@@ -4889,14 +4889,14 @@ namespace Red
 			{
 			};
 			
-			inline Return Call ( Arg3 A3, Arg4 A4 )
+			inline Return Call ( Arg3 A3, Arg4 A4 ) const
 			{
 				
 				return ( * FAddress ) ( Default1, Default2, A3, A4, Default5, Default6 );
 				
 			};
 			
-			inline Return operator() ( Arg3 A3, Arg4 A4 )
+			inline Return operator() ( Arg3 A3, Arg4 A4 ) const
 			{
 				
 				return Call ( A3, A4 );
@@ -4941,14 +4941,14 @@ namespace Red
 			{
 			};
 			
-			inline Return Call ( Arg2 A2, Arg6 A6 )
+			inline Return Call ( Arg2 A2, Arg6 A6 ) const
 			{
 				
 				return ( * FAddress ) ( Default1, A2, Default3, Default4, Default5, A6 );
 				
 			};
 			
-			inline Return operator() ( Arg2 A2, Arg6 A6 )
+			inline Return operator() ( Arg2 A2, Arg6 A6 ) const
 			{
 				
 				return Call ( A2, A6 );
@@ -4993,14 +4993,14 @@ namespace Red
 			{
 			};
 			
-			inline Return Call ( Arg2 A2, Arg5 A5 )
+			inline Return Call ( Arg2 A2, Arg5 A5 ) const
 			{
 				
 				return ( * FAddress ) ( Default1, A2, Default3, Default4, A5, Default6 );
 				
 			};
 			
-			inline Return operator() ( Arg2 A2, Arg5 A5 )
+			inline Return operator() ( Arg2 A2, Arg5 A5 ) const
 			{
 				
 				return Call ( A2, A5 );
@@ -5045,14 +5045,14 @@ namespace Red
 			{
 			};
 			
-			inline Return Call ( Arg2 A2, Arg4 A4 )
+			inline Return Call ( Arg2 A2, Arg4 A4 ) const
 			{
 				
 				return ( * FAddress ) ( Default1, A2, Default3, A4, Default5, Default6 );
 				
 			};
 			
-			inline Return operator() ( Arg2 A2, Arg4 A4 )
+			inline Return operator() ( Arg2 A2, Arg4 A4 ) const
 			{
 				
 				return Call ( A2, A4 );
@@ -5097,14 +5097,14 @@ namespace Red
 			{
 			};
 			
-			inline Return Call ( Arg2 A2, Arg3 A3 )
+			inline Return Call ( Arg2 A2, Arg3 A3 ) const
 			{
 				
 				return ( * FAddress ) ( Default1, A2, A3, Default4, Default5, Default6 );
 				
 			};
 			
-			inline Return operator() ( Arg2 A2, Arg3 A3 )
+			inline Return operator() ( Arg2 A2, Arg3 A3 ) const
 			{
 				
 				return Call ( A2, A3 );
@@ -5149,14 +5149,14 @@ namespace Red
 			{
 			};
 			
-			inline Return Call ( Arg1 A1, Arg6 A6 )
+			inline Return Call ( Arg1 A1, Arg6 A6 ) const
 			{
 				
 				return ( * FAddress ) ( A1, Default2, Default3, Default4, Default5, A6 );
 				
 			};
 			
-			inline Return operator() ( Arg1 A1, Arg6 A6 )
+			inline Return operator() ( Arg1 A1, Arg6 A6 ) const
 			{
 				
 				return Call ( A1, A6 );
@@ -5201,14 +5201,14 @@ namespace Red
 			{
 			};
 			
-			inline Return Call ( Arg1 A1, Arg5 A5 )
+			inline Return Call ( Arg1 A1, Arg5 A5 ) const
 			{
 				
 				return ( * FAddress ) ( A1, Default2, Default3, Default4, A5, Default6 );
 				
 			};
 			
-			inline Return operator() ( Arg1 A1, Arg5 A5 )
+			inline Return operator() ( Arg1 A1, Arg5 A5 ) const
 			{
 				
 				return Call ( A1, A5 );
@@ -5253,14 +5253,14 @@ namespace Red
 			{
 			};
 			
-			inline Return Call ( Arg1 A1, Arg4 A4 )
+			inline Return Call ( Arg1 A1, Arg4 A4 ) const
 			{
 				
 				return ( * FAddress ) ( A1, Default2, Default3, A4, Default5, Default6 );
 				
 			};
 			
-			inline Return operator() ( Arg1 A1, Arg4 A4 )
+			inline Return operator() ( Arg1 A1, Arg4 A4 ) const
 			{
 				
 				return Call ( A1, A4 );
@@ -5305,14 +5305,14 @@ namespace Red
 			{
 			};
 			
-			inline Return Call ( Arg1 A1, Arg3 A3 )
+			inline Return Call ( Arg1 A1, Arg3 A3 ) const
 			{
 				
 				return ( * FAddress ) ( A1, Default2, A3, Default4, Default5, Default6 );
 				
 			};
 			
-			inline Return operator() ( Arg1 A1, Arg3 A3 )
+			inline Return operator() ( Arg1 A1, Arg3 A3 ) const
 			{
 				
 				return Call ( A1, A3 );
@@ -5357,14 +5357,14 @@ namespace Red
 			{
 			};
 			
-			inline Return Call ( Arg1 A1, Arg2 A2 )
+			inline Return Call ( Arg1 A1, Arg2 A2 ) const
 			{
 				
 				return ( * FAddress ) ( A1, A2, Default3, Default4, Default5, Default6 );
 				
 			};
 			
-			inline Return operator() ( Arg1 A1, Arg2 A2 )
+			inline Return operator() ( Arg1 A1, Arg2 A2 ) const
 			{
 				
 				return Call ( A1, A2 );
@@ -5411,14 +5411,14 @@ namespace Red
 			{
 			};
 			
-			inline Return Call ( Arg6 A6 )
+			inline Return Call ( Arg6 A6 ) const
 			{
 				
 				return ( * FAddress ) ( Default1, Default2, Default3, Default4, Default5, A6 );
 				
 			};
 			
-			inline Return operator() ( Arg6 A6 )
+			inline Return operator() ( Arg6 A6 ) const
 			{
 				
 				return Call ( A6 );
@@ -5466,14 +5466,14 @@ namespace Red
 			{
 			};
 			
-			inline Return Call ( Arg5 A5 )
+			inline Return Call ( Arg5 A5 ) const
 			{
 				
 				return ( * FAddress ) ( Default1, Default2, Default3, Default4, A5, Default6 );
 				
 			};
 			
-			inline Return operator() ( Arg5 A5 )
+			inline Return operator() ( Arg5 A5 ) const
 			{
 				
 				return Call ( A5 );
@@ -5521,14 +5521,14 @@ namespace Red
 			{
 			};
 			
-			inline Return Call ( Arg4 A4 )
+			inline Return Call ( Arg4 A4 ) const
 			{
 				
 				return ( * FAddress ) ( Default1, Default2, Default3, A4, Default5, Default6 );
 				
 			};
 			
-			inline Return operator() ( Arg4 A4 )
+			inline Return operator() ( Arg4 A4 ) const
 			{
 				
 				return Call ( A4 );
@@ -5576,14 +5576,14 @@ namespace Red
 			{
 			};
 			
-			inline Return Call ( Arg3 A3 )
+			inline Return Call ( Arg3 A3 ) const
 			{
 				
 				return ( * FAddress ) ( Default1, Default2, A3, Default4, Default5, Default6 );
 				
 			};
 			
-			inline Return operator() ( Arg3 A3 )
+			inline Return operator() ( Arg3 A3 ) const
 			{
 				
 				return Call ( A3 );
@@ -5631,14 +5631,14 @@ namespace Red
 			{
 			};
 			
-			inline Return Call ( Arg2 A2 )
+			inline Return Call ( Arg2 A2 ) const
 			{
 				
 				return ( * FAddress ) ( Default1, A2, Default3, Default4, Default5, Default6 );
 				
 			};
 			
-			inline Return operator() ( Arg2 A2 )
+			inline Return operator() ( Arg2 A2 ) const
 			{
 				
 				return Call ( A2 );
@@ -5686,14 +5686,14 @@ namespace Red
 			{
 			};
 			
-			inline Return Call ( Arg1 A1 )
+			inline Return Call ( Arg1 A1 ) const
 			{
 				
 				return ( * FAddress ) ( A1, Default2, Default3, Default4, Default5, Default6 );
 				
 			};
 			
-			inline Return operator() ( Arg1 A1 )
+			inline Return operator() ( Arg1 A1 ) const
 			{
 				
 				return Call ( A1 );
@@ -5743,14 +5743,14 @@ namespace Red
 			{
 			};
 			
-			inline Return Call ()
+			inline Return Call () const
 			{
 				
 				return ( * FAddress ) ( Default1, Default2, Default3, Default4, Default5, Default6 );
 				
 			};
 			
-			inline Return operator() ()
+			inline Return operator() () const
 			{
 				
 				return Call ();
