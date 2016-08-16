@@ -60,7 +60,9 @@ OBJECTS=obj/SDLX/Lib.o \
 		obj/RAUX/MtlFile.o \
 		obj/RAUX/StlFile.o \
 		obj/RAUX/VertexShaderFile.o \
-		obj/RAUX/FragmentShaderFile.o
+		obj/RAUX/FragmentShaderFile.o \
+		obj/Red/Events/BasicEvent.o \
+		obj/Red/Events/EventDispatcher.o \
 	
 bin/main: obj/Main.o
 	$(LD) $(LINK_FLAGS) $(OBJECTS) obj/Main.o -o bin/Main
@@ -224,6 +226,14 @@ obj/RAUX/VertexShaderFile.o: include/RAUX/VertexShaderFile.h src/RAUX/VertexShad
 obj/RAUX/FragmentShaderFile.o: include/RAUX/FragmentShaderFile.h src/RAUX/FragmentShaderFile.cpp include/RAUX/TextFile.h include/RAUX/RAUX.h include/Xenon/GPU/FragmentShader.h
 	$(CXX) -c $(CXX_FLAGS) src/RAUX/FragmentShaderFile.cpp -o obj/RAUX/FragmentShaderFile.o
 	
+# ========================= Red ======================== #
+
+obj/Red/Events/BasicEvent.o: include/Red/Red.h include/Red/Events/Events.h include/Red/Events/IEvent.h include/Red/Events/BasicEvent.h src/Red/Events/BasicEvent.cpp
+	$(CXX) -c $(CXX_FLAGS) src/Red/Events/BasicEvent.cpp -o obj/Red/Events/BasicEvent.o
+	
+obj/Red/Events/EventDispatcher.o: include/Red/Red.h include/Red/Events/Events.h include/Red/Events/IEvent.h include/Red/Events/IEventDispatcher.h include/Red/Events/EventDispatcher.h src/Red/Events/EventDispatcher.cpp
+	$(CXX) -c $(CXX_FLAGS) src/Red/Events/EventDispatcher.cpp -o obj/Red/Events/EventDispatcher.o
+	
 clean:
 	-@rm -r obj/*
 	-@rm bin/main
@@ -234,4 +244,6 @@ clean:
 	-@mkdir obj/Xenon/Geometry
 	-@mkdir obj/Xenon/Rendering
 	-@mkdir obj/RAUX
+	-@mkdir obj/Red
+	-@mkdir obj/Red/Events
 	

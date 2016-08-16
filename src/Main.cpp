@@ -44,6 +44,11 @@
 #include <Red/Util/Method.h>
 #include <Red/Util/MethodObjectClosure.h>
 
+#include <Red/Events/IEventDispatcher.h>
+#include <Red/Events/EventDispatcher.h>
+#include <Red/Events/IEvent.h>
+#include <Red/Events/BasicEvent.h>
+
 #include <math.h>
 
 #include <string>
@@ -98,35 +103,19 @@ typedef struct
 	
 } KeyboardStruct;
 
+void EventHandlerTest ( Red::Events :: IEvent * Event )
+{
+	
+	Red::Events :: BasicEvent * TestEvent = dynamic_cast <Red::Events :: BasicEvent *> ( Event );
+	
+	if ( TestEvent != NULL )
+		std :: cout << "Received: \"" << TestEvent -> GetID () << "\"" << std :: endl;
+	
+}
+
 /*
 * NOTE: This file is simply a test case for the engine. I've left it in the repository so people can see what I'm working on at the moment.
 */
-
-class Test
-{
-public:
-	
-	Test ( const std :: string & Sample ):
-		Sample ( Sample )
-	{
-	};
-	
-	~Test ()
-	{
-	};
-	
-	void TestFunc ( int I ) const
-	{
-		
-		std :: cout << "Test :: TestFunc (): \"" << Sample << "\", " << I << std :: endl;
-		
-	};
-	
-private:
-	
-	const std :: string Sample;
-	
-};
 
 int main ( int argc, const char * argv [] )
 {
@@ -134,12 +123,16 @@ int main ( int argc, const char * argv [] )
 	( void ) argc;
 	( void ) argv;
 	
-	const Test MyTest ( "Hello world" );
+	Red::Util :: Function1 <void, Red::Events :: IEvent *> TestHandler ( & EventHandlerTest );
 	
-	Red::Util :: MethodObjectClosure1 <const Test, void, int> TestClosure ( & Test :: TestFunc, & MyTest );
-	Red::Util :: IFunction1 <void, int> * TestFunctionFromMethodClosure = & TestClosure;
+	Red::Events :: EventDispatcher Dispatcher;
 	
-	( * TestFunctionFromMethodClosure ) ( 666 );
+	Dispatcher.AddEventListener ( Red::Events :: BasicEvent :: kEvent_Test, & TestHandler );
+	
+	Red::Events :: BasicEvent TestEvent ( Red::Events :: BasicEvent :: kEvent_Test );
+	Dispatcher.DispatchEvent ( TestEvent );
+	
+	Dispatcher.RemoveEventListener ( Red::Events :: BasicEvent :: kEvent_Test, & TestHandler );
 	
 	uint32_t Status;
 	
