@@ -39,13 +39,18 @@
 #include <RAUX/VertexShaderFile.h>
 #include <RAUX/FragmentShaderFile.h>
 
-#include <Red/Util/Method.h>
-#include <Red/Util/MethodParameterClosure.h>
+#include <Red/Util/Closure.h>
 
 #include <Red/Events/IEventDispatcher.h>
 #include <Red/Events/EventDispatcher.h>
 #include <Red/Events/IEvent.h>
 #include <Red/Events/BasicEvent.h>
+
+#include <Red/Threading/Thread.h>
+#include <Red/Threading/ThreadEvent.h>
+
+#include <thread>
+#include <chrono>
 
 #include <math.h>
 
@@ -101,31 +106,21 @@ typedef struct
 	
 } KeyboardStruct;
 
-class TestClass
+void TestThreadFunc ( const char * Message )
 {
-public:
 	
-	TestClass ( int I ):
-		I ( I )
-	{
-	};
+	std :: this_thread :: sleep_for ( std :: chrono :: seconds ( 5 ) );
 	
-	~TestClass ()
-	{
-	};
+	std :: cout << "Message from thread: \"" << Message << "\"" << std :: endl;
 	
-	void TestMethod ( int J, int K, int L )
-	{
-		
-		std :: cout << "TestClass ( " << I << " ): TestMethod ( " << J << ", " << K << ", " << L << " )" << std :: endl;
-		
-	};
+}
+
+void TEvent ( Red::Events :: IEvent * Event )
+{
 	
-private:
+	std :: cout << "Thread event: " << Event -> GetID () << " ( " << dynamic_cast <Red::Threading :: ThreadEvent *> ( Event ) -> GetSender () -> GetName () << " )" << std :: endl;
 	
-	int I;
-	
-};
+}
 
 /*
 * NOTE: This file is simply a test case for the engine. I've left it in the repository so people can see what I'm working on at the moment.
@@ -137,12 +132,18 @@ int main ( int argc, const char * argv [] )
 	( void ) argc;
 	( void ) argv;
 	
-	TestClass C ( 1 );
+	Red::Util :: Closure1_1 <void, const char *> ThreadFuncClosure ( & TestThreadFunc, "Hello world!" );
 	
-	Red::Util :: MethodParameterClosure3_123 <TestClass, void, int, int, int> MPCTest ( & TestClass :: TestMethod, 2, 3, 4 );
-	Red::Util :: IMethod <TestClass, void> * MethodPointer = & MPCTest;
+	Red::Threading :: Thread * T1 = new Red::Threading :: Thread ( & ThreadFuncClosure, "MyThread" );
 	
-	MethodPointer -> Call ( & C );
+	Red::Util :: Function1 <void, Red::Events :: IEvent *> TEventPTR ( & TEvent );
+	T1 -> AddEventListener ( Red::Threading :: ThreadEvent :: kThreadEvent_Started, & TEventPTR );
+	T1 -> AddEventListener ( Red::Threading :: ThreadEvent :: kThreadEvent_Finished, & TEventPTR );
+	
+	T1 -> Start ();
+	T1 -> Delete ();
+	
+	T1 = NULL;
 	
 	uint32_t Status;
 	

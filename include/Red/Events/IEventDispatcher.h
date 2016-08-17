@@ -29,7 +29,7 @@ namespace Red
 			{	
 			};
 			
-			// Hold an event key. Allocates a slot for event listeners waiting on the id <EventID> and returns a local key to that slot.
+			// Hold an event key. Allocates a slot for event listeners waiting on the id <EventID> and returns a local key to that slot. Note that this function may return kEventKey_Invalid if the dispatcher doesn't support the event.
 			virtual EventKey HoldEventKey ( const std :: string & EventID ) = 0;
 			// Find a currently held slot key for the id <EventID>. Returns IEventDispatcher :: kEventKey_Invalid if the ID wasn't found.
 			virtual EventKey FindHeldEventKey ( const std :: string & EventID ) = 0;
