@@ -11,76 +11,75 @@ namespace Red
 	namespace Util
 	{
 		
-		
 		template <typename Object, typename Return>
-		class IMethod : public IFunction1 <Return, Object>
+		class IMethod : public IFunction1 <Return, Object *>
 		{
 		public:	
 			
 			inline virtual ~IMethod () {};
 			
-			inline Return Call ( Object * ) const = 0;
-			inline Return operator() ( Object * ) const = 0;
+			virtual Return Call ( Object * ) const = 0;
+			virtual Return operator() ( Object * ) const = 0;
 			
 		};
 		
 		template <typename Object, typename Return, typename Arg1>
-		class IMethod1 : public IFunction2 <Return, Object, Arg1>
+		class IMethod1 : public IFunction2 <Return, Object *, Arg1>
 		{
 		public:	
 			
 			inline virtual ~IMethod1 () {};
 			
-			inline Return Call ( Object *, Arg1 ) const = 0;
-			inline Return operator() ( Object *, Arg1 ) const = 0;
+			virtual Return Call ( Object *, Arg1 ) const = 0;
+			virtual Return operator() ( Object *, Arg1 ) const = 0;
 			
 		};
 		
 		template <typename Object, typename Return, typename Arg1, typename Arg2>
-		class IMethod2 : public IFunction3 <Return, Object, Arg1, Arg2>
+		class IMethod2 : public IFunction3 <Return, Object *, Arg1, Arg2>
 		{
 		public:	
 			
 			inline virtual ~IMethod2 () {};
 			
-			inline Return Call ( Object *, Arg1, Arg2 ) const = 0;
-			inline Return operator() ( Object *, Arg1, Arg2 ) const = 0;
+			virtual Return Call ( Object *, Arg1, Arg2 ) const = 0;
+			virtual Return operator() ( Object *, Arg1, Arg2 ) const = 0;
 			
 		};
 		
 		template <typename Object, typename Return, typename Arg1, typename Arg2, typename Arg3>
-		class IMethod3 : public IFunction4 <Return, Object, Arg1, Arg2, Arg3>
+		class IMethod3 : public IFunction4 <Return, Object *, Arg1, Arg2, Arg3>
 		{
 		public:	
 			
 			inline virtual ~IMethod3 () {};
 			
-			inline Return Call ( Object *, Arg1, Arg2, Arg3 ) const = 0;
-			inline Return operator() ( Object *, Arg1, Arg2, Arg3 ) const = 0;
+			virtual Return Call ( Object *, Arg1, Arg2, Arg3 ) const = 0;
+			virtual Return operator() ( Object *, Arg1, Arg2, Arg3 ) const = 0;
 			
 		};
 		
 		template <typename Object, typename Return, typename Arg1, typename Arg2, typename Arg3, typename Arg4>
-		class IMethod4 : public IFunction5 <Return, Object, Arg1, Arg2, Arg3, Arg4>
+		class IMethod4 : public IFunction5 <Return, Object *, Arg1, Arg2, Arg3, Arg4>
 		{
 		public:	
 			
 			inline virtual ~IMethod4 () {};
 			
-			inline Return Call ( Object *, Arg1, Arg2, Arg3, Arg4 ) const = 0;
-			inline Return operator() ( Object *, Arg1, Arg2, Arg3, Arg4 ) const = 0;
+			virtual Return Call ( Object *, Arg1, Arg2, Arg3, Arg4 ) const = 0;
+			virtual Return operator() ( Object *, Arg1, Arg2, Arg3, Arg4 ) const = 0;
 			
 		};
 		
 		template <typename Object, typename Return, typename Arg1, typename Arg2, typename Arg3, typename Arg4, typename Arg5>
-		class IMethod5 : public IFunction6 <Return, Object, Arg1, Arg2, Arg3, Arg4, Arg5>
+		class IMethod5 : public IFunction6 <Return, Object *, Arg1, Arg2, Arg3, Arg4, Arg5>
 		{
 		public:	
 			
 			inline virtual ~IMethod5 () {};
 			
-			inline Return Call ( Object *, Arg1, Arg2, Arg3, Arg4, Arg5 ) const = 0;
-			inline Return operator() ( Object *, Arg1, Arg2, Arg3, Arg4, Arg5 ) const = 0;
+			virtual Return Call ( Object *, Arg1, Arg2, Arg3, Arg4, Arg5 ) const = 0;
+			virtual Return operator() ( Object *, Arg1, Arg2, Arg3, Arg4, Arg5 ) const = 0;
 			
 		};
 		
@@ -436,7 +435,7 @@ namespace Red
 		};
 		
 		template <typename Object, typename Return, typename Arg1, typename Arg2, typename Arg3, typename Arg4>
-		class Method4 <class Object, Return, Arg1, Arg2, Arg3, Arg4> : public virtual IMethod4 <Object, Return, Arg1, Arg2, Arg3, Arg4>
+		class Method4 <const Object, Return, Arg1, Arg2, Arg3, Arg4> : public virtual IMethod4 <Object, Return, Arg1, Arg2, Arg3, Arg4>
 		{
 		public:
 			

@@ -4,6 +4,8 @@
 #include <Red/Red.h>
 #include <Red/Util/Util.h>
 
+#include <Red/Util/Function.h>
+
 namespace Red
 {
 	

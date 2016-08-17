@@ -39,10 +39,8 @@
 #include <RAUX/VertexShaderFile.h>
 #include <RAUX/FragmentShaderFile.h>
 
-#include <Red/Util/Function.h>
-#include <Red/Util/Closure.h>
 #include <Red/Util/Method.h>
-#include <Red/Util/MethodObjectClosure.h>
+#include <Red/Util/MethodParameterClosure.h>
 
 #include <Red/Events/IEventDispatcher.h>
 #include <Red/Events/EventDispatcher.h>
@@ -103,15 +101,31 @@ typedef struct
 	
 } KeyboardStruct;
 
-void EventHandlerTest ( Red::Events :: IEvent * Event )
+class TestClass
 {
+public:
 	
-	Red::Events :: BasicEvent * TestEvent = dynamic_cast <Red::Events :: BasicEvent *> ( Event );
+	TestClass ( int I ):
+		I ( I )
+	{
+	};
 	
-	if ( TestEvent != NULL )
-		std :: cout << "Received: \"" << TestEvent -> GetID () << "\"" << std :: endl;
+	~TestClass ()
+	{
+	};
 	
-}
+	void TestMethod ( int J, int K, int L )
+	{
+		
+		std :: cout << "TestClass ( " << I << " ): TestMethod ( " << J << ", " << K << ", " << L << " )" << std :: endl;
+		
+	};
+	
+private:
+	
+	int I;
+	
+};
 
 /*
 * NOTE: This file is simply a test case for the engine. I've left it in the repository so people can see what I'm working on at the moment.
@@ -123,16 +137,12 @@ int main ( int argc, const char * argv [] )
 	( void ) argc;
 	( void ) argv;
 	
-	Red::Util :: Function1 <void, Red::Events :: IEvent *> TestHandler ( & EventHandlerTest );
+	TestClass C ( 1 );
 	
-	Red::Events :: EventDispatcher Dispatcher;
+	Red::Util :: MethodParameterClosure3_123 <TestClass, void, int, int, int> MPCTest ( & TestClass :: TestMethod, 2, 3, 4 );
+	Red::Util :: IMethod <TestClass, void> * MethodPointer = & MPCTest;
 	
-	Dispatcher.AddEventListener ( Red::Events :: BasicEvent :: kEvent_Test, & TestHandler );
-	
-	Red::Events :: BasicEvent TestEvent ( Red::Events :: BasicEvent :: kEvent_Test );
-	Dispatcher.DispatchEvent ( TestEvent );
-	
-	Dispatcher.RemoveEventListener ( Red::Events :: BasicEvent :: kEvent_Test, & TestHandler );
+	MethodPointer -> Call ( & C );
 	
 	uint32_t Status;
 	

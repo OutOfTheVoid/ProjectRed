@@ -63,6 +63,8 @@ OBJECTS=obj/SDLX/Lib.o \
 		obj/RAUX/FragmentShaderFile.o \
 		obj/Red/Events/BasicEvent.o \
 		obj/Red/Events/EventDispatcher.o \
+		obj/Red/Threading/Thread.o \
+		obj/Red/Threading/ThreadEvent.o \
 	
 bin/main: obj/Main.o
 	$(LD) $(LINK_FLAGS) $(OBJECTS) obj/Main.o -o bin/Main
@@ -234,6 +236,12 @@ obj/Red/Events/BasicEvent.o: include/Red/Red.h include/Red/Events/Events.h inclu
 obj/Red/Events/EventDispatcher.o: include/Red/Red.h include/Red/Events/Events.h include/Red/Events/IEvent.h include/Red/Events/IEventDispatcher.h include/Red/Events/EventDispatcher.h src/Red/Events/EventDispatcher.cpp
 	$(CXX) -c $(CXX_FLAGS) src/Red/Events/EventDispatcher.cpp -o obj/Red/Events/EventDispatcher.o
 	
+obj/Red/Threading/Thread.o: include/Red/Threading/Thread.h src/Red/Threading/Thread.cpp include/Red/Threading/ThreadEvent.h include/Red/Threading/Threading.h include/Red/Events/IEvent.h include/Red/Events/IEventDispatcher.h include/Red/Events/EventDispatcher.h include/Red/Util/Function.h include/Red/Red.h
+	$(CXX) -c $(CXX_FLAGS) src/Red/Threading/Thread.cpp -o obj/Red/Threading/Thread.o
+	
+obj/Red/Threading/ThreadEvent.o: include/Red/Threading/ThreadEvent.h src/Red/Threading/ThreadEvent.cpp include/Red/Threading/Thread.h include/Red/Threading/Threading.h include/Red/Events/IEvent.h include/Red/Events/BasicEvent.h include/Red/Red.h
+	$(CXX) -c $(CXX_FLAGS) src/Red/Threading/ThreadEvent.cpp -o obj/Red/Threading/ThreadEvent.o
+	
 clean:
 	-@rm -r obj/*
 	-@rm bin/main
@@ -246,4 +254,5 @@ clean:
 	-@mkdir obj/RAUX
 	-@mkdir obj/Red
 	-@mkdir obj/Red/Events
+	-@mkdir obj/Red/Threading
 	

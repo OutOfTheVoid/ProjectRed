@@ -8,9 +8,6 @@ namespace Red
 	
 	namespace Events
 	{
-		
-		
-		
 	}
 	
 }

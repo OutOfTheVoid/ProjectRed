@@ -7,6 +7,10 @@
 
 #include <string>
 
+/*
+* BasicEvent: A simple implementation of the IEvent interface used soley to pass the event ID.
+*/
+
 namespace Red
 {
 	
@@ -17,12 +21,16 @@ namespace Red
 		{
 		public:
 			
+			// An ID to represent generic update events.
 			static const std :: string kEvent_Update;
+			// An ID for event testing purposes.
 			static const std :: string kEvent_Test;
 			
+			// Constructor takes event ID.
 			BasicEvent ( const std :: string & ID );
 			~BasicEvent ();
 			
+			// Return the ID.
 			const std :: string & GetID () const;
 			
 		private:

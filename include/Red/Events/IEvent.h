@@ -6,6 +6,10 @@
 
 #include <string>
 
+/*
+* IEvent: The interface that all events must implement in order to be valid for an IEventDispatcher.
+*/
+
 namespace Red
 {
 	
@@ -20,6 +24,7 @@ namespace Red
 			{
 			};
 			
+			// The ID string of this event.
 			virtual const std :: string & GetID () const = 0;
 			
 		};
