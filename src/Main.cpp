@@ -39,7 +39,8 @@
 #include <RAUX/VertexShaderFile.h>
 #include <RAUX/FragmentShaderFile.h>
 
-#include <Red/Util/Closure.h>
+#include <Red/Util/Function.h>
+#include <Red/Util/MethodObjectParameterClosure.h>
 
 #include <Red/Events/IEventDispatcher.h>
 #include <Red/Events/EventDispatcher.h>
@@ -106,25 +107,35 @@ typedef struct
 	
 } KeyboardStruct;
 
-void TestThreadFunc ( const char * Message )
-{
-	
-	std :: this_thread :: sleep_for ( std :: chrono :: seconds ( 5 ) );
-	
-	std :: cout << "Message from thread: \"" << Message << "\"" << std :: endl;
-	
-}
-
-void TEvent ( Red::Events :: IEvent * Event )
-{
-	
-	std :: cout << "Thread event: " << Event -> GetID () << " ( " << dynamic_cast <Red::Threading :: ThreadEvent *> ( Event ) -> GetSender () -> GetName () << " )" << std :: endl;
-	
-}
-
 /*
 * NOTE: This file is simply a test case for the engine. I've left it in the repository so people can see what I'm working on at the moment.
 */
+
+class TestClass
+{
+public:
+	
+	TestClass ( int X ):
+		X ( X )
+	{
+	}
+	
+	~TestClass ()
+	{
+	}
+	
+	void TestFunc ( int Y, int Z )
+	{
+		
+		std :: cout << "X: " << X << ", Y: " << Y << ", Z: " << Z << std :: endl;
+		
+	}
+	
+private:
+	
+	int X;
+	
+};
 
 int main ( int argc, const char * argv [] )
 {
@@ -132,18 +143,12 @@ int main ( int argc, const char * argv [] )
 	( void ) argc;
 	( void ) argv;
 	
-	Red::Util :: Closure1_1 <void, const char *> ThreadFuncClosure ( & TestThreadFunc, "Hello world!" );
+	TestClass TestObject ( 1 );
 	
-	Red::Threading :: Thread * T1 = new Red::Threading :: Thread ( & ThreadFuncClosure, "MyThread" );
+	Red::Util :: MethodObjectParameterClosure2_12 <TestClass, void, int, int> TestClosure ( & TestClass :: TestFunc, & TestObject, 2, 3 );
+	Red::Util :: IFunction <void> * TestFuncPTR = & TestClosure;
 	
-	Red::Util :: Function1 <void, Red::Events :: IEvent *> TEventPTR ( & TEvent );
-	T1 -> AddEventListener ( Red::Threading :: ThreadEvent :: kThreadEvent_Started, & TEventPTR );
-	T1 -> AddEventListener ( Red::Threading :: ThreadEvent :: kThreadEvent_Finished, & TEventPTR );
-	
-	T1 -> Start ();
-	T1 -> Delete ();
-	
-	T1 = NULL;
+	( * TestFuncPTR ) ();
 	
 	uint32_t Status;
 	

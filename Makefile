@@ -65,6 +65,7 @@ OBJECTS=obj/SDLX/Lib.o \
 		obj/Red/Events/EventDispatcher.o \
 		obj/Red/Threading/Thread.o \
 		obj/Red/Threading/ThreadEvent.o \
+		obj/Red/Threading/Time.o \
 	
 bin/main: obj/Main.o
 	$(LD) $(LINK_FLAGS) $(OBJECTS) obj/Main.o -o bin/Main
@@ -241,6 +242,9 @@ obj/Red/Threading/Thread.o: include/Red/Threading/Thread.h src/Red/Threading/Thr
 	
 obj/Red/Threading/ThreadEvent.o: include/Red/Threading/ThreadEvent.h src/Red/Threading/ThreadEvent.cpp include/Red/Threading/Thread.h include/Red/Threading/Threading.h include/Red/Events/IEvent.h include/Red/Events/BasicEvent.h include/Red/Red.h
 	$(CXX) -c $(CXX_FLAGS) src/Red/Threading/ThreadEvent.cpp -o obj/Red/Threading/ThreadEvent.o
+	
+obj/Red/Threading/Time.o: include/Red/Threading/Time.h src/Red/Threading/Time.cpp include/Red/Threading/Threading.h include/Red/Red.h
+	$(CXX) -c $(CXX_FLAGS) src/Red/Threading/Time.cpp -o obj/Red/Threading/Time.o
 	
 clean:
 	-@rm -r obj/*

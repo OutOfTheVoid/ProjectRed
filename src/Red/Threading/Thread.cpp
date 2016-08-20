@@ -38,7 +38,9 @@ void Red::Threading::Thread :: Delete ()
 		{
 			
 			ThreadInstance -> detach ();
+			
 			delete ThreadInstance;
+			ThreadInstance = NULL;
 			
 		}
 				
@@ -109,6 +111,8 @@ inline void Red::Threading::Thread :: ThreadRun ()
 	Lock.lock ();
 	
 	this -> Running = false;
+	
+	bool SelfDelete = this -> SelfDelete;
 	
 	Lock.unlock ();
 	
