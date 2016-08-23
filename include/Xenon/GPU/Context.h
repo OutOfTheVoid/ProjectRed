@@ -6,7 +6,8 @@
 #include <Xenon/GPU/IGLContext.h>
 #include <Xenon/GPU/GLInclude.h>
 #include <Xenon/GPU/FrameBuffer.h>
-#include <Xenon/Util/RefCounted.h>
+
+#include <Red/Util/RefCounted.h>
 
 namespace Xenon
 {
@@ -21,7 +22,7 @@ namespace Xenon
 		class Texture2D;
 		class FrameBuffer;
 		
-		class Context : public Util :: RefCounted
+		class Context : public Red::Util :: RefCounted
 		{
 		public:
 			

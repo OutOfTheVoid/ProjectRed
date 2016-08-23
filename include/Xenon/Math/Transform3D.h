@@ -8,7 +8,8 @@
 #include <Xenon/Math/Matrix4x4.h>
 #include <Xenon/GPU/GLInclude.h>
 #include <Xenon/GPU/IMatrix4x4UniformSource.h>
-#include <Xenon/Util/RefCounted.h>
+
+#include <Red/Util/RefCounted.h>
 
 namespace Xenon
 {
@@ -16,7 +17,7 @@ namespace Xenon
 	namespace Math
 	{
 		
-		class Transform3D : public Util :: RefCounted
+		class Transform3D : public Red::Util :: RefCounted
 		{
 		public:
 			

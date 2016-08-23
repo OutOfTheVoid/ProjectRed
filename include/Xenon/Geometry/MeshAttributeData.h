@@ -10,7 +10,8 @@
 #include <Xenon/GPU/IGPUResourceUser.h>
 
 #include <Xenon/Util/RCMem.h>
-#include <Xenon/Util/RefCounted.h>
+
+#include <Red/Util/RefCounted.h>
 
 namespace Xenon
 {
@@ -18,7 +19,7 @@ namespace Xenon
 	namespace Geometry
 	{
 		
-		class MeshAttributeData : public GPU :: IGPUResourceUser, public Util :: RefCounted
+		class MeshAttributeData : public GPU :: IGPUResourceUser, public Red::Util :: RefCounted
 		{
 		public:
 			

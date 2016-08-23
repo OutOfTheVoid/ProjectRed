@@ -4,7 +4,7 @@
 #include <Xenon/Xenon.h>
 #include <Xenon/GPU/GPU.h>
 #include <Xenon/GPU/GLinclude.h>
-#include <Xenon/Util/IRefCounted.h>
+#include <Red/Util/IRefCounted.h>
 
 #include <stdint.h>
 
@@ -14,7 +14,7 @@ namespace Xenon
 	namespace GPU
 	{
 		
-		class IFloatUniformSource : public virtual Util :: IRefCounted
+		class IFloatUniformSource : public virtual Red::Util :: IRefCounted
 		{
 		public:
 			

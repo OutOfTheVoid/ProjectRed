@@ -9,6 +9,7 @@ This engine is (currently) an OpenGL based game engine that supports 2D and 3D g
 
 It is broken up into several discrete parts, which include:
 
+  * Red: The master library, containing everything that doesn't (or shouldn't) fit into sublibraries, as well as further utility and abstractions on sublibraries.
   * SDLX: An OOP wrapper for the SDL2 multimedia library
   * Xenon: An OOP OpenGL abstraction library with 3D management and generation utilities
   * RAUX: A OOP Resource management and aquisition library.
@@ -24,8 +25,10 @@ SDLX
 Xenon
 -----
 	* OpenGL 3.2
+	* Red
 	* Autodesk FBX ( Eventually ) ( Optional )
 RAUX
 ----
 	* LibPNG
+	* Red ( Eventually )
 	* Xenon ( Optional )

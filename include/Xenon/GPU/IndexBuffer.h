@@ -5,7 +5,8 @@
 #include <Xenon/GPU/GPU.h>
 #include <Xenon/GPU/IGPUResourceUser.h>
 #include <Xenon/GPU/GLInclude.h>
-#include <Xenon/Util/RefCounted.h>
+
+#include <Red/Util/RefCounted.h>
 
 namespace Xenon
 {
@@ -13,7 +14,7 @@ namespace Xenon
 	namespace GPU
 	{
 		
-		class IndexBuffer : public IGPUResourceUser, public Util :: RefCounted
+		class IndexBuffer : public IGPUResourceUser, public Red::Util :: RefCounted
 		{
 		public:
 			

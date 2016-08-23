@@ -5,7 +5,8 @@
 #include <Xenon/Math/Math.h>
 #include <Xenon/GPU/IUIntUniformSource.h>
 #include <Xenon/GPU/GLInclude.h>
-#include <Xenon/Util/RefCounted.h>
+
+#include <Red/Util/RefCounted.h>
 
 namespace Xenon
 {
@@ -13,7 +14,7 @@ namespace Xenon
 	namespace Math
 	{
 		
-		class ConstantUIntUniformSource : public GPU :: IUIntUniformSource, public Util :: RefCounted
+		class ConstantUIntUniformSource : public GPU :: IUIntUniformSource, public Red::Util :: RefCounted
 		{
 		public:
 			

@@ -8,7 +8,7 @@
 #include <Xenon/GPU/GLInclude.h>
 #include <Xenon/GPU/VertexArray.h>
 
-#include <Xenon/Util/RefCounted.h>
+#include <Red/Util/RefCounted.h>
 
 #include <stdint.h>
 
@@ -20,7 +20,7 @@ namespace Xenon
 		
 		class MeshAttributeData;
 		
-		class MeshAttribute : public Util :: RefCounted
+		class MeshAttribute : public Red::Util :: RefCounted
 		{
 		public:
 			

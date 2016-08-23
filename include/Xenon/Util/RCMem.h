@@ -3,7 +3,8 @@
 
 #include <Xenon/Xenon.h>
 #include <Xenon/Util/Util.h>
-#include <Xenon/Util/RefCounted.h>
+
+#include <Red/Util/RefCounted.h>
 
 #include <stdint.h>
 #include <stdlib.h>
@@ -14,7 +15,7 @@ namespace Xenon
 	namespace Util
 	{
 		
-		class RCMem : public RefCounted
+		class RCMem : public Red::Util :: RefCounted
 		{
 		public:
 			

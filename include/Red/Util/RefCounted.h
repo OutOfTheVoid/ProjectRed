@@ -1,14 +1,14 @@
-#ifndef XENON_UTIL_REFCOUNTED_H
-#define XENON_UTIL_REFCOUNTED_H
+#ifndef RED_UTIL_REFCOUNTED_H
+#define RED_UTIL_REFCOUNTED_H
 
-#include <Xenon/Xenon.h>
-#include <Xenon/Util/Util.h>
+#include <Red/Red.h>
+#include <Red/Util/Util.h>
 
-#include <Xenon/Util/IRefCounted.h>
+#include <Red/Util/IRefCounted.h>
 
 #include <atomic>
 
-namespace Xenon
+namespace Red
 {
 	
 	namespace Util

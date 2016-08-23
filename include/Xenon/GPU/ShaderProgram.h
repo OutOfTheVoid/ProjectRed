@@ -6,7 +6,8 @@
 #include <Xenon/GPU/IShader.h>
 #include <Xenon/GPU/IGPUResourceUser.h>
 #include <Xenon/GPU/GLInclude.h>
-#include <Xenon/Util/RefCounted.h>
+
+#include <Red/Util/RefCounted.h>
 
 #include <string>
 
@@ -16,7 +17,7 @@ namespace Xenon
 	namespace GPU
 	{
 		
-		class ShaderProgram : public IGPUResourceUser, public Util :: RefCounted
+		class ShaderProgram : public IGPUResourceUser, public Red::Util :: RefCounted
 		{
 		public:
 			

@@ -12,7 +12,8 @@
 #include <Xenon/GPU/IMatrix3x3UniformSource.h>
 #include <Xenon/GPU/IMatrix4x4UniformSource.h>
 #include <Xenon/GPU/IUIntUniformSource.h>
-#include <Xenon/Util/RefCounted.h>
+
+#include <Red/Util/RefCounted.h>
 
 #include <string>
 #include <vector>
@@ -23,7 +24,7 @@ namespace Xenon
 	namespace GPU
 	{
 		
-		class UniformSet : public Util :: RefCounted
+		class UniformSet : public Red::Util :: RefCounted
 		{
 		public:
 			

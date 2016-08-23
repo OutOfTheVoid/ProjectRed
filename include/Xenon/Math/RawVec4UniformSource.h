@@ -6,7 +6,8 @@
 #include <Xenon/Math/Vec4.h>
 #include <Xenon/GPU/GLinclude.h>
 #include <Xenon/GPU/IFloatVec4UniformSource.h>
-#include <Xenon/Util/RefCounted.h>
+
+#include <Red/Util/RefCounted.h>
 
 namespace Xenon
 {
@@ -14,7 +15,7 @@ namespace Xenon
 	namespace Math
 	{
 		
-		class RawVec4UniformSource : public GPU :: IFloatVec4UniformSource, public Util :: RefCounted
+		class RawVec4UniformSource : public GPU :: IFloatVec4UniformSource, public Red::Util :: RefCounted
 		{
 		public:
 			

@@ -5,7 +5,8 @@
 
 #include <Xenon/GPU/GPU.h>
 #include <Xenon/GPU/IShader.h>
-#include <Xenon/Util/RefCounted.h>
+
+#include <Red/Util/RefCounted.h>
 
 #include <string>
 
@@ -15,7 +16,7 @@ namespace Xenon
 	namespace GPU
 	{
 		
-		class GeometryShader : public IShader, public Util :: RefCounted
+		class GeometryShader : public IShader, public Red::Util :: RefCounted
 		{
 		public:
 			
