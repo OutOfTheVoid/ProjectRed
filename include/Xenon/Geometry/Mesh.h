@@ -13,8 +13,7 @@
 #include <Xenon/GPU/VertexArray.h>
 #include <Xenon/GPU/VertexBuffer.h>
 
-#include <Xenon/Util/RCMem.h>
-
+#include <Red/Util/RCMem.h>
 #include <Red/Util/RefCounted.h>
 
 #include <stdint.h>
@@ -54,14 +53,14 @@ namespace Xenon
 				
 			};
 			
-			Mesh ( DrawMode Mode, Util :: RCMem * IndexData, uint32_t IndexCount, GPU::IndexBuffer :: IndexType IType = GPU::IndexBuffer :: kIndexType_UInts, GPU::IndexBuffer :: UsageType IUsage = GPU::IndexBuffer :: kUsageType_Static_Draw );
+			Mesh ( DrawMode Mode, Red::Util :: RCMem * IndexData, uint32_t IndexCount, GPU::IndexBuffer :: IndexType IType = GPU::IndexBuffer :: kIndexType_UInts, GPU::IndexBuffer :: UsageType IUsage = GPU::IndexBuffer :: kUsageType_Static_Draw );
 			Mesh ( MemMapIndexData MAP_INDEXBUFFER_WRITEONLY, DrawMode Mode, uint32_t IndexCount, GPU::IndexBuffer :: IndexType IType = GPU::IndexBuffer :: kIndexType_UInts, bool Draw = true );
 			
 			virtual ~Mesh ();
 			
 			void SetDrawMode ( DrawMode Mode );
 			
-			void ReIndex ( uint32_t IndexCount, Util :: RCMem * IndexData );
+			void ReIndex ( uint32_t IndexCount, Red::Util :: RCMem * IndexData );
 			void ReIndex ( MemMapIndexData MapIndexBufferMemory, uint32_t IndexCount );
 			
 			void * GetIndexMemoryPointer ();
@@ -90,7 +89,7 @@ namespace Xenon
 			
 			GPU :: IndexBuffer IndexBuff;
 			
-			Util :: RCMem * IndexData;
+			Red::Util :: RCMem * IndexData;
 			uint32_t IndexCount;
 			
 			DrawMode Mode;

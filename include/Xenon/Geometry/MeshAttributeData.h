@@ -9,8 +9,7 @@
 #include <Xenon/GPU/VertexBuffer.h>
 #include <Xenon/GPU/IGPUResourceUser.h>
 
-#include <Xenon/Util/RCMem.h>
-
+#include <Red/Util/RCMem.h>
 #include <Red/Util/RefCounted.h>
 
 namespace Xenon
@@ -23,7 +22,7 @@ namespace Xenon
 		{
 		public:
 			
-			MeshAttributeData ( Util :: RCMem * Data, GLsizei Size, GPU::VertexBuffer :: UsageType UsageMode, bool Orphaning = true );
+			MeshAttributeData ( Red::Util :: RCMem * Data, GLsizei Size, GPU::VertexBuffer :: UsageType UsageMode, bool Orphaning = true );
 			~MeshAttributeData ();
 			
 			void MarkDirty ();
@@ -39,7 +38,7 @@ namespace Xenon
 			
 		private:
 			
-			Util :: RCMem * Data;
+			Red::Util :: RCMem * Data;
 			GLsizei Size;
 			GLintptr Offset;
 			

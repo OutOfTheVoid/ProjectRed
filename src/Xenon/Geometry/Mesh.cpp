@@ -1,6 +1,6 @@
 #include <Xenon/Geometry/Mesh.h>
 
-Xenon::Geometry::Mesh :: Mesh ( DrawMode Mode, Util :: RCMem * IndexData, uint32_t IndexCount, GPU::IndexBuffer :: IndexType IType, GPU::IndexBuffer :: UsageType IUsage ):
+Xenon::Geometry::Mesh :: Mesh ( DrawMode Mode, Red::Util :: RCMem * IndexData, uint32_t IndexCount, GPU::IndexBuffer :: IndexType IType, GPU::IndexBuffer :: UsageType IUsage ):
 	RefCounted ( 0 ),
 	IndexBuff ( IUsage, IType ),
 	IndexData ( IndexData ),
@@ -74,7 +74,7 @@ void Xenon::Geometry::Mesh :: SetDrawMode ( DrawMode Mode )
 	
 }
 
-void Xenon::Geometry::Mesh :: ReIndex ( uint32_t IndexCount, Util :: RCMem * IndexData )
+void Xenon::Geometry::Mesh :: ReIndex ( uint32_t IndexCount, Red::Util :: RCMem * IndexData )
 {
 	
 	if ( GPUAllocated && IndexBuff.Mapped () )

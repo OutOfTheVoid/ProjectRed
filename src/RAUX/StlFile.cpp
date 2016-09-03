@@ -2,7 +2,8 @@
 
 #ifdef RAUX_XENON_INTERFACE
 
-	#include <Xenon/Util/RCMem.h>
+	#include <Red/Util/RCMem.h>
+
 	#include <Xenon/Geometry/MeshAttribute.h>
 	#include <Xenon/Geometry/MeshAttributeData.h>
 	#include <Xenon/GPU/GLInclude.h>
@@ -322,7 +323,7 @@ Xenon::Geometry :: Mesh * RAUX::StlFile :: CreateMesh ( const MeshParameters & P
 	if ( ( TriangleList == NULL ) || ( TriangleCount == 0 ) )
 		return NULL;
 	
-	Xenon::Util :: RCMem * IndexMemory = new Xenon::Util :: RCMem ( sizeof ( GLuint ) * 3 * TriangleCount );
+	Red::Util :: RCMem * IndexMemory = new Red::Util :: RCMem ( sizeof ( GLuint ) * 3 * TriangleCount );
 	
 	if ( IndexMemory -> GetData () == NULL )
 	{
@@ -383,7 +384,7 @@ Xenon::Geometry :: Mesh * RAUX::StlFile :: CreateMesh ( const MeshParameters & P
 		{
 			
 			GLsizei StaticBufferSize = sizeof ( float ) * 18 * TriangleCount;
-			Xenon::Util :: RCMem * StaticAttributeMemory = new Xenon::Util :: RCMem ( StaticBufferSize );
+			Red::Util :: RCMem * StaticAttributeMemory = new Red::Util :: RCMem ( StaticBufferSize );
 			
 			if ( StaticAttributeMemory -> GetData () == NULL )
 			{
@@ -423,7 +424,7 @@ Xenon::Geometry :: Mesh * RAUX::StlFile :: CreateMesh ( const MeshParameters & P
 	{
 		
 		GLsizei BufferSize = sizeof ( float ) * 12 * TriangleCount;
-		Xenon::Util :: RCMem * AttributeMemory = new Xenon::Util :: RCMem ( BufferSize );
+		Red::Util :: RCMem * AttributeMemory = new Red::Util :: RCMem ( BufferSize );
 		
 		if ( AttributeMemory -> GetData () == NULL )
 		{

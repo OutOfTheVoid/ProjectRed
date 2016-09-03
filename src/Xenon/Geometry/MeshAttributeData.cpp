@@ -1,6 +1,6 @@
 #include <Xenon/Geometry/MeshAttributeData.h>
 
-Xenon::Geometry::MeshAttributeData :: MeshAttributeData ( Util :: RCMem * Data, GLsizei Size, GPU::VertexBuffer :: UsageType UsageMode, bool Orphaning ):
+Xenon::Geometry::MeshAttributeData :: MeshAttributeData ( Red::Util :: RCMem * Data, GLsizei Size, GPU::VertexBuffer :: UsageType UsageMode, bool Orphaning ):
 	RefCounted ( 0 ),
 	Data ( Data ),
 	Size ( Size ),

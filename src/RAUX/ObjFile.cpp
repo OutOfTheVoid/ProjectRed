@@ -5,7 +5,8 @@
 
 #ifdef RAUX_XENON_MATH_INTERFACE
 	
-	#include <Xenon/Util/RCMem.h>
+	#include <Red/Util/RCMem.h>
+
 	#include <Xenon/Geometry/MeshAttribute.h>
 	#include <Xenon/Geometry/MeshAttributeData.h>
 
@@ -1019,7 +1020,7 @@ Xenon::Geometry :: Mesh * RAUX::ObjFile :: CreateMesh ( const MeshParameters & P
 	if ( ! IndexCount )
 		return NULL;
 	
-	Xenon::Util :: RCMem * IndexMemory = new Xenon::Util :: RCMem ( sizeof ( GLuint ) * IndexCount );
+	Red::Util :: RCMem * IndexMemory = new Red::Util :: RCMem ( sizeof ( GLuint ) * IndexCount );
 	GLuint * Indexies = reinterpret_cast <GLuint *> ( IndexMemory -> GetData () );
 	
 	if ( Parameters.WindCounterClockwise )

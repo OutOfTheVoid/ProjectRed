@@ -1,5 +1,6 @@
 #include <Xenon/Geometry/Primitives.h>
-#include <Xenon/Util/RCMem.h>
+
+#include <Red/Util/RCMem.h>
 
 #include <iostream>
 
@@ -489,7 +490,7 @@ bool Xenon::Geometry::Primitives :: GenerateCubeMesh ( Mesh ** Target, const Cub
 	uint32_t AttributeDataIndex = 0;
 	MeshAttributeData * AttributeDataList [ 40 ];
 	
-	Util :: RCMem * StaticDataBuffer = ( CommonStaticBufferAttributeTotal != 0 ) ? new Util :: RCMem ( CommonStaticBufferAttributeTotal ) : NULL;
+	Red::Util :: RCMem * StaticDataBuffer = ( CommonStaticBufferAttributeTotal != 0 ) ? new Red::Util :: RCMem ( CommonStaticBufferAttributeTotal ) : NULL;
 	void * StaticData = ( CommonStaticBufferAttributeTotal != 0 ) ? StaticDataBuffer -> GetData () : NULL;
 	
 	MeshAttributeData * StaticAttributeData = ( CommonStaticBufferAttributeTotal != 0 ) ? new MeshAttributeData ( StaticDataBuffer, CommonStaticBufferAttributeTotal, GPU::VertexBuffer :: kUsageType_Static_Draw, false ) : NULL;
@@ -532,7 +533,7 @@ bool Xenon::Geometry::Primitives :: GenerateCubeMesh ( Mesh ** Target, const Cub
 		else
 		{
 			
-			Util :: RCMem * PositionDataBuffer = new Util :: RCMem ( sizeof ( GLfloat ) * 3 * ( CommonVertexMode ? 8 : 24 ) );
+			Red::Util :: RCMem * PositionDataBuffer = new Red::Util :: RCMem ( sizeof ( GLfloat ) * 3 * ( CommonVertexMode ? 8 : 24 ) );
 			PositionData = PositionDataBuffer -> GetData ();
 			
 			MeshAttributeData * PositionAttributeData =  new MeshAttributeData ( PositionDataBuffer, sizeof ( GLfloat ) * 3 * ( CommonVertexMode ? 8 : 24 ), Spec.ColorSpec.Static ? GPU::VertexBuffer :: kUsageType_Static_Draw : GPU::VertexBuffer :: kUsageType_Dynamic_Draw, true );
@@ -796,7 +797,7 @@ bool Xenon::Geometry::Primitives :: GenerateCubeMesh ( Mesh ** Target, const Cub
 		else
 		{
 			
-			Util :: RCMem * NormalDataBuffer = new Util :: RCMem ( sizeof ( GLfloat ) * 3 * ( CommonVertexMode ? 8 : 24 ) );
+			Red::Util :: RCMem * NormalDataBuffer = new Red::Util :: RCMem ( sizeof ( GLfloat ) * 3 * ( CommonVertexMode ? 8 : 24 ) );
 			NormalData = NormalDataBuffer -> GetData ();
 			
 			MeshAttributeData * NormalAttributeData =  new MeshAttributeData ( NormalDataBuffer, sizeof ( GLfloat ) * 3 * ( CommonVertexMode ? 8 : 24 ), Spec.ColorSpec.Static ? GPU::VertexBuffer :: kUsageType_Static_Draw : GPU::VertexBuffer :: kUsageType_Dynamic_Draw, true );
@@ -963,7 +964,7 @@ bool Xenon::Geometry::Primitives :: GenerateCubeMesh ( Mesh ** Target, const Cub
 		else
 		{
 			
-			Util :: RCMem * TangentDataBuffer = new Util :: RCMem ( sizeof ( GLfloat ) * 3 * ( CommonVertexMode ? 8 : 24 ) );
+			Red::Util :: RCMem * TangentDataBuffer = new Red::Util :: RCMem ( sizeof ( GLfloat ) * 3 * ( CommonVertexMode ? 8 : 24 ) );
 			TangentData = TangentDataBuffer -> GetData ();
 			
 			MeshAttributeData * TangentAttributeData =  new MeshAttributeData ( TangentDataBuffer, sizeof ( GLfloat ) * 3 * ( CommonVertexMode ? 8 : 24 ), Spec.ColorSpec.Static ? GPU::VertexBuffer :: kUsageType_Static_Draw : GPU::VertexBuffer :: kUsageType_Dynamic_Draw, true );
@@ -1009,7 +1010,7 @@ bool Xenon::Geometry::Primitives :: GenerateCubeMesh ( Mesh ** Target, const Cub
 		else
 		{
 			
-			Util :: RCMem * ColorDataBuffer = new Util :: RCMem ( sizeof ( GLfloat ) * 3 * ( CommonVertexMode ? 8 : 24 ) );
+			Red::Util :: RCMem * ColorDataBuffer = new Red::Util :: RCMem ( sizeof ( GLfloat ) * 3 * ( CommonVertexMode ? 8 : 24 ) );
 			ColorData = ColorDataBuffer -> GetData ();
 			
 			MeshAttributeData * ColorAttributeData =  new MeshAttributeData ( ColorDataBuffer, sizeof ( GLfloat ) * 3 * ( CommonVertexMode ? 8 : 24 ), Spec.ColorSpec.Static ? GPU::VertexBuffer :: kUsageType_Static_Draw : GPU::VertexBuffer :: kUsageType_Dynamic_Draw, true );
@@ -1060,7 +1061,7 @@ bool Xenon::Geometry::Primitives :: GenerateCubeMesh ( Mesh ** Target, const Cub
 			else
 			{
 				
-				Util :: RCMem * TexturePositionDataBuffer = new Util :: RCMem ( ( ( Spec.TexturePositionSpecs [ I ].Layout == CubeTexturePositionSpec :: kTexturePositionLayout_PerCommonVertexCubeTexture ) ? 3 * sizeof ( GLfloat ) : 2 * sizeof ( GLfloat ) ) * ( CommonVertexMode ? 8 : 24 ) );
+				Red::Util :: RCMem * TexturePositionDataBuffer = new Red::Util :: RCMem ( ( ( Spec.TexturePositionSpecs [ I ].Layout == CubeTexturePositionSpec :: kTexturePositionLayout_PerCommonVertexCubeTexture ) ? 3 * sizeof ( GLfloat ) : 2 * sizeof ( GLfloat ) ) * ( CommonVertexMode ? 8 : 24 ) );
 				TexturePositionData = TexturePositionDataBuffer -> GetData ();
 				
 				MeshAttributeData * TexturePositionAttributeData =  new MeshAttributeData ( TexturePositionDataBuffer, ( ( Spec.TexturePositionSpecs [ I ].Layout == CubeTexturePositionSpec :: kTexturePositionLayout_PerCommonVertexCubeTexture ) ? 3 * sizeof ( GLfloat ) : 2 * sizeof ( GLfloat ) ) * ( CommonVertexMode ? 8 : 24 ), Spec.TexturePositionSpecs [ I ].Static ? GPU::VertexBuffer :: kUsageType_Static_Draw : GPU::VertexBuffer :: kUsageType_Dynamic_Draw, true );
@@ -1149,7 +1150,7 @@ bool Xenon::Geometry::Primitives :: GenerateCubeMesh ( Mesh ** Target, const Cub
 	
 	// TODO: Other attributes
 	
-	Util :: RCMem * IndexDataBuffer = new Util :: RCMem ( sizeof ( GLubyte ) * 36 );
+	Red::Util :: RCMem * IndexDataBuffer = new Red::Util :: RCMem ( sizeof ( GLubyte ) * 36 );
 	GLubyte * IndexData = reinterpret_cast <GLubyte *> ( IndexDataBuffer -> GetData () );
 	
 	if ( ! CommonVertexMode )
@@ -1578,7 +1579,7 @@ bool Xenon::Geometry::Primitives :: GenerateQuad2DMesh ( Mesh ** Target, const Q
 	uint32_t AttributeDataIndex = 0;
 	MeshAttributeData * AttributeDataList [ 40 ];
 	
-	Util :: RCMem * StaticDataBuffer = ( CommonStaticBufferAttributeTotal != 0 ) ? new Util :: RCMem ( CommonStaticBufferAttributeTotal ) : NULL;
+	Red::Util :: RCMem * StaticDataBuffer = ( CommonStaticBufferAttributeTotal != 0 ) ? new Red::Util :: RCMem ( CommonStaticBufferAttributeTotal ) : NULL;
 	void * StaticData = ( CommonStaticBufferAttributeTotal != 0 ) ? StaticDataBuffer -> GetData () : NULL;
 	
 	MeshAttributeData * StaticAttributeData = ( CommonStaticBufferAttributeTotal != 0 ) ? new MeshAttributeData ( StaticDataBuffer, CommonStaticBufferAttributeTotal, GPU::VertexBuffer :: kUsageType_Static_Draw, false ) : NULL;
@@ -1621,7 +1622,7 @@ bool Xenon::Geometry::Primitives :: GenerateQuad2DMesh ( Mesh ** Target, const Q
 		else
 		{
 			
-			Util :: RCMem * PositionDataBuffer = new Util :: RCMem ( sizeof ( GLfloat ) * 2 );
+			Red::Util :: RCMem * PositionDataBuffer = new Red::Util :: RCMem ( sizeof ( GLfloat ) * 2 );
 			PositionData = PositionDataBuffer -> GetData ();
 			
 			MeshAttributeData * PositionAttributeData =  new MeshAttributeData ( PositionDataBuffer, sizeof ( GLfloat ) * 8, Spec.ColorSpec.Static ? GPU::VertexBuffer :: kUsageType_Static_Draw : GPU::VertexBuffer :: kUsageType_Dynamic_Draw, true );
@@ -1670,7 +1671,7 @@ bool Xenon::Geometry::Primitives :: GenerateQuad2DMesh ( Mesh ** Target, const Q
 		else
 		{
 			
-			Util :: RCMem * ColorDataBuffer = new Util :: RCMem ( sizeof ( GLfloat ) * 12 );
+			Red::Util :: RCMem * ColorDataBuffer = new Red::Util :: RCMem ( sizeof ( GLfloat ) * 12 );
 			ColorData = ColorDataBuffer -> GetData ();
 			
 			MeshAttributeData * ColorAttributeData =  new MeshAttributeData ( ColorDataBuffer, sizeof ( GLfloat ) * 12, Spec.ColorSpec.Static ? GPU::VertexBuffer :: kUsageType_Static_Draw : GPU::VertexBuffer :: kUsageType_Dynamic_Draw, true );
@@ -1722,7 +1723,7 @@ bool Xenon::Geometry::Primitives :: GenerateQuad2DMesh ( Mesh ** Target, const Q
 			else
 			{
 				
-				Util :: RCMem * TexturePositionDataBuffer = new Util :: RCMem ( 8 * sizeof ( float ) );
+				Red::Util :: RCMem * TexturePositionDataBuffer = new Red::Util :: RCMem ( 8 * sizeof ( float ) );
 				TexturePositionData = TexturePositionDataBuffer -> GetData ();
 				
 				MeshAttributeData * TexturePositionAttributeData =  new MeshAttributeData ( TexturePositionDataBuffer, 8 * sizeof ( float ), Spec.TexturePositionSpecs [ I ].Static ? GPU::VertexBuffer :: kUsageType_Static_Draw : GPU::VertexBuffer :: kUsageType_Dynamic_Draw, true );
@@ -1751,7 +1752,7 @@ bool Xenon::Geometry::Primitives :: GenerateQuad2DMesh ( Mesh ** Target, const Q
 		
 	}
 	
-	Util :: RCMem * IndexDataBuffer = new Util :: RCMem ( sizeof ( GLubyte ) * 6 );
+	Red::Util :: RCMem * IndexDataBuffer = new Red::Util :: RCMem ( sizeof ( GLubyte ) * 6 );
 	GLubyte * IndexData = reinterpret_cast <GLubyte *> ( IndexDataBuffer -> GetData () );
 	
 	if ( Spec.WindOutwardFacesClockwise )
