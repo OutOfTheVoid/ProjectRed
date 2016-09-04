@@ -6,7 +6,8 @@ Xenon::GPU::ShaderProgram :: ShaderProgram ( const std :: string & Name ):
 	Name ( Name ),
 	Allocated ( false ),
 	SHandle ( 0 ),
-	LinkIteration ( - 1 )
+	LinkIteration ( - 1 ),
+	InfoLog ( "" )
 {
 }
 
@@ -43,7 +44,14 @@ void Xenon::GPU::ShaderProgram :: Bind ()
 {
 	
 	if ( ! Allocated )
-		return;
+	{
+		
+		GPUResourceAlloc ();
+		
+		if ( ! Allocated )
+			return;
+		
+	}
 	
 	if ( Context :: CurrentBoundContext -> CurrentBoundShader != this )
 	{
@@ -62,6 +70,40 @@ void Xenon::GPU::ShaderProgram :: Link ()
 	glLinkProgram ( SHandle );
 	
 	LinkIteration ++;
+	
+}
+
+const std :: string & Xenon::GPU::ShaderProgram :: GetInfoLog ()
+{
+	
+	FreeInfoLog ();
+	
+	GLint MaxLength = 0;
+	glGetProgramiv ( SHandle, GL_INFO_LOG_LENGTH, & MaxLength );
+	
+	char * TempLogStore = reinterpret_cast <char *> ( malloc ( sizeof ( char ) * ( MaxLength + 1 ) ) );
+	
+	if ( TempLogStore != NULL )
+	{
+		
+		glGetProgramInfoLog ( SHandle, MaxLength, & MaxLength, TempLogStore );
+		TempLogStore [ MaxLength ] = '\0';
+		
+		InfoLog = TempLogStore;
+		
+		delete TempLogStore;
+		
+	}
+	
+	return InfoLog;
+	
+}
+
+void Xenon::GPU::ShaderProgram :: FreeInfoLog ()
+{
+	
+	InfoLog.clear ();
+	InfoLog.shrink_to_fit ();
 	
 }
 
@@ -106,6 +148,8 @@ void Xenon::GPU::ShaderProgram :: RemoveShader ( IShader & Shader )
 		return;
 		
 	}
+	
+	Bind ();
 	
 	glDetachShader ( SHandle, Shader.GetSHandle () );
 	

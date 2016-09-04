@@ -1,7 +1,6 @@
 #ifndef RED_THREADING_THREAD_H
 #define RED_THREADING_THREAD_H
 
-#include <Red/Red.h>
 #include <Red/Threading/Threading.h>
 #include <Red/Threading/ThreadEvent.h>
 

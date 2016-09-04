@@ -72,7 +72,14 @@ bool Xenon::GPU::VertexShader :: Compile ( bool StoreCompilationLog, bool FreeSo
 		return true;
 	
 	if ( ! Allocated )
+	{
+		
 		GPUResourceAlloc ();
+		
+		if ( ! Allocated )
+			return false;
+		
+	}
 	
 	const char * const Temp = ShaderCode.c_str ();
 	
@@ -116,6 +123,8 @@ bool Xenon::GPU::VertexShader :: Compile ( bool StoreCompilationLog, bool FreeSo
 			TempLogStore [ MaxLength ] = '\0';
 			
 			CompileLog = TempLogStore;
+			
+			delete TempLogStore;
 			
 		}
 		

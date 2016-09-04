@@ -43,6 +43,9 @@ namespace Xenon
 			
 			const std :: string & GetName ();
 			
+			const std :: string & GetInfoLog ();
+			void FreeInfoLog ();
+			
 		private:
 			
 			const std :: string Name;
@@ -53,6 +56,8 @@ namespace Xenon
 			GLuint SHandle;
 			
 			int64_t LinkIteration;
+			
+			std :: string InfoLog;
 			
 		};
 		

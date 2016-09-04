@@ -1396,13 +1396,13 @@ bool Xenon::Geometry::Primitives :: GenerateQuad2DMesh ( Mesh ** Target, const Q
 	uint32_t AttributeCount = 0;
 	uint32_t AttributeDataCount = 0;
 	
-	if ( Spec.Attributes & kAttributeFlags_Position )
+	if ( ( Spec.Attributes & kAttributeFlags_Position ) != 0 )
 		AttributeCount ++;
 	
-	if ( Spec.Attributes & kAttributeFlags_Color )
+	if ( ( Spec.Attributes & kAttributeFlags_Color ) != 0 )
 		AttributeCount ++;
 	
-	if ( Spec.Attributes & kAttributeFlags_TexturePositions )
+	if ( ( Spec.Attributes & kAttributeFlags_TexturePositions ) != 0 )
 		AttributeCount += Spec.TexturePositionCount;
 	
 	typedef struct AttributeGenTracker_Struct
@@ -1432,13 +1432,13 @@ bool Xenon::Geometry::Primitives :: GenerateQuad2DMesh ( Mesh ** Target, const Q
 	size_t CommonStaticBufferAttributeStride = 0;
 	size_t CommonStaticBufferAttributeTotal = 0;
 	
-	if ( Spec.Attributes & kAttributeFlags_Position )
+	if ( ( Spec.Attributes & kAttributeFlags_Position ) != 0 )
 	{
 		
 		AttributeTrackers [ AttributeTrackerIndex ].Offset = ( Spec.PositionSpec.Static && ( Spec.CompositionMode == kStaticAttributeCompositionMode_Interleaved ) ) ? CommonStaticBufferAttributeStride : 0;
 		AttributeTrackerIndex ++;
 		
-		if ( Spec.PositionSpec.Static )
+		if ( Spec.PositionSpec.Static && ( Spec.CompositionMode != kStaticAttributeCompositionMode_SeperateBuffers ) )
 		{
 			
 			CommonStaticBufferAttributeTotal += sizeof ( GLfloat ) * 8;
@@ -1450,14 +1450,14 @@ bool Xenon::Geometry::Primitives :: GenerateQuad2DMesh ( Mesh ** Target, const Q
 		
 	}
 	
-	if ( Spec.Attributes & kAttributeFlags_Color )
+	if ( ( Spec.Attributes & kAttributeFlags_Color ) != 0 )
 	{
 		
 		AttributeTrackers [ AttributeTrackerIndex ].Offset = ( Spec.ColorSpec.Static && ( Spec.CompositionMode == kStaticAttributeCompositionMode_Interleaved ) ) ? CommonStaticBufferAttributeStride : 0;
 		
 		AttributeTrackerIndex ++;
 		
-		if ( Spec.ColorSpec.Static )
+		if ( Spec.ColorSpec.Static && ( Spec.CompositionMode != kStaticAttributeCompositionMode_SeperateBuffers ) )
 		{
 			
 			CommonStaticBufferAttributeTotal += sizeof ( GLfloat ) * 12;
@@ -1469,7 +1469,7 @@ bool Xenon::Geometry::Primitives :: GenerateQuad2DMesh ( Mesh ** Target, const Q
 		
 	}
 	
-	if ( Spec.Attributes & kAttributeFlags_TexturePositions )
+	if ( ( Spec.Attributes & kAttributeFlags_TexturePositions ) != 0 )
 	{
 		
 		for ( uint32_t I = 0; I < Spec.TexturePositionCount; I ++ )
@@ -1479,7 +1479,7 @@ bool Xenon::Geometry::Primitives :: GenerateQuad2DMesh ( Mesh ** Target, const Q
 			
 			AttributeTrackerIndex ++;
 			
-			if ( Spec.TexturePositionSpecs [ I ].Static )
+			if ( Spec.TexturePositionSpecs [ I ].Static &&  ( Spec.CompositionMode != kStaticAttributeCompositionMode_SeperateBuffers ) )
 			{
 				
 				CommonStaticBufferAttributeTotal += sizeof ( GLfloat ) * 8;
@@ -1498,7 +1498,7 @@ bool Xenon::Geometry::Primitives :: GenerateQuad2DMesh ( Mesh ** Target, const Q
 		
 		AttributeTrackerIndex = 0;
 		
-		if ( Spec.Attributes & kAttributeFlags_Position )
+		if ( ( Spec.Attributes & kAttributeFlags_Position ) != 0 )
 		{
 			
 			AttributeTrackers [ AttributeTrackerIndex ].Stride = Spec.PositionSpec.Static ? CommonStaticBufferAttributeStride : 2 * sizeof ( GLfloat );
@@ -1507,7 +1507,7 @@ bool Xenon::Geometry::Primitives :: GenerateQuad2DMesh ( Mesh ** Target, const Q
 			
 		}
 		
-		if ( Spec.Attributes & kAttributeFlags_Color )
+		if ( ( Spec.Attributes & kAttributeFlags_Color ) != 0 )
 		{
 			
 			AttributeTrackers [ AttributeTrackerIndex ].Stride = Spec.ColorSpec.Static ? CommonStaticBufferAttributeStride : 3 * sizeof ( GLfloat );
@@ -1516,7 +1516,7 @@ bool Xenon::Geometry::Primitives :: GenerateQuad2DMesh ( Mesh ** Target, const Q
 			
 		}
 		
-		if ( Spec.Attributes & kAttributeFlags_TexturePositions )
+		if ( ( Spec.Attributes & kAttributeFlags_TexturePositions ) != 0 )
 		{
 			
 			for ( uint32_t I = 0; I < Spec.TexturePositionCount; I ++ )
@@ -1536,7 +1536,16 @@ bool Xenon::Geometry::Primitives :: GenerateQuad2DMesh ( Mesh ** Target, const Q
 		
 		AttributeTrackerIndex = 0;
 		
-		if ( Spec.Attributes & kAttributeFlags_Position )
+		if ( ( Spec.Attributes & kAttributeFlags_Position ) != 0 )
+		{
+			
+			AttributeTrackers [ AttributeTrackerIndex ].Stride = 2 * sizeof ( GLfloat );
+			
+			AttributeTrackerIndex ++;
+			
+		}
+		
+		if ( ( Spec.Attributes & kAttributeFlags_Color ) != 0 )
 		{
 			
 			AttributeTrackers [ AttributeTrackerIndex ].Stride = 3 * sizeof ( GLfloat );
@@ -1545,16 +1554,7 @@ bool Xenon::Geometry::Primitives :: GenerateQuad2DMesh ( Mesh ** Target, const Q
 			
 		}
 		
-		if ( Spec.Attributes & kAttributeFlags_Color )
-		{
-			
-			AttributeTrackers [ AttributeTrackerIndex ].Stride = 3 * sizeof ( GLfloat );
-			
-			AttributeTrackerIndex ++;
-			
-		}
-		
-		if ( Spec.Attributes & kAttributeFlags_TexturePositions )
+		if ( ( Spec.Attributes & kAttributeFlags_TexturePositions ) != 0 )
 		{
 			
 			for ( uint32_t I = 0; I < Spec.TexturePositionCount; I ++ )
@@ -1603,7 +1603,7 @@ bool Xenon::Geometry::Primitives :: GenerateQuad2DMesh ( Mesh ** Target, const Q
 	
 	AttributeTrackerIndex = 0;
 	
-	if ( Spec.Attributes & kAttributeFlags_Position )
+	if ( ( Spec.Attributes & kAttributeFlags_Position ) != 0 )
 	{
 		
 		void * PositionData;
@@ -1622,10 +1622,10 @@ bool Xenon::Geometry::Primitives :: GenerateQuad2DMesh ( Mesh ** Target, const Q
 		else
 		{
 			
-			Red::Util :: RCMem * PositionDataBuffer = new Red::Util :: RCMem ( sizeof ( GLfloat ) * 2 );
+			Red::Util :: RCMem * PositionDataBuffer = new Red::Util :: RCMem ( sizeof ( GLfloat ) * 8 );
 			PositionData = PositionDataBuffer -> GetData ();
 			
-			MeshAttributeData * PositionAttributeData =  new MeshAttributeData ( PositionDataBuffer, sizeof ( GLfloat ) * 8, Spec.ColorSpec.Static ? GPU::VertexBuffer :: kUsageType_Static_Draw : GPU::VertexBuffer :: kUsageType_Dynamic_Draw, true );
+			MeshAttributeData * PositionAttributeData =  new MeshAttributeData ( PositionDataBuffer, sizeof ( GLfloat ) * 8, Spec.PositionSpec.Static ? GPU::VertexBuffer :: kUsageType_Static_Draw : GPU::VertexBuffer :: kUsageType_Dynamic_Draw, true );
 			
 			AttributeDataList [ AttributeDataIndex ] = PositionAttributeData;
 			AttributeDataIndex ++;
@@ -1652,7 +1652,7 @@ bool Xenon::Geometry::Primitives :: GenerateQuad2DMesh ( Mesh ** Target, const Q
 		
 	}
 	
-	if ( Spec.Attributes & kAttributeFlags_Color )
+	if ( ( Spec.Attributes & kAttributeFlags_Color ) != 0 )
 	{
 		
 		void * ColorData;
@@ -1701,7 +1701,7 @@ bool Xenon::Geometry::Primitives :: GenerateQuad2DMesh ( Mesh ** Target, const Q
 		
 	}
 	
-	if ( Spec.Attributes & kAttributeFlags_TexturePositions )
+	if ( ( Spec.Attributes & kAttributeFlags_TexturePositions ) != 0 )
 	{
 		
 		for ( uint32_t I = 0; I < Spec.TexturePositionCount; I ++ )

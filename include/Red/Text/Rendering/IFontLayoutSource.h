@@ -1,9 +1,9 @@
 #ifndef RED_TEXT_RENDERING_IFONTLAYOUTSOURCE_H
 #define RED_TEXT_RENDERING_IFONTLAYOUTSOURCE_H
 
-#include <Red/Red.h>
-#include <Red/Text/Text.h>
 #include <Red/Text/Rendering/Rendering.h>
+
+#include <Red/Util/IRefCounted.h>
 
 #include <stdint.h>
 
@@ -16,7 +16,7 @@ namespace Red
 		namespace Rendering
 		{
 			
-			class IFontLayoutSource
+			class IFontLayoutSource : public Util :: IRefCounted
 			{
 			public:
 				
@@ -24,8 +24,13 @@ namespace Red
 				{
 				};
 				
-				int32_t GetAdvance ( char32_t Current, char32_t Last );
+				virtual int32_t GetAdvanceX ( char32_t Current, char32_t Last ) = 0;
+				virtual int32_t GetAdvanceX ( char32_t Current ) = 0;
+				virtual int32_t GetAdvanceY ( char32_t Current ) = 0;
 				
+				virtual int32_t GetOffsetX ( char32_t Current ) = 0;
+				virtual int32_t GetOffsetY ( char32_t Current ) = 0;
+								
 			};
 			
 		}

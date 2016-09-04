@@ -1,7 +1,6 @@
 #ifndef RED_UTIL_METHODOBJECTCLOSURE_H
 #define RED_UTIL_METHODOBJECTCLOSURE_H
 
-#include <Red/Red.h>
 #include <Red/Util/Util.h>
 
 #include <Red/Util/Function.h>

@@ -1,7 +1,6 @@
 #ifndef RED_UTIL_IREFCOUNTED_H
 #define RED_UTIL_IREFCOUNTED_H
 
-#include <Red/Red.h>
 #include <Red/Util/Util.h>
 
 namespace Red

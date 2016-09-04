@@ -1,7 +1,6 @@
 #ifndef RED_THREADING_TIME_H
 #define RED_THREADING_TIME_H
 
-#include <Red/Red.h>
 #include <Red/Threading/Threading.h>
 
 #include <chrono>

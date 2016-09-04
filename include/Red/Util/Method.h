@@ -1,7 +1,6 @@
 #ifndef RED_UTIL_METHOD_H
 #define RED_UTIL_METHOD_H
 
-#include <Red/Red.h>
 #include <Red/Util/Util.h>
 #include <Red/Util/Function.h>
 

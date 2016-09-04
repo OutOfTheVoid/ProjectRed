@@ -8,3 +8,4 @@ bin/*
 *.glsl
 *.py
 *.DS_Store
+*.ttf

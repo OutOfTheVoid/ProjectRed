@@ -4,7 +4,6 @@
 #include <string>
 #include <thread>
 
-#include <Red/Red.h>
 #include <Red/Threading/Threading.h>
 
 #include <Red/Events/BasicEvent.h>

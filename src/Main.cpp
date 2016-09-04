@@ -30,7 +30,7 @@
 #include <Xenon/Math/RawFloatUniformSource.h>
 #include <Xenon/Math/RawMatrix4x4UniformSource.h>
 #include <Xenon/Math/RawMatrix3x3UniformSource.h>
-#include <Xenon/Math/ConstantUIntUniformSource.h>
+#include <Xenon/Math/ConstantIntUniformSource.h>
 
 #include <Xenon/Geometry/Mesh.h>
 #include <Xenon/Geometry/Primitives.h>
@@ -49,6 +49,9 @@
 
 #include <Red/Threading/Thread.h>
 #include <Red/Threading/ThreadEvent.h>
+
+#include <Red/Text/Rendering/FreeType/FTLibrary.h>
+#include <Red/Text/Rendering/FreeType/FontFace.h>
 
 #include <thread>
 #include <chrono>
@@ -77,16 +80,156 @@ void KeyListener ( int32_t ScanCode, int32_t KeyCode, bool Down, void * Data );
 #define WINDOW_WIDTH_1 2000
 #define WINDOW_HEIGHT_1 1400
 
+/*
+* NOTE: This file is simply a test case for the engine. I've left it in the repository so people can see what I'm working on at the moment.
+*/
+
 struct RenderStruct_Struct
 {
 	
-	Xenon::GPU :: Context * Cont; 
+	Xenon::GPU :: Context * Cont;
 	SDLX :: Window * Win;
 	SDLX :: Timer * RTimer;
+	
+	Xenon::GPU :: Texture2D * FontTexture;
+	Xenon::GPU :: ShaderProgram * Program;
+	Xenon::GPU :: VertexArray * VArray;
+	Xenon::GPU :: UniformSet * UniSet;
+	
+	Xenon::Geometry :: Mesh * TestMesh;
 	
 	uint32_t Frame;
 	
 };
+
+bool SetupScene ( RenderStruct & Data )
+{
+	
+	uint32_t Status;
+	
+	Data.FontTexture = new Xenon::GPU :: Texture2D ();
+	Data.FontTexture -> Reference ();
+	
+	RAUX :: PNGFile MyTestTextureFile ( "RockTexture.png" );
+	MyTestTextureFile.Load ( & Status );
+	
+	if ( ! MyTestTextureFile.Valid () )
+		std :: cout << "PNG load failed!" << std :: endl;
+	
+	Data.FontTexture -> AssignToTextureUnit ( 0 );
+	
+	Red::Text::Rendering::FreeType :: FontFace * TestFontFace = Red::Text::Rendering::FreeType::FontFace :: NewFromFile ( "PTMono.ttf", 0 );
+	
+	if ( TestFontFace != NULL )
+	{
+		
+		std :: cout << "Loaded font!" << std :: endl;
+		
+		TestFontFace -> SetPixelSize ( 2048 );
+		
+		uint32_t GlyphIndex = TestFontFace -> GlyphIndexFromChar ( U'Q' );
+		std :: cout << "Glyph index for \'" << 'Q' << "\': " << GlyphIndex << std :: endl;
+		
+		if ( TestFontFace -> LoadGlyph ( GlyphIndex, Red::Text::Rendering::FreeType::FontFace :: kLoadFlag_Defaults ) )
+			std :: cout << "Glyph loaded!" << std :: endl;
+		
+		TestFontFace -> RenderGlyph ();
+		
+		Red::Text::Rendering::FreeType::FontFace :: BitmapMetrics BMMetrics;
+		TestFontFace -> GetBitmapMetrics ( & BMMetrics );
+		
+		Data.FontTexture -> TextureImage ( 0, Xenon::GPU::Texture2D :: kInternalFormat_RGBA, BMMetrics.Width, BMMetrics.Rows, Xenon::GPU::Texture2D :: kExternalLayout_UByte, Xenon::GPU::Texture2D :: kExternalFormat_R, TestFontFace -> GetBitmapPointer (), 1, BMMetrics.Pitch );
+		Data.FontTexture -> SetFiltering ( Xenon::GPU::Texture2D :: kMinimizingFilter_Nearest, Xenon::GPU::Texture2D :: kMagnificationFilter_Nearest );
+		Data.FontTexture -> SetWrapMode ( Xenon::GPU::Texture2D :: kWrapMode_Repeat );
+		
+		delete TestFontFace;
+		
+	}
+	
+	Xenon::Geometry::Primitives :: Quad2DSpec RenderQuadSpec;
+	RenderQuadSpec.WindOutwardFacesClockwise = true;
+	RenderQuadSpec.Attributes = Xenon::Geometry::Primitives :: kAttributeFlags_Position | Xenon::Geometry::Primitives :: kAttributeFlags_TexturePositions;
+	RenderQuadSpec.CompositionMode = Xenon::Geometry::Primitives :: kStaticAttributeCompositionMode_Interleaved;
+	RenderQuadSpec.TexturePositionCount = 0;
+	Xenon::Geometry::Primitives :: SetupNormalQuad2DPositionSpec ( RenderQuadSpec.PositionSpec, "Position", true );
+	
+	Xenon::Geometry::Primitives :: Quad2DTexturePositionSpec TexPos;
+	Xenon::Geometry::Primitives :: SetupNormalQuad2DTexturePositionSpec ( TexPos, "TexPosition", true );
+	
+	RenderQuadSpec.TexturePositionSpecs = & TexPos;
+	RenderQuadSpec.TexturePositionCount = 1;
+	
+	Data.TestMesh = NULL;
+	if ( ! Xenon::Geometry::Primitives :: GenerateQuad2DMesh ( & Data.TestMesh, RenderQuadSpec ) )
+		std :: cout << "Failed to generate quad mesh!" << std :: endl;
+	
+	RAUX :: VertexShaderFile VShaderFile ( "Text2DVertex.glsl" );
+	RAUX :: FragmentShaderFile FShaderFile ( "Text2DFragment.glsl" );
+	
+	Xenon::GPU :: VertexShader * VShader = VShaderFile.LoadToShader ( & Status );
+	Xenon::GPU :: FragmentShader * FShader = FShaderFile.LoadToShader ( & Status );
+	
+	if ( ! VShader -> Compile ( true ) )
+		std :: cout << "VShader failed to compile: " << std :: endl << VShader -> GetCompilationLog () << std :: endl;
+		 
+	if ( ! FShader -> Compile ( true ) )
+		std :: cout << "FShader failed to compile: " << std :: endl << FShader -> GetCompilationLog () << std :: endl;
+	
+	Data.Program = new Xenon::GPU :: ShaderProgram ();
+	
+	Data.Program -> GPUResourceAlloc ();
+	Data.Program -> AddShader ( * VShader );
+	Data.Program -> AddShader ( * FShader );
+	Data.Program -> Link ();
+	
+	Data.UniSet = new Xenon::GPU :: UniformSet ();
+	
+	Xenon::Math :: ConstantIntUniformSource * FontSamplerUniformSource = new Xenon::Math :: ConstantIntUniformSource ( 0 );
+	Data.UniSet -> AddIntUniform ( "FontSampler", FontSamplerUniformSource );
+	Data.UniSet -> SetProgram ( Data.Program );
+	Data.UniSet -> Link ();
+	
+	delete VShader;
+	delete FShader;
+	
+	Data.TestMesh -> FlushData ();
+	Data.VArray = new Xenon::GPU :: VertexArray ();
+	Data.TestMesh -> BuildVertexArray ( * Data.VArray );
+	Data.VArray -> SetProgram ( Data.Program );
+	Data.VArray -> Build ();
+	Data.VArray -> Bind ();
+	
+	return true;
+	
+}
+
+void DestroyScene ( RenderStruct & Data )
+{
+	
+	Data.FontTexture -> Dereference ();
+	
+}
+
+void Render ( RenderStruct & Data )
+{
+	
+	Data.Cont -> GetDefaultFrameBuffer () -> Clear ();
+	Data.Cont -> SetCullingEnabled ( false );
+	Data.Cont -> SetDepthTestEnabled ( false );
+	Data.Cont -> SetFrontFace ( Xenon::GPU::Context :: kFrontFace_Clockwise );
+	Data.Cont -> SetCullingFace ( Xenon::GPU::Context :: kCullingFace_Back );
+	
+	Data.Program -> Bind ();
+	
+	Data.VArray -> Bind ();
+	
+	Data.UniSet -> UpdateUniforms ();
+	
+	glDrawElements ( Data.TestMesh -> GetDrawMode (), Data.TestMesh -> GetIndexCount (), Data.TestMesh -> GetIndexType (), 0 );
+	
+}
+
+//===================================================//
 
 typedef struct 
 {
@@ -107,48 +250,11 @@ typedef struct
 	
 } KeyboardStruct;
 
-/*
-* NOTE: This file is simply a test case for the engine. I've left it in the repository so people can see what I'm working on at the moment.
-*/
-
-class TestClass
-{
-public:
-	
-	TestClass ( int X ):
-		X ( X )
-	{
-	}
-	
-	~TestClass ()
-	{
-	}
-	
-	void TestFunc ( int Y, int Z )
-	{
-		
-		std :: cout << "X: " << X << ", Y: " << Y << ", Z: " << Z << std :: endl;
-		
-	}
-	
-private:
-	
-	int X;
-	
-};
-
 int main ( int argc, const char * argv [] )
 {
 	
 	( void ) argc;
 	( void ) argv;
-	
-	TestClass TestObject ( 1 );
-	
-	Red::Util :: MethodObjectParameterClosure2_12 <TestClass, void, int, int> TestClosure ( & TestClass :: TestFunc, & TestObject, 2, 3 );
-	Red::Util :: IFunction <void> * TestFuncPTR = & TestClosure;
-	
-	( * TestFuncPTR ) ();
 	
 	uint32_t Status;
 	
@@ -197,7 +303,7 @@ int main ( int argc, const char * argv [] )
 	
 	Cont -> Reference ();
 	Cont -> MakeCurrent ();
-	Cont -> GetDefaultFrameBuffer () -> SetClearColor ( 0.0f, 0.0f, 0.0f );
+	Cont -> GetDefaultFrameBuffer () -> SetClearColor ( 1.0f, 1.0f, 1.0f );
 	
 	RenderStruct RData;
 	
@@ -342,7 +448,7 @@ void DrawEvent ( SDL_UserEvent * Event )
 	if ( RData == NULL )
 		return;
 	
-	RData -> Cont -> GetDefaultFrameBuffer () -> Bind ();
+	RData -> Cont -> MakeCurrent ();
 	
 	Render ( * RData );
 	
@@ -355,33 +461,8 @@ void DrawEvent ( SDL_UserEvent * Event )
 	if ( TimerLock )
 		TimerLock -> Lock ();
 	RData -> RTimer -> Stop ();
+	RData -> RTimer -> Start ( 1000 / 120 );
 	if ( TimerLock )
 		TimerLock -> Unlock ();
-	
-	RData -> RTimer -> Start ( 1000 / 120 );
-	
-}
-
-
-bool SetupScene ( RenderStruct & Data )
-{
-	
-	(void) Data;
-	
-	return true;
-	
-}
-
-void DestroyScene ( RenderStruct & Data )
-{
-	
-	(void) Data;
-	
-}
-
-void Render ( RenderStruct & Data )
-{
-	
-	Data.Cont -> GetDefaultFrameBuffer () -> Clear ();
 	
 }

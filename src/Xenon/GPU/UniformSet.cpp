@@ -189,6 +189,25 @@ void Xenon::GPU::UniformSet :: AddUIntUniform ( const std :: string & Name, IUIn
 	
 }
 
+void Xenon::GPU::UniformSet :: AddIntUniform ( const std :: string & Name, IIntUniformSource * Source, bool LocateImmediately )
+{
+	
+	if ( Source == NULL )
+		return;
+	
+	IntUniformTracker Tracker;
+	
+	Tracker.Name = Name;
+	Tracker.Source = Source;
+	Tracker.LastUploadedIteration = - 1;
+	Tracker.UniformLocation = ( ( Program != NULL ) && LocateImmediately ) ? Program -> GetUniformLocation ( Name.c_str () ) : - 1;
+	
+	Source -> Reference ();
+	
+	IntUniforms.push_back ( Tracker );
+	
+}
+
 void Xenon::GPU::UniformSet :: ResetUniformStates ()
 {
 	
@@ -249,6 +268,14 @@ void Xenon::GPU::UniformSet :: ResetUniformStates ()
 		
 		UIntUniforms [ I ].UniformLocation = - 1;
 		UIntUniforms [ I ].LastUploadedIteration = - 1;
+		
+	}
+	
+	for ( I = 0; I < IntUniforms.size (); I ++ )
+	{
+		
+		IntUniforms [ I ].UniformLocation = - 1;
+		IntUniforms [ I ].LastUploadedIteration = - 1;
 		
 	}
 	
@@ -380,6 +407,22 @@ void Xenon::GPU::UniformSet :: UpdateUniforms ( bool Relink )
 		
 	}
 	
+	for ( I = 0; I < IntUniforms.size (); I ++ )
+	{
+		
+		int64_t CurrentIteration = IntUniforms [ I ].Source -> GetIteration ();
+		
+		if ( ( IntUniforms [ I ].UniformLocation != - 1 ) && ( IntUniforms [ I ].LastUploadedIteration < CurrentIteration ) )
+		{
+			
+			glUniform1i ( IntUniforms [ I ].UniformLocation, IntUniforms [ I ].Source -> GetValue () );
+			
+			IntUniforms [ I ].LastUploadedIteration = CurrentIteration;
+			
+		}
+		
+	}
+	
 }
 
 void Xenon::GPU::UniformSet :: Link ()
@@ -455,6 +498,14 @@ void Xenon::GPU::UniformSet :: Link ()
 		
 		if ( UIntUniforms [ I ].UniformLocation == - 1 )
 			UIntUniforms [ I ].UniformLocation = Program -> GetUniformLocation ( UIntUniforms [ I ].Name.c_str () );
+		
+	}
+	
+	for ( I = 0; I < IntUniforms.size (); I ++ )
+	{
+		
+		if ( IntUniforms [ I ].UniformLocation == - 1 )
+			IntUniforms [ I ].UniformLocation = Program -> GetUniformLocation ( IntUniforms [ I ].Name.c_str () );
 		
 	}
 	

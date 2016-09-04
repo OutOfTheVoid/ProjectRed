@@ -2,7 +2,7 @@ CXX=g++-mp-4.9
 LD=g++-mp-4.9
 
 LINK_FLAGS=-framework SDL2 -framework OpenGL -L/opt/local/lib -lpng -lgcc -lfreetype -march=nehalem -flto
-CXX_FLAGS=$(LINK_FLAGS) -Iinclude -std=c++11 -pedantic-errors -Wextra -Wall
+CXX_FLAGS=$(LINK_FLAGS) -Iinclude -I/opt/local/include/freetype2 -std=c++11 -pedantic-errors -Wextra -Wall
 
 all: build test
 
@@ -49,6 +49,7 @@ OBJECTS=obj/SDLX/Lib.o \
 		obj/Xenon/Math/RawMatrix4x4UniformSource.o \
 		obj/Xenon/Math/RawMatrix3x3UniformSource.o \
 		obj/Xenon/Math/ConstantUIntUniformSource.o \
+		obj/Xenon/Math/ConstantIntUniformSource.o \
 		obj/Xenon/Geometry/Mesh.o \
 		obj/Xenon/Geometry/MeshAttributeData.o \
 		obj/Xenon/Geometry/MeshAttribute.o \
@@ -66,7 +67,9 @@ OBJECTS=obj/SDLX/Lib.o \
 		obj/Red/Threading/Thread.o \
 		obj/Red/Threading/ThreadEvent.o \
 		obj/Red/Threading/Time.o \
-		obj/Red/Text/Rendering/RawFontTextureAtlas.o
+		obj/Red/Text/Rendering/RawFontTextureAtlas.o \
+		obj/Red/Text/Rendering/FreeType/FTLibrary.o \
+		obj/Red/Text/Rendering/FreeType/FontFace.o
 	
 bin/Main: obj/Main.o
 	$(LD) $(LINK_FLAGS) $(OBJECTS) obj/Main.o -o bin/Main
@@ -204,6 +207,9 @@ obj/Xenon/Math/RawMatrix3x3UniformSource.o: include/Xenon/Math/RawMatrix3x3Unifo
 obj/Xenon/Math/ConstantUIntUniformSource.o: include/Xenon/Math/ConstantUIntUniformSource.h src/Xenon/Math/ConstantUIntUniformSource.cpp include/Xenon/GPU/IUIntUniformSource.h include/Xenon/Math/Math.h include/Xenon/GPU/GLInclude.h include/Red/Util/RefCounted.h
 	$(CXX) -c $(CXX_FLAGS) src/Xenon/Math/ConstantUIntUniformSource.cpp -o obj/Xenon/Math/ConstantUIntUniformSource.o
 	
+obj/Xenon/Math/ConstantIntUniformSource.o: include/Xenon/Math/ConstantIntUniformSource.h src/Xenon/Math/ConstantIntUniformSource.cpp include/Xenon/GPU/IIntUniformSource.h include/Xenon/Math/Math.h include/Xenon/GPU/GLInclude.h include/Red/Util/RefCounted.h
+	$(CXX) -c $(CXX_FLAGS) src/Xenon/Math/ConstantIntUniformSource.cpp -o obj/Xenon/Math/ConstantIntUniformSource.o
+	
 # ======================== RAUX ======================== #
 	
 obj/RAUX/File.o: include/RAUX/File.h src/RAUX/File.cpp include/RAUX/RAUX.h
@@ -247,8 +253,14 @@ obj/Red/Threading/ThreadEvent.o: include/Red/Threading/ThreadEvent.h src/Red/Thr
 obj/Red/Threading/Time.o: include/Red/Threading/Time.h src/Red/Threading/Time.cpp include/Red/Threading/Threading.h include/Red/Red.h
 	$(CXX) -c $(CXX_FLAGS) src/Red/Threading/Time.cpp -o obj/Red/Threading/Time.o
 	
-obj/Red/Text/Rendering/RawFontTextureAtlas.o: include/Red/Text/Rendering/RawFontTextureAtlas.h src/Red/Text/Rendering/RawFontTextureAtlas.cpp
+obj/Red/Text/Rendering/RawFontTextureAtlas.o: include/Red/Text/Rendering/RawFontTextureAtlas.h src/Red/Text/Rendering/RawFontTextureAtlas.cpp  include/Red/Text/Rendering/Rendering.h include/Red/Text/Text.h include/Red/Red.h include/Red/Options.h
 	$(CXX) -c $(CXX_FLAGS) src/Red/Text/Rendering/RawFontTextureAtlas.cpp -o obj/Red/Text/Rendering/RawFontTextureAtlas.o
+	
+obj/Red/Text/Rendering/FreeType/FTLibrary.o: include/Red/Text/Rendering/FreeType/FTLibrary.h src/Red/Text/Rendering/FreeType/FTLibrary.cpp include/Red/Text/Rendering/FreeType/FreeType.h include/Red/Text/Rendering/Rendering.h include/Red/Text/Text.h include/Red/Red.h include/Red/Options.h
+	$(CXX) -c $(CXX_FLAGS) src/Red/Text/Rendering/FreeType/FTLibrary.cpp -o obj/Red/Text/Rendering/FreeType/FTLibrary.o
+	
+obj/Red/Text/Rendering/FreeType/FontFace.o: include/Red/Text/Rendering/FreeType/FTLibrary.h include/Red/Text/Rendering/FreeType/FontFace.h include/Red/Text/Rendering/FreeType/FreeType.h include/Red/Text/Rendering/Rendering.h include/Red/Text/Text.h include/Red/Red.h include/Red/Options.h include/Red/Util/RCMem.h include/Red/Util/RefCounted.h
+	$(CXX) -c $(CXX_FLAGS) src/Red/Text/Rendering/FreeType/FontFace.cpp -o obj/Red/Text/Rendering/FreeType/FontFace.o
 	
 clean:
 	-@rm -r obj/*
@@ -265,4 +277,5 @@ clean:
 	-@mkdir obj/Red/Threading
 	-@mkdir obj/Red/Text
 	-@mkdir obj/Red/Text/Rendering
+	-@mkdir obj/Red/Text/Rendering/FreeType
 	

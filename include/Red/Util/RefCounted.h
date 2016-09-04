@@ -1,7 +1,6 @@
 #ifndef RED_UTIL_REFCOUNTED_H
 #define RED_UTIL_REFCOUNTED_H
 
-#include <Red/Red.h>
 #include <Red/Util/Util.h>
 
 #include <Red/Util/IRefCounted.h>

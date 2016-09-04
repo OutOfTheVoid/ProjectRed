@@ -1,7 +1,6 @@
 #ifndef RED_UTIL_RCMEM_H
 #define RED_UTIL_RCMEM_H
 
-#include <Red/Red.h>
 #include <Red/Util/Util.h>
 
 #include <Red/Util/RefCounted.h>
