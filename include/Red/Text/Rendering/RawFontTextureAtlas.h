@@ -40,6 +40,7 @@ namespace Red
 				~RawFontTextureAtlas ();
 				
 				const void * GetBitmapData () const;
+				
 				void DisposeBitmap ();
 				
 				uint32_t GetBitmapWidth () const;
@@ -51,6 +52,11 @@ namespace Red
 				GlyphMetrics GetGlyphMetrics ( char32_t CodePoint ) const;
 				
 				int32_t GetBitmapFontSize () const;
+				
+				void StartUsage ();
+				void EndUsage ();
+				
+				uint32_t GetUsageCount ();
 				
 			private:
 				
@@ -67,6 +73,8 @@ namespace Red
 				const int32_t * CodePointToMetricsIndex;
 				
 				int32_t BitmapFontSize;
+				
+				uint32_t UsageCount;
 				
 			};
 			

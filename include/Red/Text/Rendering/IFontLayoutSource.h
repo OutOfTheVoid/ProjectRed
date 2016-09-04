@@ -20,16 +20,32 @@ namespace Red
 			{
 			public:
 				
+				enum LayoutDirection
+				{
+					
+					kLayoutDirection_HorizontalRightward,
+					kLayoutDirection_HorizontalLeftward,
+					kLayoutDirection_Downward
+					
+				};
+				
 				virtual ~IFontLayoutSource ()
 				{
 				};
 				
-				virtual int32_t GetAdvanceX ( char32_t Current, char32_t Last ) = 0;
-				virtual int32_t GetAdvanceX ( char32_t Current ) = 0;
-				virtual int32_t GetAdvanceY ( char32_t Current ) = 0;
+				virtual double GetUnitAdvanceX ( char32_t Current, char32_t Last ) const = 0;
+				virtual double GetUnitAdvanceX ( char32_t Current ) const = 0;
+				virtual double GetUnitAdvanceY ( char32_t Current ) const = 0;
 				
-				virtual int32_t GetOffsetX ( char32_t Current ) = 0;
-				virtual int32_t GetOffsetY ( char32_t Current ) = 0;
+				virtual double GetUnitOffsetX ( char32_t Current ) const = 0;
+				virtual double GetUnitOffsetY ( char32_t Current ) const = 0;
+				
+				virtual double GetUnitFontHeight () const = 0;
+				
+				virtual double GetPointScaleFactor ( double PointSize ) const = 0;
+				virtual double GetPixelScaleFactor ( double PixelSize ) const = 0;
+				
+				virtual LayoutDirection GetLayoutDirection () const = 0;
 								
 			};
 			

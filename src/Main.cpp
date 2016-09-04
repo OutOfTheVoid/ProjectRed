@@ -127,8 +127,8 @@ bool SetupScene ( RenderStruct & Data )
 		
 		TestFontFace -> SetPixelSize ( 2048 );
 		
-		uint32_t GlyphIndex = TestFontFace -> GlyphIndexFromChar ( U'Q' );
-		std :: cout << "Glyph index for \'" << 'Q' << "\': " << GlyphIndex << std :: endl;
+		uint32_t GlyphIndex = TestFontFace -> GlyphIndexFromChar ( U'K' );
+		std :: cout << "Glyph index for \'" << 'K' << "\': " << GlyphIndex << std :: endl;
 		
 		if ( TestFontFace -> LoadGlyph ( GlyphIndex, Red::Text::Rendering::FreeType::FontFace :: kLoadFlag_Defaults ) )
 			std :: cout << "Glyph loaded!" << std :: endl;

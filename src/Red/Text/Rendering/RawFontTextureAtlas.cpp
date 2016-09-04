@@ -12,7 +12,8 @@ Red::Text::Rendering::RawFontTextureAtlas :: RawFontTextureAtlas ( Util :: RCMem
 	Metrics ( Metrics ),
 	MaxCodePoint ( MaxCodePoint ),
 	CodePointToMetricsIndex ( CodePointToMetricsIndex ),
-	BitmapFontSize ( BitmapFontSize )
+	BitmapFontSize ( BitmapFontSize ),
+	UsageCount ( 0 )
 {
 	
 	BitmapMemory -> Reference ();
@@ -92,5 +93,32 @@ int32_t Red::Text::Rendering::RawFontTextureAtlas :: GetBitmapFontSize () const
 {
 	
 	return BitmapFontSize;
+	
+}
+
+void Red::Text::Rendering::RawFontTextureAtlas :: StartUsage ()
+{
+	
+	UsageCount ++;
+	
+	if ( UsageCount == 1 )
+		Reference ();
+	
+}
+
+void Red::Text::Rendering::RawFontTextureAtlas :: EndUsage ()
+{
+	
+	UsageCount --;
+	
+	if ( UsageCount == 0 )
+		Dereference ();
+	
+}
+
+uint32_t Red::Text::Rendering::RawFontTextureAtlas :: GetUsageCount ()
+{
+	
+	return UsageCount;
 	
 }
