@@ -50,8 +50,11 @@
 #include <Red/Threading/Thread.h>
 #include <Red/Threading/ThreadEvent.h>
 
+#include <Red/Text/Rendering/RawFontTextureAtlas.h>
+#include <Red/Text/Rendering/FontRenderData.h>
 #include <Red/Text/Rendering/FreeType/FTLibrary.h>
 #include <Red/Text/Rendering/FreeType/FontFace.h>
+#include <Red/Text/Rendering/FreeType/FreeTypeFontRenderData.h>
 
 #include <thread>
 #include <chrono>
@@ -118,29 +121,36 @@ bool SetupScene ( RenderStruct & Data )
 	
 	Data.FontTexture -> AssignToTextureUnit ( 0 );
 	
-	Red::Text::Rendering::FreeType :: FontFace * TestFontFace = Red::Text::Rendering::FreeType::FontFace :: NewFromFile ( "PTMono.ttf", 0 );
+	Red::Text::Rendering::FreeType :: FontFace * TestFontFace = Red::Text::Rendering::FreeType::FontFace :: NewFromFile ( "PTMono.ttf", 0, "PT Mono" );
 	
 	if ( TestFontFace != NULL )
 	{
 		
-		std :: cout << "Loaded font!" << std :: endl;
+		std :: u32string CharSet ( U"abcdefghighjlmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ.,!?$#@%\\/^&*()-+_=~`\'\"<>[]{}:;" );
+		//std :: u32string CharSet ( U"ABCDEFGHIJKLMNOPQRSTUVWXYZ" );
 		
-		TestFontFace -> SetPixelSize ( 2048 );
+		Red::Text::Rendering :: FontRenderData * FontRData = Red::Text::Rendering::FreeType::FreeTypeFontRenderData :: CreateRenderData ( TestFontFace, CharSet, Red::Text::Rendering::FontRenderData :: kAtlasGenerationMode_PowerOfTwo );
 		
-		uint32_t GlyphIndex = TestFontFace -> GlyphIndexFromChar ( U'K' );
-		std :: cout << "Glyph index for \'" << 'K' << "\': " << GlyphIndex << std :: endl;
-		
-		if ( TestFontFace -> LoadGlyph ( GlyphIndex, Red::Text::Rendering::FreeType::FontFace :: kLoadFlag_Defaults ) )
-			std :: cout << "Glyph loaded!" << std :: endl;
-		
-		TestFontFace -> RenderGlyph ();
-		
-		Red::Text::Rendering::FreeType::FontFace :: BitmapMetrics BMMetrics;
-		TestFontFace -> GetBitmapMetrics ( & BMMetrics );
-		
-		Data.FontTexture -> TextureImage ( 0, Xenon::GPU::Texture2D :: kInternalFormat_RGBA, BMMetrics.Width, BMMetrics.Rows, Xenon::GPU::Texture2D :: kExternalLayout_UByte, Xenon::GPU::Texture2D :: kExternalFormat_R, TestFontFace -> GetBitmapPointer (), 1, BMMetrics.Pitch );
-		Data.FontTexture -> SetFiltering ( Xenon::GPU::Texture2D :: kMinimizingFilter_Nearest, Xenon::GPU::Texture2D :: kMagnificationFilter_Nearest );
-		Data.FontTexture -> SetWrapMode ( Xenon::GPU::Texture2D :: kWrapMode_Repeat );
+		if ( FontRData != NULL )
+		{
+			
+			Red::Text::Rendering :: RawFontTextureAtlas * Atlas = FontRData -> CreateFontTextureAtlas ( 240, 1.0f );
+			
+			if ( Atlas != NULL )
+			{
+				
+				//Data.FontTexture -> TextureImage ( 0, Xenon::GPU::Texture2D :: kInternalFormat_RGBA, BMMetrics.Width, BMMetrics.Rows, Xenon::GPU::Texture2D :: kExternalLayout_UByte, Xenon::GPU::Texture2D :: kExternalFormat_R, TestFontFace -> GetBitmapPointer (), 1, BMMetrics.Pitch );
+				Data.FontTexture -> TextureImage ( 0, Xenon::GPU::Texture2D :: kInternalFormat_RGBA, Atlas -> GetBitmapWidth (), Atlas -> GetBitmapHeight (), Xenon::GPU::Texture2D :: kExternalLayout_UByte, Xenon::GPU::Texture2D :: kExternalFormat_R, Atlas -> GetBitmapData () );
+				Data.FontTexture -> SetFiltering ( Xenon::GPU::Texture2D :: kMinimizingFilter_Nearest, Xenon::GPU::Texture2D :: kMagnificationFilter_Nearest );
+				Data.FontTexture -> SetWrapMode ( Xenon::GPU::Texture2D :: kWrapMode_Repeat );
+				
+				FontRData -> RetireFontTextureAtlas ( Atlas );
+				
+			}
+			
+			delete FontRData;
+			
+		}
 		
 		delete TestFontFace;
 		

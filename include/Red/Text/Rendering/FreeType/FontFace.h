@@ -8,6 +8,8 @@
 #include <ft2build.h>
 #include FT_FREETYPE_H
 
+#include <Red/Text/Rendering/IFontReference.h>
+
 #include <Red/Util/RefCounted.h>
 #include <Red/Util/RCMem.h>
 
@@ -25,7 +27,9 @@ namespace Red
 			namespace FreeType
 			{
 				
-				class FontFace : public Util :: RefCounted
+				class FreeTypeFontRenderData;
+				
+				class FontFace : public Util :: RefCounted, public virtual IFontReference
 				{
 				public:
 					
@@ -72,7 +76,7 @@ namespace Red
 						
 						uint32_t Rows;
 						uint32_t Width;
-						uint32_t Pitch;
+						int32_t Pitch;
 						
 						uint32_t GrayCount;
 						
@@ -80,48 +84,54 @@ namespace Red
 						
 					} BitmapMetrics;
 					
-					static FontFace * NewFromFile ( const std :: string & FileName, uint32_t FaceIndex );
-					static FontFace * NewFromMemory ( Util :: RCMem * FileMemory, uint32_t FileSize, uint32_t FaceIndex );
+					static FontFace * NewFromFile ( const std :: string & FileName, uint32_t FaceIndex, const std :: string & RefName );
+					static FontFace * NewFromMemory ( Util :: RCMem * FileMemory, uint32_t FileSize, uint32_t FaceIndex, const std :: string & RefName );
 					
 					~FontFace ();
 					
-					uint32_t GetNumFaces ();
-					uint32_t GetFaceIndex ();
+					uint32_t GetNumFaces () const;
+					uint32_t GetFaceIndex () const;
 					
-					FaceFlag GetFaceFlags ();
-					StyleFlag GetStyleFlags ();
+					FaceFlag GetFaceFlags () const;
+					StyleFlag GetStyleFlags () const;
 					
-					uint32_t GetNumGlyphs ();
+					uint32_t GetNumGlyphs () const;
 					
-					const std :: string & GetFamilyName ();
-					const std :: string & GetStyleName ();
+					const std :: string & GetFamilyName () const;
+					const std :: string & GetStyleName () const;
 					
-					uint32_t GetFixedSizeCount ();
-					double GetFixedNominalWidth ( int32_t Index );
-					double GetFixedNominalHeight ( int32_t Index );
+					uint32_t GetFixedSizeCount () const;
+					double GetFixedNominalWidth ( int32_t Index ) const;
+					double GetFixedNominalHeight ( int32_t Index ) const;
 					
-					void SetSize ( double PointSize, uint32_t DPI );
 					void SetPixelSize ( uint32_t PixelSize );
+					uint32_t GetPixelSize () const;
 					
 					void SetRenderMode ( RenderMode RMode );
 					
-					uint32_t GlyphIndexFromChar ( char32_t Char );
+					uint32_t GlyphIndexFromChar ( char32_t Char ) const;
 					
 					bool LoadGlyph ( uint32_t Index, LoadFlag Flags );
-					void RenderGlyph ();
+					bool RenderGlyph ();
 					
-					void * GetBitmapPointer ();
-					void GetBitmapMetrics ( BitmapMetrics * Metrics );
+					void * GetBitmapPointer () const;
+					void GetBitmapMetrics ( BitmapMetrics & Metrics ) const;
 					
 					void SetTransform ( double A, double B, double C, double D, double TX, double TY );
 					void SetIdentityTransform ( double TX, double TY );
 					
+					const std :: string & GetName () const;
+					
 				private:
 					
-					FontFace ();
+					friend class FreeTypeFontRenderData;
+					
+					FontFace ( const std :: string & RefName );
 					
 					FT_Face FHandle;
 					bool Valid;
+					
+					uint32_t PixelSize;
 					
 					Util :: RCMem * MemFile;
 					
@@ -129,6 +139,11 @@ namespace Red
 					std :: string StyleName;
 					
 					RenderMode RMode;
+					
+					std :: string RefName;
+					
+					uint32_t LastLoaded;
+					LoadFlag LastLoadFlags;
 					
 				};
 				

@@ -6,7 +6,7 @@
 
 #include <freetype/fttypes.h>
 
-Red::Text::Rendering::FreeType :: FontFace * Red::Text::Rendering::FreeType::FontFace :: NewFromFile ( const std :: string & FileName, uint32_t FaceIndex )
+Red::Text::Rendering::FreeType :: FontFace * Red::Text::Rendering::FreeType::FontFace :: NewFromFile ( const std :: string & FileName, uint32_t FaceIndex, const std :: string & RefName )
 {
 	
 	FT_Library * LHandle = FTLibrary :: GetLibrary ();
@@ -14,12 +14,18 @@ Red::Text::Rendering::FreeType :: FontFace * Red::Text::Rendering::FreeType::Fon
 	if ( LHandle == NULL )
 		return NULL;
 	
-	FontFace * New = new FontFace ();
+	FontFace * New = new FontFace ( RefName );
 	
 	if ( FT_New_Face ( * LHandle, FileName.c_str (), FaceIndex, & New -> FHandle ) == 0 )
 	{
 		
+		New -> FamilyName.assign ( const_cast <const char *> ( New -> FHandle -> family_name ) );
+		New -> StyleName.assign ( const_cast <const char *> ( New -> FHandle -> style_name ) );
+		
 		New -> Valid = true;
+		
+		New -> SetPixelSize ( 24 );
+		
 		return New;
 		
 	}
@@ -30,7 +36,7 @@ Red::Text::Rendering::FreeType :: FontFace * Red::Text::Rendering::FreeType::Fon
 	
 }
 
-Red::Text::Rendering::FreeType :: FontFace * Red::Text::Rendering::FreeType::FontFace :: NewFromMemory ( Util :: RCMem * FileMemory, uint32_t FileSize, uint32_t FaceIndex )
+Red::Text::Rendering::FreeType :: FontFace * Red::Text::Rendering::FreeType::FontFace :: NewFromMemory ( Util :: RCMem * FileMemory, uint32_t FileSize, uint32_t FaceIndex, const std :: string & RefName )
 {
 	
 	FT_Library * LHandle = FTLibrary :: GetLibrary ();
@@ -38,7 +44,7 @@ Red::Text::Rendering::FreeType :: FontFace * Red::Text::Rendering::FreeType::Fon
 	if ( LHandle == NULL )
 		return NULL;
 	
-	FontFace * New = new FontFace ();
+	FontFace * New = new FontFace ( RefName );
 	
 	if ( FT_New_Memory_Face ( * LHandle, reinterpret_cast <FT_Byte *> ( FileMemory -> GetData () ), FileSize, FaceIndex, & New -> FHandle ) == 0 )
 	{
@@ -51,6 +57,8 @@ Red::Text::Rendering::FreeType :: FontFace * Red::Text::Rendering::FreeType::Fon
 		New -> FamilyName.assign ( const_cast <const char *> ( New -> FHandle -> family_name ) );
 		New -> StyleName.assign ( const_cast <const char *> ( New -> FHandle -> style_name ) );
 		
+		New -> SetPixelSize ( 24 );
+		
 		return New;
 		
 	}
@@ -61,13 +69,17 @@ Red::Text::Rendering::FreeType :: FontFace * Red::Text::Rendering::FreeType::Fon
 	
 }
 
-Red::Text::Rendering::FreeType::FontFace :: FontFace ():
+Red::Text::Rendering::FreeType::FontFace :: FontFace ( const std :: string & RefName ):
 	FHandle (),
 	Valid ( false ),
+	PixelSize ( 24 ),
 	MemFile ( NULL ),
 	FamilyName ( "" ),
 	StyleName ( "" ),
-	RMode ( kRenderMode_Normal )
+	RMode ( kRenderMode_Normal ),
+	RefName ( RefName ),
+	LastLoaded ( 0 ),
+	LastLoadFlags ( 0 )
 {
 }
 
@@ -84,79 +96,79 @@ Red::Text::Rendering::FreeType::FontFace :: ~FontFace ()
 	
 }
 
-uint32_t Red::Text::Rendering::FreeType::FontFace :: GetNumFaces ()
+uint32_t Red::Text::Rendering::FreeType::FontFace :: GetNumFaces () const
 {
 	
 	return FHandle -> num_faces;
 	
 }
 
-uint32_t Red::Text::Rendering::FreeType::FontFace :: GetFaceIndex ()
+uint32_t Red::Text::Rendering::FreeType::FontFace :: GetFaceIndex () const
 {
 	
 	return FHandle -> face_index;
 	
 }
 
-Red::Text::Rendering::FreeType::FontFace :: FaceFlag Red::Text::Rendering::FreeType::FontFace :: GetFaceFlags ()
+Red::Text::Rendering::FreeType::FontFace :: FaceFlag Red::Text::Rendering::FreeType::FontFace :: GetFaceFlags () const
 {
 	
 	return FHandle -> face_flags;
 	
 }
 
-Red::Text::Rendering::FreeType::FontFace :: StyleFlag Red::Text::Rendering::FreeType::FontFace :: GetStyleFlags ()
+Red::Text::Rendering::FreeType::FontFace :: StyleFlag Red::Text::Rendering::FreeType::FontFace :: GetStyleFlags () const
 {
 	
 	return FHandle -> style_flags;
 	
 }
 
-uint32_t Red::Text::Rendering::FreeType::FontFace :: GetNumGlyphs ()
+uint32_t Red::Text::Rendering::FreeType::FontFace :: GetNumGlyphs () const
 {
 	
 	return FHandle -> num_glyphs;
 	
 }
 
-const std :: string & Red::Text::Rendering::FreeType::FontFace :: GetFamilyName ()
+const std :: string & Red::Text::Rendering::FreeType::FontFace :: GetFamilyName () const
 {
 	
 	return FamilyName;
 	
 }
 
-const std :: string & Red::Text::Rendering::FreeType::FontFace :: GetStyleName ()
+const std :: string & Red::Text::Rendering::FreeType::FontFace :: GetStyleName () const
 {
 	
 	return StyleName;
 	
 }
 
-void Red::Text::Rendering::FreeType::FontFace :: SetSize ( double PointSize, uint32_t DPI )
-{
-	
-	PointSize *= 64.0;
-	
-	FT_Set_Char_Size ( FHandle, static_cast <FT_F26Dot6> ( PointSize ), 0, DPI, 0 );
-	
-}
-
 void Red::Text::Rendering::FreeType::FontFace :: SetPixelSize ( uint32_t PixelSize )
 {
+	
+	this -> PixelSize = PixelSize;
 	
 	FT_Set_Pixel_Sizes ( FHandle, PixelSize, PixelSize );
 	
 }
 
-uint32_t Red::Text::Rendering::FreeType::FontFace :: GetFixedSizeCount ()
+uint32_t Red::Text::Rendering::FreeType::FontFace :: GetPixelSize () const
+{
+	
+	return PixelSize;
+	
+}
+
+uint32_t Red::Text::Rendering::FreeType::FontFace :: GetFixedSizeCount () const
 {
 	
 	return FHandle -> num_fixed_sizes;
 	
 }
 
-double Red::Text::Rendering::FreeType::FontFace :: GetFixedNominalWidth ( int32_t Index )
+double Red::Text::Rendering::FreeType::FontFace :: GetFixedNominalWidth ( int32_t Index ) const
 {
 	
 	if ( ( Index >= FHandle -> num_fixed_sizes ) || ( Index < 0 ) )
@@ -166,7 +178,7 @@ double Red::Text::Rendering::FreeType::FontFace :: GetFixedNominalWidth ( int32_
 	
 }
 
-double Red::Text::Rendering::FreeType::FontFace :: GetFixedNominalHeight ( int32_t Index )
+double Red::Text::Rendering::FreeType::FontFace :: GetFixedNominalHeight ( int32_t Index ) const
 {
 	
 	if ( ( Index >= FHandle -> num_fixed_sizes ) || ( Index < 0 ) )
@@ -176,7 +188,7 @@ double Red::Text::Rendering::FreeType::FontFace :: GetFixedNominalHeight ( int32
 	
 }
 
-uint32_t Red::Text::Rendering::FreeType::FontFace :: GlyphIndexFromChar ( char32_t Char )
+uint32_t Red::Text::Rendering::FreeType::FontFace :: GlyphIndexFromChar ( char32_t Char ) const
 {
 	
 	return FT_Get_Char_Index ( FHandle, Char );
@@ -186,35 +198,48 @@ uint32_t Red::Text::Rendering::FreeType::FontFace :: GlyphIndexFromChar ( char32
 bool Red::Text::Rendering::FreeType::FontFace :: LoadGlyph ( uint32_t Index, LoadFlag Flags )
 {
 	
-	return FT_Load_Glyph ( FHandle, Index, Flags ) == 0;
+	if ( ( LastLoaded == Index ) && ( LastLoadFlags == Flags ) )
+		return true;
+	
+	if ( FT_Load_Glyph ( FHandle, Index, Flags ) == 0 )
+	{
+		
+		LastLoaded = Index;
+		LastLoadFlags = Flags;
+		
+		return true;
+		
+	}
+	
+	LastLoaded = 0;
+	LastLoadFlags = 0;
+	
+	return false;
 	
 }
 
-void Red::Text::Rendering::FreeType::FontFace :: RenderGlyph ()
+bool Red::Text::Rendering::FreeType::FontFace :: RenderGlyph ()
 {
 	
-	FT_Render_Glyph ( FHandle -> glyph, RMode );
+	return FT_Render_Glyph ( FHandle -> glyph, RMode ) == 0;
 	
 }
 
-void * Red::Text::Rendering::FreeType::FontFace :: GetBitmapPointer ()
+void * Red::Text::Rendering::FreeType::FontFace :: GetBitmapPointer () const
 {
 	
 	return reinterpret_cast <void *> ( FHandle -> glyph -> bitmap.buffer );
 	
 }
 
-void Red::Text::Rendering::FreeType::FontFace :: GetBitmapMetrics ( BitmapMetrics * Metrics )
+void Red::Text::Rendering::FreeType::FontFace :: GetBitmapMetrics ( BitmapMetrics & Metrics ) const
 {
 	
-	if ( Metrics == NULL )
-		return;
-	
-	Metrics -> Rows = FHandle -> glyph -> bitmap.rows;
-	Metrics -> Width = FHandle -> glyph -> bitmap.width;
-	Metrics -> Pitch = FHandle -> glyph -> bitmap.pitch;
-	Metrics -> GrayCount = FHandle -> glyph -> bitmap.num_grays;
-	Metrics -> PixMode = static_cast <PixelMode> ( FHandle -> glyph -> bitmap.pixel_mode );
+	Metrics.Rows = FHandle -> glyph -> bitmap.rows;
+	Metrics.Width = FHandle -> glyph -> bitmap.width;
+	Metrics.Pitch = FHandle -> glyph -> bitmap.pitch;
+	Metrics.GrayCount = FHandle -> glyph -> bitmap.num_grays;
+	Metrics.PixMode = static_cast <PixelMode> ( FHandle -> glyph -> bitmap.pixel_mode );
 	
 }
 
@@ -246,6 +271,13 @@ void Red::Text::Rendering::FreeType::FontFace :: SetIdentityTransform ( double T
 	Translation.x = static_cast <FT_Pos> ( TY * 64.0 );
 	
 	FT_Set_Transform ( FHandle, NULL, & Translation );
+	
+}
+
+const std :: string & Red::Text::Rendering::FreeType::FontFace :: GetName () const
+{
+	
+	return RefName;
 	
 }
 

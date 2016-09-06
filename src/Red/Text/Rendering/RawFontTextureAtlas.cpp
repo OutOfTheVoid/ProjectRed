@@ -23,6 +23,9 @@ Red::Text::Rendering::RawFontTextureAtlas :: RawFontTextureAtlas ( Util :: RCMem
 Red::Text::Rendering::RawFontTextureAtlas :: ~RawFontTextureAtlas ()
 {
 	
+	delete [] CodePointToMetricsIndex;
+	delete [] Metrics;
+	
 	DisposeBitmap ();
 	
 }

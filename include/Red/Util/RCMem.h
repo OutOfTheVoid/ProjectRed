@@ -14,7 +14,7 @@ namespace Red
 	namespace Util
 	{
 		
-		class RCMem : public Red::Util :: RefCounted
+		class RCMem : public RefCounted
 		{
 		public:
 			

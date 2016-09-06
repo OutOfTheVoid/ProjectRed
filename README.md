@@ -34,4 +34,4 @@ RAUX
 	* Xenon ( Optional )
 RED
 ---
-	* LibFreeType 2 ( Eventually )
+	* LibFreeType 2 ( Optional )

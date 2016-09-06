@@ -2,6 +2,9 @@
 #define RED_TEXT_RENDERING_IFONTTEXTUREATLASFACTORY_H
 
 #include <Red/Text/Rendering/Rendering.h>
+#include <Red/Text/Rendering/FontRenderData.h>
+
+#include <Red/Util/IRefCounted.h>
 
 #include <string>
 
@@ -16,7 +19,7 @@ namespace Red
 			
 			class RawFontTextureAtlas;
 			
-			class IFontTextureAtlasFactory
+			class IFontTextureAtlasFactory : public virtual Util :: IRefCounted
 			{
 			public:
 				
@@ -24,7 +27,7 @@ namespace Red
 				{
 				};
 				
-				virtual RawFontTextureAtlas * CreateAtlas ( double PixelSize, const std :: u32string & CharSet ) = 0;
+				virtual RawFontTextureAtlas * CreateAtlas ( uint32_t PixelSize, const std :: u32string & CharSet, FontRenderData :: AtlasGenerationMode ) const = 0;
 				
 			};
 			

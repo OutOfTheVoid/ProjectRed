@@ -2,6 +2,7 @@
 #define RED_TEXT_RENDERING_IFONTLAYOUTSOURCE_H
 
 #include <Red/Text/Rendering/Rendering.h>
+#include <Red/Text/Rendering/RawFontTextureAtlas.h>
 
 #include <Red/Util/IRefCounted.h>
 
@@ -16,16 +17,15 @@ namespace Red
 		namespace Rendering
 		{
 			
-			class IFontLayoutSource : public Util :: IRefCounted
+			class IFontLayoutSource : public virtual Util :: IRefCounted
 			{
 			public:
 				
 				enum LayoutDirection
 				{
 					
-					kLayoutDirection_HorizontalRightward,
-					kLayoutDirection_HorizontalLeftward,
-					kLayoutDirection_Downward
+					kLayoutDirection_Horizontal,
+					kLayoutDirection_Vertical
 					
 				};
 				
@@ -33,17 +33,14 @@ namespace Red
 				{
 				};
 				
-				virtual double GetUnitAdvanceX ( char32_t Current, char32_t Last ) const = 0;
-				virtual double GetUnitAdvanceX ( char32_t Current ) const = 0;
-				virtual double GetUnitAdvanceY ( char32_t Current ) const = 0;
+				virtual void GetAdvance ( RawFontTextureAtlas * Atlas, char32_t Current, char32_t Last, double & AdvanceX, double & AdvanceY ) const = 0;
+				virtual void GetAdvance ( RawFontTextureAtlas * Atlas, char32_t Last, double & AdvanceX, double & AdvanceY ) const = 0;
 				
-				virtual double GetUnitOffsetX ( char32_t Current ) const = 0;
-				virtual double GetUnitOffsetY ( char32_t Current ) const = 0;
+				virtual void GetOffset ( RawFontTextureAtlas * Atlas, char32_t Current, double & OffsetX, double & OffsetY ) const = 0;
 				
-				virtual double GetUnitFontHeight () const = 0;
+				virtual double GetFontHeight ( RawFontTextureAtlas * Atlas ) const = 0;
 				
-				virtual double GetPointScaleFactor ( double PointSize ) const = 0;
-				virtual double GetPixelScaleFactor ( double PixelSize ) const = 0;
+				virtual double GetScalingFactor ( RawFontTextureAtlas * Atlas, double PixelSize ) const = 0;
 				
 				virtual LayoutDirection GetLayoutDirection () const = 0;
 								

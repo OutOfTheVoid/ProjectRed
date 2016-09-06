@@ -70,7 +70,8 @@ OBJECTS=obj/SDLX/Lib.o \
 		obj/Red/Text/Rendering/RawFontTextureAtlas.o \
 		obj/Red/Text/Rendering/FreeType/FTLibrary.o \
 		obj/Red/Text/Rendering/FreeType/FontFace.o \
-		obj/Red/Text/Rendering/FontRenderData.o
+		obj/Red/Text/Rendering/FontRenderData.o \
+		obj/Red/Text/Rendering/FreeType/FreeTypeFontRenderData.o
 	
 bin/Main: obj/Main.o
 	$(LD) $(LINK_FLAGS) $(OBJECTS) obj/Main.o -o bin/Main
@@ -265,6 +266,9 @@ obj/Red/Text/Rendering/FreeType/FontFace.o: include/Red/Text/Rendering/FreeType/
 	
 obj/Red/Text/Rendering/FontRenderData.o: include/Red/Text/Rendering/FontRenderData.h src/Red/Text/Rendering/FontRenderData.cpp include/Red/Text/Rendering/Rendering.h include/Red/Text/Text.h include/Red/Red.h include/Red/Util/RefCounted.h include/Red/Text/Rendering/IFontLayoutSource.h include/Red/Text/Rendering/IFontReference.h include/Red/Text/Rendering/IFontTextureAtlasFactory.h include/Red/Text/Rendering/RawFontTextureAtlas.h
 	$(CXX) -c $(CXX_FLAGS) src/Red/Text/Rendering/FontRenderData.cpp -o obj/Red/Text/Rendering/FontRenderData.o
+	
+obj/Red/Text/Rendering/FreeType/FreeTypeFontRenderData.o: include/Red/Text/Rendering/FreeType/FreeTypeFontRenderData.h src/Red/Text/Rendering/FreeType/FreeTypeFontRenderData.cpp include/Red/Text/Rendering/FontRenderData.h include/Red/Text/Rendering/FreeType/FreeType.h include/Red/Text/Rendering/FreeType/FontFace.h include/Red/Text/Rendering/Rendering.h include/Red/Text/Text.h include/Red/Red.h include/Red/Util/RefCounted.h include/Red/Text/Rendering/IFontLayoutSource.h include/Red/Text/Rendering/IFontReference.h include/Red/Text/Rendering/IFontTextureAtlasFactory.h include/Red/Text/Rendering/RawFontTextureAtlas.h include/Red/Options.h include/Red/Util/RCMem.h include/Red/Util/RefCounted.h
+	$(CXX) -c $(CXX_FLAGS) src/Red/Text/Rendering/FreeType/FreeTypeFontRenderData.cpp -o obj/Red/Text/Rendering/FreeType/FreeTypeFontRenderData.o
 	
 clean:
 	-@rm -r obj/*

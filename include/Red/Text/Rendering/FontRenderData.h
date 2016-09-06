@@ -5,7 +5,6 @@
 
 #include <Red/Text/Rendering/IFontLayoutSource.h>
 #include <Red/Text/Rendering/IFontReference.h>
-#include <Red/Text/Rendering/IFontTextureAtlasFactory.h>
 #include <Red/Text/Rendering/RawFontTextureAtlas.h>
 
 #include <Red/Util/RefCounted.h>
@@ -22,12 +21,22 @@ namespace Red
 		namespace Rendering
 		{
 			
-			class FontRenderingData : public Util :: RefCounted
+			class IFontTextureAtlasFactory;
+			
+			class FontRenderData : public Util :: RefCounted
 			{
 			public:
 				
-				FontRenderingData ( IFontReference * FontReference, IFontLayoutSource * LayoutSource, IFontTextureAtlasFactory * AtlasFactory, const std :: u32string & CharSet );
-				~FontRenderingData ();
+				enum AtlasGenerationMode
+				{
+					
+					kAtlasGenerationMode_PowerOfTwo,
+					kAtlasGenerationMode_Rectangle
+					
+				};
+				
+				FontRenderData ( IFontReference * FontReference, IFontLayoutSource * LayoutSource, IFontTextureAtlasFactory * AtlasFactory, const std :: u32string & CharSet, AtlasGenerationMode GenerationMode );
+				~FontRenderData ();
 				
 				const IFontLayoutSource * GetLayoutSource () const;
 				const IFontTextureAtlasFactory * GetFontTextureAtlasFactory () const;
@@ -48,6 +57,8 @@ namespace Red
 				IFontTextureAtlasFactory * AtlasFactory;
 				
 				std :: u32string CharSet;
+				
+				AtlasGenerationMode GenerationMode;
 				
 				std :: set <RawFontTextureAtlas *, bool ( * ) ( const RawFontTextureAtlas * A, const RawFontTextureAtlas * B )> AltasSet;
 				

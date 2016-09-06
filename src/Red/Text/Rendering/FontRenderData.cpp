@@ -1,35 +1,54 @@
 #include <Red/Text/Rendering/FontRenderData.h>
+#include <Red/Text/Rendering/IFontTextureAtlasFactory.h>
 
-Red::Text::Rendering::FontRenderingData :: FontRenderingData ( IFontReference * FontReference, IFontLayoutSource * LayoutSource, IFontTextureAtlasFactory * AtlasFactory, const std :: u32string & CharSet ):
+Red::Text::Rendering::FontRenderData :: FontRenderData ( IFontReference * FontReference, IFontLayoutSource * LayoutSource, IFontTextureAtlasFactory * AtlasFactory, const std :: u32string & CharSet, AtlasGenerationMode GenerationMode ):
 	RefCounted (),
 	FontReference ( FontReference ),
 	LayoutSource ( LayoutSource ),
 	AtlasFactory ( AtlasFactory ),
 	CharSet ( CharSet ),
+	GenerationMode ( GenerationMode ),
 	AltasSet ( & CompareAtlasSize )
 {
 	
 	FontReference -> Reference ();
 	LayoutSource -> Reference ();
+	AtlasFactory -> Reference ();
 	
 }
 
-Red::Text::Rendering::FontRenderingData :: ~FontRenderingData ()
+Red::Text::Rendering::FontRenderData :: ~FontRenderData ()
 {
+	
+	/*for ( std :: set <RawFontTextureAtlas *, bool ( * ) ( const RawFontTextureAtlas * A, const RawFontTextureAtlas * B )> :: iterator Iter = AltasSet.begin (); Iter != AltasSet.end (); ++ Iter )
+	{
+		
+		if ( ( * Iter ) -> GetUsageCount () == 0 )
+		{
+			
+			RawFontTextureAtlas * ToRemove = ( * Iter );
+			AltasSet.erase ( ToRemove );
+			
+			ToRemove -> Dereference ();
+			
+		}
+		
+	}*/
 	
 	FontReference -> Dereference ();
 	LayoutSource -> Dereference ();
+	AtlasFactory -> Dereference ();
 	
 }
 
-const Red::Text::Rendering :: IFontLayoutSource * Red::Text::Rendering::FontRenderingData :: GetLayoutSource () const
+const Red::Text::Rendering :: IFontLayoutSource * Red::Text::Rendering::FontRenderData :: GetLayoutSource () const
 {
 	
 	return LayoutSource;
 	
 }
 
-Red::Text::Rendering :: RawFontTextureAtlas * Red::Text::Rendering::FontRenderingData :: CreateFontTextureAtlas ( double PixelSize, double PixelSizeThresholdScale )
+Red::Text::Rendering :: RawFontTextureAtlas * Red::Text::Rendering::FontRenderData :: CreateFontTextureAtlas ( double PixelSize, double PixelSizeThresholdScale )
 {
 	
 	for ( std :: set <RawFontTextureAtlas *, bool ( * ) ( const RawFontTextureAtlas * A, const RawFontTextureAtlas * B )> :: iterator Iter = AltasSet.begin (); Iter != AltasSet.end (); ++ Iter )
@@ -54,7 +73,7 @@ Red::Text::Rendering :: RawFontTextureAtlas * Red::Text::Rendering::FontRenderin
 		
 	}
 	
-	RawFontTextureAtlas * Atlas = AtlasFactory -> CreateAtlas ( PixelSize, CharSet );
+	RawFontTextureAtlas * Atlas = AtlasFactory -> CreateAtlas ( PixelSize, CharSet, GenerationMode );
 	
 	if ( Atlas != NULL )
 	{
@@ -70,7 +89,15 @@ Red::Text::Rendering :: RawFontTextureAtlas * Red::Text::Rendering::FontRenderin
 	
 }
 
-void Red::Text::Rendering::FontRenderingData :: TrimUnusedAtlasEntries ( double PixelSizeThreshold )
+void Red::Text::Rendering::FontRenderData :: RetireFontTextureAtlas ( Red::Text::Rendering :: RawFontTextureAtlas * Atlas )
+{
+	
+	/*Atlas -> EndUsage ();
+	Atlas -> Dereference ();*/
+	
+}
+
+void Red::Text::Rendering::FontRenderData :: TrimUnusedAtlasEntries ( double PixelSizeThreshold )
 {
 	
 	for ( std :: set <RawFontTextureAtlas *, bool ( * ) ( const RawFontTextureAtlas * A, const RawFontTextureAtlas * B )> :: iterator Iter = AltasSet.begin (); Iter != AltasSet.end (); ++ Iter )
@@ -97,14 +124,14 @@ void Red::Text::Rendering::FontRenderingData :: TrimUnusedAtlasEntries ( double 
 	
 }
 
-const std :: u32string & Red::Text::Rendering::FontRenderingData :: GetCharSet () const
+const std :: u32string & Red::Text::Rendering::FontRenderData :: GetCharSet () const
 {
 	
 	return CharSet;
 	
 }
 
-bool Red::Text::Rendering::FontRenderingData :: CompareAtlasSize ( const RawFontTextureAtlas * A, const RawFontTextureAtlas * B )
+bool Red::Text::Rendering::FontRenderData :: CompareAtlasSize ( const RawFontTextureAtlas * A, const RawFontTextureAtlas * B )
 {
 	
 	return A -> GetBitmapFontSize () < B -> GetBitmapFontSize ();

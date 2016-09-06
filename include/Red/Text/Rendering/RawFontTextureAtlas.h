@@ -17,6 +17,8 @@ namespace Red
 		namespace Rendering
 		{
 			
+			class FontRenderData;
+			
 			class RawFontTextureAtlas : public Util :: RefCounted
 			{
 			public:
@@ -31,10 +33,13 @@ namespace Red
 					
 				} GlyphMetrics;
 				
-				typedef uint32_t BitmapFormat;
-				
-				static const BitmapFormat kBitmapFormat_Alpha_8 = 0;
-				static const BitmapFormat kBitmapFormat_ARGB_32 = 1;
+				enum BitmapFormat
+				{
+					
+					kBitmapFormat_Alpha_8,
+					kBitmapFormat_ARGB_32
+					
+				};
 				
 				RawFontTextureAtlas ( Util :: RCMem * BitmapMemory, uint32_t BitmapWidth, uint32_t BitmapHeight, const BitmapFormat Format, uint32_t GlyphCount, const GlyphMetrics * Metrics, char32_t MaxCodePoint, int32_t * CodePointToMetricsIndex, int32_t BitmapFontSize );
 				~RawFontTextureAtlas ();
@@ -53,12 +58,14 @@ namespace Red
 				
 				int32_t GetBitmapFontSize () const;
 				
+			private:
+				
+				friend class FontRenderData;
+				
 				void StartUsage ();
 				void EndUsage ();
 				
 				uint32_t GetUsageCount ();
-				
-			private:
 				
 				Util :: RCMem * BitmapMemory;
 				uint32_t BitmapWidth;
