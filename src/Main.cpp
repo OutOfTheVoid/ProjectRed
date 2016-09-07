@@ -104,14 +104,14 @@ struct RenderStruct_Struct
 bool SetupScene ( RenderStruct & Data )
 {
 	
-	Red::Text::Rendering::FreeType :: FontFace * TestFontFace = Red::Text::Rendering::FreeType::FontFace :: NewFromFile ( "PTMono.ttf", 0, "PT Mono" );
+	Red::Text::Rendering::FreeType :: FontFace * TestFontFace = Red::Text::Rendering::FreeType::FontFace :: NewFromFile ( "DIN.ttf", 0, "__FontName__" );
 	
 	if ( TestFontFace != NULL )
 	{
 		
 		std :: u32string CharSet ( U"abcdefghighjlmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ.,!?$#@%\\/^&*()-+_=~`\'\"<>[]{}:; " );
 		
-		Red::Text::Rendering :: FontRenderData * PTMonoRenderData = Red::Text::Rendering::FreeType::FreeTypeFontRenderData :: CreateRenderData ( TestFontFace, CharSet, Red::Text::Rendering::FontRenderData :: kAtlasGenerationMode_PowerOfTwo );
+		Red::Text::Rendering :: FontRenderData * PTMonoRenderData = Red::Text::Rendering::FreeType::FreeTypeFontRenderData :: CreateRenderData ( TestFontFace, CharSet, Red::Text::Rendering::FontRenderData :: kAtlasGenerationMode_PowerOfTwo, Red::Text::Rendering::FreeType::FreeTypeFontRenderData :: kFreeTypeRenderFlag_ComputeMetrics );
 		
 		if ( PTMonoRenderData != NULL )
 		{
@@ -119,9 +119,10 @@ bool SetupScene ( RenderStruct & Data )
 			Data.TextRenderer = new Red::Text::Rendering::ShadedRenderer ( PTMonoRenderData );
 			Data.TextRenderer -> GPUResourceAlloc ();
 			Data.TextRenderer -> SetRenderTarget ( Data.Cont, Data.Cont -> GetDefaultFrameBuffer (), Xenon::Math :: Vec2 ( WINDOW_WIDTH_0, WINDOW_HEIGHT_0 ) );
+			Data.TextRenderer -> SetRegistrationMetrics ( Red::Text::Rendering::ShadedRenderer :: kRegistrationMetric_Center, Red::Text::Rendering::ShadedRenderer :: kRegistrationMetric_Center );
 			Data.TextRenderer -> Reference ();
 			
-			Data.TextRenderer -> SetSize ( 100.0 );
+			Data.TextRenderer -> SetSize ( 50.0 );
 			
 		}
 		else
@@ -150,14 +151,15 @@ void Render ( RenderStruct & Data )
 	
 	Xenon::Math::Matrix3x3 TextTransform;
 	
-	Xenon::Math::Matrix3x3 :: AppendTranslation ( TextTransform, - 375.0, 0.0 );
+	Xenon::Math::Matrix3x3 :: AppendTranslation ( TextTransform, 0.0, 0.0 );
+	Xenon::Math::Matrix3x3 :: PrependRotation ( TextTransform, Data.Frame / 20.0 );
 	
 	if ( Data.TextRenderer != NULL )
 	{
 		
 		Data.TextRenderer -> SetColor ( Xenon::Math :: Vec4 ( 0.6f, 0.7f, 1.0f, 1.0f ) );
-		Data.TextRenderer -> SetGlobalTransform ( TextTransform );
-		Data.TextRenderer -> RenderUnicodeString ( U"Hello, world!" );
+		//Data.TextRenderer -> SetGlobalTransform ( TextTransform );
+		Data.TextRenderer -> RenderUnicodeString ( U"Hello, world!\nThis is multi-line\ntext! :)" );
 		
 	}
 	

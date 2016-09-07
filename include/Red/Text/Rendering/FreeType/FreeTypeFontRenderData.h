@@ -34,6 +34,7 @@ namespace Red
 					typedef uint32_t FreeTypeRenderFlag;
 					
 					static const FreeTypeRenderFlag kFreeTypeRenderFlag_Color = 1;
+					static const FreeTypeRenderFlag kFreeTypeRenderFlag_ComputeMetrics = 2;
 					
 					static FontRenderData * CreateRenderData ( FontFace * Face, const std :: u32string & CharSet, FontRenderData :: AtlasGenerationMode GenerationMode, FreeTypeRenderFlag Flags = 0 );
 					

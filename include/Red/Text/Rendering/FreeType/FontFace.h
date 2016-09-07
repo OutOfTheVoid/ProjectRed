@@ -44,7 +44,7 @@ namespace Red
 					static const StyleFlag kStyleFlag_Italic = FT_STYLE_FLAG_ITALIC;
 					static const StyleFlag kStyleFlag_Bold = FT_STYLE_FLAG_BOLD;
 					
-					static const FaceFlag kFaceFlag_Scalabel = FT_FACE_FLAG_SCALABLE;
+					static const FaceFlag kFaceFlag_Scalable = FT_FACE_FLAG_SCALABLE;
 					static const FaceFlag kFaceFlag_FixedSizes = FT_FACE_FLAG_FIXED_SIZES;
 					static const FaceFlag kFaceFlag_FixedWidth = FT_FACE_FLAG_FIXED_WIDTH;
 					static const FaceFlag kFaceFlag_HorizontalMetrics = FT_FACE_FLAG_HORIZONTAL;

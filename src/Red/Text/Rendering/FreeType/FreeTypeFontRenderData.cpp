@@ -32,7 +32,7 @@ Red::Text::Rendering::FreeType::FreeTypeFontRenderData :: FreeTypeFontRenderData
 void Red::Text::Rendering::FreeType::FreeTypeFontRenderData :: GetAdvance ( RawFontTextureAtlas * Atlas, char32_t Current, char32_t Last, double & AdvanceX, double & AdvanceY ) const
 {
 	
-	if ( ( Font -> GetFaceFlags () & FontFace :: kFaceFlag_Kerning ) == 0 )
+	if ( ( ( Flags & kFreeTypeRenderFlag_ComputeMetrics ) != 0 ) || ( ( Font -> GetFaceFlags () & FontFace :: kFaceFlag_Kerning ) == 0 ) )
 		return GetAdvance ( Atlas, Last, AdvanceX, AdvanceY );
 	
 	uint32_t CurrentIndex = Font -> GlyphIndexFromChar ( Current );
@@ -56,7 +56,8 @@ void Red::Text::Rendering::FreeType::FreeTypeFontRenderData :: GetAdvance ( RawF
 	
 	Font -> SetPixelSize ( Atlas -> GetBitmapFontSize () );
 	
-	FT_Get_Kerning ( Font -> FHandle, LastIndex, CurrentIndex, FT_KERNING_UNFITTED, & Kerning );
+	if ( FT_Get_Kerning ( Font -> FHandle, LastIndex, CurrentIndex, FT_KERNING_UNSCALED, & Kerning ) != 0 )
+		return GetAdvance ( Atlas, Last, AdvanceX, AdvanceY );
 	
 	AdvanceX = static_cast <double> ( Kerning.x ) * 0.015625;
 	AdvanceY = static_cast <double> ( Kerning.y ) * 0.015625;
@@ -80,7 +81,7 @@ void Red::Text::Rendering::FreeType::FreeTypeFontRenderData :: GetAdvance ( RawF
 		
 	}
 	
-	if ( Font -> LoadGlyph ( LastIndex, FontFace :: kLoadFlag_Defaults ) )
+	if ( Font -> LoadGlyph ( LastIndex, ( ( Flags & kFreeTypeRenderFlag_ComputeMetrics ) != 0 ) ? FontFace :: kLoadFlag_ComputeMetrics : FontFace :: kLoadFlag_Defaults ) )
 	{
 		
 		AdvanceX = static_cast <double> ( Font -> FHandle -> glyph -> advance.x ) * 0.015625;
@@ -114,21 +115,21 @@ void Red::Text::Rendering::FreeType::FreeTypeFontRenderData :: GetOffset ( RawFo
 		
 	}
 	
-	if ( Font -> LoadGlyph ( CurrentIndex, FontFace :: kLoadFlag_Defaults ) )
+	if ( Font -> LoadGlyph ( CurrentIndex, ( ( Flags & kFreeTypeRenderFlag_ComputeMetrics ) != 0 ) ? FontFace :: kLoadFlag_ComputeMetrics : FontFace :: kLoadFlag_Defaults ) )
 	{
 		
 		if ( ( Font -> GetFaceFlags () & FT_FACE_FLAG_VERTICAL ) == 0 )
 		{
 			
 			OffsetX = static_cast <double> ( Font -> FHandle -> glyph -> metrics.horiBearingX ) * 0.015625;
-			OffsetY = 0.0;
+			OffsetY = static_cast <double> ( Font -> FHandle -> glyph -> metrics.horiBearingY ) * 0.015625;
 			
 		}
 		else
 		{
 			
-			OffsetX = 0.0;
-			OffsetY = static_cast <double> ( Font -> FHandle -> glyph -> metrics.horiBearingY ) * 0.015625;
+			OffsetX = static_cast <double> ( Font -> FHandle -> glyph -> metrics.vertBearingX ) * 0.015625;
+			OffsetY = static_cast <double> ( Font -> FHandle -> glyph -> metrics.vertBearingY ) * 0.015625;
 			
 		}
 		
@@ -148,7 +149,9 @@ double Red::Text::Rendering::FreeType::FreeTypeFontRenderData :: GetFontHeight (
 	
 	(void) Atlas;
 	
-	return Font -> FHandle -> height;
+	Font -> SetPixelSize ( Atlas -> GetBitmapFontSize () );
+	
+	return Font -> FHandle -> size -> metrics.height * 0.015625;
 	
 }
 
@@ -334,7 +337,7 @@ Red::Text::Rendering :: RawFontTextureAtlas * Red::Text::Rendering::FreeType::Fr
 			
 			Font -> SetPixelSize ( PixelSize );
 			
-			if ( Font -> LoadGlyph ( CharSet [ I ], FontFace :: kLoadFlag_Defaults ) )
+			if ( Font -> LoadGlyph ( CharSet [ I ], ( ( Flags & kFreeTypeRenderFlag_ComputeMetrics ) != 0 ) ? FontFace :: kLoadFlag_ComputeMetrics : FontFace :: kLoadFlag_Defaults ) )
 				GlyphCount ++;
 			
 		}
@@ -367,7 +370,7 @@ Red::Text::Rendering :: RawFontTextureAtlas * Red::Text::Rendering::FreeType::Fr
 			Font -> SetPixelSize ( PixelSize );
 			
 			// Unfortunately we need to render in order to get bitmap metrics :(
-			if ( Font -> LoadGlyph ( GlyphIndex, FontFace :: kLoadFlag_Defaults ) )
+			if ( Font -> LoadGlyph ( GlyphIndex, ( ( Flags & kFreeTypeRenderFlag_ComputeMetrics ) != 0 ) ? FontFace :: kLoadFlag_ComputeMetrics : FontFace :: kLoadFlag_Defaults ) )
 			{
 				
 				if ( Font -> RenderGlyph () )
@@ -464,7 +467,7 @@ Red::Text::Rendering :: RawFontTextureAtlas * Red::Text::Rendering::FreeType::Fr
 		for ( I = 0; I < GlyphCount; I ++ )
 		{
 			
-			if ( ( ! Font -> LoadGlyph ( GlyphedChars [ I ].GlyphID, FontFace :: kLoadFlag_Defaults ) ) || ( ! Font -> RenderGlyph () ) )
+			if ( ( ! Font -> LoadGlyph ( GlyphedChars [ I ].GlyphID, ( ( Flags & kFreeTypeRenderFlag_ComputeMetrics ) != 0 ) ? FontFace :: kLoadFlag_ComputeMetrics : FontFace :: kLoadFlag_Defaults ) ) || ( ! Font -> RenderGlyph () ) )
 			{
 				
 				GlyphMetricsList [ I ].OffsetX = 0;

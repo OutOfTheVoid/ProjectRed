@@ -1,6 +1,8 @@
 #include <Red/Text/Rendering/ShadedRenderer.h>
 #include <Xenon/Geometry/Primitives.h>
 
+#include <float.h>
+
 #include <iostream>
 
 const char * _ShadedRenderer_VertexShader =
@@ -65,6 +67,8 @@ Red::Text::Rendering::ShadedRenderer :: ShadedRenderer ( FontRenderData * FontDa
 	ExternalGlobalTransform (),
 	GlobalTransform ( Xenon::Math::Matrix3x3 :: NO_INIT ),
 	GlobalTransformUniform ( & GlobalTransform, false ),
+	RegistrationX ( kRegistrationMetric_BaseLine_Start ),
+	RegistrationY ( kRegistrationMetric_BaseLine_Start ),
 	DepthUniform ( 0.5 ),
 	DepthTesting ( false ),
 	Bounds ( kWidth_Unbounded, kHeight_Unbounded ),
@@ -365,6 +369,14 @@ bool Red::Text::Rendering::ShadedRenderer :: GetDepthTestEnabled ()
 	
 }
 
+void Red::Text::Rendering::ShadedRenderer :: SetRegistrationMetrics ( RegistrationMetric X, RegistrationMetric Y )
+{
+	
+	this -> RegistrationX = X;
+	this -> RegistrationY = Y;
+	
+}
+
 void Red::Text::Rendering::ShadedRenderer :: RenderUnicodeString ( const std :: u32string & String )
 {
 	
@@ -393,16 +405,40 @@ void Red::Text::Rendering::ShadedRenderer :: RenderUnicodeString ( const std :: 
 	
 	PreAllocBuffer ( StringLength );
 	
+	typedef struct
+	{
+		
+		uint32_t StartRenderCharIndex;
+		uint32_t RenderCharCount;
+		
+		double Width;
+		double Height;
+		
+		double CursorEndX;
+		double CursorEndY;
+		
+	} LineData;
+	
+	uint32_t LineCount = 1;
+	
+	for ( uint32_t I = 0; I < String.size (); I ++ )
+	{
+		
+		if ( String [ I ] == U'\n' )
+			LineCount ++;
+		
+	}
+	
+	LineData * Lines = new LineData [ LineCount ];
+	
 	uint32_t StringIndex = 0;
 	uint32_t RenderCharIndex = 0;
 	char32_t CurrentCharachter = U'\0';
 	char32_t LastCharachter = 0;
 	
-	Xenon::Math :: Vec2 Cursor ( 0.0, 0.0 );
+	uint32_t LineIndex = 0;
 	
-	// TODO: Implement baseline repositioning to align text to upper left corner.
-	/*double MinX = 0.0;
-	double MinY = 0.0;*/
+	Xenon::Math :: Vec2 Cursor ( 0.0, 0.0 );
 	
 	double BitmapWidth = CurrentAtlas -> GetBitmapWidth ();
 	double BitmapHeight = CurrentAtlas -> GetBitmapHeight ();
@@ -412,6 +448,24 @@ void Red::Text::Rendering::ShadedRenderer :: RenderUnicodeString ( const std :: 
 	double BitmapScalingFactor = Layout -> GetScalingFactor ( CurrentAtlas, PixelSize );
 	double ScalingFactorX = 2.0 / RenderTargetDimensions.X;
 	double ScalingFactorY = 2.0 / RenderTargetDimensions.Y;
+	
+	double MinX = DBL_MAX;
+	double MaxX = - DBL_MAX;
+	double MinY = DBL_MAX;
+	double MaxY = - DBL_MAX;
+	
+	double LineMinX = DBL_MAX;
+	double LineMaxX = - DBL_MAX;
+	double LineMinY = DBL_MAX;
+	double LineMaxY = - DBL_MAX;
+	
+	double CursorEndXMax = - DBL_MAX;
+	double CursorEndXMin = DBL_MAX;
+	double CursorEndYMax = - DBL_MAX;
+	double CursorEndYMin = DBL_MAX;
+	
+	Lines [ LineIndex ].StartRenderCharIndex = 0;
+	Lines [ LineIndex ].RenderCharCount = 0;
 	
 	while ( StringIndex < StringLength )
 	{
@@ -436,18 +490,30 @@ void Red::Text::Rendering::ShadedRenderer :: RenderUnicodeString ( const std :: 
 			
 			Layout -> GetOffset ( CurrentAtlas, CurrentCharachter, OffsetX, OffsetY );
 			
-			TranslationX += OffsetX;
-			TranslationY += OffsetY;
+			TranslationX += BitmapScalingFactor * OffsetX;
+			TranslationY -= static_cast <double> ( Metrics.Height ) * BitmapScalingFactor - BitmapScalingFactor * OffsetY;
 			
 			Layout -> GetAdvance ( CurrentAtlas, CurrentCharachter, LastCharachter, OffsetX, OffsetY );
 			
-			Cursor.X += OffsetX;
-			Cursor.Y += OffsetY;
+			Cursor.X += BitmapScalingFactor * OffsetX;
+			Cursor.Y += BitmapScalingFactor * OffsetY;
 			
 			TranslationX += Cursor.X;
 			TranslationY += Cursor.Y;
 			
-			Xenon::Math::Matrix3x3 :: AppendTranslation ( CharTransform, BitmapScalingFactor * TranslationX, BitmapScalingFactor * TranslationY );
+			Xenon::Math::Matrix3x3 :: AppendTranslation ( CharTransform, TranslationX, TranslationY );
+			
+			if ( LineMinX > TranslationX )
+				LineMinX = TranslationX;
+			
+			if ( LineMinY > TranslationY )
+				LineMinY = TranslationY;
+			
+			if ( LineMaxX < TranslationX + BitmapScalingFactor * Metrics.Width )
+				LineMaxX = TranslationX + BitmapScalingFactor * Metrics.Width;
+			
+			if ( LineMaxY < TranslationY + BitmapScalingFactor * Metrics.Height )
+				LineMaxY = TranslationY + BitmapScalingFactor * Metrics.Height;
 			
 			Xenon::Math :: Vec4 & TexCoords = TextureCoordinateArray [ RenderCharIndex ];
 			
@@ -474,12 +540,101 @@ void Red::Text::Rendering::ShadedRenderer :: RenderUnicodeString ( const std :: 
 				Cursor.Y += OffsetY;
 				
 			}
+			else
+			{
+				
+				if ( CurrentCharachter == U'\n' )
+				{
+					
+					if ( MinX > LineMinX )
+						MinX = LineMinX;
+					
+					if ( MinY > LineMinY )
+						MinY = LineMinY;
+					
+					if ( MaxX < LineMaxX )
+						MaxX = LineMaxX;
+					
+					if ( MaxY < LineMaxY )
+						MaxY = LineMaxY;
+					
+					Lines [ LineIndex ].RenderCharCount = RenderCharIndex - Lines [ LineIndex ].StartRenderCharIndex;
+					Lines [ LineIndex ].Width = LineMaxX - LineMinX;
+					Lines [ LineIndex ].Height = LineMaxY - LineMinY;
+					Lines [ LineIndex ].CursorEndX = Cursor.X;
+					Lines [ LineIndex ].CursorEndY = Cursor.Y;
+					
+					if ( CursorEndXMin > Cursor.X )
+						CursorEndXMin = Cursor.X;
+					
+					if ( CursorEndXMax < Cursor.X )
+						CursorEndXMax = Cursor.X;
+					
+					if ( CursorEndYMin > Cursor.Y )
+						CursorEndYMin = Cursor.Y;
+					
+					if ( CursorEndYMax < Cursor.Y )
+						CursorEndYMax = Cursor.Y;
+					
+					LineMinX = DBL_MAX;
+					LineMaxX = - DBL_MAX;
+					LineMinY = DBL_MAX;
+					LineMaxY = - DBL_MAX;
+					
+					if ( Layout -> GetLayoutDirection () == IFontLayoutSource :: kLayoutDirection_Horizontal )
+					{
+						
+						Cursor.X = 0;
+						Cursor.Y -= Layout -> GetFontHeight ( CurrentAtlas ) * BitmapScalingFactor;
+						
+					}
+					else
+					{
+						
+						Cursor.Y = 0;
+						Cursor.X += Layout -> GetFontHeight ( CurrentAtlas ) * BitmapScalingFactor;
+						
+					}
+					
+					LineIndex ++;
+					
+				}
+				
+			}
 			
 		}
 		
 		StringIndex ++;
 		
 	}
+	
+	if ( MinX > LineMinX )
+		MinX = LineMinX;
+	
+	if ( MinY > LineMinY )
+		MinY = LineMinY;
+	
+	if ( MaxX < LineMaxX )
+		MaxX = LineMaxX;
+	
+	if ( MaxY < LineMaxY )
+		MaxY = LineMaxY;
+	
+	if ( CursorEndXMin > Cursor.X )
+		CursorEndXMin = Cursor.X;
+	
+	if ( CursorEndXMax < Cursor.X )
+		CursorEndXMax = Cursor.X;
+	
+	if ( CursorEndYMin > Cursor.Y )
+		CursorEndYMin = Cursor.Y;
+	
+	if ( CursorEndYMax < Cursor.Y )
+		CursorEndYMax = Cursor.Y;
+	
+	Lines [ LineIndex ].RenderCharCount = RenderCharIndex - Lines [ LineIndex ].StartRenderCharIndex;
+	Lines [ LineIndex ].Width = LineMaxX - LineMinX;
+	Lines [ LineIndex ].Height = LineMaxY - LineMinY;
 	
 	Cont -> GetDefaultFrameBuffer () -> Clear ();
 	Cont -> SetCullingEnabled ( false );
@@ -490,8 +645,60 @@ void Red::Text::Rendering::ShadedRenderer :: RenderUnicodeString ( const std :: 
 	Cont -> BlendEquation ( Xenon::GPU::Context :: kBlendOperator_Add, Xenon::GPU::Context :: kBlendOperator_Add );
 	
 	Xenon::Math::Matrix3x3 :: Identity ( GlobalTransform );
-	//TODO: Translate so text is reference to upper left corner.
-	Xenon::Math::Matrix3x3 :: Append ( GlobalTransform, ExternalGlobalTransform );
+	
+	double DeltaX = 0.0;
+	double DeltaY = 0.0;
+	
+	switch ( RegistrationX )
+	{
+		
+		case kRegistrationMetric_BaseLine_End:
+			DeltaX = - ( abs ( CursorEndXMax ) > abs ( CursorEndXMin ) ) ? CursorEndXMax : CursorEndXMin;
+			break;
+		
+		case kRegistrationMetric_Center:
+			DeltaX = ( MinX + MaxX ) * - 0.5;
+			break;
+		
+		case kRegistrationMetric_Min:
+			DeltaX = - MinX;
+			break;
+		
+		case kRegistrationMetric_Max:
+			DeltaX = - MaxX;
+			break;
+		
+		default:
+			break;
+		
+	}
+	
+	switch ( RegistrationY )
+	{
+		
+		case kRegistrationMetric_BaseLine_End:
+			DeltaY = - ( abs ( CursorEndYMax ) > abs ( CursorEndYMin ) ) ? CursorEndYMax : CursorEndYMin;
+			break;
+		
+		case kRegistrationMetric_Center:
+			DeltaY = ( MinY + MaxY ) * - 0.5;
+			break;
+		
+		case kRegistrationMetric_Min:
+			DeltaY = - MinY;
+			break;
+		
+		case kRegistrationMetric_Max:
+			DeltaY = - MaxY;
+			break;
+		
+		default:
+			break;
+		
+	}
+	
+	Xenon::Math::Matrix3x3 :: SetAsTranslation ( GlobalTransform, DeltaX, DeltaY );
+	Xenon::Math::Matrix3x3 :: Prepend ( GlobalTransform, ExternalGlobalTransform );
 	Xenon::Math::Matrix3x3 :: PrependScale ( GlobalTransform, ScalingFactorX, ScalingFactorY );
 	GlobalTransformUniform.SetDirty ();
 	

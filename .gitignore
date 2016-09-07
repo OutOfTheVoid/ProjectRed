@@ -9,3 +9,4 @@ bin/*
 *.py
 *.DS_Store
 *.ttf
+*.ttc

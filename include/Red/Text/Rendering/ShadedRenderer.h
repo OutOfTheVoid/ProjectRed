@@ -44,6 +44,17 @@ namespace Red
 				static constexpr double kWidth_Unbounded = - 1.0;
 				static constexpr double kHeight_Unbounded = - 1.0;
 				
+				enum RegistrationMetric
+				{
+					
+					kRegistrationMetric_Min,
+					kRegistrationMetric_Max,
+					kRegistrationMetric_Center,
+					kRegistrationMetric_BaseLine_Start,
+					kRegistrationMetric_BaseLine_End
+					
+				};
+				
 				ShadedRenderer ( FontRenderData * FontData );
 				~ShadedRenderer ();
 				
@@ -59,6 +70,8 @@ namespace Red
 				
 				void SetColor ( const Xenon::Math :: Vec4 Color );
 				Xenon::Math :: Vec4 GetColor ();
+				
+				void SetRegistrationMetrics ( RegistrationMetric X, RegistrationMetric Y );
 				
 				void SetGlobalTransform ( const Xenon::Math :: Matrix3x3 & Transform );
 				
@@ -120,6 +133,9 @@ namespace Red
 				Xenon::Math :: Matrix3x3 ExternalGlobalTransform;
 				Xenon::Math :: Matrix3x3 GlobalTransform;
 				Xenon::Math :: RawMatrix3x3UniformSource GlobalTransformUniform;
+				
+				RegistrationMetric RegistrationX;
+				RegistrationMetric RegistrationY;
 				
 				Xenon::Math :: RawFloatUniformSource DepthUniform;
 				
