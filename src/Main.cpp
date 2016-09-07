@@ -158,7 +158,7 @@ void Render ( RenderStruct & Data )
 	{
 		
 		Data.TextRenderer -> SetColor ( Xenon::Math :: Vec4 ( 0.6f, 0.7f, 1.0f, 1.0f ) );
-		//Data.TextRenderer -> SetGlobalTransform ( TextTransform );
+		Data.TextRenderer -> SetGlobalTransform ( TextTransform );
 		Data.TextRenderer -> RenderUnicodeString ( U"Hello, world!\nThis is multi-line\ntext! :)" );
 		
 	}
@@ -328,6 +328,8 @@ void KeyListener ( int32_t ScanCode, int32_t KeyCode, bool Down, void * Data )
 			
 			reinterpret_cast <KeyboardStruct *> ( Data ) -> Resized = false;
 			reinterpret_cast <KeyboardStruct *> ( Data ) -> RenderData -> Win -> Resize ( WINDOW_WIDTH_0, WINDOW_HEIGHT_0 );
+			glViewport ( 0, 0, WINDOW_WIDTH_0, WINDOW_HEIGHT_0 );
+			reinterpret_cast <KeyboardStruct *> ( Data ) -> RenderData -> TextRenderer -> SetRenderTarget ( reinterpret_cast <KeyboardStruct *> ( Data ) -> RenderData -> Cont, reinterpret_cast <KeyboardStruct *> ( Data ) -> RenderData -> Cont -> GetDefaultFrameBuffer (), Xenon::Math::Vec2 ( WINDOW_WIDTH_0, WINDOW_HEIGHT_0 ) );
 			
 		}
 		else
@@ -335,6 +337,8 @@ void KeyListener ( int32_t ScanCode, int32_t KeyCode, bool Down, void * Data )
 			
 			reinterpret_cast <KeyboardStruct *> ( Data ) -> Resized = true;
 			reinterpret_cast <KeyboardStruct *> ( Data ) -> RenderData -> Win -> Resize ( WINDOW_WIDTH_1, WINDOW_HEIGHT_1 );
+			glViewport ( 0, 0, WINDOW_WIDTH_1, WINDOW_HEIGHT_1 );
+			reinterpret_cast <KeyboardStruct *> ( Data ) -> RenderData -> TextRenderer -> SetRenderTarget ( reinterpret_cast <KeyboardStruct *> ( Data ) -> RenderData -> Cont, reinterpret_cast <KeyboardStruct *> ( Data ) -> RenderData -> Cont -> GetDefaultFrameBuffer (), Xenon::Math::Vec2 ( WINDOW_WIDTH_1, WINDOW_HEIGHT_1 ) );
 			
 		}
 		

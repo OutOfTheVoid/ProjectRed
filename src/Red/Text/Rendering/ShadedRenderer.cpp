@@ -267,38 +267,53 @@ double Red::Text::Rendering::ShadedRenderer :: GetSize ()
 void Red::Text::Rendering::ShadedRenderer :: SetRenderTarget ( Xenon::GPU :: Context * Cont, Xenon::GPU :: FrameBuffer * RenderTarget, Xenon::Math::Vec2 Dimensions )
 {
 	
-	if ( this -> RenderTarget != NULL )
-		this -> RenderTarget -> Dereference ();
-	
-	bool GPUAlloc = false;
-	
-	if ( this -> Cont != NULL )
+	if ( this -> RenderTarget != RenderTarget )
 	{
 		
-		GPUAlloc = GPUAllocated;
+		if ( this -> RenderTarget != NULL )
+			this -> RenderTarget -> Reference ();
 		
-		this -> Cont -> Dereference ();
+		this -> RenderTarget = RenderTarget;
 		
-		GPUResourceFree ();
+		if ( this -> RenderTarget != NULL )
+			this -> RenderTarget -> Reference ();
 		
 	}
 	
-	this -> RenderTarget = RenderTarget;
-	this -> Cont = Cont;
+	if ( this -> Cont != Cont )
+	{
+		
+		if ( ( this -> Cont != NULL ) && ( Cont != NULL ) )
+		{
+			
+			bool GPUAlloc = GPUAllocated;
+			
+			GPUResourceFree ();
+			this -> Cont -> Dereference ();
+			
+			this -> Cont = Cont;
+			this -> Cont -> Reference ();
+			
+			if ( GPUAlloc )
+				GPUResourceAlloc ();
+			
+		}
+		else
+		{
+			
+			if ( this -> Cont != NULL )
+				this -> Cont -> Dereference ();
+			
+			this -> Cont = Cont;
+			
+			if ( this -> Cont != NULL )
+				this -> Cont -> Reference ();
+			
+		}
+		
+	}
+	
 	this -> RenderTargetDimensions = Dimensions;
-	
-	if ( this -> RenderTarget != NULL )
-		this -> RenderTarget -> Reference ();
-	
-	if ( this -> Cont != NULL )
-	{
-		
-		this -> Cont -> Reference ();
-	
-		if ( GPUAlloc )
-			GPUResourceAlloc ();
-		
-	}
 	
 }
 
