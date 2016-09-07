@@ -55,6 +55,7 @@
 #include <Red/Text/Rendering/FreeType/FTLibrary.h>
 #include <Red/Text/Rendering/FreeType/FontFace.h>
 #include <Red/Text/Rendering/FreeType/FreeTypeFontRenderData.h>
+#include <Red/Text/Rendering/ShadedRenderer.h>
 
 #include <thread>
 #include <chrono>
@@ -94,12 +95,7 @@ struct RenderStruct_Struct
 	SDLX :: Window * Win;
 	SDLX :: Timer * RTimer;
 	
-	Xenon::GPU :: Texture2D * FontTexture;
-	Xenon::GPU :: ShaderProgram * Program;
-	Xenon::GPU :: VertexArray * VArray;
-	Xenon::GPU :: UniformSet * UniSet;
-	
-	Xenon::Geometry :: Mesh * TestMesh;
+	Red::Text::Rendering::ShadedRenderer * TextRenderer;
 	
 	uint32_t Frame;
 	
@@ -108,106 +104,32 @@ struct RenderStruct_Struct
 bool SetupScene ( RenderStruct & Data )
 {
 	
-	uint32_t Status;
-	
-	Data.FontTexture = new Xenon::GPU :: Texture2D ();
-	Data.FontTexture -> Reference ();
-	
-	RAUX :: PNGFile MyTestTextureFile ( "RockTexture.png" );
-	MyTestTextureFile.Load ( & Status );
-	
-	if ( ! MyTestTextureFile.Valid () )
-		std :: cout << "PNG load failed!" << std :: endl;
-	
-	Data.FontTexture -> AssignToTextureUnit ( 0 );
-	
 	Red::Text::Rendering::FreeType :: FontFace * TestFontFace = Red::Text::Rendering::FreeType::FontFace :: NewFromFile ( "PTMono.ttf", 0, "PT Mono" );
 	
 	if ( TestFontFace != NULL )
 	{
 		
-		std :: u32string CharSet ( U"abcdefghighjlmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ.,!?$#@%\\/^&*()-+_=~`\'\"<>[]{}:;" );
-		//std :: u32string CharSet ( U"ABCDEFGHIJKLMNOPQRSTUVWXYZ" );
+		std :: u32string CharSet ( U"abcdefghighjlmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ.,!?$#@%\\/^&*()-+_=~`\'\"<>[]{}:; " );
 		
-		Red::Text::Rendering :: FontRenderData * FontRData = Red::Text::Rendering::FreeType::FreeTypeFontRenderData :: CreateRenderData ( TestFontFace, CharSet, Red::Text::Rendering::FontRenderData :: kAtlasGenerationMode_PowerOfTwo );
+		Red::Text::Rendering :: FontRenderData * PTMonoRenderData = Red::Text::Rendering::FreeType::FreeTypeFontRenderData :: CreateRenderData ( TestFontFace, CharSet, Red::Text::Rendering::FontRenderData :: kAtlasGenerationMode_PowerOfTwo );
 		
-		if ( FontRData != NULL )
+		if ( PTMonoRenderData != NULL )
 		{
 			
-			Red::Text::Rendering :: RawFontTextureAtlas * Atlas = FontRData -> CreateFontTextureAtlas ( 240, 1.0f );
+			Data.TextRenderer = new Red::Text::Rendering::ShadedRenderer ( PTMonoRenderData );
+			Data.TextRenderer -> GPUResourceAlloc ();
+			Data.TextRenderer -> SetRenderTarget ( Data.Cont, Data.Cont -> GetDefaultFrameBuffer (), Xenon::Math :: Vec2 ( WINDOW_WIDTH_0, WINDOW_HEIGHT_0 ) );
+			Data.TextRenderer -> Reference ();
 			
-			if ( Atlas != NULL )
-			{
-				
-				//Data.FontTexture -> TextureImage ( 0, Xenon::GPU::Texture2D :: kInternalFormat_RGBA, BMMetrics.Width, BMMetrics.Rows, Xenon::GPU::Texture2D :: kExternalLayout_UByte, Xenon::GPU::Texture2D :: kExternalFormat_R, TestFontFace -> GetBitmapPointer (), 1, BMMetrics.Pitch );
-				Data.FontTexture -> TextureImage ( 0, Xenon::GPU::Texture2D :: kInternalFormat_RGBA, Atlas -> GetBitmapWidth (), Atlas -> GetBitmapHeight (), Xenon::GPU::Texture2D :: kExternalLayout_UByte, Xenon::GPU::Texture2D :: kExternalFormat_R, Atlas -> GetBitmapData () );
-				Data.FontTexture -> SetFiltering ( Xenon::GPU::Texture2D :: kMinimizingFilter_Nearest, Xenon::GPU::Texture2D :: kMagnificationFilter_Nearest );
-				Data.FontTexture -> SetWrapMode ( Xenon::GPU::Texture2D :: kWrapMode_Repeat );
-				
-				FontRData -> RetireFontTextureAtlas ( Atlas );
-				
-			}
-			
-			delete FontRData;
+			Data.TextRenderer -> SetSize ( 100.0 );
 			
 		}
-		
-		delete TestFontFace;
+		else
+			Data.TextRenderer = NULL;
 		
 	}
-	
-	Xenon::Geometry::Primitives :: Quad2DSpec RenderQuadSpec;
-	RenderQuadSpec.WindOutwardFacesClockwise = true;
-	RenderQuadSpec.Attributes = Xenon::Geometry::Primitives :: kAttributeFlags_Position | Xenon::Geometry::Primitives :: kAttributeFlags_TexturePositions;
-	RenderQuadSpec.CompositionMode = Xenon::Geometry::Primitives :: kStaticAttributeCompositionMode_Interleaved;
-	RenderQuadSpec.TexturePositionCount = 0;
-	Xenon::Geometry::Primitives :: SetupNormalQuad2DPositionSpec ( RenderQuadSpec.PositionSpec, "Position", true );
-	
-	Xenon::Geometry::Primitives :: Quad2DTexturePositionSpec TexPos;
-	Xenon::Geometry::Primitives :: SetupNormalQuad2DTexturePositionSpec ( TexPos, "TexPosition", true );
-	
-	RenderQuadSpec.TexturePositionSpecs = & TexPos;
-	RenderQuadSpec.TexturePositionCount = 1;
-	
-	Data.TestMesh = NULL;
-	if ( ! Xenon::Geometry::Primitives :: GenerateQuad2DMesh ( & Data.TestMesh, RenderQuadSpec ) )
-		std :: cout << "Failed to generate quad mesh!" << std :: endl;
-	
-	RAUX :: VertexShaderFile VShaderFile ( "Text2DVertex.glsl" );
-	RAUX :: FragmentShaderFile FShaderFile ( "Text2DFragment.glsl" );
-	
-	Xenon::GPU :: VertexShader * VShader = VShaderFile.LoadToShader ( & Status );
-	Xenon::GPU :: FragmentShader * FShader = FShaderFile.LoadToShader ( & Status );
-	
-	if ( ! VShader -> Compile ( true ) )
-		std :: cout << "VShader failed to compile: " << std :: endl << VShader -> GetCompilationLog () << std :: endl;
-		 
-	if ( ! FShader -> Compile ( true ) )
-		std :: cout << "FShader failed to compile: " << std :: endl << FShader -> GetCompilationLog () << std :: endl;
-	
-	Data.Program = new Xenon::GPU :: ShaderProgram ();
-	
-	Data.Program -> GPUResourceAlloc ();
-	Data.Program -> AddShader ( * VShader );
-	Data.Program -> AddShader ( * FShader );
-	Data.Program -> Link ();
-	
-	Data.UniSet = new Xenon::GPU :: UniformSet ();
-	
-	Xenon::Math :: ConstantIntUniformSource * FontSamplerUniformSource = new Xenon::Math :: ConstantIntUniformSource ( 0 );
-	Data.UniSet -> AddIntUniform ( "FontSampler", FontSamplerUniformSource );
-	Data.UniSet -> SetProgram ( Data.Program );
-	Data.UniSet -> Link ();
-	
-	delete VShader;
-	delete FShader;
-	
-	Data.TestMesh -> FlushData ();
-	Data.VArray = new Xenon::GPU :: VertexArray ();
-	Data.TestMesh -> BuildVertexArray ( * Data.VArray );
-	Data.VArray -> SetProgram ( Data.Program );
-	Data.VArray -> Build ();
-	Data.VArray -> Bind ();
+	else
+		Data.TextRenderer = NULL;
 	
 	return true;
 	
@@ -216,7 +138,8 @@ bool SetupScene ( RenderStruct & Data )
 void DestroyScene ( RenderStruct & Data )
 {
 	
-	Data.FontTexture -> Dereference ();
+	if ( Data.TextRenderer != NULL )
+		Data.TextRenderer -> Dereference ();
 	
 }
 
@@ -224,18 +147,19 @@ void Render ( RenderStruct & Data )
 {
 	
 	Data.Cont -> GetDefaultFrameBuffer () -> Clear ();
-	Data.Cont -> SetCullingEnabled ( false );
-	Data.Cont -> SetDepthTestEnabled ( false );
-	Data.Cont -> SetFrontFace ( Xenon::GPU::Context :: kFrontFace_Clockwise );
-	Data.Cont -> SetCullingFace ( Xenon::GPU::Context :: kCullingFace_Back );
 	
-	Data.Program -> Bind ();
+	Xenon::Math::Matrix3x3 TextTransform;
 	
-	Data.VArray -> Bind ();
+	Xenon::Math::Matrix3x3 :: AppendTranslation ( TextTransform, - 375.0, 0.0 );
 	
-	Data.UniSet -> UpdateUniforms ();
-	
-	glDrawElements ( Data.TestMesh -> GetDrawMode (), Data.TestMesh -> GetIndexCount (), Data.TestMesh -> GetIndexType (), 0 );
+	if ( Data.TextRenderer != NULL )
+	{
+		
+		Data.TextRenderer -> SetColor ( Xenon::Math :: Vec4 ( 0.6f, 0.7f, 1.0f, 1.0f ) );
+		Data.TextRenderer -> SetGlobalTransform ( TextTransform );
+		Data.TextRenderer -> RenderUnicodeString ( U"Hello, world!" );
+		
+	}
 	
 }
 
@@ -273,7 +197,7 @@ int main ( int argc, const char * argv [] )
 	if ( Status != SDLX :: kStatus_Success )
 		return - 1;
 	
-	SDLX::Window * Win = SDLX::Window :: CreateWindow ( & Status, "Test", WINDOW_WIDTH_0, WINDOW_HEIGHT_0, SDLX::Window :: kCreateFlag_Shown | SDLX::Window :: kCreateFlag_HighDPI | SDLX::Window :: kCreateFlag_OpenGL );
+	SDLX::Window * Win = SDLX::Window :: CreateWindow ( & Status, "Test", WINDOW_WIDTH_0, WINDOW_HEIGHT_0, SDLX::Window :: kCreateFlag_Shown | /*SDLX::Window :: kCreateFlag_HighDPI |*/ SDLX::Window :: kCreateFlag_OpenGL );
 	
 	SDLX::GLContext :: RequestGLContextVersion ( SDLX::GLContext :: kGLProfile_Core, 3, 3 );
 	SDLX::GLContext :: RequestDepthBufferSize ( 24 );
@@ -307,13 +231,11 @@ int main ( int argc, const char * argv [] )
 		
 	}
 	
-	SDLX::Mouse :: Lock ();
-	
 	Xenon::GPU :: Context * Cont = new Xenon::GPU :: Context ( GL );
 	
 	Cont -> Reference ();
 	Cont -> MakeCurrent ();
-	Cont -> GetDefaultFrameBuffer () -> SetClearColor ( 1.0f, 1.0f, 1.0f );
+	Cont -> GetDefaultFrameBuffer () -> SetClearColor ( 0.0f, 0.0f, 0.0f );
 	
 	RenderStruct RData;
 	

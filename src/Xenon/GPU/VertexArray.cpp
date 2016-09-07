@@ -84,7 +84,7 @@ void Xenon::GPU::VertexArray :: SetProgram ( ShaderProgram * Program )
 	
 }
 
-void Xenon::GPU::VertexArray :: AddFPAttribute ( const std :: string & Name, GLint Size, FPAttributeInputType InputType, bool Normalized, GLsizei Stride, GLvoid * Offset, VertexBuffer * Data, GLuint InstanceDivisor )
+void Xenon::GPU::VertexArray :: AddFPAttribute ( const std :: string & Name, GLint Size, FPAttributeInputType InputType, bool Normalized, GLsizei Stride, GLvoid * Offset, VertexBuffer * Data, GLuint InstanceDivisor, GLuint AttributeOffset )
 {
 	
 	FPAttributeStruct Attribute;
@@ -98,9 +98,10 @@ void Xenon::GPU::VertexArray :: AddFPAttribute ( const std :: string & Name, GLi
 	Attribute.Data = Data;
 	Attribute.Normalized = Normalized;
 	Attribute.InstanceDivisor = InstanceDivisor;
+	Attribute.AttributeOffset = AttributeOffset;
 	
 	if ( Program != NULL )
-		Attribute.AttributeLocation = Program -> GetAttributeLocation ( Name.c_str () );
+		Attribute.AttributeLocation = Program -> GetAttributeLocation ( Name.c_str () ) + AttributeOffset;
 	else
 		Attribute.AttributeLocation = 0;
 	
@@ -108,7 +109,7 @@ void Xenon::GPU::VertexArray :: AddFPAttribute ( const std :: string & Name, GLi
 	
 }
 
-void Xenon::GPU::VertexArray :: AddIntegerAttribute ( const std :: string & Name, GLint Size, FPAttributeInputType InputType, GLsizei Stride, GLvoid * Offset, VertexBuffer * Data, GLuint InstanceDivisor )
+void Xenon::GPU::VertexArray :: AddIntegerAttribute ( const std :: string & Name, GLint Size, FPAttributeInputType InputType, GLsizei Stride, GLvoid * Offset, VertexBuffer * Data, GLuint InstanceDivisor, GLuint AttributeOffset )
 {
 	
 	IntegerAttributeStruct Attribute;
@@ -121,9 +122,10 @@ void Xenon::GPU::VertexArray :: AddIntegerAttribute ( const std :: string & Name
 	Attribute.Offset = Offset;
 	Attribute.Data = Data;
 	Attribute.InstanceDivisor = InstanceDivisor;
+	Attribute.AttributeOffset = AttributeOffset;
 	
 	if ( Program != NULL )
-		Attribute.AttributeLocation = Program -> GetAttributeLocation ( Name.c_str () );
+		Attribute.AttributeLocation = Program -> GetAttributeLocation ( Name.c_str () ) + AttributeOffset;
 	else
 		Attribute.AttributeLocation = 0;
 	
@@ -162,9 +164,9 @@ void Xenon::GPU::VertexArray :: Build ()
 			
 			FPAttributes [ I ].Data -> Bind ();
 			
-			glEnableVertexAttribArray ( FPAttributes [ I ].AttributeLocation );
-			glVertexAttribPointer ( FPAttributes [ I ].AttributeLocation, FPAttributes [ I ].Size, FPAttributes [ I ].InputType, FPAttributes [ I ].Normalized, FPAttributes [ I ].Stride, FPAttributes [ I ].Offset );
-			glVertexAttribDivisor ( FPAttributes [ I ].AttributeLocation, FPAttributes [ I ].InstanceDivisor );
+			glEnableVertexAttribArray ( FPAttributes [ I ].AttributeLocation + FPAttributes [ I ].AttributeOffset );
+			glVertexAttribPointer ( FPAttributes [ I ].AttributeLocation + FPAttributes [ I ].AttributeOffset, FPAttributes [ I ].Size, FPAttributes [ I ].InputType, FPAttributes [ I ].Normalized, FPAttributes [ I ].Stride, FPAttributes [ I ].Offset );
+			glVertexAttribDivisor ( FPAttributes [ I ].AttributeLocation + FPAttributes [ I ].AttributeOffset, FPAttributes [ I ].InstanceDivisor );
 			
 		}
 		
@@ -180,9 +182,9 @@ void Xenon::GPU::VertexArray :: Build ()
 			
 			IntegerAttributes [ I ].Data -> Bind ();
 			
-			glEnableVertexAttribArray ( IntegerAttributes [ I ].AttributeLocation );
-			glVertexAttribIPointer ( IntegerAttributes [ I ].AttributeLocation, IntegerAttributes [ I ].Size, IntegerAttributes [ I ].InputType, IntegerAttributes [ I ].Stride, IntegerAttributes [ I ].Offset );
-			glVertexAttribDivisor ( IntegerAttributes [ I ].AttributeLocation, IntegerAttributes [ I ].InstanceDivisor );
+			glEnableVertexAttribArray ( IntegerAttributes [ I ].AttributeLocation + IntegerAttributes [ I ].AttributeOffset );
+			glVertexAttribIPointer ( IntegerAttributes [ I ].AttributeLocation + IntegerAttributes [ I ].AttributeOffset, IntegerAttributes [ I ].Size, IntegerAttributes [ I ].InputType, IntegerAttributes [ I ].Stride, IntegerAttributes [ I ].Offset );
+			glVertexAttribDivisor ( IntegerAttributes [ I ].AttributeLocation + IntegerAttributes [ I ].AttributeOffset, IntegerAttributes [ I ].InstanceDivisor );
 			
 		}
 		

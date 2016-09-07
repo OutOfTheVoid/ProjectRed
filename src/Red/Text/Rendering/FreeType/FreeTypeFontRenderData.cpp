@@ -3,12 +3,14 @@
 #ifdef RED_OPT_TEXT_RENDERING_FREETYPE
 
 #include <string.h>
+#include <math.h>
+
 #include <iostream>
 
-Red::Text::Rendering :: FontRenderData * Red::Text::Rendering::FreeType::FreeTypeFontRenderData :: CreateRenderData ( FontFace * Face, const std :: u32string & CharSet, FontRenderData :: AtlasGenerationMode GenerationMode )
+Red::Text::Rendering :: FontRenderData * Red::Text::Rendering::FreeType::FreeTypeFontRenderData :: CreateRenderData ( FontFace * Face, const std :: u32string & CharSet, FontRenderData :: AtlasGenerationMode GenerationMode, FreeTypeRenderFlag Flags )
 {
 	
-	FreeTypeFontRenderData * RenderDataInternal = new FreeTypeFontRenderData ( Face );
+	FreeTypeFontRenderData * RenderDataInternal = new FreeTypeFontRenderData ( Face, Flags );
 	return new FontRenderData ( Face, RenderDataInternal, RenderDataInternal, CharSet, GenerationMode );
 	
 }
@@ -17,9 +19,10 @@ Red::Text::Rendering::FreeType::FreeTypeFontRenderData :: ~FreeTypeFontRenderDat
 {
 }
 
-Red::Text::Rendering::FreeType::FreeTypeFontRenderData :: FreeTypeFontRenderData ( FontFace * Font ):
+Red::Text::Rendering::FreeType::FreeTypeFontRenderData :: FreeTypeFontRenderData ( FontFace * Font, FreeTypeRenderFlag Flags ):
 	RefCounted (),
-	Font ( Font )
+	Font ( Font ),
+	Flags ( Flags )
 {
 	
 	Font -> Reference ();
@@ -28,6 +31,9 @@ Red::Text::Rendering::FreeType::FreeTypeFontRenderData :: FreeTypeFontRenderData
 
 void Red::Text::Rendering::FreeType::FreeTypeFontRenderData :: GetAdvance ( RawFontTextureAtlas * Atlas, char32_t Current, char32_t Last, double & AdvanceX, double & AdvanceY ) const
 {
+	
+	if ( ( Font -> GetFaceFlags () & FontFace :: kFaceFlag_Kerning ) == 0 )
+		return GetAdvance ( Atlas, Last, AdvanceX, AdvanceY );
 	
 	uint32_t CurrentIndex = Font -> GlyphIndexFromChar ( Current );
 	
@@ -60,6 +66,8 @@ void Red::Text::Rendering::FreeType::FreeTypeFontRenderData :: GetAdvance ( RawF
 void Red::Text::Rendering::FreeType::FreeTypeFontRenderData :: GetAdvance ( RawFontTextureAtlas * Atlas, char32_t Last, double & AdvanceX, double & AdvanceY ) const
 {
 	
+	Font -> SetPixelSize ( Atlas -> GetBitmapFontSize () );
+	
 	uint32_t LastIndex = Font -> GlyphIndexFromChar ( Last );
 	
 	if ( LastIndex == 0 )
@@ -71,8 +79,6 @@ void Red::Text::Rendering::FreeType::FreeTypeFontRenderData :: GetAdvance ( RawF
 		return;
 		
 	}
-	
-	Font -> SetPixelSize ( Atlas -> GetBitmapFontSize () );
 	
 	if ( Font -> LoadGlyph ( LastIndex, FontFace :: kLoadFlag_Defaults ) )
 	{
@@ -170,172 +176,11 @@ typedef struct
 	
 	uint32_t Width;
 	uint32_t Height;
-	uint32_t X;
-	uint32_t Y;
+	uint32_t Pitch;
+	
+	Red::Text::Rendering::FreeType::FontFace :: PixelMode PixMode;
 	
 } _GlyphPack;
-
-typedef struct
-{
-	
-	uint32_t X;
-	uint32_t Y;
-	uint32_t Width;
-	uint32_t Height;
-	
-} _Rectangle;
-
-typedef struct PackingTreeNode_Struct
-{
-	
-	bool Leaf;
-	
-	struct PackingTreeNode_Struct * LeftChild;
-	struct PackingTreeNode_Struct * RightChild;
-	
-	_Rectangle Rect;
-	
-	int32_t GlyphPackIndex;
-	
-} _PackingTreeNode;
-
-_PackingTreeNode * _New_PackingTreeNode ()
-{
-	
-	_PackingTreeNode * New = new _PackingTreeNode ();
-	
-	New -> LeftChild = NULL;
-	New -> RightChild = NULL;
-	New -> Leaf = true;
-	
-	New -> Rect.X = 0;
-	New -> Rect.Y = 0;
-	New -> Rect.Width = 0xFFFFFFFF;
-	New -> Rect.Height = 0xFFFFFFFF;
-	
-	New -> GlyphPackIndex = - 1;
-	
-	return New;
-	
-}
-
-void _Delete_PackingTree ( _PackingTreeNode * Root )
-{
-	
-	if ( Root -> LeftChild != NULL )
-		_Delete_PackingTree ( Root -> LeftChild );
-	
-	if ( Root -> RightChild != NULL )
-		_Delete_PackingTree ( Root -> RightChild );
-	
-	delete Root;
-	
-}
-
-void _FindMaxDimensions_PackingTreeNode ( _PackingTreeNode * Node, uint32_t & MaxX, uint32_t & MaxY )
-{
-	
-	if ( Node == NULL )
-		return;
-	
-	_FindMaxDimensions_PackingTreeNode ( Node -> LeftChild, MaxX, MaxY );
-	_FindMaxDimensions_PackingTreeNode ( Node -> RightChild, MaxX, MaxY );
-	
-	if ( Node -> GlyphPackIndex == - 1 )
-		return;
-	
-	if ( ( Node -> Rect.X + Node -> Rect.Width ) > MaxX )
-		MaxX = ( Node -> Rect.X + Node -> Rect.Width );
-	
-	if ( ( Node -> Rect.Y + Node -> Rect.Height ) > MaxY )
-		MaxY = ( Node -> Rect.Y + Node -> Rect.Height );
-	
-}
-
-_PackingTreeNode * _Insert_PackingTreeNode ( _PackingTreeNode * Node, _GlyphPack * Pack )
-{
-	
-	if ( ! Node -> Leaf )
-	{
-		
-		_PackingTreeNode * NewNode = _Insert_PackingTreeNode ( Node -> LeftChild, Pack );
-		
-		if ( NewNode != NULL )
-		{
-			
-			return NewNode;
-			
-		}
-		
-		NewNode = _Insert_PackingTreeNode ( Node -> RightChild, Pack );
-		
-		return NewNode;
-		
-	}
-	else
-	{
-		
-		if ( Node -> GlyphPackIndex != - 1 )
-			return NULL;
-		
-		if ( ( Pack -> Width > Node -> Rect.Width ) || ( Pack -> Height > Node -> Rect.Height ) )
-			return NULL;
-		
-		if ( ( Pack -> Width == Node -> Rect.Width ) && ( Pack -> Height == Node -> Rect.Height ) )
-		{
-			
-			Node -> GlyphPackIndex = Pack -> Index;
-			Pack -> X = Node -> Rect.X;
-			Pack -> Y = Node -> Rect.Y;
-			
-			return Node;
-			
-		}
-		
-		Node -> Leaf = false;
-		
-		Node -> LeftChild = _New_PackingTreeNode ();
-		Node -> RightChild = _New_PackingTreeNode ();
-		
-		uint32_t DiffX = Node -> Rect.Width - Pack -> Width;
-		uint32_t DiffY = Node -> Rect.Height - Pack -> Height;
-		
-		if ( DiffX > DiffY )
-		{
-			
-			Node -> LeftChild -> Rect.X = Node -> Rect.X;
-			Node -> LeftChild -> Rect.Y = Node -> Rect.Y;
-			Node -> LeftChild -> Rect.Width = Pack -> Width;
-			Node -> LeftChild -> Rect.Height = Node -> Rect.Height;
-			
-			Node -> RightChild -> Rect.X = Node -> Rect.X + Pack -> Width;
-			Node -> RightChild -> Rect.Y = Node -> Rect.Y;
-			Node -> RightChild -> Rect.Width = Node -> Rect.Width - Pack -> Width;
-			Node -> RightChild -> Rect.Height = Node -> Rect.Height;
-			
-		}
-		else
-		{
-			
-			Node -> LeftChild -> Rect.X = Node -> Rect.X;
-			Node -> LeftChild -> Rect.Y = Node -> Rect.Y;
-			Node -> LeftChild -> Rect.Width = Node -> Rect.Width;
-			Node -> LeftChild -> Rect.Height = Pack -> Height;
-			
-			Node -> RightChild -> Rect.X = Node -> Rect.X;
-			Node -> RightChild -> Rect.Y = Node -> Rect.Y + Pack -> Height;
-			Node -> RightChild -> Rect.Width = Node -> Rect.Width;
-			Node -> RightChild -> Rect.Height = Node -> Rect.Height - Pack -> Height;
-			
-		}
-		
-		_PackingTreeNode * ReturnNode = _Insert_PackingTreeNode ( Node -> LeftChild, Pack );
-		
-		return ReturnNode;
-		
-	}
-	
-}
 
 void _BlitGreyToAlpha8 ( void * Target, uint32_t X, uint32_t Y, uint32_t TargetWidth, const void * Source, uint32_t Width, uint32_t Height, int32_t Pitch )
 {
@@ -427,53 +272,47 @@ void _BlitPreMulBGRA32ToARGB32 ( void * Target, uint32_t X, uint32_t Y, uint32_t
 	
 }
 
-void _PerformTreeBlitToAlpha8 ( void * TargetAtlas, uint32_t TargetWidth, _PackingTreeNode * Node, Red::Text::Rendering::FreeType :: FontFace * Font, _GlyphPack * GlyphedChars, uint32_t PixelSize )
+void _BlitToAlpha8 ( void * Target, uint32_t X, uint32_t Y, uint32_t TargetWidth, const void * Source, uint32_t Width, uint32_t Height, uint32_t Pitch, Red::Text::Rendering::FreeType::FontFace :: PixelMode PixMode )
 {
 	
-	if ( Node == NULL )
-		return;
-	
-	_PerformTreeBlitToAlpha8 ( TargetAtlas, TargetWidth, Node -> LeftChild, Font, GlyphedChars, PixelSize );
-	_PerformTreeBlitToAlpha8 ( TargetAtlas, TargetWidth, Node -> RightChild, Font, GlyphedChars, PixelSize );
-	
-	if ( Node -> GlyphPackIndex == - 1 )
-		return;
-	
-	_GlyphPack & Pack = GlyphedChars [ Node -> GlyphPackIndex ];
-	
-	Font -> SetPixelSize ( PixelSize );
-	
-	if ( ! Font -> LoadGlyph ( Pack.GlyphID, Red::Text::Rendering::FreeType :: FontFace :: kLoadFlag_Defaults ) )
-		return;
-	
-	if ( ! Font -> RenderGlyph () )
-		return;
-	
-	if ( Font -> GetBitmapPointer () == NULL )
-		return;
-	
-	Red::Text::Rendering::FreeType::FontFace :: BitmapMetrics BMMetrics;
-	Font -> GetBitmapMetrics ( BMMetrics );
-	
-	if ( BMMetrics.PixMode == Red::Text::Rendering::FreeType :: FontFace :: kPixelMode_Gray )
-		_BlitGreyToAlpha8 ( TargetAtlas, Node -> Rect.X, Node -> Rect.Y, TargetWidth, Font -> GetBitmapPointer (), BMMetrics.Width, BMMetrics.Rows, BMMetrics.Pitch );
-	else if ( BMMetrics.PixMode == Red::Text::Rendering::FreeType :: FontFace :: kPixelMode_Monochrome )
-		_BlitMonochromeToAlpha8 ( TargetAtlas, Node -> Rect.X, Node -> Rect.Y, TargetWidth, Font -> GetBitmapPointer (), BMMetrics.Width, BMMetrics.Rows, BMMetrics.Pitch );
-	else if ( BMMetrics.PixMode == Red::Text::Rendering::FreeType :: FontFace :: kPixelMode_BGRA )
-		_BlitPreMulBGRA32ToAlpha8 ( TargetAtlas, Node -> Rect.X, Node -> Rect.Y, TargetWidth, Font -> GetBitmapPointer (), BMMetrics.Width, BMMetrics.Rows, BMMetrics.Pitch );
+	switch ( PixMode )
+	{
+		
+		case Red::Text::Rendering::FreeType::FontFace :: kPixelMode_Monochrome:
+			return _BlitMonochromeToAlpha8 ( Target, X, Y, TargetWidth, Source, Width, Height, Pitch );
+			
+		case Red::Text::Rendering::FreeType::FontFace :: kPixelMode_Gray:
+			return _BlitGreyToAlpha8 ( Target, X, Y, TargetWidth, Source, Width, Height, Pitch );
+			
+		case Red::Text::Rendering::FreeType::FontFace :: kPixelMode_BGRA:
+			return _BlitPreMulBGRA32ToAlpha8 ( Target, X, Y, TargetWidth, Source, Width, Height, Pitch );
+			
+		default:
+			break;
+		
+	}
 	
 }
 
-void _PerformTreeBlitToARGB32 ( void * TargetAtlas, uint32_t TargetWidth, _PackingTreeNode * Node, Red::Text::Rendering::FreeType :: FontFace * Font, _GlyphPack * GlyphedChars )
+void _BlitToARGB32 ( void * Target, uint32_t X, uint32_t Y, uint32_t TargetWidth, const void * Source, uint32_t Width, uint32_t Height, uint32_t Pitch, Red::Text::Rendering::FreeType::FontFace :: PixelMode PixMode )
 {
 	
-	(void) TargetAtlas;
-	(void) TargetWidth;
-	(void) Node;
-	(void) Font;
-	(void) GlyphedChars;
-	
-	// TODO: Implement
+	switch ( PixMode )
+	{
+		
+		case Red::Text::Rendering::FreeType::FontFace :: kPixelMode_Monochrome:
+			return _BlitMonochromeToARGB32 ( Target, X, Y, TargetWidth, Source, Width, Height, Pitch );
+			
+		case Red::Text::Rendering::FreeType::FontFace :: kPixelMode_Gray:
+			return _BlitGreyToARGB32 ( Target, X, Y, TargetWidth, Source, Width, Height, Pitch );
+			
+		case Red::Text::Rendering::FreeType::FontFace :: kPixelMode_BGRA:
+			return _BlitPreMulBGRA32ToARGB32 ( Target, X, Y, TargetWidth, Source, Width, Height, Pitch );
+			
+		default:
+			break;
+		
+	}
 	
 }
 
@@ -542,8 +381,8 @@ Red::Text::Rendering :: RawFontTextureAtlas * Red::Text::Rendering::FreeType::Fr
 					GlyphedChars [ GlyphPackIndex ].Index = GlyphPackIndex;
 					GlyphedChars [ GlyphPackIndex ].Width = BMMetrics.Width;
 					GlyphedChars [ GlyphPackIndex ].Height = BMMetrics.Rows;
-					GlyphedChars [ GlyphPackIndex ].X = 0;
-					GlyphedChars [ GlyphPackIndex ].Y = 0;
+					GlyphedChars [ GlyphPackIndex ].Pitch = BMMetrics.Pitch;
+					GlyphedChars [ GlyphPackIndex ].PixMode = BMMetrics.PixMode;
 					
 					GlyphPackIndex ++;
 					
@@ -561,19 +400,24 @@ Red::Text::Rendering :: RawFontTextureAtlas * Red::Text::Rendering::FreeType::Fr
 	if ( ( GenerationMode == FontRenderData :: kAtlasGenerationMode_PowerOfTwo ) || ( GenerationMode == FontRenderData :: kAtlasGenerationMode_Rectangle ) )
 	{
 		
-		_PackingTreeNode * RootNode = _New_PackingTreeNode ();
+		uint32_t MaxGlyphWidth = 0;
+		uint32_t MaxGlyphHeight = 0;
 		
-		// Build our tree. I could have stuck this in the upper loop, but say i wanted to sort the list, i'd have to seperate them.
-		// TODO: Consider sorting GlyphedChars based on maximum dimension.
 		for ( I = 0; I < GlyphCount; I ++ )
-			_Insert_PackingTreeNode ( RootNode, & GlyphedChars [ I ] );
+		{
+			
+			MaxGlyphWidth = ( GlyphedChars [ I ].Width > MaxGlyphWidth ) ? GlyphedChars [ I ].Width : MaxGlyphWidth;
+			MaxGlyphHeight = ( GlyphedChars [ I ].Height > MaxGlyphHeight ) ? GlyphedChars [ I ].Height : MaxGlyphHeight;
+			
+		}
 		
-		uint32_t MaxDimensionX = 0;
-		uint32_t MaxDimensionY = 0;
+		double Area = static_cast <double> ( static_cast <uint64_t> ( MaxGlyphWidth ) * static_cast <uint64_t> ( MaxGlyphHeight ) * static_cast <uint64_t> ( GlyphCount ) );
+		double SqrtArea = sqrt ( Area );
+		uint32_t XCount = ceil ( SqrtArea / static_cast <double> ( MaxGlyphWidth ) );
+		uint32_t YCount = ceil ( SqrtArea / static_cast <double> ( MaxGlyphHeight ) );
 		
-		_FindMaxDimensions_PackingTreeNode ( RootNode, MaxDimensionX, MaxDimensionY );
-		
-		std :: cout << "Dimensions: [ " << MaxDimensionX << ", " << MaxDimensionY << " ]" << std :: endl;
+		uint32_t MaxDimensionX = XCount * MaxGlyphWidth;
+		uint32_t MaxDimensionY = YCount * MaxGlyphHeight;
 		
 		if ( GenerationMode == FontRenderData :: kAtlasGenerationMode_PowerOfTwo )
 		{
@@ -599,16 +443,13 @@ Red::Text::Rendering :: RawFontTextureAtlas * Red::Text::Rendering::FreeType::Fr
 		FontFace :: BitmapMetrics BMMetrics;
 		Font -> GetBitmapMetrics ( BMMetrics );
 		
-		// TODO: Add way to render to ARGB32
 		
-		Util :: RCMem * AtlasImageMemory = new Util :: RCMem ( MaxDimensionX * MaxDimensionY * sizeof ( uint8_t ) );
+		Util :: RCMem * AtlasImageMemory = new Util :: RCMem ( MaxDimensionX * MaxDimensionY * ( ( ( Flags & kFreeTypeRenderFlag_Color ) != 0 ) ? sizeof ( uint32_t ) : sizeof ( uint8_t ) ) );
 		
 		if ( AtlasImageMemory -> GetData () == NULL )
 		{
 			
 			delete AtlasImageMemory;
-			
-			_Delete_PackingTree ( RootNode );
 			
 			delete [] GlyphedChars;
 			
@@ -616,20 +457,36 @@ Red::Text::Rendering :: RawFontTextureAtlas * Red::Text::Rendering::FreeType::Fr
 			
 		}
 		
-		
-		// Perform tree-blit
-		_PerformTreeBlitToAlpha8 ( AtlasImageMemory -> GetData (), MaxDimensionX, RootNode, Font, GlyphedChars, PixelSize );
-		_Delete_PackingTree ( RootNode );
+		// TODO: Add way to render to ARGB32
 		
 		RawFontTextureAtlas :: GlyphMetrics * GlyphMetricsList = new RawFontTextureAtlas :: GlyphMetrics [ GlyphCount ];
 		
 		for ( I = 0; I < GlyphCount; I ++ )
 		{
 			
-			GlyphMetricsList [ I ].OffsetX = GlyphedChars [ I ].X;
-			GlyphMetricsList [ I ].OffsetY = GlyphedChars [ I ].Y;
+			if ( ( ! Font -> LoadGlyph ( GlyphedChars [ I ].GlyphID, FontFace :: kLoadFlag_Defaults ) ) || ( ! Font -> RenderGlyph () ) )
+			{
+				
+				GlyphMetricsList [ I ].OffsetX = 0;
+				GlyphMetricsList [ I ].OffsetY = 0;
+				GlyphMetricsList [ I ].Width = 0;
+				GlyphMetricsList [ I ].Height = 0;
+				
+				continue;
+				
+			}
+			
+			if ( ( Flags & kFreeTypeRenderFlag_Color ) != 0 )
+				_BlitToARGB32 ( AtlasImageMemory -> GetData (), ( I % XCount ) * MaxGlyphWidth, ( I / XCount ) * MaxGlyphHeight, MaxDimensionX, Font -> GetBitmapPointer (), GlyphedChars [ I ].Width, GlyphedChars [ I ].Height, GlyphedChars [ I ].Pitch, GlyphedChars [ I ].PixMode );
+			else
+				_BlitToAlpha8 ( AtlasImageMemory -> GetData (), ( I % XCount ) * MaxGlyphWidth, ( I / XCount ) * MaxGlyphHeight, MaxDimensionX, Font -> GetBitmapPointer (), GlyphedChars [ I ].Width, GlyphedChars [ I ].Height, GlyphedChars [ I ].Pitch, GlyphedChars [ I ].PixMode );
+			
+			GlyphMetricsList [ I ].OffsetX = ( I % XCount ) * MaxGlyphWidth;
+			GlyphMetricsList [ I ].OffsetY = ( I / XCount ) * MaxGlyphHeight;
 			GlyphMetricsList [ I ].Width = GlyphedChars [ I ].Width;
 			GlyphMetricsList [ I ].Height = GlyphedChars [ I ].Height;
+			
+			CodePointToMetricsIndex [ GlyphedChars [ I ].Charachter ] = I;
 			
 		}
 		

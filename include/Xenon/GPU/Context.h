@@ -53,6 +53,14 @@ namespace Xenon
 			static const BlendFactor kBlendFactor_SourceOneAlpha = GL_SRC1_ALPHA;
 			static const BlendFactor kBlendFactor_OneMinusSourceOneAlpha = GL_ONE_MINUS_SRC1_ALPHA;
 			
+			typedef GLenum BlendOperator;
+			
+			static const BlendOperator kBlendOperator_Add = GL_FUNC_ADD;
+			static const BlendOperator kBlendOperator_Subtract = GL_FUNC_SUBTRACT;
+			static const BlendOperator kBlendOperator_ReverseSubtract = GL_FUNC_REVERSE_SUBTRACT;
+			static const BlendOperator kBlendOperator_Min = GL_MIN;
+			static const BlendOperator kBlendOperator_Max = GL_MAX;
+			
 			typedef GLenum CullingFace;
 			
 			static const CullingFace kCullingFace_Front = GL_FRONT;
@@ -68,7 +76,8 @@ namespace Xenon
 			
 			void MakeCurrent ();
 			
-			void BlendFunc ( BlendFactor Source, BlendFactor Destination );
+			void BlendFunc ( BlendFactor SourceRGB, BlendFactor DestinationRGB, BlendFactor SourceAlpha = kBlendFactor_One, BlendFactor DestinationAlpha = kBlendFactor_Zero );
+			void BlendEquation ( BlendOperator OperatorRGB, BlendOperator OperatorAlpha );
 			
 			void SetCullingEnabled ( bool Enabled );
 			void SetCullingFace ( CullingFace Face );

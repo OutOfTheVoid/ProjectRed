@@ -218,36 +218,56 @@ void Xenon::Math::Matrix3x3 :: SetAsTranslation ( Matrix3x3 & Target, const floa
 void Xenon::Math::Matrix3x3 :: AppendTranslation ( Matrix3x3 & Target, const Vec2 & Translation )
 {
 	
-	Target.Elements [ 0 ].SubElements.E2 += Target.Elements [ 0 ].SubElements.E0 * Translation.X + Target.Elements [ 0 ].SubElements.E1 * Translation.Y;
-	Target.Elements [ 1 ].SubElements.E2 += Target.Elements [ 1 ].SubElements.E0 * Translation.X + Target.Elements [ 1 ].SubElements.E1 * Translation.Y;
-	Target.Elements [ 2 ].SubElements.E2 += Target.Elements [ 2 ].SubElements.E0 * Translation.X + Target.Elements [ 2 ].SubElements.E1 * Translation.Y;
+	Target.Elements [ 0 ].SubElements.E0 += Target.Elements [ 2 ].SubElements.E0 * Translation.X;
+	Target.Elements [ 0 ].SubElements.E1 += Target.Elements [ 2 ].SubElements.E1 * Translation.X;
+	Target.Elements [ 0 ].SubElements.E2 += Target.Elements [ 2 ].SubElements.E2 * Translation.X;
+	
+	Target.Elements [ 1 ].SubElements.E0 += Target.Elements [ 2 ].SubElements.E0 * Translation.Y;
+	Target.Elements [ 1 ].SubElements.E1 += Target.Elements [ 2 ].SubElements.E1 * Translation.Y;
+	Target.Elements [ 1 ].SubElements.E2 += Target.Elements [ 2 ].SubElements.E2 * Translation.Y;
 	
 }
 
 void Xenon::Math::Matrix3x3 :: AppendTranslation ( Matrix3x3 & Target, const float X, const float Y )
 {
 	
-	Target.Elements [ 0 ].SubElements.E2 += Target.Elements [ 0 ].SubElements.E0 * X + Target.Elements [ 0 ].SubElements.E1 * Y;
-	Target.Elements [ 1 ].SubElements.E2 += Target.Elements [ 1 ].SubElements.E0 * X + Target.Elements [ 1 ].SubElements.E1 * Y;
-	Target.Elements [ 2 ].SubElements.E2 += Target.Elements [ 2 ].SubElements.E0 * X + Target.Elements [ 2 ].SubElements.E1 * Y;
+	Target.Elements [ 0 ].SubElements.E0 += Target.Elements [ 2 ].SubElements.E0 * X;
+	Target.Elements [ 0 ].SubElements.E1 += Target.Elements [ 2 ].SubElements.E1 * X;
+	Target.Elements [ 0 ].SubElements.E2 += Target.Elements [ 2 ].SubElements.E2 * X;
+	
+	Target.Elements [ 1 ].SubElements.E0 += Target.Elements [ 2 ].SubElements.E0 * Y;
+	Target.Elements [ 1 ].SubElements.E1 += Target.Elements [ 2 ].SubElements.E1 * Y;
+	Target.Elements [ 1 ].SubElements.E2 += Target.Elements [ 2 ].SubElements.E2 * Y;
 	
 }
 
 void Xenon::Math::Matrix3x3 :: AppendTranslation ( Matrix3x3 & Target, const Matrix3x3 & Source, const Vec2 & Translation )
 {
 	
-	Target.Elements [ 0 ].SubElements.E2 = Source.Elements [ 0 ].SubElements.E2 + Source.Elements [ 0 ].SubElements.E0 * Translation.X + Source.Elements [ 0 ].SubElements.E1 * Translation.Y;
-	Target.Elements [ 1 ].SubElements.E2 = Source.Elements [ 1 ].SubElements.E2 + Source.Elements [ 1 ].SubElements.E0 * Translation.X + Source.Elements [ 1 ].SubElements.E1 * Translation.Y;
-	Target.Elements [ 2 ].SubElements.E2 = Source.Elements [ 2 ].SubElements.E2 + Source.Elements [ 2 ].SubElements.E0 * Translation.X + Source.Elements [ 2 ].SubElements.E1 * Translation.Y;
+	Target.Elements [ 0 ].SubElements.E0 += Source.Elements [ 2 ].SubElements.E0 * Translation.X + Source.Elements [ 0 ].SubElements.E0;
+	Target.Elements [ 0 ].SubElements.E1 += Source.Elements [ 2 ].SubElements.E1 * Translation.X + Source.Elements [ 0 ].SubElements.E1;
+	Target.Elements [ 0 ].SubElements.E2 += Source.Elements [ 2 ].SubElements.E2 * Translation.X + Source.Elements [ 0 ].SubElements.E2;
+	
+	Target.Elements [ 1 ].SubElements.E0 += Source.Elements [ 2 ].SubElements.E0 * Translation.Y + Source.Elements [ 1 ].SubElements.E0;
+	Target.Elements [ 1 ].SubElements.E1 += Source.Elements [ 2 ].SubElements.E1 * Translation.Y + Source.Elements [ 1 ].SubElements.E1;
+	Target.Elements [ 1 ].SubElements.E2 += Source.Elements [ 2 ].SubElements.E2 * Translation.Y + Source.Elements [ 1 ].SubElements.E2;
+	
+	Target.Elements [ 2 ] = Source.Elements [ 2 ];
 	
 }
 
 void Xenon::Math::Matrix3x3 :: AppendTranslation ( Matrix3x3 & Target, const Matrix3x3 & Source, const float X, const float Y )
 {
 	
-	Target.Elements [ 0 ].SubElements.E2 = Source.Elements [ 0 ].SubElements.E2 + Source.Elements [ 0 ].SubElements.E0 * X + Source.Elements [ 0 ].SubElements.E1 * Y;
-	Target.Elements [ 1 ].SubElements.E2 = Source.Elements [ 1 ].SubElements.E2 + Source.Elements [ 1 ].SubElements.E0 * X + Source.Elements [ 1 ].SubElements.E1 * Y;
-	Target.Elements [ 2 ].SubElements.E2 = Source.Elements [ 2 ].SubElements.E2 + Source.Elements [ 2 ].SubElements.E0 * X + Source.Elements [ 2 ].SubElements.E1 * Y;
+	Target.Elements [ 0 ].SubElements.E0 += Source.Elements [ 2 ].SubElements.E0 * X + Source.Elements [ 0 ].SubElements.E0;
+	Target.Elements [ 0 ].SubElements.E1 += Source.Elements [ 2 ].SubElements.E1 * X + Source.Elements [ 0 ].SubElements.E1;
+	Target.Elements [ 0 ].SubElements.E2 += Source.Elements [ 2 ].SubElements.E2 * X + Source.Elements [ 0 ].SubElements.E2;
+	
+	Target.Elements [ 1 ].SubElements.E0 += Source.Elements [ 2 ].SubElements.E0 * Y + Source.Elements [ 1 ].SubElements.E0;
+	Target.Elements [ 1 ].SubElements.E1 += Source.Elements [ 2 ].SubElements.E1 * Y + Source.Elements [ 1 ].SubElements.E1;
+	Target.Elements [ 1 ].SubElements.E2 += Source.Elements [ 2 ].SubElements.E2 * Y + Source.Elements [ 1 ].SubElements.E2;
+	
+	Target.Elements [ 2 ] = Source.Elements [ 2 ];
 	
 }
 			
@@ -406,11 +426,11 @@ void Xenon::Math::Matrix3x3 :: SetAsScale ( Matrix3x3 & Target, const Vec2 & Sca
 	Target.Elements [ 0 ].SubElements.E0 = Scale.X;
 	Target.Elements [ 0 ].SubElements.E1 = Target.Elements [ 0 ].SubElements.E2 = 0.0f;
 	
-	Target.Elements [ 0 ].SubElements.E1 = Scale.Y;
-	Target.Elements [ 0 ].SubElements.E0 = Target.Elements [ 0 ].SubElements.E2 = 0.0f;
+	Target.Elements [ 1 ].SubElements.E1 = Scale.Y;
+	Target.Elements [ 1 ].SubElements.E0 = Target.Elements [ 1 ].SubElements.E2 = 0.0f;
 	
-	Target.Elements [ 0 ].SubElements.E2 = 1.0f;
-	Target.Elements [ 0 ].SubElements.E1 = Target.Elements [ 0 ].SubElements.E2 = 0.0f;
+	Target.Elements [ 2 ].SubElements.E2 = 1.0f;
+	Target.Elements [ 2 ].SubElements.E1 = Target.Elements [ 2 ].SubElements.E0 = 0.0f;
 	
 }
 
@@ -420,11 +440,11 @@ void Xenon::Math::Matrix3x3 :: SetAsScale ( Matrix3x3 & Target, const float X, c
 	Target.Elements [ 0 ].SubElements.E0 = X;
 	Target.Elements [ 0 ].SubElements.E1 = Target.Elements [ 0 ].SubElements.E2 = 0.0f;
 	
-	Target.Elements [ 0 ].SubElements.E1 = Y;
-	Target.Elements [ 0 ].SubElements.E0 = Target.Elements [ 0 ].SubElements.E2 = 0.0f;
+	Target.Elements [ 1 ].SubElements.E1 = Y;
+	Target.Elements [ 1 ].SubElements.E0 = Target.Elements [ 1 ].SubElements.E2 = 0.0f;
 	
-	Target.Elements [ 0 ].SubElements.E2 = 1.0f;
-	Target.Elements [ 0 ].SubElements.E1 = Target.Elements [ 0 ].SubElements.E2 = 0.0f;
+	Target.Elements [ 2 ].SubElements.E2 = 1.0f;
+	Target.Elements [ 2 ].SubElements.E1 = Target.Elements [ 2 ].SubElements.E0 = 0.0f;
 	
 }
 

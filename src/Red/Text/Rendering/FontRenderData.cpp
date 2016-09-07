@@ -20,20 +20,19 @@ Red::Text::Rendering::FontRenderData :: FontRenderData ( IFontReference * FontRe
 Red::Text::Rendering::FontRenderData :: ~FontRenderData ()
 {
 	
-	/*for ( std :: set <RawFontTextureAtlas *, bool ( * ) ( const RawFontTextureAtlas * A, const RawFontTextureAtlas * B )> :: iterator Iter = AltasSet.begin (); Iter != AltasSet.end (); ++ Iter )
+	for ( std :: set <RawFontTextureAtlas *, bool ( * ) ( const RawFontTextureAtlas * A, const RawFontTextureAtlas * B )> :: iterator Iter = AltasSet.begin (); Iter != AltasSet.end (); ++ Iter )
 	{
 		
 		if ( ( * Iter ) -> GetUsageCount () == 0 )
 		{
 			
 			RawFontTextureAtlas * ToRemove = ( * Iter );
-			AltasSet.erase ( ToRemove );
-			
 			ToRemove -> Dereference ();
+			AltasSet.erase ( ToRemove );
 			
 		}
 		
-	}*/
+	}
 	
 	FontReference -> Dereference ();
 	LayoutSource -> Dereference ();
@@ -92,8 +91,8 @@ Red::Text::Rendering :: RawFontTextureAtlas * Red::Text::Rendering::FontRenderDa
 void Red::Text::Rendering::FontRenderData :: RetireFontTextureAtlas ( Red::Text::Rendering :: RawFontTextureAtlas * Atlas )
 {
 	
-	/*Atlas -> EndUsage ();
-	Atlas -> Dereference ();*/
+	Atlas -> EndUsage ();
+	Atlas -> Dereference ();
 	
 }
 

@@ -31,7 +31,11 @@ namespace Red
 				{
 				public:
 					
-					static FontRenderData * CreateRenderData ( FontFace * Face, const std :: u32string & CharSet, FontRenderData :: AtlasGenerationMode GenerationMode );
+					typedef uint32_t FreeTypeRenderFlag;
+					
+					static const FreeTypeRenderFlag kFreeTypeRenderFlag_Color = 1;
+					
+					static FontRenderData * CreateRenderData ( FontFace * Face, const std :: u32string & CharSet, FontRenderData :: AtlasGenerationMode GenerationMode, FreeTypeRenderFlag Flags = 0 );
 					
 					~FreeTypeFontRenderData ();
 					
@@ -50,9 +54,11 @@ namespace Red
 						
 				private:
 					
-					FreeTypeFontRenderData ( FontFace * Font );
+					FreeTypeFontRenderData ( FontFace * Font, FreeTypeRenderFlag Flags );
 					
 					FontFace * Font;
+					
+					FreeTypeRenderFlag Flags;
 					
 				};
 				

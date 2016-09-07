@@ -71,7 +71,8 @@ OBJECTS=obj/SDLX/Lib.o \
 		obj/Red/Text/Rendering/FreeType/FTLibrary.o \
 		obj/Red/Text/Rendering/FreeType/FontFace.o \
 		obj/Red/Text/Rendering/FontRenderData.o \
-		obj/Red/Text/Rendering/FreeType/FreeTypeFontRenderData.o
+		obj/Red/Text/Rendering/FreeType/FreeTypeFontRenderData.o \
+		obj/Red/Text/Rendering/ShadedRenderer.o
 	
 bin/Main: obj/Main.o
 	$(LD) $(LINK_FLAGS) $(OBJECTS) obj/Main.o -o bin/Main
@@ -269,6 +270,9 @@ obj/Red/Text/Rendering/FontRenderData.o: include/Red/Text/Rendering/FontRenderDa
 	
 obj/Red/Text/Rendering/FreeType/FreeTypeFontRenderData.o: include/Red/Text/Rendering/FreeType/FreeTypeFontRenderData.h src/Red/Text/Rendering/FreeType/FreeTypeFontRenderData.cpp include/Red/Text/Rendering/FontRenderData.h include/Red/Text/Rendering/FreeType/FreeType.h include/Red/Text/Rendering/FreeType/FontFace.h include/Red/Text/Rendering/Rendering.h include/Red/Text/Text.h include/Red/Red.h include/Red/Util/RefCounted.h include/Red/Text/Rendering/IFontLayoutSource.h include/Red/Text/Rendering/IFontReference.h include/Red/Text/Rendering/IFontTextureAtlasFactory.h include/Red/Text/Rendering/RawFontTextureAtlas.h include/Red/Options.h include/Red/Util/RCMem.h include/Red/Util/RefCounted.h
 	$(CXX) -c $(CXX_FLAGS) src/Red/Text/Rendering/FreeType/FreeTypeFontRenderData.cpp -o obj/Red/Text/Rendering/FreeType/FreeTypeFontRenderData.o
+	
+obj/Red/Text/Rendering/ShadedRenderer.o: include/Red/Text/Rendering/ShadedRenderer.h src/Red/Text/Rendering/ShadedRenderer.cpp include/Red/Text/Rendering/Rendering.h include/Red/Text/Rendering/FontRenderData.h include/Xenon/Geometry/Mesh.h include/Xenon/Geometry/Primitives.h include/Xenon/Math/Matrix3x3.h include/Xenon/Math/Vec4.h include/Xenon/Math/Vec2.h include/Xenon/Math/RawVec4UniformSource.h include/Xenon/Math/RawFloatUniformSource.h include/Xenon/Math/RawMatrix3x3UniformSource.h include/Xenon/GPU/IGPUResourceUser.h include/Xenon/GPU/VertexBuffer.h include/Xenon/GPU/VertexShader.h include/Xenon/GPU/FragmentShader.h include/Xenon/GPU/ShaderProgram.h include/Xenon/GPU/UniformSet.h include/Xenon/GPU/FrameBuffer.h include/Xenon/GPU/VertexArray.h include/Xenon/GPU/Texture2D.h include/Red/Util/RefCounted.h
+	$(CXX) -c $(CXX_FLAGS) src/Red/Text/Rendering/ShadedRenderer.cpp -o obj/Red/Text/Rendering/ShadedRenderer.o
 	
 clean:
 	-@rm -r obj/*

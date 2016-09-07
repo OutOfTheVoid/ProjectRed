@@ -43,7 +43,7 @@ void Xenon::GPU::Context :: MakeCurrent ()
 	
 }
 
-void Xenon::GPU::Context :: BlendFunc ( BlendFactor Source, BlendFactor Destination )
+void Xenon::GPU::Context :: BlendFunc ( BlendFactor SourceRGB, BlendFactor DestinationRGB, BlendFactor SourceAlpha, BlendFactor DestinationAlpha )
 {
 	
 	MakeCurrent ();
@@ -52,7 +52,20 @@ void Xenon::GPU::Context :: BlendFunc ( BlendFactor Source, BlendFactor Destinat
 		return;
 	
 	glEnable ( GL_BLEND );
-	glBlendFunc ( Source, Destination );
+	glBlendFuncSeparate ( SourceRGB, DestinationRGB, SourceAlpha, DestinationAlpha );
+	
+}
+
+void Xenon::GPU::Context :: BlendEquation ( BlendOperator OperatorRGB, BlendOperator OperatorAlpha )
+{
+	
+	MakeCurrent ();
+	
+	if ( CurrentBoundContext != this )
+		return;
+	
+	glEnable ( GL_BLEND );
+	glBlendEquationSeparate ( OperatorRGB, OperatorAlpha );
 	
 }
 
