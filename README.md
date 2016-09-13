@@ -30,8 +30,9 @@ Xenon
 RAUX
 ----
 	* LibPNG
-	* Red ( Eventually )
+	* Red ( Optional ) ( Eventually )
 	* Xenon ( Optional )
 RED
 ---
 	* LibFreeType 2 ( Optional )
+	* Xenon

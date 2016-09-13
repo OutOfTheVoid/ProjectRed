@@ -55,6 +55,15 @@ namespace Red
 					
 				};
 				
+				enum JustificationMode
+				{
+					
+					kJustificationMode_Left,
+					kJustificationMode_Right,
+					kJustificationMode_Center
+					
+				};
+				
 				ShadedRenderer ( FontRenderData * FontData );
 				~ShadedRenderer ();
 				
@@ -72,6 +81,7 @@ namespace Red
 				Xenon::Math :: Vec4 GetColor ();
 				
 				void SetRegistrationMetrics ( RegistrationMetric X, RegistrationMetric Y );
+				void SetJustificationMode ( JustificationMode Justify );
 				
 				void SetGlobalTransform ( const Xenon::Math :: Matrix3x3 & Transform );
 				
@@ -136,6 +146,10 @@ namespace Red
 				
 				RegistrationMetric RegistrationX;
 				RegistrationMetric RegistrationY;
+				
+				JustificationMode Justify;
+				
+				double TabWidth;
 				
 				Xenon::Math :: RawFloatUniformSource DepthUniform;
 				
