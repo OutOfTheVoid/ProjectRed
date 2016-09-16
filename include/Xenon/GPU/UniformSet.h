@@ -38,7 +38,9 @@ namespace Xenon
 			void AddFloatVec4Uniform ( const std :: string & Name, IFloatVec4UniformSource * Source, bool LocateImmediately = true );
 			
 			void AddMatrix3x3Uniform ( const std :: string & Name, IMatrix3x3UniformSource * Source, bool LocateImmediately = true );
+			
 			void AddMatrix4x4Uniform ( const std :: string & Name, Xenon::GPU::IMatrix4x4UniformSource * Source, bool LocateImmediately = true );
+			void ChangeMatrix4x4Uniform ( const std :: string & Name, Xenon::GPU::IMatrix4x4UniformSource * Source, bool LocateImmediately = true );
 			
 			void AddUIntUniform ( const std :: string & Name, IUIntUniformSource * Source, bool LocateImmediately = true );
 			void AddIntUniform ( const std :: string & Name, IIntUniformSource * Source, bool LocateImmediately = true );

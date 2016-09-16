@@ -58,12 +58,12 @@ void Xenon::GPU::Texture2D :: Bind ()
 	
 }
 
-void Xenon::GPU::Texture2D :: BlankTextureImage ( GLint DetailLevel, InternalFormat FInternal, GLsizei Width, GLsizei Height, ExternalFormat EFormat, ExternalLayout ELayout )
+void Xenon::GPU::Texture2D :: BlankTextureImage ( GLint DetailLevel, InternalFormat FInternal, GLsizei Width, GLsizei Height )
 {
 	
 	Bind ();
 	
-	glTexImage2D ( GL_TEXTURE_2D, DetailLevel, FInternal, Width, Height, 0, EFormat, ELayout, NULL );
+	glTexImage2D ( GL_TEXTURE_2D, DetailLevel, FInternal, Width, Height, 0, kExternalFormat_RGBA, kExternalLayout_UByte, NULL );
 	
 }
 

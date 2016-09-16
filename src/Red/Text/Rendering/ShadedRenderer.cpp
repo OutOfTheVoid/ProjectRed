@@ -112,6 +112,9 @@ Red::Text::Rendering::ShadedRenderer :: ShadedRenderer ( FontRenderData * FontDa
 	RenderQuadSpec.PositionSpec.Static = true;
 	Xenon::Geometry::Primitives :: GenerateQuad2DMesh ( & QuadMesh, RenderQuadSpec );
 	
+	if ( QuadMesh != NULL )
+		QuadMesh -> Reference ();
+	
 }
 
 Red::Text::Rendering::ShadedRenderer :: ~ShadedRenderer ()
@@ -121,6 +124,14 @@ Red::Text::Rendering::ShadedRenderer :: ~ShadedRenderer ()
 	SetFontData ( NULL );
 	
 	GPUResourceFree ();
+	
+	if ( QuadMesh != NULL )
+	{
+		
+		QuadMesh -> Dereference ();
+		QuadMesh = NULL;
+		
+	}
 	
 }
 

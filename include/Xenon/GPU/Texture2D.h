@@ -16,6 +16,8 @@ namespace Xenon
 	namespace GPU
 	{
 		
+		class FrameBuffer;
+		
 		class Texture2D : public ITexture, public Red::Util :: RefCounted
 		{
 		public:
@@ -169,7 +171,7 @@ namespace Xenon
 			
 			bool GPUResourceAllocated ();
 			
-			void BlankTextureImage ( GLint DetailLevel, InternalFormat FInternal, GLsizei Width, GLsizei Height, ExternalLayout ELayout, ExternalFormat EFormat );
+			void BlankTextureImage ( GLint DetailLevel, InternalFormat FInternal, GLsizei Width, GLsizei Height );
 			void TextureImage ( GLint DetailLevel, InternalFormat FInternal, GLsizei Width, GLsizei Height, ExternalFormat EFormat, ExternalLayout ELayout, const GLvoid * Data, GLuint Alignment = 1, GLuint Pitch = 0 );
 			
 			void GenerateMipMaps ();
@@ -184,6 +186,8 @@ namespace Xenon
 			void AssignToTextureUnit ( GLuint Unit );
 			
 		private:
+			
+			friend class FrameBuffer;
 			
 			bool Allocated;
 			

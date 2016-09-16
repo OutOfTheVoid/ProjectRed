@@ -47,6 +47,8 @@
 #include <Red/Events/IEvent.h>
 #include <Red/Events/BasicEvent.h>
 
+#include <Red/Graphics/DeferredModelRenderer.h>
+
 #include <Red/Threading/Thread.h>
 #include <Red/Threading/ThreadEvent.h>
 
@@ -95,7 +97,7 @@ struct RenderStruct_Struct
 	SDLX :: Window * Win;
 	SDLX :: Timer * RTimer;
 	
-	Red::Text::Rendering::ShadedRenderer * TextRenderer;
+	Red::Graphics :: DeferredModelRenderer * Renderer;
 	
 	uint32_t Frame;
 	
@@ -104,34 +106,10 @@ struct RenderStruct_Struct
 bool SetupScene ( RenderStruct & Data )
 {
 	
-	Red::Text::Rendering::FreeType :: FontFace * TestFontFace = Red::Text::Rendering::FreeType::FontFace :: NewFromFile ( "PTMono.ttf", 0, "__FontName__" );
-	
-	if ( TestFontFace != NULL )
-	{
-		
-		std :: u32string CharSet ( U"abcdefghighjlmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789.,!?$#@%\\/^&*()-+_=~`\'\"<>[]{}:; |" );
-		
-		Red::Text::Rendering :: FontRenderData * PTMonoRenderData = Red::Text::Rendering::FreeType::FreeTypeFontRenderData :: CreateRenderData ( TestFontFace, CharSet, Red::Text::Rendering::FontRenderData :: kAtlasGenerationMode_PowerOfTwo, Red::Text::Rendering::FreeType::FreeTypeFontRenderData :: kFreeTypeRenderFlag_ComputeMetrics );
-		
-		if ( PTMonoRenderData != NULL )
-		{
-			
-			Data.TextRenderer = new Red::Text::Rendering::ShadedRenderer ( PTMonoRenderData );
-			Data.TextRenderer -> GPUResourceAlloc ();
-			Data.TextRenderer -> SetRenderTarget ( Data.Cont, Data.Cont -> GetDefaultFrameBuffer (), Xenon::Math :: Vec2 ( WINDOW_WIDTH_0, WINDOW_HEIGHT_0 ) );
-			Data.TextRenderer -> SetRegistrationMetrics ( Red::Text::Rendering::ShadedRenderer :: kRegistrationMetric_Min, Red::Text::Rendering::ShadedRenderer :: kRegistrationMetric_Max );
-			Data.TextRenderer -> SetJustificationMode ( Red::Text::Rendering::ShadedRenderer :: kJustificationMode_Right );
-			Data.TextRenderer -> Reference ();
-			
-			Data.TextRenderer -> SetSize ( 20.0 );
-			
-		}
-		else
-			Data.TextRenderer = NULL;
-		
-	}
-	else
-		Data.TextRenderer = NULL;
+	Data.Renderer = new Red::Graphics :: DeferredModelRenderer ();
+	Data.Renderer -> Reference ();
+	Data.Renderer -> Initialize ( Data.Cont );
+	Data.Renderer -> SetupRender ( Data.Cont -> GetDefaultFrameBuffer (), Xenon::Math :: Vec2 ( WINDOW_WIDTH_0, WINDOW_HEIGHT_0 ) );
 	
 	return true;
 	
@@ -140,8 +118,13 @@ bool SetupScene ( RenderStruct & Data )
 void DestroyScene ( RenderStruct & Data )
 {
 	
-	if ( Data.TextRenderer != NULL )
-		Data.TextRenderer -> Dereference ();
+	if ( Data.Renderer != NULL )
+	{
+		
+		Data.Renderer -> DestroyRender ();
+		Data.Renderer -> Dereference ();
+		
+	}
 	
 }
 
@@ -150,22 +133,7 @@ void Render ( RenderStruct & Data )
 	
 	Data.Cont -> GetDefaultFrameBuffer () -> Clear ();
 	
-	Xenon::Math::Matrix3x3 TextTransform;
-	
-	Xenon::Math::Matrix3x3 :: AppendTranslation ( TextTransform, - 400.0, 300.0 );
-	//Xenon::Math::Matrix3x3 :: PrependRotation ( TextTransform, Data.Frame / 20.0 );
-	
-	if ( Data.TextRenderer != NULL )
-	{
-		
-		float SFT = ( sinf ( Data.Frame / 15.0 ) + 1.0f ) * 0.5f;
-		float CFT = ( cosf ( Data.Frame / 15.0 ) + 1.0f ) * 0.5f;
-		
-		Data.TextRenderer -> SetColor ( Xenon::Math :: Vec4 ( SFT * 0.6f + CFT * 1.0f, SFT * 0.7f + CFT * 0.2f, SFT * 1.0f + CFT * 0.5f, 1.0f ) );
-		Data.TextRenderer -> SetGlobalTransform ( TextTransform );
-		Data.TextRenderer -> RenderUnicodeString ( U"#include <stdio.h>\n\nint main ( int argc, const char * argv )\n{\n\t\n\tprintf ( \"Hello, world!\" );\n\t\n}" );
-		
-	}
+	Data.Renderer -> Render ();
 	
 }
 
@@ -333,7 +301,7 @@ void KeyListener ( int32_t ScanCode, int32_t KeyCode, bool Down, void * Data )
 			reinterpret_cast <KeyboardStruct *> ( Data ) -> Resized = false;
 			reinterpret_cast <KeyboardStruct *> ( Data ) -> RenderData -> Win -> Resize ( WINDOW_WIDTH_0, WINDOW_HEIGHT_0 );
 			glViewport ( 0, 0, WINDOW_WIDTH_0, WINDOW_HEIGHT_0 );
-			reinterpret_cast <KeyboardStruct *> ( Data ) -> RenderData -> TextRenderer -> SetRenderTarget ( reinterpret_cast <KeyboardStruct *> ( Data ) -> RenderData -> Cont, reinterpret_cast <KeyboardStruct *> ( Data ) -> RenderData -> Cont -> GetDefaultFrameBuffer (), Xenon::Math::Vec2 ( WINDOW_WIDTH_0, WINDOW_HEIGHT_0 ) );
+			reinterpret_cast <KeyboardStruct *> ( Data ) -> RenderData -> Renderer -> SetupRender ( reinterpret_cast <KeyboardStruct *> ( Data ) -> RenderData -> Cont -> GetDefaultFrameBuffer (), Xenon::Math :: Vec2 ( WINDOW_WIDTH_0, WINDOW_HEIGHT_0 ) );
 			
 		}
 		else
@@ -342,7 +310,7 @@ void KeyListener ( int32_t ScanCode, int32_t KeyCode, bool Down, void * Data )
 			reinterpret_cast <KeyboardStruct *> ( Data ) -> Resized = true;
 			reinterpret_cast <KeyboardStruct *> ( Data ) -> RenderData -> Win -> Resize ( WINDOW_WIDTH_1, WINDOW_HEIGHT_1 );
 			glViewport ( 0, 0, WINDOW_WIDTH_1, WINDOW_HEIGHT_1 );
-			reinterpret_cast <KeyboardStruct *> ( Data ) -> RenderData -> TextRenderer -> SetRenderTarget ( reinterpret_cast <KeyboardStruct *> ( Data ) -> RenderData -> Cont, reinterpret_cast <KeyboardStruct *> ( Data ) -> RenderData -> Cont -> GetDefaultFrameBuffer (), Xenon::Math::Vec2 ( WINDOW_WIDTH_1, WINDOW_HEIGHT_1 ) );
+			reinterpret_cast <KeyboardStruct *> ( Data ) -> RenderData -> Renderer -> SetupRender ( reinterpret_cast <KeyboardStruct *> ( Data ) -> RenderData -> Cont -> GetDefaultFrameBuffer (), Xenon::Math :: Vec2 ( WINDOW_WIDTH_1, WINDOW_HEIGHT_1 ) );
 			
 		}
 		

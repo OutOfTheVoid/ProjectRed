@@ -21,6 +21,7 @@ namespace Xenon
 		class VertexArray;
 		class Texture2D;
 		class FrameBuffer;
+		class RenderBuffer;
 		
 		class Context : public Red::Util :: RefCounted
 		{
@@ -95,6 +96,7 @@ namespace Xenon
 			friend class VertexArray;
 			friend class Texture2D;
 			friend class FrameBuffer;
+			friend class RenderBuffer;
 			
 			static Context NullContext;
 			
@@ -109,6 +111,7 @@ namespace Xenon
 			Texture2D * CurrentBoundTexture2D;
 			FrameBuffer * CurrentBoundReadFrameBuffer;
 			FrameBuffer * CurrentBoundDrawFrameBuffer;
+			RenderBuffer * CurrentBoundRenderBuffer;
 			
 			FrameBuffer DefaultFrameBuffer;
 			

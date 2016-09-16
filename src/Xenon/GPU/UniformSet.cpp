@@ -170,6 +170,50 @@ void Xenon::GPU::UniformSet :: AddMatrix4x4Uniform ( const std :: string & Name,
 	
 }
 
+void Xenon::GPU::UniformSet :: ChangeMatrix4x4Uniform ( const std :: string & Name, Xenon::GPU::IMatrix4x4UniformSource * Source, bool LocateImmediately )
+{
+	
+	for ( uint32_t I = 0; I < Matrix4x4Uniforms.size (); I ++ )
+	{
+		
+		Matrix4x4UniformTracker & Tracker = Matrix4x4Uniforms [ I ];
+		
+		if ( Tracker.Name == Name )
+		{
+			
+			if ( Source != NULL )
+			{
+				
+				Tracker.Source -> Dereference ();
+				Tracker.Source = Source;
+				Tracker.Source -> Reference ();
+				
+				Tracker.LastUploadedIteration = - 1;
+				
+				return;
+				
+			}
+			else
+			{
+				
+				Tracker.Source -> Dereference ();
+				Tracker.Source = NULL;
+				
+				Matrix4x4Uniforms.erase ( Matrix4x4Uniforms.begin () + I );
+				
+				return;
+				
+			}
+			
+		}
+		
+	}
+	
+	if ( Source != NULL )
+		AddMatrix4x4Uniform ( Name, Source, LocateImmediately );
+	
+}
+
 void Xenon::GPU::UniformSet :: AddUIntUniform ( const std :: string & Name, IUIntUniformSource * Source, bool LocateImmediately )
 {
 	
@@ -319,7 +363,10 @@ void Xenon::GPU::UniformSet :: UpdateUniforms ( bool Relink )
 		if ( ( FloatVec2Uniforms [ I ].UniformLocation != - 1 ) && ( FloatVec2Uniforms [ I ].LastUploadedIteration < CurrentIteration ) )
 		{
 			
-			glUniform2fv ( FloatVec2Uniforms [ I ].UniformLocation, 1, FloatVec2Uniforms [ I ].Source -> GetFloatVector () );
+			const GLfloat * Vector = FloatVec2Uniforms [ I ].Source -> GetFloatVector ();
+			
+			if ( Vector != NULL )
+				glUniform2fv ( FloatVec2Uniforms [ I ].UniformLocation, 1, Vector );
 			
 			FloatVec2Uniforms [ I ].LastUploadedIteration = CurrentIteration;
 			
@@ -335,7 +382,10 @@ void Xenon::GPU::UniformSet :: UpdateUniforms ( bool Relink )
 		if ( ( FloatVec3Uniforms [ I ].UniformLocation != - 1 ) && ( FloatVec3Uniforms [ I ].LastUploadedIteration < CurrentIteration ) )
 		{
 			
-			glUniform3fv ( FloatVec3Uniforms [ I ].UniformLocation, 1, FloatVec3Uniforms [ I ].Source -> GetFloatVector () );
+			const GLfloat * Vector = FloatVec3Uniforms [ I ].Source -> GetFloatVector ();
+			
+			if ( Vector != NULL )
+				glUniform3fv ( FloatVec3Uniforms [ I ].UniformLocation, 1, Vector );
 			
 			FloatVec3Uniforms [ I ].LastUploadedIteration = CurrentIteration;
 			
@@ -351,7 +401,10 @@ void Xenon::GPU::UniformSet :: UpdateUniforms ( bool Relink )
 		if ( ( FloatVec4Uniforms [ I ].UniformLocation != - 1 ) && ( FloatVec4Uniforms [ I ].LastUploadedIteration < CurrentIteration ) )
 		{
 			
-			glUniform4fv ( FloatVec4Uniforms [ I ].UniformLocation, 1, FloatVec4Uniforms [ I ].Source -> GetFloatVector () );
+			const GLfloat * Vector = FloatVec4Uniforms [ I ].Source -> GetFloatVector ();
+			
+			if ( Vector != NULL )
+				glUniform4fv ( FloatVec4Uniforms [ I ].UniformLocation, 1, Vector );
 			
 			FloatVec4Uniforms [ I ].LastUploadedIteration = CurrentIteration;
 			
@@ -367,7 +420,10 @@ void Xenon::GPU::UniformSet :: UpdateUniforms ( bool Relink )
 		if ( ( Matrix3x3Uniforms [ I ].UniformLocation != - 1 ) && ( Matrix3x3Uniforms [ I ].LastUploadedIteration < CurrentIteration ) )
 		{
 			
-			glUniformMatrix3fv ( Matrix3x3Uniforms [ I ].UniformLocation, 1, Matrix3x3Uniforms [ I ].Source -> IsTransposed (), Matrix3x3Uniforms [ I ].Source -> GetFloatArray () );
+			const GLfloat * Array = Matrix3x3Uniforms [ I ].Source -> GetFloatArray ();
+			
+			if ( Array != NULL )
+				glUniformMatrix3fv ( Matrix3x3Uniforms [ I ].UniformLocation, 1, Matrix3x3Uniforms [ I ].Source -> IsTransposed (), Array );
 			
 			Matrix3x3Uniforms [ I ].LastUploadedIteration = CurrentIteration;
 			
@@ -383,7 +439,10 @@ void Xenon::GPU::UniformSet :: UpdateUniforms ( bool Relink )
 		if ( ( Matrix4x4Uniforms [ I ].UniformLocation != - 1 ) && ( Matrix4x4Uniforms [ I ].LastUploadedIteration < CurrentIteration ) )
 		{
 			
-			glUniformMatrix4fv ( Matrix4x4Uniforms [ I ].UniformLocation, 1, Matrix4x4Uniforms [ I ].Source -> IsTransposed (), Matrix4x4Uniforms [ I ].Source -> GetFloatArray () );
+			const GLfloat * Array = Matrix4x4Uniforms [ I ].Source -> GetFloatArray ();
+			
+			if ( Array != NULL )
+				glUniformMatrix4fv ( Matrix4x4Uniforms [ I ].UniformLocation, 1, Matrix4x4Uniforms [ I ].Source -> IsTransposed (), Array );
 			
 			Matrix4x4Uniforms [ I ].LastUploadedIteration = CurrentIteration;
 			

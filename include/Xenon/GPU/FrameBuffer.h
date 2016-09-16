@@ -15,6 +15,8 @@ namespace Xenon
 	{
 		
 		class Context;
+		class Texture2D;
+		class RenderBuffer;
 		
 		class FrameBuffer : public IGPUResourceUser, public Red::Util :: RefCounted
 		{
@@ -32,6 +34,12 @@ namespace Xenon
 			static const FrameBufferComponent kFrameBufferComponent_Depth = GL_DEPTH_BUFFER_BIT;
 			static const FrameBufferComponent kFrameBufferComponent_Stencil = GL_STENCIL_BUFFER_BIT;
 			
+			typedef GLenum OutputAttachment;
+			
+			static const OutputAttachment kOutputAttachment_ColorBuffer = GL_COLOR_ATTACHMENT0;
+			static const OutputAttachment kOutputAttachment_DepthBuffer = GL_DEPTH_ATTACHMENT;
+			static const OutputAttachment kOutputAttachment_StencilBuffer = GL_STENCIL_ATTACHMENT;
+			
 			FrameBuffer ();
 			~FrameBuffer ();
 			
@@ -47,6 +55,9 @@ namespace Xenon
 			void SetClearStencil ( GLint Value );
 			
 			void Clear ( FrameBufferComponent Components = kFrameBufferComponent_Color | kFrameBufferComponent_Depth );
+			
+			void SetRenderTexture2D ( OutputAttachment Attachment, GLuint AttachmentIndex, Texture2D & Texture, GLuint Level = 0 );
+			void SetRenderBuffer ( OutputAttachment Attachment, GLuint AttachmentIndex, RenderBuffer & Buffer );
 			
 		private:
 			
