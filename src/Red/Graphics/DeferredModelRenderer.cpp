@@ -11,6 +11,8 @@ const char * Red::Graphics::DeferredModelRenderer :: kModelAttributeName_Tangent
 const char * Red::Graphics::DeferredModelRenderer :: kModelAttributeName_Color = "Color";
 const char * Red::Graphics::DeferredModelRenderer :: kModelAttributeName_TextureCoords = "TextureCoord";
 
+const char * Red::Graphics::DeferredModelRenderer :: kModelAttributeName_InstancedTransform = "InstancedTransform";
+
 const char * _DeferredModelRenderer_VShader_Geometry =
 "#version 330 core\n"
 
@@ -20,11 +22,14 @@ const char * _DeferredModelRenderer_VShader_Geometry =
 "in vec3 Color;\n"
 "in vec2 TextureCoord;\n"
 
+"in mat4 InstancedTransform;\n"
+
 "uniform mat4 ModelMatrix;\n"
 "uniform mat4 ViewProjectionMatrix;\n"
 "uniform mat4 NormalMatrix;\n"
 
 "uniform bool DoNormalTexture;\n"
+"uniform bool DoInstancedTransformation;\n"
 
 "out vec3 FragPosition;\n"
 "out vec3 FragNormal;\n"
@@ -36,7 +41,12 @@ const char * _DeferredModelRenderer_VShader_Geometry =
 "void main ()\n"
 "{\n"
 
-"	vec4 WorldPosition = vec4 ( Position, 1.0 ) * ModelMatrix;\n"
+"	vec4 WorldPosition;\n"
+
+"	if ( DoInstancedTransformation )\n"
+"		WorldPosition = vec4 ( Position, 1.0 ) * InstancedTransform;\n"
+"	else\n"
+"		WorldPosition = vec4 ( Position, 1.0 ) * ModelMatrix;\n"
 
 "	if ( DoNormalTexture )\n"
 "	{\n"
@@ -183,7 +193,6 @@ Red::Graphics::DeferredModelRenderer :: DeferredModelRenderer ():
 	GPUContext ( NULL ),
 	RenderTarget ( NULL ),
 	GPUAllocated ( false ),
-	GeometryVAO (),
 	GeometryUniforms (),
 	GBuffer (),
 	AttachmentList { GL_COLOR_ATTACHMENT0, GL_COLOR_ATTACHMENT1, GL_COLOR_ATTACHMENT2 },
@@ -331,8 +340,6 @@ void Red::Graphics::DeferredModelRenderer :: SetupRender ( Xenon::GPU :: FrameBu
 	GPUContext -> MakeCurrent ();
 	
 	// Set up geometry pass
-	
-	GeometryVAO.Bind ();
 	GBuffer.Bind ();
 	
 	AlbedoSpecularTexture.BlankTextureImage ( 0, Xenon::GPU::Texture2D :: kInternalFormat_RGBA, Dimensions.X, Dimensions.Y );
@@ -367,7 +374,6 @@ void Red::Graphics::DeferredModelRenderer :: SetupRender ( Xenon::GPU :: FrameBu
 	GeometryProgram.AddShader ( GeometryFShader );
 	GeometryProgram.Link ();
 	GeometryProgram.Reference ();
-	GeometryVAO.SetProgram ( & GeometryProgram );
 	
 	GeometryUniforms.SetProgram ( & GeometryProgram );
 	GeometryUniforms.Link ();
@@ -432,8 +438,6 @@ void Red::Graphics::DeferredModelRenderer :: DestroyRender ()
 	GeometryVShader.GPUResourceFree ();
 	GeometryFShader.GPUResourceFree ();
 	
-	GeometryVAO.GPUResourceFree ();
-	
 	LightingUniforms.SetProgram ( NULL );
 	LightingUniforms.ResetUniformStates ();
 	
@@ -454,5 +458,23 @@ void Red::Graphics::DeferredModelRenderer :: Render ()
 {
 	
 	// TODO: Setup rendering chain
+	
+}
+
+Red::Graphics::DeferredModelRenderer::PerModelRenderData :: PerModelRenderData ( Model * RenderModel, uint32_t Flags ):
+	RenderModel ( RenderModel ),
+	DoInstancedTransformUniform ( ( Flags & kRenderFlags_InstancedTransform ) != 0 ),
+	DoNormalTextureUniform ( ( Flags & kRenderFlags_NormalTexture ) != 0 ),
+	DoColorTextureUniform ( ( Flags & kRenderFlags_ColorTexture ) != 0 ),
+	Uniforms (),
+	AttributeArray (),
+	GPUAllocated ( false )
+{
+}
+
+Red::Graphics::DeferredModelRenderer::PerModelRenderData :: ~PerModelRenderData ()
+{
+	
+	
 	
 }

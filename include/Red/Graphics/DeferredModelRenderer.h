@@ -2,11 +2,13 @@
 #define RED_GRAPHICS_DEFERREDMODELRENDERER_H
 
 #include <Red/Graphics/Graphics.h>
+#include <Red/Graphics/Model.h>
 #include <Red/Graphics/IRenderer3D.h>
 
 #include <Xenon/Math/Vec2.h>
 #include <Xenon/Math/Matrix4x4.h>
 #include <Xenon/Math/ConstantIntUniformSource.h>
+#include <Xenon/Math/ConstantBoolUniformSource.h>
 #include <Xenon/Math/RawMatrix4x4UniformSource.h>
 
 #include <Xenon/GPU/Context.h>
@@ -28,6 +30,8 @@ namespace Red
 	namespace Graphics
 	{
 		
+		class DeferredModelRenderer;
+		
 		class DeferredModelRenderer : public Util :: RefCounted, public virtual IRenderer3D
 		{
 		public:
@@ -38,12 +42,19 @@ namespace Red
 			static const char * kModelAttributeName_Color;
 			static const char * kModelAttributeName_TextureCoords;
 			
+			static const char * kModelAttributeName_InstancedTransform;
+			
+			static const uint32_t kRenderFlags_InstancedTransform = 1;
+			static const uint32_t kRenderFlags_NormalTexture = 2;
+			static const uint32_t kRenderFlags_ColorTexture = 4;
+			
 			DeferredModelRenderer ();
 			~DeferredModelRenderer ();
 			
 			void Initialize ( Xenon::GPU :: Context * GPUContext );
 			
 			void SetProjection ( Xenon::Math :: Matrix4x4 & ProjectionMatrix );
+			void SetView ( Xenon::Math :: Matrix4x4 & ViewMatrix );
 			
 			void SetupRender ( Xenon::GPU :: FrameBuffer * RenderTarget, Xenon::Math :: Vec2 Dimensions );
 			void DestroyRender ();
@@ -52,14 +63,37 @@ namespace Red
 			
 		private:
 			
+			class PerModelRenderData
+			{
+			public:
+				
+				~PerModelRenderData ();
+				
+			private:
+				
+				friend class DeferredModelRenderer;
+				
+				PerModelRenderData ( Model * RenderModel, uint32_t Flags );
+				
+				Model * RenderModel;
+				
+				Xenon::Math :: ConstantBoolUniformSource DoInstancedTransformUniform;
+				Xenon::Math :: ConstantBoolUniformSource DoNormalTextureUniform;
+				Xenon::Math :: ConstantBoolUniformSource DoColorTextureUniform;
+				
+				Xenon::GPU :: UniformSet Uniforms;
+				Xenon::GPU :: VertexArray AttributeArray; 
+				
+				bool GPUAllocated;
+				
+			};
+			
 			Xenon::GPU :: Context * GPUContext;
 			Xenon::GPU :: FrameBuffer * RenderTarget;
 			
 			bool GPUAllocated;
 			
 			// Geometry pass
-			
-			Xenon::GPU :: VertexArray GeometryVAO;
 			
 			Xenon::GPU :: UniformSet GeometryUniforms;
 			

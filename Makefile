@@ -1,5 +1,5 @@
-CXX=g++-mp-4.9
-LD=g++-mp-4.9
+CXX=g++
+LD=g++
 
 LINK_FLAGS=-framework SDL2 -framework OpenGL -L/opt/local/lib -lpng -lgcc -lfreetype -march=nehalem -flto
 CXX_FLAGS=$(LINK_FLAGS) -Iinclude -I/opt/local/include/freetype2 -std=c++11 -pedantic-errors -Wextra -Wall
@@ -50,6 +50,7 @@ OBJECTS=obj/SDLX/Lib.o \
 		obj/Xenon/Math/RawMatrix3x3UniformSource.o \
 		obj/Xenon/Math/ConstantUIntUniformSource.o \
 		obj/Xenon/Math/ConstantIntUniformSource.o \
+		obj/Xenon/Math/ConstantBoolUniformSource.o \
 		obj/Xenon/Geometry/Mesh.o \
 		obj/Xenon/Geometry/MeshAttributeData.o \
 		obj/Xenon/Geometry/MeshAttribute.o \
@@ -217,6 +218,9 @@ obj/Xenon/Math/ConstantUIntUniformSource.o: include/Xenon/Math/ConstantUIntUnifo
 	
 obj/Xenon/Math/ConstantIntUniformSource.o: include/Xenon/Math/ConstantIntUniformSource.h src/Xenon/Math/ConstantIntUniformSource.cpp include/Xenon/GPU/IIntUniformSource.h include/Xenon/Math/Math.h include/Xenon/GPU/GLInclude.h include/Red/Util/RefCounted.h
 	$(CXX) -c $(CXX_FLAGS) src/Xenon/Math/ConstantIntUniformSource.cpp -o obj/Xenon/Math/ConstantIntUniformSource.o
+	
+obj/Xenon/Math/ConstantBoolUniformSource.o: include/Xenon/Math/ConstantBoolUniformSource.h src/Xenon/Math/ConstantBoolUniformSource.cpp include/Xenon/GPU/IBoolUniformSource.h include/Xenon/Math/Math.h include/Xenon/GPU/GLInclude.h include/Red/Util/RefCounted.h
+	$(CXX) -c $(CXX_FLAGS) src/Xenon/Math/ConstantBoolUniformSource.cpp -o obj/Xenon/Math/ConstantBoolUniformSource.o
 	
 # ======================== RAUX ======================== #
 	

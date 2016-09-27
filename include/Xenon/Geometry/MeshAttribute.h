@@ -32,12 +32,26 @@ namespace Xenon
 			};
 			
 			MeshAttribute ( NoInit NO_INIT );
-			MeshAttribute ( const std :: string & Name, GPU::VertexArray :: FPAttributeInputType FloatingType, bool Normalized, GLuint Size, GLuint Stride, GLvoid * Offset, MeshAttributeData * Data );
-			MeshAttribute ( const std :: string & Name, GPU::VertexArray :: IntegerAttributeInputType IntegerType, GLuint Size, GLuint Stride, GLvoid * Offset, MeshAttributeData * Data );
+			MeshAttribute ( const std :: string & Name, GPU::VertexArray :: FPAttributeInputType FloatingType, bool Normalized, GLuint Size, GLuint Stride, GLvoid * Offset, MeshAttributeData * Data, GLuint InstanceDivisor = 0 );
+			MeshAttribute ( const std :: string & Name, GPU::VertexArray :: IntegerAttributeInputType IntegerType, GLuint Size, GLuint Stride, GLvoid * Offset, MeshAttributeData * Data, GLuint InstanceDivisor = 0 );
 			
 			~MeshAttribute ();
 			
 			void ApplyToVertexArray ( GPU :: VertexArray & Array );
+			
+			MeshAttributeData * GetDataPointer ();
+			
+			GLvoid * GetDataOffset ();
+			GLuint GetStride ();
+			GLuint GetSize ();
+			GLuint GetInstanceDivisor ();
+			
+			bool IsFloatingPoint ();
+			
+			GPU::VertexArray :: FPAttributeInputType GetFloatingType ();
+			GPU::VertexArray :: IntegerAttributeInputType GetIntegerType ();
+			
+			const std :: string & GetName ();
 			
 		private:
 			
@@ -58,6 +72,7 @@ namespace Xenon
 			GLuint Size;
 			GLuint Stride;
 			GLvoid * Offset;
+			GLuint InstanceDivisor;
 			
 			MeshAttributeData * Data;
 			

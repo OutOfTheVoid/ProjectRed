@@ -13,6 +13,7 @@
 #include <Xenon/GPU/IMatrix4x4UniformSource.h>
 #include <Xenon/GPU/IUIntUniformSource.h>
 #include <Xenon/GPU/IIntUniformSource.h>
+#include <Xenon/GPU/IBoolUniformSource.h>
 
 #include <Red/Util/RefCounted.h>
 
@@ -44,6 +45,8 @@ namespace Xenon
 			
 			void AddUIntUniform ( const std :: string & Name, IUIntUniformSource * Source, bool LocateImmediately = true );
 			void AddIntUniform ( const std :: string & Name, IIntUniformSource * Source, bool LocateImmediately = true );
+			
+			void AddBoolUniform ( const std :: string & Name, IBoolUniformSource * Source, bool LocateImmediately = true );
 			
 			void Link ();
 			
@@ -150,6 +153,18 @@ namespace Xenon
 				
 			} IntUniformTracker;
 			
+			typedef struct
+			{
+				
+				IBoolUniformSource * Source;
+				std :: string Name;
+				
+				GLint UniformLocation;
+				
+				int64_t LastUploadedIteration;
+				
+			} BoolUniformTracker;
+			
 			ShaderProgram * Program;
 			
 			int64_t LastLinkIteration;
@@ -164,6 +179,9 @@ namespace Xenon
 			
 			std :: vector <UIntUniformTracker> UIntUniforms;
 			std :: vector <IntUniformTracker> IntUniforms;
+			
+			std :: vector <BoolUniformTracker> BoolUniforms;
+			
 			
 		};
 		

@@ -11,7 +11,9 @@ Xenon::GPU::UniformSet :: UniformSet ( ShaderProgram * Program ):
 	FloatVec4Uniforms (),
 	Matrix3x3Uniforms (),
 	Matrix4x4Uniforms (),
-	UIntUniforms ()
+	UIntUniforms (),
+	IntUniforms (),
+	BoolUniforms ()
 {
 	
 	if ( Program != NULL )
@@ -53,6 +55,9 @@ Xenon::GPU::UniformSet :: ~UniformSet ()
 	
 	for ( I = 0; I < UIntUniforms.size (); I ++ )
 		UIntUniforms [ I ].Source -> Dereference ();
+	
+	for ( I = 0; I < IntUniforms.size (); I ++ )
+		IntUniforms [ I ].Source -> Dereference ();
 	
 }
 
@@ -252,6 +257,25 @@ void Xenon::GPU::UniformSet :: AddIntUniform ( const std :: string & Name, IIntU
 	
 }
 
+void Xenon::GPU::UniformSet :: AddBoolUniform ( const std :: string & Name, IBoolUniformSource * Source, bool LocateImmediately )
+{
+	
+	if ( Source == NULL )
+		return;
+	
+	BoolUniformTracker Tracker;
+	
+	Tracker.Name = Name;
+	Tracker.Source = Source;
+	Tracker.LastUploadedIteration = - 1;
+	Tracker.UniformLocation = ( ( Program != NULL ) && LocateImmediately ) ? Program -> GetUniformLocation ( Name.c_str () ) : - 1;
+	
+	Source -> Reference ();
+	
+	BoolUniforms.push_back ( Tracker );
+	
+}
+
 void Xenon::GPU::UniformSet :: ResetUniformStates ()
 {
 	
@@ -320,6 +344,14 @@ void Xenon::GPU::UniformSet :: ResetUniformStates ()
 		
 		IntUniforms [ I ].UniformLocation = - 1;
 		IntUniforms [ I ].LastUploadedIteration = - 1;
+		
+	}
+	
+	for ( I = 0; I < BoolUniforms.size (); I ++ )
+	{
+		
+		BoolUniforms [ I ].UniformLocation = - 1;
+		BoolUniforms [ I ].LastUploadedIteration = - 1;
 		
 	}
 	
@@ -482,6 +514,22 @@ void Xenon::GPU::UniformSet :: UpdateUniforms ( bool Relink )
 		
 	}
 	
+	for ( I = 0; I < BoolUniforms.size (); I ++ )
+	{
+		
+		int64_t CurrentIteration = BoolUniforms [ I ].Source -> GetIteration ();
+		
+		if ( ( BoolUniforms [ I ].UniformLocation != - 1 ) && ( BoolUniforms [ I ].LastUploadedIteration < CurrentIteration ) )
+		{
+			
+			glUniform1i ( BoolUniforms [ I ].UniformLocation, BoolUniforms [ I ].Source -> GetValue () ? 1 : 0 );
+			
+			BoolUniforms [ I ].LastUploadedIteration = CurrentIteration;
+			
+		}
+		
+	}
+	
 }
 
 void Xenon::GPU::UniformSet :: Link ()
@@ -565,6 +613,14 @@ void Xenon::GPU::UniformSet :: Link ()
 		
 		if ( IntUniforms [ I ].UniformLocation == - 1 )
 			IntUniforms [ I ].UniformLocation = Program -> GetUniformLocation ( IntUniforms [ I ].Name.c_str () );
+		
+	}
+	
+	for ( I = 0; I < BoolUniforms.size (); I ++ )
+	{
+		
+		if ( BoolUniforms [ I ].UniformLocation == - 1 )
+			BoolUniforms [ I ].UniformLocation = Program -> GetUniformLocation ( BoolUniforms [ I ].Name.c_str () );
 		
 	}
 	

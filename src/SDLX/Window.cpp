@@ -81,7 +81,7 @@ SDLX::Mutex * SDLX::Window :: GetMutex ()
 void SDLX::Window :: AddEventHook ( uint8_t SDLWindowEventID, void ( * EventCallback ) ( SDL_WindowEvent * Event, Window * Origin, void * Data ), void * Data, int32_t Position )
 {
 	
-	if ( ! EventMap.count ( SDLWindowEventID ) > 0 )
+	if ( EventMap.count ( SDLWindowEventID ) <= 0 )
 		EventMap [ SDLWindowEventID ] = std :: vector <CallbackPair> ();
 	
 	std :: vector <CallbackPair> & CallbackList = EventMap [ SDLWindowEventID ];
