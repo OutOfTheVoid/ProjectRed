@@ -11,6 +11,9 @@ test: bin/Main
 	
 build: bin/Main
 	
+#MAINFILE=src/GFXTestMain.cpp
+MAINFILE=src/AudioTestMain.cpp
+	
 OBJECTS=obj/SDLX/Lib.o \
 		obj/SDLX/RefCounted.o \
 		obj/SDLX/Window.o \
@@ -23,6 +26,7 @@ OBJECTS=obj/SDLX/Lib.o \
 		obj/SDLX/Renderer.o \
 		obj/SDLX/Keyboard.o \
 		obj/SDLX/Mouse.o \
+		obj/SDLX/AudioDevice.o \
 		obj/Xenon/GPU/ShaderProgram.o \
 		obj/Xenon/GPU/VertexShader.o \
 		obj/Xenon/GPU/Context.o \
@@ -80,8 +84,8 @@ OBJECTS=obj/SDLX/Lib.o \
 bin/Main: obj/Main.o
 	$(LD) $(LINK_FLAGS) $(OBJECTS) obj/Main.o -o bin/Main
 
-obj/Main.o: src/Main.cpp $(OBJECTS) include/Red/Util/Function.h include/Red/Util/Method.h include/Red/Util/Closure.h include/Red/Util/MethodObjectClosure.h
-	$(CXX) -c $(CXX_FLAGS) src/Main.cpp -o obj/Main.o
+obj/Main.o: $(MAINFILE) $(OBJECTS)
+	$(CXX) -c $(CXX_FLAGS) $(MAINFILE) -o obj/Main.o
 	
 # ======================== SDLX ======================== #
 	
@@ -120,6 +124,9 @@ obj/SDLX/Keyboard.o: src/SDLX/Keyboard.cpp include/SDLX/Keyboard.h include/SDLX/
 	
 obj/SDLX/Mouse.o: src/SDLX/Mouse.cpp include/SDLX/Mouse.h include/SDLX/SDLX.h
 	$(CXX) -c $(CXX_FLAGS) src/SDLX/Mouse.cpp -o obj/SDLX/Mouse.o
+	
+obj/SDLX/AudioDevice.o: src/SDLX/AudioDevice.cpp include/SDLX/AudioDevice.h include/SDLX/SDLX.h
+	$(CXX) -c $(CXX_FLAGS) src/SDLX/AudioDevice.cpp -o obj/SDLX/AudioDevice.o
 	
 # ======================== XENON ======================= #
 	
@@ -298,6 +305,7 @@ clean:
 	-@mkdir obj/RAUX
 	-@mkdir obj/Red
 	-@mkdir obj/Red/Events
+	-@mkdir obj/Red/Audio
 	-@mkdir obj/Red/Graphics
 	-@mkdir obj/Red/Threading
 	-@mkdir obj/Red/Text

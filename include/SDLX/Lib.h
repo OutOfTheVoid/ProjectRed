@@ -11,6 +11,7 @@ namespace SDLX
 	public:
 		
 		static const uint32_t kSDLFlag_Video = SDL_INIT_VIDEO;
+		static const uint32_t kSDLFlag_Audio = SDL_INIT_AUDIO;
 		
 		static void Init ( uint32_t * Status, uint32_t SDLFlags );
 		static void DeInit ();

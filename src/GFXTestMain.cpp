@@ -171,7 +171,7 @@ int main ( int argc, const char * argv [] )
 	if ( Status != SDLX :: kStatus_Success )
 		return - 1;
 	
-	SDLX::Window * Win = SDLX::Window :: CreateWindow ( & Status, "Test", WINDOW_WIDTH_0, WINDOW_HEIGHT_0, SDLX::Window :: kCreateFlag_Shown | /*SDLX::Window :: kCreateFlag_HighDPI |*/ SDLX::Window :: kCreateFlag_OpenGL );
+	SDLX::Window * Win = SDLX::Window :: CreateWindow ( & Status, "Test", WINDOW_WIDTH_0, WINDOW_HEIGHT_0, SDLX::Window :: kCreateFlag_Shown | SDLX::Window :: kCreateFlag_HighDPI | SDLX::Window :: kCreateFlag_OpenGL );
 	
 	SDLX::GLContext :: RequestGLContextVersion ( SDLX::GLContext :: kGLProfile_Core, 3, 3 );
 	SDLX::GLContext :: RequestDepthBufferSize ( 24 );
@@ -240,7 +240,7 @@ int main ( int argc, const char * argv [] )
 	UEData.RenderData = & RData;
 	
 	SDLX :: Timer * DrawTimer = new SDLX :: Timer ( & DrawEventPush, reinterpret_cast <void *> ( & UEData ) );
-	DrawTimer -> Start ( 1000 / 120 );
+	DrawTimer -> Start ( 1000 / 60 );
 	
 	RData.RTimer = DrawTimer;
 	
