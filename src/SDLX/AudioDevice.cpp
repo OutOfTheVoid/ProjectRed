@@ -44,15 +44,21 @@ SDLX :: AudioDevice * SDLX::AudioDevice :: RequestAudioDevice ( const char * Dev
 	
 }
 
-SDLX::AudioDevice :: AudioDevice ()
+SDLX::AudioDevice :: AudioDevice ():
+	FillFunction ( NULL ),
+	Device ( 0 ),
+	Spec ()
 {
-	
-	
-	
 }
 
 SDLX::AudioDevice :: ~AudioDevice ()
 {
+	
+	Stop ();
+	SDL_CloseAudioDevice ( Device );
+	
+	Device = 0;
+	
 }
 
 uint32_t SDLX::AudioDevice :: GetSampleFrequencey ()
@@ -94,6 +100,42 @@ inline void SDLX::AudioDevice :: CallbackInternal ( uint8_t * Packet, int Packet
 void SDLX::AudioDevice :: AudioCallback ( void * DeviceInstance, uint8_t * Packet, int PacketLength )
 {
 	
-	reinterpret_cast <AudioDevice *> ( DeviceInstance ) -> CallbackInternal ( Packet, PacketLength );
+	if ( reinterpret_cast <AudioDevice *> ( DeviceInstance ) -> FillFunction != NULL ) 
+		( * reinterpret_cast <AudioDevice *> ( DeviceInstance ) -> FillFunction ) ( Packet, PacketLength );
+	
+}
+
+void SDLX::AudioDevice :: Lock ()
+{
+	
+	SDL_LockAudioDevice ( Device );
+	
+}
+
+void SDLX::AudioDevice :: Unlock ()
+{
+	
+	SDL_UnlockAudioDevice ( Device );
+	
+}
+
+void SDLX::AudioDevice :: Start ()
+{
+	
+	SDL_PauseAudioDevice ( Device, 0 );
+	
+}
+
+void SDLX::AudioDevice :: Stop ()
+{
+	
+	SDL_PauseAudioDevice ( Device, 1 );
+	
+}
+
+void SDLX::AudioDevice :: SetFillCallback ( Red::Util :: IFunction2 <void, uint8_t *, int> * FillFunction )
+{
+	
+	this -> FillFunction = FillFunction;
 	
 }
