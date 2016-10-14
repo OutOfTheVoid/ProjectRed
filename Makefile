@@ -67,6 +67,7 @@ OBJECTS=obj/SDLX/Lib.o \
 		obj/RAUX/StlFile.o \
 		obj/RAUX/VertexShaderFile.o \
 		obj/RAUX/FragmentShaderFile.o \
+		obj/RAUX/WAVFile.o \
 		obj/Red/Events/BasicEvent.o \
 		obj/Red/Events/EventDispatcher.o \
 		obj/Red/Threading/Thread.o \
@@ -79,6 +80,7 @@ OBJECTS=obj/SDLX/Lib.o \
 		obj/Red/Text/Rendering/FreeType/FreeTypeFontRenderData.o \
 		obj/Red/Text/Rendering/ShadedRenderer.o \
 		obj/Red/Graphics/DeferredModelRenderer.o \
+		obj/Red/Audio/AudioBuffer.o \
 		obj/Xenon/GPU/RenderBuffer.o
 	
 bin/Main: obj/Main.o
@@ -125,7 +127,7 @@ obj/SDLX/Keyboard.o: src/SDLX/Keyboard.cpp include/SDLX/Keyboard.h include/SDLX/
 obj/SDLX/Mouse.o: src/SDLX/Mouse.cpp include/SDLX/Mouse.h include/SDLX/SDLX.h
 	$(CXX) -c $(CXX_FLAGS) src/SDLX/Mouse.cpp -o obj/SDLX/Mouse.o
 	
-obj/SDLX/AudioDevice.o: src/SDLX/AudioDevice.cpp include/SDLX/AudioDevice.h include/SDLX/SDLX.h
+obj/SDLX/AudioDevice.o: src/SDLX/AudioDevice.cpp include/SDLX/AudioDevice.h include/SDLX/SDLX.h include/Red/Audio/Audio.h include/Red/Audio/IAudioOutput.h
 	$(CXX) -c $(CXX_FLAGS) src/SDLX/AudioDevice.cpp -o obj/SDLX/AudioDevice.o
 	
 # ======================== XENON ======================= #
@@ -255,6 +257,9 @@ obj/RAUX/VertexShaderFile.o: include/RAUX/VertexShaderFile.h src/RAUX/VertexShad
 obj/RAUX/FragmentShaderFile.o: include/RAUX/FragmentShaderFile.h src/RAUX/FragmentShaderFile.cpp include/RAUX/TextFile.h include/RAUX/RAUX.h include/Xenon/GPU/FragmentShader.h
 	$(CXX) -c $(CXX_FLAGS) src/RAUX/FragmentShaderFile.cpp -o obj/RAUX/FragmentShaderFile.o
 	
+obj/RAUX/WAVFile.o: include/RAUX/File.h include/RAUX/WAVFile.h src/RAUX/WAVFile.cpp include/Red/Audio/Audio.h include/RAUX/RAUX.h
+	$(CXX) -c $(CXX_FLAGS) src/RAUX/WAVFile.cpp -o obj/RAUX/WAVFile.o
+	
 # ========================= Red ======================== #
 
 obj/Red/Events/BasicEvent.o: include/Red/Red.h include/Red/Events/Events.h include/Red/Events/IEvent.h include/Red/Events/BasicEvent.h src/Red/Events/BasicEvent.cpp
@@ -292,6 +297,9 @@ obj/Red/Text/Rendering/ShadedRenderer.o: include/Red/Text/Rendering/ShadedRender
 
 obj/Red/Graphics/DeferredModelRenderer.o: include/Red/Graphics/DeferredModelRenderer.h src/Red/Graphics/DeferredModelRenderer.cpp include/Xenon/GPU/Context.h include/Xenon/Math/Vec2.h include/Xenon/GPU/RenderBuffer.h include/Xenon/GPU/VertexArray.h include/Xenon/GPU/ShaderProgram.h include/Xenon/GPU/FrameBuffer.h include/Xenon/GPU/IGPUResourceUser.h include/Xenon/GPU/UniformSet.h include/Xenon/GPU/VertexShader.h include/Xenon/GPU/FragmentShader.h include/Xenon/GPU/Texture2D.h include/Xenon/Geometry/Mesh.h include/Red/Graphics/Graphics.h include/Red/Red.h include/Xenon/Math/RawMatrix4x4UniformSource.h
 	$(CXX) -c $(CXX_FLAGS) src/Red/Graphics/DeferredModelRenderer.cpp -o obj/Red/Graphics/DeferredModelRenderer.o
+	
+obj/Red/Audio/AudioBuffer.o: include/Red/Audio/Audio.h include/Red/Audio/AudioBuffer.h src/Red/Audio/AudioBuffer.cpp include/Red/Util/RefCounted.h include/Red/Util/Function.h include/Red/Util/SSE.h
+	$(CXX) -c $(CXX_FLAGS) src/Red/Audio/AudioBuffer.cpp -o obj/Red/Audio/AudioBuffer.o
 	
 clean:
 	-@rm -r obj/*

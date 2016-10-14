@@ -7,6 +7,10 @@
 
 #include <SDLX/AudioDevice.h>
 
+#include <Red/Audio/AudioBuffer.h>
+
+#include <RAUX/WAVFile.h>
+
 #include <math.h>
 
 #define WINDOW_WIDTH 800
@@ -15,6 +19,8 @@
 void WindowCloseEvent ( SDL_WindowEvent * Event, SDLX::Window * Win, void * Data );
 
 void FillAudioData ( uint32_t & Counter, uint8_t * DataBuffer, int PacketLength );
+
+Red::Audio :: AudioBuffer * FileBuffer = NULL;
 
 int main ( int argc, char const * argv [] )
 {
@@ -45,14 +51,40 @@ int main ( int argc, char const * argv [] )
 	
 	/*================================*/
 	
-	SDLX :: AudioDevice * Device = SDLX::AudioDevice :: RequestAudioDevice ( NULL, SDLX::AudioDevice :: kStandardFrequencey_48K, SDLX::AudioDevice :: kBufferFormat_F32_SE, 1, 4096, false, false );
+	RAUX :: WAVFile TestWAV ( "LittlePistol.wav" );
 	
+	TestWAV.Load ( & Status );
+	
+	if ( Status == RAUX :: WAVFile :: kStatus_Success )
+	{
+		
+		FileBuffer = TestWAV.LoadToBuffer ();
+		
+		if ( FileBuffer != NULL )
+			std :: cout << "WAV Load success!" << std :: endl;
+		
+		FileBuffer -> Reference ();
+		
+	}
+	
+	/*================================*/
+	
+	SDLX :: AudioDevice * Device = SDLX::AudioDevice :: RequestAudioDevice ( NULL, 44100, SDLX::AudioDevice :: kBufferFormat_I16_LE, 2, 4096, false, false );
+	
+	if ( Device == NULL )
+	{
+		
+		Win -> Disown ();
+		
+		SDLX::Lib :: DeInit ();
+		
+		return 0;
+		
+	}
+		
 	uint32_t * Counter = new uint32_t ();
 	
 	Red::Util :: Closure3_1 <void, uint32_t &, uint8_t *, int> FillDataClosure ( & FillAudioData, * Counter );
-	
-	if ( Device != NULL )
-		std :: cout << "Got audio device!" << std :: endl;
 	
 	Device -> Lock ();
 	Device -> SetFillCallback ( & FillDataClosure );
@@ -80,15 +112,30 @@ int main ( int argc, char const * argv [] )
 void FillAudioData ( uint32_t & Counter, uint8_t * DataBuffer, int PacketLength )
 {
 	
-	float * DataPointer = reinterpret_cast <float *> ( DataBuffer );
+	(void) PacketLength;
 	
-	std :: cout << "Counter: " << Counter << std :: endl;
+	int16_t * DataPointer = reinterpret_cast <int16_t *> ( DataBuffer );
 	
-	for ( uint32_t I = 0; I < 4096; I ++ )
+	for ( uint32_t I = 0; I < 4096 * 2; I ++ )
 	{
 		
-		double Seconds = static_cast <double> ( Counter + I ) / 48000.0;
-		DataPointer [ I ] = sinf ( Seconds * 3.14159265 * 440.0 * powf ( 1.059463094359, ( Counter / 24000 ) ) );
+		DataPointer [ I ] = 0;
+		
+	}
+	
+	Red::Audio :: AudioBuffer FillBuffer ( reinterpret_cast <void *> ( DataBuffer ), Red::Audio :: kAudioBufferType_Int16_LittleEndian, 2, 4096, NULL );
+	FillBuffer.Reference ();
+	
+	if ( FileBuffer != NULL )
+	{
+		
+		if ( FileBuffer -> GetSampleCount () > Counter + 4096 )
+		{
+			
+			FillBuffer.BlitBuffer ( * FileBuffer, 0, 4096, Counter, 0 );
+			FillBuffer.BlitBuffer ( * FileBuffer, 1, 4096, Counter, 0 );
+			
+		}
 		
 	}
 	

@@ -8,11 +8,15 @@
 #include <SDL2/SDL.h>
 
 #include <Red/Util/Function.h>
+#include <Red/Util/RefCounted.h>
+
+#include <Red/Audio/Audio.h>
+#include <Red/Audio/IAudioOutput.h>
 
 namespace SDLX
 {
 	
-	class AudioDevice
+	class AudioDevice : public Red::Util :: RefCounted, public virtual Red::Audio :: IAudioOutput
 	{
 	public:
 		
@@ -47,9 +51,12 @@ namespace SDLX
 		static AudioDevice * RequestAudioDevice ( const char * DeviceName, uint32_t Frequencey, BufferFormat Format, uint32_t ChannelCount, uint32_t SampleSize, bool FlexibleSource, bool RequireRecording );
 		
 		uint32_t GetSampleFrequencey ();
-		BufferFormat GetFormat ();
-		uint32_t GetChannelCount ();
 		uint32_t GetSampleSize ();
+		
+		uint32_t GetChannelCount ();
+		
+		BufferFormat GetFormat ();
+		Red::Audio :: AudioBufferType GetSampleFormat ();
 		
 		~AudioDevice ();
 		

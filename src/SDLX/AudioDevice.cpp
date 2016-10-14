@@ -45,6 +45,8 @@ SDLX :: AudioDevice * SDLX::AudioDevice :: RequestAudioDevice ( const char * Dev
 }
 
 SDLX::AudioDevice :: AudioDevice ():
+	IAudioOutput (),
+	RefCounted (),
 	FillFunction ( NULL ),
 	Device ( 0 ),
 	Spec ()
@@ -72,6 +74,46 @@ SDLX::AudioDevice :: BufferFormat SDLX::AudioDevice :: GetFormat ()
 {
 	
 	return Spec.format;
+	
+}
+
+Red::Audio :: AudioBufferType SDLX::AudioDevice :: GetSampleFormat ()
+{
+	
+	switch ( Spec.format )
+	{
+		
+		case kBufferFormat_U8:
+			return Red::Audio :: kAudioBufferType_UInt8;
+			
+		case kBufferFormat_I8:
+			return Red::Audio :: kAudioBufferType_UInt8;
+		
+		case kBufferFormat_U16_LE:
+			return Red::Audio :: kAudioBufferType_UInt16_LittleEndian;
+			
+		case kBufferFormat_U16_BE:
+			return Red::Audio :: kAudioBufferType_UInt16_BigEndian;
+			
+		case kBufferFormat_I16_LE:
+			return Red::Audio :: kAudioBufferType_Int16_LittleEndian;
+			
+		case kBufferFormat_I16_BE:
+			return Red::Audio :: kAudioBufferType_Int16_BigEndian;
+			
+		case kBufferFormat_I32_LE:
+			return Red::Audio :: kAudioBufferType_Int32_LittleEndian;
+			
+		case kBufferFormat_I32_BE:
+			return Red::Audio :: kAudioBufferType_Int32_BigEndian;
+			
+		case kBufferFormat_F32_LE:
+			return Red::Audio :: kAudioBufferType_Float32_LittleEndian;
+			
+		default:
+			return Red::Audio :: kAudioBufferType_Float32_BigEndian;
+		
+	}
 	
 }
 
