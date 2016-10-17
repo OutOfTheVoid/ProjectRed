@@ -83,7 +83,7 @@ OBJECTS=obj/SDLX/Lib.o \
 		obj/Red/Audio/AudioBuffer.o \
 		obj/Xenon/GPU/RenderBuffer.o
 	
-bin/Main: obj/Main.o
+bin/Main: obj/Main.o include/Red/Util/Endian.h
 	$(LD) $(LINK_FLAGS) $(OBJECTS) obj/Main.o -o bin/Main
 
 obj/Main.o: $(MAINFILE) $(OBJECTS)

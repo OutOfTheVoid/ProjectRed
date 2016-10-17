@@ -1,5 +1,5 @@
-#ifndef RAUX_ENDIAN_H
-#define RAUX_ENDIAN_H
+#ifndef RED_UTIL_ENDIAN_H
+#define RED_UTIL_ENDIAN_H
 
 #include <stdint.h>
 
@@ -11,15 +11,15 @@
 	
 	#if __BYTE_ORDER__ == __ORDER_BIG_ENDIAN__ && __BYTE_ORDER__ != __ORDER_LITTLE_ENDIAN__
 		
-		#define RAUX_BIG_ENDIAN_DEFINITE
+		#define RED_BIG_ENDIAN_DEFINITE
 
 	#elif __BYTE_ORDER__ == __ORDER_LITTLE_ENDIAN__
 
-		#define RAUX_LITTLE_ENDIAN_DEFINITE
+		#define RED_LITTLE_ENDIAN_DEFINITE
 
 	#else
 	
-		#define RAUX_ENDIAN_INDEFINATE
+		#define RED_ENDIAN_INDEFINATE
 
 	#endif
 
@@ -28,7 +28,7 @@
 inline uint32_t LittleToHostEndian32 ( const uint32_t In )
 {
 	
-#ifdef RAUX_LITTLE_ENDIAN_DEFINITE
+#ifdef RED_LITTLE_ENDIAN_DEFINITE
 	
 	return In;
 	
@@ -45,7 +45,7 @@ inline uint32_t LittleToHostEndian32 ( const uint32_t In )
 inline uint32_t BigToHostEndian32 ( const uint32_t In )
 {
 	
-#ifdef RAUX_BIG_ENDIAN_DEFINITE
+#ifdef RED_BIG_ENDIAN_DEFINITE
 	
 	return In;
 	
@@ -61,7 +61,7 @@ inline uint32_t BigToHostEndian32 ( const uint32_t In )
 inline uint16_t LittleToHostEndian16 ( const uint16_t In )
 {
 	
-#ifdef RAUX_LITTLE_ENDIAN_DEFINITE
+#ifdef RED_LITTLE_ENDIAN_DEFINITE
 	
 	return In;
 	
@@ -78,7 +78,7 @@ inline uint16_t LittleToHostEndian16 ( const uint16_t In )
 inline uint16_t BigToHostEndian16 ( const uint16_t In )
 {
 	
-#ifdef RAUX_BIG_ENDIAN_DEFINITE
+#ifdef RED_BIG_ENDIAN_DEFINITE
 	
 	return In;
 	
@@ -114,7 +114,7 @@ inline float BigToHostEndianFloat ( const float In )
 inline uint16_t HostToLittleEndian16 ( const uint16_t In )
 {
 	
-#ifdef RAUX_LITTLE_ENDIAN_DEFINITE
+#ifdef RED_LITTLE_ENDIAN_DEFINITE
 	
 	return In;
 	
@@ -134,7 +134,7 @@ inline uint16_t HostToLittleEndian16 ( const uint16_t In )
 inline uint16_t HostToBigEndian16 ( const uint16_t In )
 {
 	
-#ifdef RAUX_BIG_ENDIAN_DEFINITE
+#ifdef RED_BIG_ENDIAN_DEFINITE
 	
 	return In;
 	
@@ -154,7 +154,7 @@ inline uint16_t HostToBigEndian16 ( const uint16_t In )
 inline uint32_t HostToLittleEndian32 ( const uint32_t In )
 {
 	
-#ifdef RAUX_LITTLE_ENDIAN_DEFINITE
+#ifdef RED_LITTLE_ENDIAN_DEFINITE
 	
 	return In;
 	
@@ -176,7 +176,7 @@ inline uint32_t HostToLittleEndian32 ( const uint32_t In )
 inline uint32_t HostToBigEndian32 ( const uint32_t In )
 {
 	
-#ifdef RAUX_BIG_ENDIAN_DEFINITE
+#ifdef RED_BIG_ENDIAN_DEFINITE
 	
 	return In;
 	

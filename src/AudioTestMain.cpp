@@ -9,6 +9,8 @@
 
 #include <Red/Audio/AudioBuffer.h>
 
+#include <Red/Util/Endian.h>
+
 #include <RAUX/WAVFile.h>
 
 #include <math.h>
@@ -96,6 +98,7 @@ int main ( int argc, char const * argv [] )
 	
 	SDLX::Lib :: EventLoop ( & Status );
 	
+	//Device -> Lock ();
 	Device -> Stop ();
 	
 	delete Counter;
@@ -114,14 +117,9 @@ void FillAudioData ( uint32_t & Counter, uint8_t * DataBuffer, int PacketLength 
 	
 	(void) PacketLength;
 	
-	int16_t * DataPointer = reinterpret_cast <int16_t *> ( DataBuffer );
+	uint32_t TempData [ 4096 * 2 ];
 	
-	for ( uint32_t I = 0; I < 4096 * 2; I ++ )
-	{
-		
-		DataPointer [ I ] = 0;
-		
-	}
+	Red::Audio :: AudioBuffer ConversionBuffer ( reinterpret_cast <void *> ( TempData ), Red::Audio :: kAudioBufferType_UInt32_BigEndian, 2, 4096, NULL );
 	
 	Red::Audio :: AudioBuffer FillBuffer ( reinterpret_cast <void *> ( DataBuffer ), Red::Audio :: kAudioBufferType_Int16_LittleEndian, 2, 4096, NULL );
 	FillBuffer.Reference ();
@@ -132,8 +130,13 @@ void FillAudioData ( uint32_t & Counter, uint8_t * DataBuffer, int PacketLength 
 		if ( FileBuffer -> GetSampleCount () > Counter + 4096 )
 		{
 			
-			FillBuffer.BlitBuffer ( * FileBuffer, 0, 4096, Counter, 0 );
-			FillBuffer.BlitBuffer ( * FileBuffer, 1, 4096, Counter, 0 );
+			ConversionBuffer.BlitBuffer ( * FileBuffer, 0, 4096, Counter, 0 );
+			ConversionBuffer.BlitBuffer ( * FileBuffer, 1, 4096, Counter, 0 );
+			
+			FillBuffer.BlitBuffer ( ConversionBuffer, 0, 4096, 0, 0 );
+			FillBuffer.BlitBuffer ( ConversionBuffer, 1, 4096, 0, 0 );
+			
+			std :: cout << std :: endl << std :: endl;
 			
 		}
 		
