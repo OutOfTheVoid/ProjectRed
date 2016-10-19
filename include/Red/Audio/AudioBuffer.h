@@ -18,7 +18,7 @@ namespace Red
 		{
 		public:
 			
-			enum
+			typedef enum
 			{
 				
 				kResampleMode_Nearest,
@@ -31,7 +31,7 @@ namespace Red
 			AudioBuffer ( void * Data, AudioBufferType Type, uint32_t Channels, uint32_t SampleCount, Util :: IFunction1 <void, void *> * OnFree = NULL );
 			
 			static AudioBuffer * CopyReformated ( AudioBuffer & Source, AudioBufferType NewDataType, uint32_t NewChannelCount = 0 );
-			static AudioBuffer * CopyReformatedResampled ( AudioBuffer & Source, AudioBufferType NewDataType, uint32_t NewChannelCount = 0, float SampleRatio = 1.0f );
+			static AudioBuffer * CopyReformatedResampled ( AudioBuffer & Source, ResampleMode Mode, AudioBufferType NewDataType, uint32_t NewChannelCount = 0, float SampleRatio = 1.0f );
 			
 			void * GetRawBuffer ();
 			

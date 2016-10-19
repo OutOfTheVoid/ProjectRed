@@ -68,6 +68,7 @@ OBJECTS=obj/SDLX/Lib.o \
 		obj/RAUX/VertexShaderFile.o \
 		obj/RAUX/FragmentShaderFile.o \
 		obj/RAUX/WAVFile.o \
+		obj/RAUX/FLACFile.o \
 		obj/Red/Events/BasicEvent.o \
 		obj/Red/Events/EventDispatcher.o \
 		obj/Red/Threading/Thread.o \
@@ -259,6 +260,9 @@ obj/RAUX/FragmentShaderFile.o: include/RAUX/FragmentShaderFile.h src/RAUX/Fragme
 	
 obj/RAUX/WAVFile.o: include/RAUX/File.h include/RAUX/WAVFile.h src/RAUX/WAVFile.cpp include/Red/Audio/Audio.h include/RAUX/RAUX.h
 	$(CXX) -c $(CXX_FLAGS) src/RAUX/WAVFile.cpp -o obj/RAUX/WAVFile.o
+	
+obj/RAUX/FLACFile.o: include/RAUX/File.h include/RAUX/FLACFile.h src/RAUX/FLACFile.cpp include/Red/Audio/Audio.h  include/RAUX/Endian.h include/RAUX/RAUX.h
+	$(CXX) -c $(CXX_FLAGS) src/RAUX/FLACFile.cpp -o obj/RAUX/FLACFile.o
 	
 # ========================= Red ======================== #
 

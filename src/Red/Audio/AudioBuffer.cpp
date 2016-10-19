@@ -89,7 +89,7 @@ Red::Audio :: AudioBuffer * Red::Audio::AudioBuffer :: CopyReformated ( AudioBuf
 	
 }
 
-Red::Audio :: AudioBuffer * Red::Audio::AudioBuffer :: CopyReformatedResampled ( AudioBuffer & Source, AudioBufferType NewDataType, uint32_t NewChannelCount, float SampleRatio )
+Red::Audio :: AudioBuffer * Red::Audio::AudioBuffer :: CopyReformatedResampled ( AudioBuffer & Source, ResampleMode Mode, AudioBufferType NewDataType, uint32_t NewChannelCount, float SampleRatio )
 {
 	
 	uint32_t NewSampleCount = static_cast <uint32_t> ( ceil ( static_cast <float> ( Source.SampleCount ) * SampleRatio ) );
@@ -105,7 +105,7 @@ Red::Audio :: AudioBuffer * Red::Audio::AudioBuffer :: CopyReformatedResampled (
 	uint32_t Channel;
 	
 	for ( Channel = 0; Channel < LeastTotalChannels; Channel ++ )
-		NewBuffer -> BlitBufferResampled ( Source, Channel, NewSampleCount, 0, 0, SampleRatio );
+		NewBuffer -> BlitBufferResampled ( Source, Mode, Channel, NewSampleCount, 0, 0, SampleRatio );
 	
 	if ( ( NewDataType == kAudioBufferType_Float32_LittleEndian ) || ( NewDataType == kAudioBufferType_Float32_BigEndian ) )
 		for ( ; Channel < NewChannelCount; Channel ++ )
@@ -1646,10 +1646,11 @@ void Red::Audio::AudioBuffer :: BlitBuffer ( AudioBuffer & Source, uint32_t Sour
 	
 }
 
-void Red::Audio::AudioBuffer :: BlitBufferResampled ( AudioBuffer & Source, uint32_t Channel, uint32_t SampleCount, uint32_t SourceStartSample, uint32_t TargetStartSample, float SampleRatio, uint32_t TargetChannel )
+void Red::Audio::AudioBuffer :: BlitBufferResampled ( AudioBuffer & Source, ResampleMode Mode, uint32_t Channel, uint32_t SampleCount, uint32_t SourceStartSample, uint32_t TargetStartSample, float SampleRatio, uint32_t TargetChannel )
 {
 	
 	(void) Source;
+	(void) Mode;
 	(void) Channel;
 	(void) SampleCount;
 	(void) SourceStartSample;
@@ -1675,10 +1676,11 @@ void Red::Audio::AudioBuffer :: AddBuffer ( AudioBuffer & Source, uint32_t Sourc
 	
 }
 
-void Red::Audio::AudioBuffer :: AddBufferResampled ( AudioBuffer & Source, uint32_t SourceChannel, uint32_t SampleCount, uint32_t SourceStartSample, uint32_t TargetStartSample, uint32_t TargetChannel, float SampleRatio )
+void Red::Audio::AudioBuffer :: AddBufferResampled ( AudioBuffer & Source, ResampleMode Mode, uint32_t SourceChannel, uint32_t SampleCount, uint32_t SourceStartSample, uint32_t TargetStartSample, uint32_t TargetChannel, float SampleRatio )
 {
 	
 	(void) Source;
+	(void) Mode;
 	(void) SourceChannel;
 	(void) SampleCount;
 	(void) SourceStartSample;
