@@ -117,9 +117,9 @@ void FillAudioData ( uint32_t & Counter, uint8_t * DataBuffer, int PacketLength 
 	
 	(void) PacketLength;
 	
-	uint32_t TempData [ 4096 * 2 ];
+	float TempData [ 4096 * 2 ];
 	
-	Red::Audio :: AudioBuffer ConversionBuffer ( reinterpret_cast <void *> ( TempData ), Red::Audio :: kAudioBufferType_UInt32_BigEndian, 2, 4096, NULL );
+	Red::Audio :: AudioBuffer ConversionBuffer ( reinterpret_cast <void *> ( TempData ), Red::Audio :: kAudioBufferType_Float32_BigEndian, 2, 4096, NULL );
 	
 	Red::Audio :: AudioBuffer FillBuffer ( reinterpret_cast <void *> ( DataBuffer ), Red::Audio :: kAudioBufferType_Int16_LittleEndian, 2, 4096, NULL );
 	FillBuffer.Reference ();
@@ -135,8 +135,6 @@ void FillAudioData ( uint32_t & Counter, uint8_t * DataBuffer, int PacketLength 
 			
 			FillBuffer.BlitBuffer ( ConversionBuffer, 0, 4096, 0, 0 );
 			FillBuffer.BlitBuffer ( ConversionBuffer, 1, 4096, 0, 0 );
-			
-			std :: cout << std :: endl << std :: endl;
 			
 		}
 		

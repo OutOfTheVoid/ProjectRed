@@ -40,7 +40,7 @@ namespace RAUX
 		uint32_t GetChannelCount ();
 		
 		Red::Audio :: AudioBuffer * LoadToBuffer ();
-		Red::Audio :: AudioBuffer * LoadToReformattedBuffer ();
+		Red::Audio :: AudioBuffer * LoadToReformattedBuffer ( Red::Audio :: AudioBufferType NewType );
 		
 	private:
 		

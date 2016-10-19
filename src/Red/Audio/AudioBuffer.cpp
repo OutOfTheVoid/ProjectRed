@@ -255,8 +255,8 @@ void Red::Audio::AudioBuffer :: BlitBuffer ( AudioBuffer & Source, uint32_t Sour
 		
 		#define _BLITBUFFER_ABDESTDATA_INT8(x) reinterpret_cast <uint8_t *> ( Data ) [ ChannelCount * ( TargetStartSample + I ) + TargetChannel ] = static_cast <int8_t> ( x )
 		#define _BLITBUFFER_ABDESTDATA_UINT8(x) reinterpret_cast <uint8_t *> ( Data ) [ ChannelCount * ( TargetStartSample + I ) + TargetChannel ] = static_cast <uint8_t> ( x )
-		#define _BLITBUFFER_ABDESTDATA_INT16_LE(x) reinterpret_cast <int16_t *> ( Data ) [ ChannelCount * ( TargetStartSample + I ) + TargetChannel ] = _AB_Alias_U16ToI16 ( HostToLittleEndian16 ( _AB_Alias_I16ToU16 ( x ) ) )
-		#define _BLITBUFFER_ABDESTDATA_INT16_BE(x) reinterpret_cast <int16_t *> ( Data ) [ ChannelCount * ( TargetStartSample + I ) + TargetChannel ] = _AB_Alias_U16ToI16 ( HostToBigEndian16 (  _AB_Alias_I16ToU16 ( x ) ) )
+		#define _BLITBUFFER_ABDESTDATA_INT16_LE(x) reinterpret_cast <int16_t *> ( Data ) [ ChannelCount * ( TargetStartSample + I ) + TargetChannel ] = /*_AB_Alias_U16ToI16*/ ( /*HostToLittleEndian16*/ ( /*_AB_Alias_I16ToU16*/ ( static_cast <int16_t> ( static_cast <int32_t> ( x ) ) ) ) )
+		#define _BLITBUFFER_ABDESTDATA_INT16_BE(x) reinterpret_cast <int16_t *> ( Data ) [ ChannelCount * ( TargetStartSample + I ) + TargetChannel ] = _AB_Alias_U16ToI16 ( HostToBigEndian16 ( _AB_Alias_I16ToU16 ( static_cast <int16_t> ( x ) ) ) )
 		#define _BLITBUFFER_ABDESTDATA_UINT16_LE(x) reinterpret_cast <uint16_t *> ( Data ) [ ChannelCount * ( TargetStartSample + I ) + TargetChannel ] = HostToLittleEndian16 ( static_cast <uint16_t> ( x ) )
 		#define _BLITBUFFER_ABDESTDATA_UINT16_BE(x) reinterpret_cast <uint16_t *> ( Data ) [ ChannelCount * ( TargetStartSample + I ) + TargetChannel ] = HostToBigEndian16 ( static_cast <uint16_t> ( x ) )
 		#define _BLITBUFFER_ABDESTDATA_INT32_LE(x) reinterpret_cast <int32_t *> ( Data ) [ ChannelCount * ( TargetStartSample + I ) + TargetChannel ] = _AB_Alias_U32ToI32 ( HostToLittleEndian32 ( _AB_Alias_I32ToU32 ( static_cast <int32_t> ( x ) ) ) )
@@ -264,7 +264,7 @@ void Red::Audio::AudioBuffer :: BlitBuffer ( AudioBuffer & Source, uint32_t Sour
 		#define _BLITBUFFER_ABDESTDATA_UINT32_LE(x) reinterpret_cast <uint32_t *> ( Data ) [ ChannelCount * ( TargetStartSample + I ) + TargetChannel ] = HostToLittleEndian32 ( static_cast <uint32_t> ( x ) )
 		#define _BLITBUFFER_ABDESTDATA_UINT32_BE(x) reinterpret_cast <uint32_t *> ( Data ) [ ChannelCount * ( TargetStartSample + I ) + TargetChannel ] = HostToBigEndian32 ( static_cast <uint32_t> ( x ) )
 		#define _BLITBUFFER_ABDESTDATA_FLOAT32_LE(x) reinterpret_cast <float *> ( Data ) [ ChannelCount * ( TargetStartSample + I ) + TargetChannel ] = HostToLittleEndianFloat ( static_cast <float> ( x ) )
-		#define _BLITBUFFER_ABDESTDATA_FLOAT32_BE(x) reinterpret_cast <float *> ( Data ) [ ChannelCount * ( TargetStartSample + I ) + TargetChannel ] = HostToLittleEndianFloat ( static_cast <float> ( x ) )
+		#define _BLITBUFFER_ABDESTDATA_FLOAT32_BE(x) reinterpret_cast <float *> ( Data ) [ ChannelCount * ( TargetStartSample + I ) + TargetChannel ] = HostToBigEndianFloat ( static_cast <float> ( x ) )
 		
 		switch ( DataType )
 		{
@@ -364,6 +364,7 @@ void Red::Audio::AudioBuffer :: BlitBuffer ( AudioBuffer & Source, uint32_t Sour
 							_BLITBUFFER_ABDESTDATA_INT8 ( _BLITBUFFER_ABSOURCEDATA_FLOAT32_LE * 127.5 - 0.5 );
 						
 					}
+					break;
 					
 					case kAudioBufferType_Float32_BigEndian:
 					{
@@ -372,6 +373,7 @@ void Red::Audio::AudioBuffer :: BlitBuffer ( AudioBuffer & Source, uint32_t Sour
 							_BLITBUFFER_ABDESTDATA_INT8 ( _BLITBUFFER_ABSOURCEDATA_FLOAT32_BE * 127.5 - 0.5 );
 						
 					}
+					break;
 					
 					default:
 						break;
@@ -476,6 +478,7 @@ void Red::Audio::AudioBuffer :: BlitBuffer ( AudioBuffer & Source, uint32_t Sour
 							_BLITBUFFER_ABDESTDATA_UINT8 ( ( _BLITBUFFER_ABSOURCEDATA_FLOAT32_LE + 1.0 ) * 127.5 );
 						
 					}
+					break;
 					
 					case kAudioBufferType_Float32_BigEndian:
 					{
@@ -484,6 +487,7 @@ void Red::Audio::AudioBuffer :: BlitBuffer ( AudioBuffer & Source, uint32_t Sour
 							_BLITBUFFER_ABDESTDATA_UINT8 ( ( _BLITBUFFER_ABSOURCEDATA_FLOAT32_BE + 1.0 ) * 127.5 );
 						
 					}
+					break;
 					
 					default:
 						break;
@@ -585,9 +589,10 @@ void Red::Audio::AudioBuffer :: BlitBuffer ( AudioBuffer & Source, uint32_t Sour
 					{
 						
 						for ( I = 0; I < SampleCount; I ++ )
-							_BLITBUFFER_ABDESTDATA_INT16_LE ( ( _BLITBUFFER_ABSOURCEDATA_FLOAT32_LE * 32767.5 ) - 0.5 );
+							_BLITBUFFER_ABDESTDATA_INT16_LE ( ( _BLITBUFFER_ABSOURCEDATA_FLOAT32_LE * 32767.5f ) - 0.5f );
 						
 					}
+					break;
 					
 					case kAudioBufferType_Float32_BigEndian:
 					{
@@ -596,6 +601,7 @@ void Red::Audio::AudioBuffer :: BlitBuffer ( AudioBuffer & Source, uint32_t Sour
 							_BLITBUFFER_ABDESTDATA_INT16_LE ( ( _BLITBUFFER_ABSOURCEDATA_FLOAT32_BE * 32767.5 ) - 0.5 );
 						
 					}
+					break;
 					
 					default:
 						break;
@@ -700,6 +706,7 @@ void Red::Audio::AudioBuffer :: BlitBuffer ( AudioBuffer & Source, uint32_t Sour
 							_BLITBUFFER_ABDESTDATA_INT16_BE ( ( _BLITBUFFER_ABSOURCEDATA_FLOAT32_LE * 32767.5 ) - 0.5 );
 						
 					}
+					break;
 					
 					case kAudioBufferType_Float32_BigEndian:
 					{
@@ -708,6 +715,7 @@ void Red::Audio::AudioBuffer :: BlitBuffer ( AudioBuffer & Source, uint32_t Sour
 							_BLITBUFFER_ABDESTDATA_INT16_BE ( ( _BLITBUFFER_ABSOURCEDATA_FLOAT32_BE * 32767.5 ) - 0.5 );
 						
 					}
+					break;
 					
 					default:
 						break;
@@ -812,6 +820,7 @@ void Red::Audio::AudioBuffer :: BlitBuffer ( AudioBuffer & Source, uint32_t Sour
 							_BLITBUFFER_ABDESTDATA_UINT16_LE ( ( _BLITBUFFER_ABSOURCEDATA_FLOAT32_LE + 1.0 ) * 32767.5 );
 						
 					}
+					break;
 					
 					case kAudioBufferType_Float32_BigEndian:
 					{
@@ -820,6 +829,7 @@ void Red::Audio::AudioBuffer :: BlitBuffer ( AudioBuffer & Source, uint32_t Sour
 							_BLITBUFFER_ABDESTDATA_UINT16_LE ( ( _BLITBUFFER_ABSOURCEDATA_FLOAT32_BE + 1.0 ) * 32767.5 );
 						
 					}
+					break;
 					
 					default:
 						break;
@@ -924,6 +934,7 @@ void Red::Audio::AudioBuffer :: BlitBuffer ( AudioBuffer & Source, uint32_t Sour
 							_BLITBUFFER_ABDESTDATA_UINT16_BE ( ( _BLITBUFFER_ABSOURCEDATA_FLOAT32_LE + 1.0 ) * 32767.5 );
 						
 					}
+					break;
 					
 					case kAudioBufferType_Float32_BigEndian:
 					{
@@ -932,6 +943,7 @@ void Red::Audio::AudioBuffer :: BlitBuffer ( AudioBuffer & Source, uint32_t Sour
 							_BLITBUFFER_ABDESTDATA_UINT16_BE ( ( _BLITBUFFER_ABSOURCEDATA_FLOAT32_BE + 1.0 ) * 32767.5 );
 						
 					}
+					break;
 					
 					default:
 						break;
@@ -1036,6 +1048,7 @@ void Red::Audio::AudioBuffer :: BlitBuffer ( AudioBuffer & Source, uint32_t Sour
 							_BLITBUFFER_ABDESTDATA_INT32_LE ( ( _BLITBUFFER_ABSOURCEDATA_FLOAT32_BE * 2147483647.5 ) - 0.5 );
 						
 					}
+					break;
 					
 					case kAudioBufferType_Float32_BigEndian:
 					{
@@ -1044,6 +1057,7 @@ void Red::Audio::AudioBuffer :: BlitBuffer ( AudioBuffer & Source, uint32_t Sour
 							_BLITBUFFER_ABDESTDATA_INT32_LE ( ( _BLITBUFFER_ABSOURCEDATA_FLOAT32_BE * 2147483647.5 ) - 0.5 );
 						
 					}
+					break;
 					
 					default:
 						break;
@@ -1148,6 +1162,7 @@ void Red::Audio::AudioBuffer :: BlitBuffer ( AudioBuffer & Source, uint32_t Sour
 							_BLITBUFFER_ABDESTDATA_INT32_BE ( ( _BLITBUFFER_ABSOURCEDATA_FLOAT32_LE * 2147483647.5 ) - 0.5 );
 						
 					}
+					break;
 					
 					case kAudioBufferType_Float32_BigEndian:
 					{
@@ -1156,6 +1171,7 @@ void Red::Audio::AudioBuffer :: BlitBuffer ( AudioBuffer & Source, uint32_t Sour
 							_BLITBUFFER_ABDESTDATA_INT32_BE ( ( _BLITBUFFER_ABSOURCEDATA_FLOAT32_BE * 2147483647.5 ) - 0.5 );
 						
 					}
+					break;
 					
 					default:
 						break;
@@ -1260,6 +1276,7 @@ void Red::Audio::AudioBuffer :: BlitBuffer ( AudioBuffer & Source, uint32_t Sour
 							_BLITBUFFER_ABDESTDATA_UINT32_LE ( ( _BLITBUFFER_ABSOURCEDATA_FLOAT32_LE + 1.0 ) * 2147483647.5 );
 						
 					}
+					break;
 					
 					case kAudioBufferType_Float32_BigEndian:
 					{
@@ -1268,6 +1285,7 @@ void Red::Audio::AudioBuffer :: BlitBuffer ( AudioBuffer & Source, uint32_t Sour
 							_BLITBUFFER_ABDESTDATA_UINT32_LE ( ( _BLITBUFFER_ABSOURCEDATA_FLOAT32_BE + 1.0 ) * 2147483647.5 );
 						
 					}
+					break;
 					
 					default:
 						break;
@@ -1369,17 +1387,19 @@ void Red::Audio::AudioBuffer :: BlitBuffer ( AudioBuffer & Source, uint32_t Sour
 					{
 						
 						for ( I = 0; I < SampleCount; I ++ )
-							_BLITBUFFER_ABDESTDATA_UINT32_BE ( ( _BLITBUFFER_ABSOURCEDATA_FLOAT32_LE + 1.0 ) * 2147483647.5 );
+							_BLITBUFFER_ABDESTDATA_UINT32_BE ( ( _BLITBUFFER_ABSOURCEDATA_FLOAT32_LE + 1.0 ) * 2147483647.5f );
 						
 					}
+					break;
 					
 					case kAudioBufferType_Float32_BigEndian:
 					{
 						
 						for ( I = 0; I < SampleCount; I ++ )
-							_BLITBUFFER_ABDESTDATA_UINT32_BE ( ( _BLITBUFFER_ABSOURCEDATA_FLOAT32_BE + 1.0 ) * 2147483647.5 );
+							_BLITBUFFER_ABDESTDATA_UINT32_BE ( ( _BLITBUFFER_ABSOURCEDATA_FLOAT32_BE + 1.0 ) * 2147483647.5f );
 						
 					}
+					break;
 					
 					default:
 						break;
@@ -1388,7 +1408,234 @@ void Red::Audio::AudioBuffer :: BlitBuffer ( AudioBuffer & Source, uint32_t Sour
 				
 			}
 			break;
-			// TODO: Implement other conversions
+			
+			case kAudioBufferType_Float32_LittleEndian:
+			{
+				
+				switch ( Source.DataType )
+				{
+					
+	
+					case kAudioBufferType_Int8:
+					{
+						
+						for ( I = 0; I < SampleCount; I ++ )
+							_BLITBUFFER_ABDESTDATA_FLOAT32_LE ( ( static_cast <float> ( _BLITBUFFER_ABSOURCEDATA_INT8 ) + 0.5f ) * 0.00784313725f );
+						
+					}
+					break;
+					
+					case kAudioBufferType_UInt8:
+					{
+						
+						for ( I = 0; I < SampleCount; I ++ )
+							_BLITBUFFER_ABDESTDATA_FLOAT32_LE ( ( static_cast <float> ( _BLITBUFFER_ABSOURCEDATA_INT8 ) - 127.5f ) * 0.00784313725f );
+						
+					}
+					break;
+					
+					case kAudioBufferType_Int16_LittleEndian:
+					{
+						
+						for ( I = 0; I < SampleCount; I ++ )
+							_BLITBUFFER_ABDESTDATA_FLOAT32_LE ( ( static_cast <float> ( _BLITBUFFER_ABSOURCEDATA_INT16_LE ) + 0.5f ) * 0.00003051804f );
+						
+					}
+					break;
+					
+					case kAudioBufferType_Int16_BigEndian:
+					{
+						
+						for ( I = 0; I < SampleCount; I ++ )
+							_BLITBUFFER_ABDESTDATA_FLOAT32_LE ( ( static_cast <float> ( _BLITBUFFER_ABSOURCEDATA_INT16_BE ) + 0.5f ) * 0.00003051804f );
+						
+					}
+					break;
+					
+					case kAudioBufferType_UInt16_LittleEndian:
+					{
+						
+						for ( I = 0; I < SampleCount; I ++ )
+							_BLITBUFFER_ABDESTDATA_FLOAT32_LE ( ( static_cast <float> ( _BLITBUFFER_ABSOURCEDATA_UINT16_LE ) - 32767.5 ) * 0.00003051804f );
+							
+					}
+					break;
+					
+					case kAudioBufferType_UInt16_BigEndian:
+					{
+						
+						for ( I = 0; I < SampleCount; I ++ )
+							_BLITBUFFER_ABDESTDATA_FLOAT32_LE ( ( static_cast <float> ( _BLITBUFFER_ABSOURCEDATA_UINT16_BE ) - 32767.5 ) * 0.00003051804f );
+							
+					}
+					break;
+					
+					case kAudioBufferType_Int32_LittleEndian:
+					{
+						
+						for ( I = 0; I < SampleCount; I ++ ) // The center shift here is pointless as a float32 has only 23 fraction bits
+							_BLITBUFFER_ABDESTDATA_FLOAT32_LE ( static_cast <float> ( _BLITBUFFER_ABSOURCEDATA_INT32_LE ) * 4.6566129e-10 );
+						
+					}
+					break;
+					
+					case kAudioBufferType_Int32_BigEndian:
+					{
+						
+						for ( I = 0; I < SampleCount; I ++ ) // The center shift here is pointless as a float32 has only 23 fraction bits
+							_BLITBUFFER_ABDESTDATA_FLOAT32_LE ( static_cast <float> ( _BLITBUFFER_ABSOURCEDATA_INT32_BE ) * 4.6566129e-10 );
+						
+					}
+					break;
+					
+					case kAudioBufferType_UInt32_LittleEndian:
+					{
+						
+						for ( I = 0; I < SampleCount; I ++ ) // The center shift here is pointless as a float32 has only 23 fraction bits
+							_BLITBUFFER_ABDESTDATA_FLOAT32_LE ( ( static_cast <float> ( _BLITBUFFER_ABSOURCEDATA_UINT32_LE ) - 2147483647.5f ) * 4.6566129e-10 );
+						
+					}
+					break;
+					
+					case kAudioBufferType_UInt32_BigEndian:
+					{
+						
+						for ( I = 0; I < SampleCount; I ++ )
+							_BLITBUFFER_ABDESTDATA_FLOAT32_LE ( ( static_cast <float> ( _BLITBUFFER_ABSOURCEDATA_UINT32_BE ) - 2147483647.5f ) * 4.6566129e-10 );
+						
+					}
+					break;
+					
+					case kAudioBufferType_Float32_BigEndian:
+					{
+						
+						for ( I = 0; I < SampleCount; I ++ )
+							_BLITBUFFER_ABDESTDATA_FLOAT32_LE ( _BLITBUFFER_ABSOURCEDATA_FLOAT32_BE );
+						
+					}
+					break;
+					
+					default:
+						break;
+					
+				}
+				
+			}
+			break;
+			
+			case kAudioBufferType_Float32_BigEndian:
+			{
+				
+				switch ( Source.DataType )
+				{
+					
+	
+					case kAudioBufferType_Int8:
+					{
+						
+						for ( I = 0; I < SampleCount; I ++ )
+							_BLITBUFFER_ABDESTDATA_FLOAT32_BE ( ( static_cast <float> ( _BLITBUFFER_ABSOURCEDATA_INT8 ) + 0.5f ) * 0.00784313725f );
+						
+					}
+					break;
+					
+					case kAudioBufferType_UInt8:
+					{
+						
+						for ( I = 0; I < SampleCount; I ++ )
+							_BLITBUFFER_ABDESTDATA_FLOAT32_BE ( ( static_cast <float> ( _BLITBUFFER_ABSOURCEDATA_INT8 ) - 127.5f ) * 0.00784313725f );
+						
+					}
+					break;
+					
+					case kAudioBufferType_Int16_LittleEndian:
+					{
+						
+						for ( I = 0; I < SampleCount; I ++ )
+							_BLITBUFFER_ABDESTDATA_FLOAT32_BE ( ( static_cast <float> ( _BLITBUFFER_ABSOURCEDATA_INT16_LE ) + 0.5f ) * 0.00003051804f );
+						
+					}
+					break;
+					
+					case kAudioBufferType_Int16_BigEndian:
+					{
+						
+						for ( I = 0; I < SampleCount; I ++ )
+							_BLITBUFFER_ABDESTDATA_FLOAT32_BE ( ( static_cast <float> ( _BLITBUFFER_ABSOURCEDATA_INT16_BE ) + 0.5f ) * 0.00003051804f );
+						
+					}
+					break;
+					
+					case kAudioBufferType_UInt16_LittleEndian:
+					{
+						
+						for ( I = 0; I < SampleCount; I ++ )
+							_BLITBUFFER_ABDESTDATA_FLOAT32_BE ( ( static_cast <float> ( _BLITBUFFER_ABSOURCEDATA_UINT16_LE ) - 32767.5 ) * 0.00003051804f );
+							
+					}
+					break;
+					
+					case kAudioBufferType_UInt16_BigEndian:
+					{
+						
+						for ( I = 0; I < SampleCount; I ++ )
+							_BLITBUFFER_ABDESTDATA_FLOAT32_BE ( ( static_cast <float> ( _BLITBUFFER_ABSOURCEDATA_UINT16_BE ) - 32767.5 ) * 0.00003051804f );
+							
+					}
+					break;
+					
+					case kAudioBufferType_Int32_LittleEndian:
+					{
+						
+						for ( I = 0; I < SampleCount; I ++ ) // The center shift here is pointless as a float32 has only 23 fraction bits
+							_BLITBUFFER_ABDESTDATA_FLOAT32_BE ( static_cast <float> ( _BLITBUFFER_ABSOURCEDATA_INT32_LE ) * 4.6566129e-10 );
+						
+					}
+					break;
+					
+					case kAudioBufferType_Int32_BigEndian:
+					{
+						
+						for ( I = 0; I < SampleCount; I ++ ) // The center shift here is pointless as a float32 has only 23 fraction bits
+							_BLITBUFFER_ABDESTDATA_FLOAT32_BE ( static_cast <float> ( _BLITBUFFER_ABSOURCEDATA_INT32_BE ) * 4.6566129e-10 );
+						
+					}
+					break;
+					
+					case kAudioBufferType_UInt32_LittleEndian:
+					{
+						
+						for ( I = 0; I < SampleCount; I ++ ) // The center shift here is pointless as a float32 has only 23 fraction bits
+							_BLITBUFFER_ABDESTDATA_FLOAT32_BE ( ( static_cast <float> ( _BLITBUFFER_ABSOURCEDATA_UINT32_LE ) - 2147483647.5f ) * 4.6566129e-10 );
+						
+					}
+					break;
+					
+					case kAudioBufferType_UInt32_BigEndian:
+					{
+						
+						for ( I = 0; I < SampleCount; I ++ )
+							_BLITBUFFER_ABDESTDATA_FLOAT32_BE ( ( static_cast <float> ( _BLITBUFFER_ABSOURCEDATA_UINT32_BE ) - 2147483647.5f ) * 4.6566129e-10 );
+						
+					}
+					break;
+					
+					case kAudioBufferType_Float32_LittleEndian:
+					{
+						
+						for ( I = 0; I < SampleCount; I ++ )
+							_BLITBUFFER_ABDESTDATA_FLOAT32_BE ( _BLITBUFFER_ABSOURCEDATA_FLOAT32_LE );
+						
+					}
+					break;
+					
+					default:
+						break;
+					
+				}
+				
+			}
+			break;
 			
 			default:
 				break;
@@ -1446,22 +1693,64 @@ void Red::Audio::AudioBuffer :: AddBufferResampled ( AudioBuffer & Source, uint3
 void Red::Audio::AudioBuffer :: ClearBufferFloat ( uint32_t Channel, float Value )
 {
 	
-	(void) Channel;
 	(void) Value;
 	
-	// TODO: Implement
+	if ( Channel > ChannelCount )
+		return;
+	
+	uint32_t I = 0;
+	
+	switch ( DataType )
+	{
+		
+		case kAudioBufferType_Float32_LittleEndian:
+		{
+			
+			float CValue = HostToLittleEndianFloat ( Value );
+			
+			for ( I = 0; I < SampleCount; I ++ )
+				reinterpret_cast <float *> ( Data ) [ I * ChannelCount + Channel ] = CValue;
+			
+		}
+		break;
+		
+		case kAudioBufferType_Float32_BigEndian:
+		{
+			
+			float CValue = HostToBigEndianFloat ( Value );
+			
+			for ( I = 0; I < SampleCount; I ++ )
+				reinterpret_cast <float *> ( Data ) [ I * ChannelCount + Channel ] = CValue;
+			
+		}
+		break;
+		
+		case kAudioBufferType_Int8:
+		case kAudioBufferType_UInt8:
+		case kAudioBufferType_Int16_LittleEndian:
+		case kAudioBufferType_Int16_BigEndian:
+		case kAudioBufferType_UInt16_LittleEndian:
+		case kAudioBufferType_UInt16_BigEndian:
+		case kAudioBufferType_Int32_LittleEndian:
+		case kAudioBufferType_Int32_BigEndian:
+		case kAudioBufferType_UInt32_LittleEndian:
+		case kAudioBufferType_UInt32_BigEndian:
+			return ClearBufferInt ( Channel, static_cast <int64_t> ( Value ) );
+			
+		default:
+			return;
+		
+	}
 	
 }
 
-void Red::Audio::AudioBuffer :: ClearBufferInt ( uint32_t Channel, int32_t Value )
+void Red::Audio::AudioBuffer :: ClearBufferInt ( uint32_t Channel, int64_t Value )
 {
 	
 	if ( Channel >= ChannelCount )
 		return;
 	
 	uint32_t I;
-	
-	// TODO: Implement
 	
 	switch ( DataType )
 	{
@@ -1476,6 +1765,7 @@ void Red::Audio::AudioBuffer :: ClearBufferInt ( uint32_t Channel, int32_t Value
 					reinterpret_cast <int8_t *> ( Data ) [ I * ChannelCount + Channel ] = static_cast <int8_t> ( Value );
 			
 		}
+		break;
 		
 		case kAudioBufferType_UInt8:
 		{
@@ -1487,32 +1777,102 @@ void Red::Audio::AudioBuffer :: ClearBufferInt ( uint32_t Channel, int32_t Value
 					reinterpret_cast <uint8_t *> ( Data ) [ I * ChannelCount + Channel ] = static_cast <uint8_t> ( Value );
 			
 		}
-		
-		/*
+		break;
 		
 		case kAudioBufferType_Int16_LittleEndian:
 		{
 			
-			uint16_t Value = 
+			uint16_t CValue = HostToLittleEndian16 ( _AB_Alias_I16ToU16 ( static_cast <int16_t> ( Value ) ) );
 			
 			for ( I = 0; I < SampleCount; I ++ )
-				reinterpret_cast <int8_t *> ( Data ) [ I * ChannelCount + Channel ] = static_cast <int8_t> ( Value );
+				reinterpret_cast <uint16_t *> ( Data ) [ I * ChannelCount + Channel ] = CValue;
 			
 		}
+		break;
+		
+		case kAudioBufferType_Int16_BigEndian:
+		{
+			
+			uint16_t CValue = HostToBigEndian16 ( _AB_Alias_I16ToU16 ( static_cast <int16_t> ( Value ) ) );
+			
+			for ( I = 0; I < SampleCount; I ++ )
+				reinterpret_cast <uint16_t *> ( Data ) [ I * ChannelCount + Channel ] = CValue;
+			
+		}
+		break;
 		
 		case kAudioBufferType_UInt16_LittleEndian:
 		{
 			
-			if ( ChannelCount == 1 )
-				memset ( reinterpret_cast <char *> ( Data ), static_cast <char> ( static_cast <uint8_t> ( Value ) ), SampleCount );
-			else
-				for ( I = 0; I < SampleCount; I ++ )
-					reinterpret_cast <uint8_t *> ( Data ) [ I * ChannelCount + Channel ] = static_cast <uint8_t> ( Value );
+			uint16_t CValue = HostToLittleEndian16 ( static_cast <uint16_t> ( Value ) );
 			
-		}*/
+			for ( I = 0; I < SampleCount; I ++ )
+				reinterpret_cast <uint16_t *> ( Data ) [ I * ChannelCount + Channel ] = CValue;
+			
+		}
+		break;
+		
+		case kAudioBufferType_UInt16_BigEndian:
+		{
+			
+			uint16_t CValue = HostToBigEndian16 ( static_cast <uint16_t> ( Value ) );
+			
+			for ( I = 0; I < SampleCount; I ++ )
+				reinterpret_cast <uint16_t *> ( Data ) [ I * ChannelCount + Channel ] = CValue;
+			
+		}
+		break;
+		
+		case kAudioBufferType_Int32_LittleEndian:
+		{
+			
+			uint32_t CValue = HostToLittleEndian32 ( _AB_Alias_I32ToU32 ( static_cast <int32_t> ( Value ) ) );
+			
+			for ( I = 0; I < SampleCount; I ++ )
+				reinterpret_cast <uint32_t *> ( Data ) [ I * ChannelCount + Channel ] = CValue;
+			
+		}
+		break;
+		
+		case kAudioBufferType_Int32_BigEndian:
+		{
+			
+			uint32_t CValue = HostToBigEndian32 ( _AB_Alias_I32ToU32 ( static_cast <int32_t> ( Value ) ) );
+			
+			for ( I = 0; I < SampleCount; I ++ )
+				reinterpret_cast <uint32_t *> ( Data ) [ I * ChannelCount + Channel ] = CValue;
+			
+		}
+		break;
+		
+		case kAudioBufferType_UInt32_LittleEndian:
+		{
+			
+			uint32_t CValue = HostToLittleEndian32 ( static_cast <uint32_t> ( Value ) );
+			
+			for ( I = 0; I < SampleCount; I ++ )
+				reinterpret_cast <uint32_t *> ( Data ) [ I * ChannelCount + Channel ] = CValue;
+			
+		}
+		break;
+		
+		case kAudioBufferType_UInt32_BigEndian:
+		{
+			
+			uint32_t CValue = HostToBigEndian32 ( static_cast <uint32_t> ( Value ) );
+			
+			for ( I = 0; I < SampleCount; I ++ )
+				reinterpret_cast <uint32_t *> ( Data ) [ I * ChannelCount + Channel ] = CValue;
+			
+		}
+		break;
+		
+		case kAudioBufferType_Float32_LittleEndian:
+		case kAudioBufferType_Float32_BigEndian:
+			return ClearBufferFloat ( Channel, static_cast <float> ( Value ) );
 		
 		default:
-			break;
+			return;
 		
 	}
 	

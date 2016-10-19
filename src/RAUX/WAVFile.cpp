@@ -408,3 +408,24 @@ Red::Audio :: AudioBuffer * RAUX::WAVFile :: LoadToBuffer ()
 	return NULL;
 	
 }
+
+Red::Audio :: AudioBuffer * RAUX::WAVFile :: LoadToReformattedBuffer ( Red::Audio :: AudioBufferType NewType )
+{
+	
+	Red::Audio :: AudioBuffer * TemporaryBuffer = LoadToBuffer ();
+	
+	if ( TemporaryBuffer != NULL )
+	{
+		
+		Red::Audio :: AudioBuffer * NewBuffer = Red::Audio::AudioBuffer :: CopyReformated ( * TemporaryBuffer, NewType );
+		
+		delete TemporaryBuffer;
+		return NewBuffer;
+		
+	}
+	
+	delete TemporaryBuffer;
+	
+	return NULL;
+	
+}
