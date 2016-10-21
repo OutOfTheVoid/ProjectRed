@@ -1,5 +1,5 @@
 #include <RAUX/FLACFile.h>
-#include <RAUX/Endian.h>
+#include <Red/Util/Endian.h>
 
 #include <iostream>
 
@@ -342,12 +342,12 @@ bool RAUX::FLACFile :: ParseSeekTableBlock ( uint32_t & Offset, uint32_t Length,
 		SeekTable = new SeekEntry [ SeekEntryCount ];
 		SeekTableSize = SeekEntryCount;
 		
-		for ( uint32_t I = 0; I < SeekEntryCount )
+		for ( uint32_t I = 0; I < SeekEntryCount; I ++ )
 		{
 			
 			FileInstance.Read ( reinterpret_cast <void *> ( & Temp64 ), 8, Offset + 18 * I, & DummyStatus );
 			
-			if ( DummyStatus != FileInstance :: kStatus_Success )
+			if ( DummyStatus != File :: kStatus_Success )
 			{
 				
 				delete[] SeekTable;
@@ -364,7 +364,7 @@ bool RAUX::FLACFile :: ParseSeekTableBlock ( uint32_t & Offset, uint32_t Length,
 			
 			FileInstance.Read ( reinterpret_cast <void *> ( & Temp64 ), 8, Offset + 8 + 18 * I, & DummyStatus );
 			
-			if ( DummyStatus != FileInstance :: kStatus_Success )
+			if ( DummyStatus != File :: kStatus_Success )
 			{
 				
 				delete[] SeekTable;
@@ -381,7 +381,7 @@ bool RAUX::FLACFile :: ParseSeekTableBlock ( uint32_t & Offset, uint32_t Length,
 			
 			FileInstance.Read ( reinterpret_cast <void *> ( & Temp16 ), 2, Offset + 16 + 18 * I, & DummyStatus );
 			
-			if ( DummyStatus != FileInstance :: kStatus_Success )
+			if ( DummyStatus != File :: kStatus_Success )
 			{
 				
 				delete[] SeekTable;

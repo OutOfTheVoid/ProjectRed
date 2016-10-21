@@ -74,6 +74,7 @@ OBJECTS=obj/SDLX/Lib.o \
 		obj/Red/Threading/Thread.o \
 		obj/Red/Threading/ThreadEvent.o \
 		obj/Red/Threading/Time.o \
+		obj/Red/Threading/Mutex.o \
 		obj/Red/Text/Rendering/RawFontTextureAtlas.o \
 		obj/Red/Text/Rendering/FreeType/FTLibrary.o \
 		obj/Red/Text/Rendering/FreeType/FontFace.o \
@@ -82,6 +83,8 @@ OBJECTS=obj/SDLX/Lib.o \
 		obj/Red/Text/Rendering/ShadedRenderer.o \
 		obj/Red/Graphics/DeferredModelRenderer.o \
 		obj/Red/Audio/AudioBuffer.o \
+		obj/Red/Audio/EmptyAudioBufferPool.o \
+		obj/Red/Math/FFT.o \
 		obj/Xenon/GPU/RenderBuffer.o
 	
 bin/Main: obj/Main.o include/Red/Util/Endian.h
@@ -128,7 +131,7 @@ obj/SDLX/Keyboard.o: src/SDLX/Keyboard.cpp include/SDLX/Keyboard.h include/SDLX/
 obj/SDLX/Mouse.o: src/SDLX/Mouse.cpp include/SDLX/Mouse.h include/SDLX/SDLX.h
 	$(CXX) -c $(CXX_FLAGS) src/SDLX/Mouse.cpp -o obj/SDLX/Mouse.o
 	
-obj/SDLX/AudioDevice.o: src/SDLX/AudioDevice.cpp include/SDLX/AudioDevice.h include/SDLX/SDLX.h include/Red/Audio/Audio.h include/Red/Audio/IAudioOutput.h
+obj/SDLX/AudioDevice.o: src/SDLX/AudioDevice.cpp include/SDLX/AudioDevice.h include/SDLX/SDLX.h include/Red/Audio/Audio.h include/Red/Audio/IAudioOutputDevice.h
 	$(CXX) -c $(CXX_FLAGS) src/SDLX/AudioDevice.cpp -o obj/SDLX/AudioDevice.o
 	
 # ======================== XENON ======================= #
@@ -258,10 +261,10 @@ obj/RAUX/VertexShaderFile.o: include/RAUX/VertexShaderFile.h src/RAUX/VertexShad
 obj/RAUX/FragmentShaderFile.o: include/RAUX/FragmentShaderFile.h src/RAUX/FragmentShaderFile.cpp include/RAUX/TextFile.h include/RAUX/RAUX.h include/Xenon/GPU/FragmentShader.h
 	$(CXX) -c $(CXX_FLAGS) src/RAUX/FragmentShaderFile.cpp -o obj/RAUX/FragmentShaderFile.o
 	
-obj/RAUX/WAVFile.o: include/RAUX/File.h include/RAUX/WAVFile.h src/RAUX/WAVFile.cpp include/Red/Audio/Audio.h include/RAUX/RAUX.h
+obj/RAUX/WAVFile.o: include/RAUX/File.h include/RAUX/WAVFile.h src/RAUX/WAVFile.cpp include/Red/Audio/Audio.h include/RAUX/RAUX.h include/Red/Util/Endian.h
 	$(CXX) -c $(CXX_FLAGS) src/RAUX/WAVFile.cpp -o obj/RAUX/WAVFile.o
 	
-obj/RAUX/FLACFile.o: include/RAUX/File.h include/RAUX/FLACFile.h src/RAUX/FLACFile.cpp include/Red/Audio/Audio.h  include/RAUX/Endian.h include/RAUX/RAUX.h
+obj/RAUX/FLACFile.o: include/RAUX/File.h include/RAUX/FLACFile.h src/RAUX/FLACFile.cpp include/Red/Audio/Audio.h include/Red/Util/Endian.h include/RAUX/RAUX.h
 	$(CXX) -c $(CXX_FLAGS) src/RAUX/FLACFile.cpp -o obj/RAUX/FLACFile.o
 	
 # ========================= Red ======================== #
@@ -274,6 +277,9 @@ obj/Red/Events/EventDispatcher.o: include/Red/Red.h include/Red/Events/Events.h 
 	
 obj/Red/Threading/Thread.o: include/Red/Threading/Thread.h src/Red/Threading/Thread.cpp include/Red/Threading/ThreadEvent.h include/Red/Threading/Threading.h include/Red/Events/IEvent.h include/Red/Events/IEventDispatcher.h include/Red/Events/EventDispatcher.h include/Red/Util/Function.h include/Red/Red.h
 	$(CXX) -c $(CXX_FLAGS) src/Red/Threading/Thread.cpp -o obj/Red/Threading/Thread.o
+	
+obj/Red/Threading/Mutex.o: include/Red/Threading/Mutex.h src/Red/Threading/Mutex.cpp include/Red/Threading/Threading.h include/Red/Red.h
+	$(CXX) -c $(CXX_FLAGS) src/Red/Threading/Mutex.cpp -o obj/Red/Threading/Mutex.o
 	
 obj/Red/Threading/ThreadEvent.o: include/Red/Threading/ThreadEvent.h src/Red/Threading/ThreadEvent.cpp include/Red/Threading/Thread.h include/Red/Threading/Threading.h include/Red/Events/IEvent.h include/Red/Events/BasicEvent.h include/Red/Red.h
 	$(CXX) -c $(CXX_FLAGS) src/Red/Threading/ThreadEvent.cpp -o obj/Red/Threading/ThreadEvent.o
@@ -305,6 +311,12 @@ obj/Red/Graphics/DeferredModelRenderer.o: include/Red/Graphics/DeferredModelRend
 obj/Red/Audio/AudioBuffer.o: include/Red/Audio/Audio.h include/Red/Audio/AudioBuffer.h src/Red/Audio/AudioBuffer.cpp include/Red/Util/RefCounted.h include/Red/Util/Function.h include/Red/Util/SSE.h
 	$(CXX) -c $(CXX_FLAGS) src/Red/Audio/AudioBuffer.cpp -o obj/Red/Audio/AudioBuffer.o
 	
+obj/Red/Audio/EmptyAudioBufferPool.o: include/Red/Audio/Audio.h include/Red/Audio/EmptyAudioBufferPool.h src/Red/Audio/EmptyAudioBufferPool.cpp include/Red/Util/RefCounted.h include/Red/Util/MethodObjectClosure.h 
+	$(CXX) -c $(CXX_FLAGS) src/Red/Audio/EmptyAudioBufferPool.cpp -o obj/Red/Audio/EmptyAudioBufferPool.o
+	
+obj/Red/Math/FFT.o: include/Red/Math/Math.h include/Red/Math/FFT.h src/Red/Math/FFT.cpp
+	$(CXX) -c $(CXX_FLAGS) src/Red/Math/FFT.cpp -o obj/Red/Math/FFT.o
+	
 clean:
 	-@rm -r obj/*
 	-@rm bin/main
@@ -320,6 +332,7 @@ clean:
 	-@mkdir obj/Red/Audio
 	-@mkdir obj/Red/Graphics
 	-@mkdir obj/Red/Threading
+	-@mkdir obj/Red/Math
 	-@mkdir obj/Red/Text
 	-@mkdir obj/Red/Text/Rendering
 	-@mkdir obj/Red/Text/Rendering/FreeType

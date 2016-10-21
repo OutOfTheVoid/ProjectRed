@@ -13,7 +13,7 @@
 
 #endif
 
-#include <RAUX/Endian.h>
+#include <Red/Util/Endian.h>
 
 #include <limits>
 #include <iostream>

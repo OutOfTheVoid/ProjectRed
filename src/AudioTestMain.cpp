@@ -98,7 +98,6 @@ int main ( int argc, char const * argv [] )
 	
 	SDLX::Lib :: EventLoop ( & Status );
 	
-	//Device -> Lock ();
 	Device -> Stop ();
 	
 	delete Counter;

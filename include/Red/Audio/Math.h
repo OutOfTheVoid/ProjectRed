@@ -5,6 +5,8 @@
 
 #include <stdint.h>
 
+#include <complex>
+
 inline float DecibelsToScaleF ( float Decibels )
 {
 	

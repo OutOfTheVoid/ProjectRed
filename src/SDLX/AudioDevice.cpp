@@ -45,7 +45,7 @@ SDLX :: AudioDevice * SDLX::AudioDevice :: RequestAudioDevice ( const char * Dev
 }
 
 SDLX::AudioDevice :: AudioDevice ():
-	IAudioOutput (),
+	IAudioOutputDevice (),
 	RefCounted (),
 	FillFunction ( NULL ),
 	Device ( 0 ),

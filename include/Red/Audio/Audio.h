@@ -2,6 +2,7 @@
 #define RED_AUDIO_AUDIO_H
 
 #include <Red/Red.h>
+#include <Red/Util/Endian.h>
 
 namespace Red
 {
@@ -28,7 +29,18 @@ namespace Red
 			kAudioBufferType_Float32_LittleEndian,
 			kAudioBufferType_Float32_BigEndian,
 			
+			kAudioBufferType_Invalid
+			
 		} AudioBufferType;
+		
+		AudioBufferType GetPerferredEndianTypeInt16 ();
+		AudioBufferType GetPerferredEndianTypeUInt16 ();
+		
+		AudioBufferType GetPerferredEndianTypeInt32 ();
+		AudioBufferType GetPerferredEndianTypeUInt32 ();
+		
+		AudioBufferType GetPerferredEndianTypeFloat32 ();
+		AudioBufferType GetPerferredEndianTypeUInt32 ();
 		
 	}
 	

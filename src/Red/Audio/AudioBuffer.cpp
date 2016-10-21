@@ -7,7 +7,6 @@
 #include <string.h>
 #include <math.h>
 
-#include <iostream>
 
 Red::Util :: Function1 <void, void *> Red::Audio::AudioBuffer :: StdFreeWrapper ( & free );
 
@@ -34,6 +33,9 @@ inline size_t GetSizeFromDataType ( Red::Audio :: AudioBufferType Type )
 		case Red::Audio :: kAudioBufferType_Float32_LittleEndian:
 		case Red::Audio :: kAudioBufferType_Float32_BigEndian:
 			return sizeof ( uint32_t );
+			
+		default:
+			break;
 		
 	}
 	
@@ -41,13 +43,14 @@ inline size_t GetSizeFromDataType ( Red::Audio :: AudioBufferType Type )
 	
 }
 
-Red::Audio::AudioBuffer :: AudioBuffer ( void * Data, AudioBufferType Type, uint32_t Channels, uint32_t SampleCount, Util :: IFunction1 <void, void *> * OnFree ):
-	RefCounted (),
+Red::Audio::AudioBuffer :: AudioBuffer ( void * Data, AudioBufferType Type, uint32_t Channels, uint64_t SampleCount, Util :: IFunction1 <void, void *> * OnFree, Util :: IFunction1 <bool, AudioBuffer *> * OnUnReferenced ):
 	Data ( Data ),
 	DataType ( Type ),
 	ChannelCount ( Channels ),
 	SampleCount ( SampleCount ),
-	OnFree ( OnFree )
+	OnFree ( OnFree ),
+	OnUnReferenced ( OnUnReferenced ),
+	RefCount ( 0 )
 {
 }
 
@@ -61,8 +64,35 @@ Red::Audio::AudioBuffer :: ~AudioBuffer ()
 	
 }
 
+void Red::Audio::AudioBuffer :: Reference ()
+{
+	
+	RefCount ++;
+	
+}
+
+void Red::Audio::AudioBuffer :: Dereference ()
+{
+	
+	RefCount --;
+	
+	if ( RefCount == 0 )
+	{
+		
+		if ( OnUnReferenced == NULL )
+			delete this;
+		else if ( ( * OnUnReferenced ) ( this ) )
+			delete this;
+			
+	}
+	
+}
+
 Red::Audio :: AudioBuffer * Red::Audio::AudioBuffer :: CopyReformated ( AudioBuffer & Source, AudioBufferType NewDataType, uint32_t NewChannelCount )
 {
+	
+	if ( NewDataType == kAudioBufferType_Invalid )
+		return NULL;
 	
 	void * NewData = malloc ( GetSizeFromDataType ( NewDataType ) * Source.SampleCount );
 	
@@ -91,6 +121,9 @@ Red::Audio :: AudioBuffer * Red::Audio::AudioBuffer :: CopyReformated ( AudioBuf
 
 Red::Audio :: AudioBuffer * Red::Audio::AudioBuffer :: CopyReformatedResampled ( AudioBuffer & Source, ResampleMode Mode, AudioBufferType NewDataType, uint32_t NewChannelCount, float SampleRatio )
 {
+	
+	if ( NewDataType == kAudioBufferType_Invalid )
+		return NULL;
 	
 	uint32_t NewSampleCount = static_cast <uint32_t> ( ceil ( static_cast <float> ( Source.SampleCount ) * SampleRatio ) );
 	void * NewData = malloc ( GetSizeFromDataType ( NewDataType ) * NewSampleCount );
@@ -174,7 +207,7 @@ inline uint32_t _AB_Alias_I32ToU32 ( const int32_t RValue )
 	
 }
 
-void Red::Audio::AudioBuffer :: BlitBuffer ( AudioBuffer & Source, uint32_t SourceChannel, uint32_t SampleCount, uint32_t SourceStartSample, uint32_t TargetStartSample, uint32_t TargetChannel )
+void Red::Audio::AudioBuffer :: BlitBuffer ( AudioBuffer & Source, uint32_t SourceChannel, uint64_t SampleCount, uint32_t SourceStartSample, uint32_t TargetStartSample, uint32_t TargetChannel )
 {
 	
 	uint32_t I;
@@ -187,6 +220,21 @@ void Red::Audio::AudioBuffer :: BlitBuffer ( AudioBuffer & Source, uint32_t Sour
 	
 	if ( SourceChannel >= Source.ChannelCount )
 		return;
+	
+	if ( DataType == kAudioBufferType_Invalid )
+		return;
+	
+	if ( Source.DataType == kAudioBufferType_Invalid )
+	{
+		
+		if ( ( DataType == kAudioBufferType_Float32_LittleEndian ) || ( DataType == kAudioBufferType_Float32_BigEndian ) )
+			ClearBufferFloat ( TargetChannel, 0.0f );
+		else
+			ClearBufferInt ( TargetChannel, 0 );
+			
+		return;
+		
+	}
 	
 	if ( DataType == Source.DataType )
 	{
@@ -1646,7 +1694,7 @@ void Red::Audio::AudioBuffer :: BlitBuffer ( AudioBuffer & Source, uint32_t Sour
 	
 }
 
-void Red::Audio::AudioBuffer :: BlitBufferResampled ( AudioBuffer & Source, ResampleMode Mode, uint32_t Channel, uint32_t SampleCount, uint32_t SourceStartSample, uint32_t TargetStartSample, float SampleRatio, uint32_t TargetChannel )
+void Red::Audio::AudioBuffer :: BlitBufferResampled ( AudioBuffer & Source, ResampleMode Mode, uint32_t Channel, uint64_t SampleCount, uint32_t SourceStartSample, uint32_t TargetStartSample, float SampleRatio, uint32_t TargetChannel )
 {
 	
 	(void) Source;
@@ -1662,7 +1710,7 @@ void Red::Audio::AudioBuffer :: BlitBufferResampled ( AudioBuffer & Source, Resa
 	
 }
 
-void Red::Audio::AudioBuffer :: AddBuffer ( AudioBuffer & Source, uint32_t SourceChannel, uint32_t SampleCount, uint32_t SourceStartSample, uint32_t TargetStartSample, uint32_t TargetChannel )
+void Red::Audio::AudioBuffer :: AddBuffer ( AudioBuffer & Source, uint32_t SourceChannel, uint64_t SampleCount, uint32_t SourceStartSample, uint32_t TargetStartSample, uint32_t TargetChannel )
 {
 	
 	(void) Source;
@@ -1676,7 +1724,7 @@ void Red::Audio::AudioBuffer :: AddBuffer ( AudioBuffer & Source, uint32_t Sourc
 	
 }
 
-void Red::Audio::AudioBuffer :: AddBufferResampled ( AudioBuffer & Source, ResampleMode Mode, uint32_t SourceChannel, uint32_t SampleCount, uint32_t SourceStartSample, uint32_t TargetStartSample, uint32_t TargetChannel, float SampleRatio )
+void Red::Audio::AudioBuffer :: AddBufferResampled ( AudioBuffer & Source, ResampleMode Mode, uint32_t SourceChannel, uint64_t SampleCount, uint32_t SourceStartSample, uint32_t TargetStartSample, uint32_t TargetChannel, float SampleRatio )
 {
 	
 	(void) Source;
@@ -1692,7 +1740,7 @@ void Red::Audio::AudioBuffer :: AddBufferResampled ( AudioBuffer & Source, Resam
 	
 }
 
-void Red::Audio::AudioBuffer :: ClearBufferFloat ( uint32_t Channel, float Value )
+void Red::Audio::AudioBuffer :: ClearBufferFloat ( uint32_t Channel, float Value, uint64_t SampleCount )
 {
 	
 	(void) Value;
@@ -1746,7 +1794,7 @@ void Red::Audio::AudioBuffer :: ClearBufferFloat ( uint32_t Channel, float Value
 	
 }
 
-void Red::Audio::AudioBuffer :: ClearBufferInt ( uint32_t Channel, int64_t Value )
+void Red::Audio::AudioBuffer :: ClearBufferInt ( uint32_t Channel, int64_t Value, uint64_t SampleCount )
 {
 	
 	if ( Channel >= ChannelCount )
@@ -1871,7 +1919,7 @@ void Red::Audio::AudioBuffer :: ClearBufferInt ( uint32_t Channel, int64_t Value
 		
 		case kAudioBufferType_Float32_LittleEndian:
 		case kAudioBufferType_Float32_BigEndian:
-			return ClearBufferFloat ( Channel, static_cast <float> ( Value ) );
+			return ClearBufferFloat ( Channel, static_cast <float> ( Value ), SampleCount );
 		
 		default:
 			return;

@@ -2,7 +2,7 @@
 #define RED_AUDIO_AUDIOOUTPUT_H
 
 #include <Red/Audio/Audio.h>
-#include <Red/Audio/IAudioOutput.h>
+#include <Red/Audio/IAudioOutputDevice.h>
 
 #include <Red/Util/Function.h>
 #include <Red/Util/IRefCounted.h>
@@ -13,11 +13,11 @@ namespace Red
 	namespace Audio
 	{
 		
-		class IAudioOutput : public virtual Util :: IRefCounted
+		class IAudioOutputDevice : public virtual Util :: IRefCounted
 		{
 		public:
 			
-			virtual inline ~IAudioOutput () {};
+			virtual inline ~IAudioOutputDevice () {};
 			
 			virtual void SetFillCallback ( Util :: IFunction2 <void, uint8_t *, int> * FillFunction ) = 0;
 			
@@ -29,7 +29,6 @@ namespace Red
 			
 			virtual uint32_t GetSampleFrequencey () = 0;
 			virtual uint32_t GetSampleSize () = 0;
-			
 			virtual uint32_t GetChannelCount () = 0;
 			
 			virtual AudioBufferType GetSampleFormat () = 0;

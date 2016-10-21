@@ -11,12 +11,12 @@
 #include <Red/Util/RefCounted.h>
 
 #include <Red/Audio/Audio.h>
-#include <Red/Audio/IAudioOutput.h>
+#include <Red/Audio/IAudioOutputDevice.h>
 
 namespace SDLX
 {
 	
-	class AudioDevice : public Red::Util :: RefCounted, public virtual Red::Audio :: IAudioOutput
+	class AudioDevice : public Red::Util :: RefCounted, public virtual Red::Audio :: IAudioOutputDevice
 	{
 	public:
 		

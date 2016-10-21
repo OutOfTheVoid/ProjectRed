@@ -195,6 +195,22 @@ inline uint32_t HostToBigEndian32 ( const uint32_t In )
 	
 }
 
+inline uint64_t BigToHostEndian64 ( const uint64_t In )
+{
+	
+#ifdef RAUX_BIG_ENDIAN_DEFINITE
+	
+	return In;
+	
+#else
+	
+	const uint8_t * Bytes = reinterpret_cast <const uint8_t *> ( & In );
+	
+	return ( ( static_cast <uint64_t> ( Bytes [ 0 ] ) << 56 ) & 0xFF00000000000000 ) | ( ( static_cast <uint64_t> ( Bytes [ 1 ] ) << 48 ) & 0xFF000000000000 ) | ( ( static_cast <uint64_t> ( Bytes [ 2 ] ) << 40 ) & 0xFF0000000000 ) | ( ( static_cast <uint64_t> ( Bytes [ 3 ] ) << 32 ) & 0xFF00000000 ) | ( ( static_cast <uint64_t> ( Bytes [ 4 ] ) << 24 ) & 0xFF000000 ) | ( ( static_cast <uint64_t> ( Bytes [ 5 ] ) << 16 ) & 0xFF0000 ) | ( ( static_cast <uint64_t> ( Bytes [ 6 ] ) << 8 ) & 0xFF00 ) | ( static_cast <uint64_t> ( Bytes [ 7 ] ) & 0xFF );
+#endif
+	
+}
+
 inline float HostToLittleEndianFloat ( const float In )
 {
 	
