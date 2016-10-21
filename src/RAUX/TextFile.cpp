@@ -1,4 +1,5 @@
 #include <RAUX/TextFile.h>
+ #include <stdlib.h>
 
 RAUX::TextFile :: TextFile ( const std :: string & Name ):
 	FileInstance ( Name )

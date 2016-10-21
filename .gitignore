@@ -11,3 +11,6 @@ bin/*
 *.ttf
 *.ttc
 *.wav
+*.xcodeproj
+build/
+build

@@ -31,8 +31,8 @@ Xenon::Math::Matrix4x4 :: Matrix4x4 ( NoInit NO_INIT )
 }
 
 Xenon::Math::Matrix4x4 :: Matrix4x4 ( const Matrix4x4 & CopyFrom ):
-	Elements ( CopyFrom.Elements )
-{	
+	Elements { CopyFrom.Elements [ 0 ], CopyFrom.Elements [ 1 ], CopyFrom.Elements [ 2 ], CopyFrom.Elements [ 3 ] }
+{
 }
 
 Xenon::Math::Matrix4x4 :: ~Matrix4x4 ()

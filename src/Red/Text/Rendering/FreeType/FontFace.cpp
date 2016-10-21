@@ -99,35 +99,35 @@ Red::Text::Rendering::FreeType::FontFace :: ~FontFace ()
 uint32_t Red::Text::Rendering::FreeType::FontFace :: GetNumFaces () const
 {
 	
-	return FHandle -> num_faces;
+	return static_cast <uint32_t> ( FHandle -> num_faces );
 	
 }
 
 uint32_t Red::Text::Rendering::FreeType::FontFace :: GetFaceIndex () const
 {
 	
-	return FHandle -> face_index;
+	return static_cast <uint32_t> ( FHandle -> face_index );
 	
 }
 
 Red::Text::Rendering::FreeType::FontFace :: FaceFlag Red::Text::Rendering::FreeType::FontFace :: GetFaceFlags () const
 {
 	
-	return FHandle -> face_flags;
+	return static_cast <FaceFlag> ( FHandle -> face_flags );
 	
 }
 
 Red::Text::Rendering::FreeType::FontFace :: StyleFlag Red::Text::Rendering::FreeType::FontFace :: GetStyleFlags () const
 {
 	
-	return FHandle -> style_flags;
+	return static_cast <StyleFlag> ( FHandle -> style_flags );
 	
 }
 
 uint32_t Red::Text::Rendering::FreeType::FontFace :: GetNumGlyphs () const
 {
 	
-	return FHandle -> num_glyphs;
+	return static_cast <uint32_t> ( FHandle -> num_glyphs );
 	
 }
 

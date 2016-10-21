@@ -2,6 +2,7 @@
 #include <Xenon/Geometry/Primitives.h>
 
 #include <float.h>
+#include <cmath>
 
 #include <iostream>
 
@@ -433,7 +434,7 @@ void Red::Text::Rendering::ShadedRenderer :: RenderUnicodeString ( const std :: 
 	
 	UploadTexture ( false );
 	
-	uint32_t StringLength = String.size ();
+	uint32_t StringLength = static_cast <uint32_t> ( String.size () );
 	
 	if ( StringLength == 0 )
 		return;
@@ -739,7 +740,7 @@ void Red::Text::Rendering::ShadedRenderer :: RenderUnicodeString ( const std :: 
 	{
 		
 		case kRegistrationMetric_BaseLine_End:
-			DeltaX = - ( abs ( CursorEndXMax ) > abs ( CursorEndXMin ) ) ? CursorEndXMax : CursorEndXMin;
+			DeltaX = - ( std :: abs ( CursorEndXMax ) > std :: abs ( CursorEndXMin ) ) ? CursorEndXMax : CursorEndXMin;
 			break;
 		
 		case kRegistrationMetric_Center:
@@ -763,7 +764,7 @@ void Red::Text::Rendering::ShadedRenderer :: RenderUnicodeString ( const std :: 
 	{
 		
 		case kRegistrationMetric_BaseLine_End:
-			DeltaY = - ( abs ( CursorEndYMax ) > abs ( CursorEndYMin ) ) ? CursorEndYMax : CursorEndYMin;
+			DeltaY = - ( std :: abs ( CursorEndYMax ) > std :: abs ( CursorEndYMin ) ) ? CursorEndYMax : CursorEndYMin;
 			break;
 		
 		case kRegistrationMetric_Center:

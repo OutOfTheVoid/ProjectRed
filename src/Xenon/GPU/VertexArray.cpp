@@ -64,12 +64,12 @@ void Xenon::GPU::VertexArray :: SetProgram ( ShaderProgram * Program )
 	if ( Program != NULL )
 	{
 		
-		Count = FPAttributes.size ();
+		Count = static_cast <uint32_t> ( FPAttributes.size () );
 		
 		for ( I = 0; I < Count; I ++ )
 			FPAttributes [ I ].AttributeLocation = Program -> GetAttributeLocation ( FPAttributes [ I ].Name.c_str () );
 		
-		Count = IntegerAttributes.size ();
+		Count = static_cast <uint32_t> ( IntegerAttributes.size () );
 		
 		for ( I = 0; I < Count; I ++ )
 			IntegerAttributes [ I ].AttributeLocation = Program -> GetAttributeLocation ( IntegerAttributes [ I ].Name.c_str () );
@@ -154,7 +154,7 @@ void Xenon::GPU::VertexArray :: Build ()
 	if ( IBuffer != NULL )
 		IBuffer -> Bind ();
 	
-	Count = FPAttributes.size ();
+	Count = static_cast <uint32_t> ( FPAttributes.size () );
 	
 	for ( I = 0; I < Count; I ++ )
 	{
@@ -172,7 +172,7 @@ void Xenon::GPU::VertexArray :: Build ()
 		
 	}
 	
-	Count = IntegerAttributes.size ();
+	Count = static_cast <uint32_t> ( IntegerAttributes.size () );
 	
 	for ( I = 0; I < Count; I ++ )
 	{

@@ -39,7 +39,7 @@ namespace Red
 			AudioBufferType GetDataType ();
 			uint32_t GetChannelCount ();
 			
-			uint32_t GetSampleCount ();
+			uint64_t GetSampleCount ();
 			
 			void BlitBuffer ( AudioBuffer & Source, uint32_t SourceChannel, uint64_t SampleCount, uint32_t SourceStartSample = 0, uint32_t TargetStartSample = 0, uint32_t TargetChannel = 0xFFFFFFFF );
 			void BlitBufferResampled ( AudioBuffer & Source, ResampleMode Mode, uint32_t Channel, uint64_t SampleCount, uint32_t SourceStartSample = 0, uint32_t TargetStartSample = 0, float SampleRatio = 1.0f, uint32_t TargetChannel = 0xFFFFFFFF );

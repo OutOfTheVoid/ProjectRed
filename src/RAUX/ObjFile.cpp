@@ -636,9 +636,9 @@ bool RAUX::ObjFile :: ProcessFace ( const std :: string & Line, uint32_t Index )
 	
 	Face Out;
 	
-	Out.VertexIndexBase = Vertices.size ();
-	Out.VertexCount = VertexAccumulator.size ();
-	Out.MaterialIndex = ActiveMaterials.size () - 1;
+	Out.VertexIndexBase = static_cast <uint32_t> ( Vertices.size () );
+	Out.VertexCount = static_cast <uint32_t> ( VertexAccumulator.size () );
+	Out.MaterialIndex = static_cast <uint32_t> ( ActiveMaterials.size () - 1 );
 	
 	Faces.push_back ( Out );
 	Vertices.insert ( Vertices.end (), VertexAccumulator.begin (), VertexAccumulator.end () );
@@ -680,7 +680,7 @@ bool RAUX::ObjFile :: ProcessGroups ( const std :: string & Line, uint32_t Index
 	ResolveActiveGroups ();
 	
 	ActiveGroupIndexes.clear ();
-	ActiveGroupFaceIndexBase = Faces.size ();
+	ActiveGroupFaceIndexBase = static_cast <uint32_t> ( Faces.size () );
 	
 	for ( uint32_t I = 0; I < GroupNames.size (); I ++ )
 	{
@@ -698,7 +698,7 @@ bool RAUX::ObjFile :: ProcessGroups ( const std :: string & Line, uint32_t Index
 		if ( ActiveIndex == - 1 )
 		{
 			
-			ActiveGroupIndexes.push_back ( Groups.size () );
+			ActiveGroupIndexes.push_back ( static_cast <uint32_t> ( Groups.size () ) );
 			Groups.push_back ( GroupNames [ I ] );
 			
 		}
@@ -748,7 +748,7 @@ bool RAUX::ObjFile :: ProcessMaterial ( const std :: string & Line, uint32_t Ind
 			if ( PendingMaterial != NULL )
 			{
 				
-				CurrentMaterial = ActiveMaterials.size ();
+				CurrentMaterial = static_cast <uint32_t> ( ActiveMaterials.size () );
 				ActiveMaterials.push_back ( * PendingMaterial );
 				
 				break;

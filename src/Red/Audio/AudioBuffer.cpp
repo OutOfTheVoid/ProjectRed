@@ -172,7 +172,7 @@ uint32_t Red::Audio::AudioBuffer :: GetChannelCount ()
 	
 }
 
-uint32_t Red::Audio::AudioBuffer :: GetSampleCount ()
+uint64_t Red::Audio::AudioBuffer :: GetSampleCount ()
 {
 	
 	return SampleCount;

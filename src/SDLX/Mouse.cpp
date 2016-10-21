@@ -51,7 +51,7 @@ void SDLX::Mouse :: MotionEventInternal ( SDL_MouseMotionEvent * Event )
 	
 	MotionListenerLock -> Lock ();
 	
-	Length = MotionListeners.size ();
+	Length = static_cast <uint32_t> ( MotionListeners.size () );
 	
 	std :: vector <MotionListenerStruct> MotionListenersCopy ( MotionListeners );
 	

@@ -103,7 +103,7 @@ void SDLX::Keyboard :: EventInternal ( SDL_KeyboardEvent * Event )
 	
 	ListenerLock -> Lock ();
 	
-	Length = Listeners.size ();
+	Length = static_cast <uint32_t> ( Listeners.size () );
 	
 	std :: vector <ListenerStruct> ListenersCopy ( Listeners );
 	

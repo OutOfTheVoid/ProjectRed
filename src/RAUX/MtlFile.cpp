@@ -1,10 +1,13 @@
 #include <RAUX/MtlFile.h>
 
 #include <stdexcept>
+#include <stdlib.h>
 
 #define READBLOCK_SIZE 0x1000
 
 std :: string RAUX::MtlFile :: NullComment ( "" );
+
+//HELLO WORLD
 
 RAUX::MtlFile :: MtlFile ( const std :: string & Name, uint32_t Flags ):
 	Flags ( Flags ),
@@ -1031,7 +1034,7 @@ bool RAUX::MtlFile :: ProcessOpticalDensity ( const std :: string & Line, uint32
 uint32_t RAUX::MtlFile :: GetCommentCount () const
 {
 	
-	return Comments.size ();
+	return static_cast <uint32_t> ( Comments.size () );
 	
 }
 
@@ -1048,7 +1051,7 @@ const std :: string & RAUX::MtlFile :: GetComment ( uint32_t Index ) const
 uint32_t RAUX::MtlFile :: GetMaterialCount () const
 {
 	
-	return Materials.size ();
+	return static_cast <uint32_t> ( Materials.size () );
 	
 }
 

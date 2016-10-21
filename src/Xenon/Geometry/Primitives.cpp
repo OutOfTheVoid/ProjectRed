@@ -493,7 +493,7 @@ bool Xenon::Geometry::Primitives :: GenerateCubeMesh ( Mesh ** Target, const Cub
 	Red::Util :: RCMem * StaticDataBuffer = ( CommonStaticBufferAttributeTotal != 0 ) ? new Red::Util :: RCMem ( CommonStaticBufferAttributeTotal ) : NULL;
 	void * StaticData = ( CommonStaticBufferAttributeTotal != 0 ) ? StaticDataBuffer -> GetData () : NULL;
 	
-	MeshAttributeData * StaticAttributeData = ( CommonStaticBufferAttributeTotal != 0 ) ? new MeshAttributeData ( StaticDataBuffer, CommonStaticBufferAttributeTotal, GPU::VertexBuffer :: kUsageType_Static_Draw, false ) : NULL;
+	MeshAttributeData * StaticAttributeData = ( CommonStaticBufferAttributeTotal != 0 ) ? new MeshAttributeData ( StaticDataBuffer, static_cast <GLsizei> ( CommonStaticBufferAttributeTotal ), GPU::VertexBuffer :: kUsageType_Static_Draw, false ) : NULL;
 	
 	if ( ( CommonStaticBufferAttributeTotal != 0 ) )
 	{
@@ -526,7 +526,7 @@ bool Xenon::Geometry::Primitives :: GenerateCubeMesh ( Mesh ** Target, const Cub
 			
 			PositionData = StaticData;
 			
-			AttributeTrackers [ AttributeTrackerIndex ].Attribute = new MeshAttribute ( Spec.PositionSpec.AttributeName, GPU::VertexArray :: kFPAttributeInputType_Float, false, 3, PositionStride, reinterpret_cast <void *> ( PositionOffset ), StaticAttributeData );
+			AttributeTrackers [ AttributeTrackerIndex ].Attribute = new MeshAttribute ( Spec.PositionSpec.AttributeName, GPU::VertexArray :: kFPAttributeInputType_Float, false, 3, static_cast <GLuint> ( PositionStride ), reinterpret_cast <void *> ( PositionOffset ), StaticAttributeData );
 			AttributeTrackerIndex ++;
 			
 		}
@@ -551,7 +551,7 @@ bool Xenon::Geometry::Primitives :: GenerateCubeMesh ( Mesh ** Target, const Cub
 				
 			}
 			
-			AttributeTrackers [ AttributeTrackerIndex ].Attribute = new MeshAttribute ( Spec.PositionSpec.AttributeName, GPU::VertexArray :: kFPAttributeInputType_Float, false, 3, PositionStride, reinterpret_cast <void *> ( PositionOffset ), PositionAttributeData );
+			AttributeTrackers [ AttributeTrackerIndex ].Attribute = new MeshAttribute ( Spec.PositionSpec.AttributeName, GPU::VertexArray :: kFPAttributeInputType_Float, false, 3, static_cast <uint32_t> ( PositionStride ), reinterpret_cast <void *> ( PositionOffset ), PositionAttributeData );
 			AttributeTrackerIndex ++;
 			
 		}
@@ -790,7 +790,7 @@ bool Xenon::Geometry::Primitives :: GenerateCubeMesh ( Mesh ** Target, const Cub
 			
 			NormalData = StaticData;
 			
-			AttributeTrackers [ AttributeTrackerIndex ].Attribute = new MeshAttribute ( Spec.NormalSpec.AttributeName, GPU::VertexArray :: kFPAttributeInputType_Float, false, 3, NormalStride, reinterpret_cast <void *> ( NormalOffset ), StaticAttributeData );
+			AttributeTrackers [ AttributeTrackerIndex ].Attribute = new MeshAttribute ( Spec.NormalSpec.AttributeName, GPU::VertexArray :: kFPAttributeInputType_Float, false, 3, static_cast <GLuint> ( NormalStride ), reinterpret_cast <void *> ( NormalOffset ), StaticAttributeData );
 			AttributeTrackerIndex ++;
 			
 		}
@@ -815,7 +815,7 @@ bool Xenon::Geometry::Primitives :: GenerateCubeMesh ( Mesh ** Target, const Cub
 				
 			}
 			
-			AttributeTrackers [ AttributeTrackerIndex ].Attribute = new MeshAttribute ( Spec.NormalSpec.AttributeName, GPU::VertexArray :: kFPAttributeInputType_Float, false, 3, NormalStride, reinterpret_cast <void *> ( NormalOffset ), NormalAttributeData );
+			AttributeTrackers [ AttributeTrackerIndex ].Attribute = new MeshAttribute ( Spec.NormalSpec.AttributeName, GPU::VertexArray :: kFPAttributeInputType_Float, false, 3, static_cast <GLuint> ( NormalStride ), reinterpret_cast <void *> ( NormalOffset ), NormalAttributeData );
 			AttributeTrackerIndex ++;
 			
 		}
@@ -957,7 +957,7 @@ bool Xenon::Geometry::Primitives :: GenerateCubeMesh ( Mesh ** Target, const Cub
 			
 			TangentData = StaticData;
 			
-			AttributeTrackers [ AttributeTrackerIndex ].Attribute = new MeshAttribute ( Spec.TangentSpec.AttributeName, GPU::VertexArray :: kFPAttributeInputType_Float, false, 3, TangentStride, reinterpret_cast <void *> ( TangentOffset ), StaticAttributeData );
+			AttributeTrackers [ AttributeTrackerIndex ].Attribute = new MeshAttribute ( Spec.TangentSpec.AttributeName, GPU::VertexArray :: kFPAttributeInputType_Float, false, 3, static_cast <uint32_t> ( TangentStride ), reinterpret_cast <void *> ( TangentOffset ), StaticAttributeData );
 			AttributeTrackerIndex ++;
 			
 		}
@@ -982,7 +982,7 @@ bool Xenon::Geometry::Primitives :: GenerateCubeMesh ( Mesh ** Target, const Cub
 				
 			}
 			
-			AttributeTrackers [ AttributeTrackerIndex ].Attribute = new MeshAttribute ( Spec.TangentSpec.AttributeName, GPU::VertexArray :: kFPAttributeInputType_Float, false, 3, TangentStride, reinterpret_cast <void *> ( TangentOffset ), TangentAttributeData );
+			AttributeTrackers [ AttributeTrackerIndex ].Attribute = new MeshAttribute ( Spec.TangentSpec.AttributeName, GPU::VertexArray :: kFPAttributeInputType_Float, false, 3, static_cast <GLuint> ( TangentStride ), reinterpret_cast <void *> ( TangentOffset ), TangentAttributeData );
 			AttributeTrackerIndex ++;
 			
 		}
@@ -1003,7 +1003,7 @@ bool Xenon::Geometry::Primitives :: GenerateCubeMesh ( Mesh ** Target, const Cub
 			
 			ColorData = StaticData;
 			
-			AttributeTrackers [ AttributeTrackerIndex ].Attribute = new MeshAttribute ( Spec.ColorSpec.AttributeName, GPU::VertexArray :: kFPAttributeInputType_Float, false, 3, ColorStride, reinterpret_cast <void *> ( ColorOffset ), StaticAttributeData );
+			AttributeTrackers [ AttributeTrackerIndex ].Attribute = new MeshAttribute ( Spec.ColorSpec.AttributeName, GPU::VertexArray :: kFPAttributeInputType_Float, false, 3, static_cast <uint32_t> ( ColorStride ), reinterpret_cast <void *> ( ColorOffset ), StaticAttributeData );
 			AttributeTrackerIndex ++;
 			
 		}
@@ -1028,7 +1028,7 @@ bool Xenon::Geometry::Primitives :: GenerateCubeMesh ( Mesh ** Target, const Cub
 				
 			}
 			
-			AttributeTrackers [ AttributeTrackerIndex ].Attribute = new MeshAttribute ( Spec.ColorSpec.AttributeName, GPU::VertexArray :: kFPAttributeInputType_Float, false, 3, ColorStride, reinterpret_cast <void *> ( ColorOffset ), ColorAttributeData );
+			AttributeTrackers [ AttributeTrackerIndex ].Attribute = new MeshAttribute ( Spec.ColorSpec.AttributeName, GPU::VertexArray :: kFPAttributeInputType_Float, false, 3, static_cast <GLuint> ( ColorStride ), reinterpret_cast <void *> ( ColorOffset ), ColorAttributeData );
 			AttributeTrackerIndex ++;
 			
 		}
@@ -1054,7 +1054,7 @@ bool Xenon::Geometry::Primitives :: GenerateCubeMesh ( Mesh ** Target, const Cub
 				
 				TexturePositionData = StaticData;
 				
-				AttributeTrackers [ AttributeTrackerIndex ].Attribute = new MeshAttribute ( Spec.TexturePositionSpecs [ I ].AttributeName, GPU::VertexArray :: kFPAttributeInputType_Float, false, ( Spec.TexturePositionSpecs [ I ].Layout == CubeTexturePositionSpec :: kTexturePositionLayout_PerCommonVertexCubeTexture ) ? 3 : 2, TexturePositionStride, reinterpret_cast <void *> ( TexturePositionOffset ), StaticAttributeData );
+				AttributeTrackers [ AttributeTrackerIndex ].Attribute = new MeshAttribute ( Spec.TexturePositionSpecs [ I ].AttributeName, GPU::VertexArray :: kFPAttributeInputType_Float, false, ( Spec.TexturePositionSpecs [ I ].Layout == CubeTexturePositionSpec :: kTexturePositionLayout_PerCommonVertexCubeTexture ) ? 3 : 2, static_cast <GLuint> ( TexturePositionStride ), reinterpret_cast <void *> ( TexturePositionOffset ), StaticAttributeData );
 				AttributeTrackerIndex ++;
 				
 			}
@@ -1079,7 +1079,7 @@ bool Xenon::Geometry::Primitives :: GenerateCubeMesh ( Mesh ** Target, const Cub
 					
 				}
 				
-				AttributeTrackers [ AttributeTrackerIndex ].Attribute = new MeshAttribute ( Spec.TexturePositionSpecs [ I ].AttributeName, GPU::VertexArray :: kFPAttributeInputType_Float, false, 3, TexturePositionStride, reinterpret_cast <void *> ( TexturePositionOffset ), TexturePositionAttributeData );
+				AttributeTrackers [ AttributeTrackerIndex ].Attribute = new MeshAttribute ( Spec.TexturePositionSpecs [ I ].AttributeName, GPU::VertexArray :: kFPAttributeInputType_Float, false, 3, static_cast <GLuint> ( TexturePositionStride ), reinterpret_cast <void *> ( TexturePositionOffset ), TexturePositionAttributeData );
 				AttributeTrackerIndex ++;
 				
 			}
@@ -1582,7 +1582,7 @@ bool Xenon::Geometry::Primitives :: GenerateQuad2DMesh ( Mesh ** Target, const Q
 	Red::Util :: RCMem * StaticDataBuffer = ( CommonStaticBufferAttributeTotal != 0 ) ? new Red::Util :: RCMem ( CommonStaticBufferAttributeTotal ) : NULL;
 	void * StaticData = ( CommonStaticBufferAttributeTotal != 0 ) ? StaticDataBuffer -> GetData () : NULL;
 	
-	MeshAttributeData * StaticAttributeData = ( CommonStaticBufferAttributeTotal != 0 ) ? new MeshAttributeData ( StaticDataBuffer, CommonStaticBufferAttributeTotal, GPU::VertexBuffer :: kUsageType_Static_Draw, false ) : NULL;
+	MeshAttributeData * StaticAttributeData = ( CommonStaticBufferAttributeTotal != 0 ) ? new MeshAttributeData ( StaticDataBuffer, static_cast <GLuint> ( CommonStaticBufferAttributeTotal ), GPU::VertexBuffer :: kUsageType_Static_Draw, false ) : NULL;
 	
 	if ( ( CommonStaticBufferAttributeTotal != 0 ) )
 	{
@@ -1615,7 +1615,7 @@ bool Xenon::Geometry::Primitives :: GenerateQuad2DMesh ( Mesh ** Target, const Q
 			
 			PositionData = StaticData;
 			
-			AttributeTrackers [ AttributeTrackerIndex ].Attribute = new MeshAttribute ( Spec.PositionSpec.AttributeName, GPU::VertexArray :: kFPAttributeInputType_Float, false, 2, PositionStride, reinterpret_cast <void *> ( PositionOffset ), StaticAttributeData );
+			AttributeTrackers [ AttributeTrackerIndex ].Attribute = new MeshAttribute ( Spec.PositionSpec.AttributeName, GPU::VertexArray :: kFPAttributeInputType_Float, false, 2, static_cast <uint32_t> ( PositionStride ), reinterpret_cast <void *> ( PositionOffset ), StaticAttributeData );
 			AttributeTrackerIndex ++;
 			
 		}
@@ -1640,7 +1640,7 @@ bool Xenon::Geometry::Primitives :: GenerateQuad2DMesh ( Mesh ** Target, const Q
 				
 			}
 			
-			AttributeTrackers [ AttributeTrackerIndex ].Attribute = new MeshAttribute ( Spec.PositionSpec.AttributeName, GPU::VertexArray :: kFPAttributeInputType_Float, false, 2, PositionStride, reinterpret_cast <void *> ( PositionOffset ), PositionAttributeData );
+			AttributeTrackers [ AttributeTrackerIndex ].Attribute = new MeshAttribute ( Spec.PositionSpec.AttributeName, GPU::VertexArray :: kFPAttributeInputType_Float, false, 2, static_cast <uint32_t> ( PositionStride ), reinterpret_cast <void *> ( PositionOffset ), PositionAttributeData );
 			AttributeTrackerIndex ++;
 			
 		}
@@ -1664,7 +1664,7 @@ bool Xenon::Geometry::Primitives :: GenerateQuad2DMesh ( Mesh ** Target, const Q
 			
 			ColorData = StaticData;
 			
-			AttributeTrackers [ AttributeTrackerIndex ].Attribute = new MeshAttribute ( Spec.ColorSpec.AttributeName, GPU::VertexArray :: kFPAttributeInputType_Float, false, 3, ColorStride, reinterpret_cast <void *> ( ColorOffset ), StaticAttributeData );
+			AttributeTrackers [ AttributeTrackerIndex ].Attribute = new MeshAttribute ( Spec.ColorSpec.AttributeName, GPU::VertexArray :: kFPAttributeInputType_Float, false, 3, static_cast <uint32_t> ( ColorStride ), reinterpret_cast <void *> ( ColorOffset ), StaticAttributeData );
 			AttributeTrackerIndex ++;
 			
 		}
@@ -1689,7 +1689,7 @@ bool Xenon::Geometry::Primitives :: GenerateQuad2DMesh ( Mesh ** Target, const Q
 				
 			}
 			
-			AttributeTrackers [ AttributeTrackerIndex ].Attribute = new MeshAttribute ( Spec.ColorSpec.AttributeName, GPU::VertexArray :: kFPAttributeInputType_Float, false, 3, ColorStride, reinterpret_cast <void *> ( ColorOffset ), ColorAttributeData );
+			AttributeTrackers [ AttributeTrackerIndex ].Attribute = new MeshAttribute ( Spec.ColorSpec.AttributeName, GPU::VertexArray :: kFPAttributeInputType_Float, false, 3, static_cast <uint32_t> ( ColorStride ), reinterpret_cast <void *> ( ColorOffset ), ColorAttributeData );
 			AttributeTrackerIndex ++;
 			
 		}
@@ -1716,7 +1716,7 @@ bool Xenon::Geometry::Primitives :: GenerateQuad2DMesh ( Mesh ** Target, const Q
 				
 				TexturePositionData = StaticData;
 				
-				AttributeTrackers [ AttributeTrackerIndex ].Attribute = new MeshAttribute ( Spec.TexturePositionSpecs [ I ].AttributeName, GPU::VertexArray :: kFPAttributeInputType_Float, false, 2, TexturePositionStride, reinterpret_cast <void *> ( TexturePositionOffset ), StaticAttributeData );
+				AttributeTrackers [ AttributeTrackerIndex ].Attribute = new MeshAttribute ( Spec.TexturePositionSpecs [ I ].AttributeName, GPU::VertexArray :: kFPAttributeInputType_Float, false, 2, static_cast <GLuint> ( TexturePositionStride ), reinterpret_cast <void *> ( TexturePositionOffset ), StaticAttributeData );
 				AttributeTrackerIndex ++;
 				
 			}

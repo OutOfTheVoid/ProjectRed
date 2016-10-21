@@ -94,7 +94,7 @@ Red::Events::IEventDispatcher :: EventKey Red::Events::EventDispatcher :: HoldEv
 		Registrations.push_back ( NewRegistration );
 		
 		NewRegistration -> NextFree = NULL;
-		NewRegistration -> Key = Registrations.size () - 1;
+		NewRegistration -> Key = static_cast <uint32_t> ( Registrations.size () - 1 );
 		
 	}
 	

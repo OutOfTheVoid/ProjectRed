@@ -408,8 +408,8 @@ Xenon::Geometry :: Mesh * RAUX::StlFile :: CreateMesh ( const MeshParameters & P
 			PositionAttributeData = StaticAttributeData;
 			NormalAttributeData = StaticAttributeData;
 			
-			PositionMeshAttribute = new Xenon::Geometry :: MeshAttribute ( Params.PositionAttributeName, Xenon::GPU::VertexArray :: kFPAttributeInputType_Float, false, 3, PositionStride, reinterpret_cast <void *> ( PositionOffset ), StaticAttributeData );
-			NormalMeshAttribute = new Xenon::Geometry :: MeshAttribute ( Params.NormalAttributeName, Xenon::GPU::VertexArray :: kFPAttributeInputType_Float, false, 3, NormalStride, reinterpret_cast <void *> ( NormalOffset ), StaticAttributeData );
+			PositionMeshAttribute = new Xenon::Geometry :: MeshAttribute ( Params.PositionAttributeName, Xenon::GPU::VertexArray :: kFPAttributeInputType_Float, false, 3, static_cast <GLuint> ( PositionStride ), reinterpret_cast <void *> ( PositionOffset ), StaticAttributeData );
+			NormalMeshAttribute = new Xenon::Geometry :: MeshAttribute ( Params.NormalAttributeName, Xenon::GPU::VertexArray :: kFPAttributeInputType_Float, false, 3, static_cast <GLuint> ( NormalStride ), reinterpret_cast <void *> ( NormalOffset ), StaticAttributeData );
 			
 		}
 		else
@@ -442,7 +442,7 @@ Xenon::Geometry :: Mesh * RAUX::StlFile :: CreateMesh ( const MeshParameters & P
 		Xenon::Geometry :: MeshAttributeData * AttributeData = new Xenon::Geometry :: MeshAttributeData ( AttributeMemory, BufferSize, ( ( Params.Flags & kMeshParameterFlags_DynamicPositions ) == 0 ) ? Xenon::GPU::VertexBuffer :: kUsageType_Static_Draw : Xenon::GPU::VertexBuffer :: kUsageType_Dynamic_Draw );
 		PositionAttributeData = AttributeData;
 		
-		PositionMeshAttribute = new Xenon::Geometry :: MeshAttribute ( Params.PositionAttributeName, Xenon::GPU::VertexArray :: kFPAttributeInputType_Float, false, 3, PositionStride, reinterpret_cast <void *> ( PositionOffset ), AttributeData );
+		PositionMeshAttribute = new Xenon::Geometry :: MeshAttribute ( Params.PositionAttributeName, Xenon::GPU::VertexArray :: kFPAttributeInputType_Float, false, 3, static_cast <uint32_t> ( PositionStride ), reinterpret_cast <void *> ( PositionOffset ), AttributeData );
 		
 	}
 	
