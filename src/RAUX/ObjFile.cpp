@@ -864,7 +864,7 @@ bool RAUX::ObjFile :: Valid () const
 uint32_t RAUX::ObjFile :: GetCommentCount () const
 {
 	
-	return Comments.size ();
+	return static_cast <uint32_t> ( Comments.size () );
 	
 }
 
@@ -881,7 +881,7 @@ const std :: string & RAUX::ObjFile :: GetComment ( uint32_t Index ) const
 uint32_t RAUX::ObjFile :: GetVertexPositionCount () const
 {
 	
-	return VertexPositions.size ();
+	return static_cast <uint32_t> ( VertexPositions.size () );
 	
 }
 
@@ -898,7 +898,7 @@ const RAUX::ObjFile :: Vec3 RAUX::ObjFile :: GetVertexPosition ( uint32_t Index 
 uint32_t RAUX::ObjFile :: GetVertexNormalCount () const
 {
 	
-	return VertexNormals.size ();
+	return static_cast <uint32_t> ( VertexNormals.size () );
 	
 }
 
@@ -915,7 +915,7 @@ const RAUX::ObjFile :: Vec3 RAUX::ObjFile :: GetVertexNormal ( uint32_t Index ) 
 uint32_t RAUX::ObjFile :: GetVertexTexturePositionCount () const
 {
 	
-	return VertexPositions.size ();
+	return static_cast <uint32_t> ( VertexPositions.size () );
 	
 }
 
@@ -932,7 +932,7 @@ const RAUX::ObjFile :: TexturePosition RAUX::ObjFile :: GetVertexTexturePosition
 uint32_t RAUX::ObjFile :: GetGroupCount () const
 {
 	
-	return Groups.size ();
+	return static_cast <uint32_t> ( Groups.size () );
 	
 }
 
@@ -964,7 +964,7 @@ const RAUX::ObjFile :: Group * RAUX::ObjFile :: GetGroup ( const std :: string &
 uint32_t RAUX::ObjFile :: GetFaceCount () const
 {
 	
-	return Faces.size ();
+	return static_cast <uint32_t> ( Faces.size () );
 	
 }
 

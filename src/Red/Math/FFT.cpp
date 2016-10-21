@@ -17,8 +17,9 @@ inline uint8_t _ReverseByteBits ( uint8_t In )
 
 inline uint32_t _ReverseBits ( uint32_t Number, uint32_t BitCount )
 {
-	
-	return ( ( _ReverseByteBits ( Number ) << 24 ) | ( _ReverseByteBits ( Number >> 8 ) << 16 ) | ( _ReverseByteBits ( Number >> 16 ) << 8 ) | _ReverseByteBits ( Number >> 24 ) ) >> ( 32 - BitCount );
+
+	uint32_t ByteReversed = ( ( _ReverseByteBits ( Number ) << 24 ) | ( _ReverseByteBits ( Number >> 8 ) << 16 ) | ( _ReverseByteBits ( Number >> 16 ) << 8 ) | _ReverseByteBits ( Number >> 24 ) );
+	return ( ByteReversed >> ( 32 - BitCount ) );
 	
 }
 
@@ -47,6 +48,8 @@ void Red::Math::FFT_1DReal_Float :: Setup ( uint32_t ElementCount )
 	
 	if ( ! _IsPowerOfTwo ( ElementCount ) )
 		return;
+	
+	this -> ElementCount = ElementCount;
 	
 	Level = static_cast <uint32_t> ( std :: log2 ( ElementCount ) );
 	
@@ -95,7 +98,9 @@ void Red::Math::FFT_1DReal_Float :: Run ( float * InputData, uint32_t Stride )
 	uint32_t K;
 	
 	for ( I = 0; I < ElementCount; I ++ )
+	{
 		Data [ _ReverseBits ( I, Level ) ] = InputData [ I * Stride ];
+	}
 	
 	uint32_t L = 0;
 	

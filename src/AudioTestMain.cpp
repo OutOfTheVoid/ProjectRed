@@ -9,6 +9,8 @@
 
 #include <Red/Audio/AudioBuffer.h>
 
+#include <Red/Math/FFT.h>
+
 #include <Red/Util/Endian.h>
 
 #include <RAUX/WAVFile.h>
@@ -23,6 +25,8 @@ void WindowCloseEvent ( SDL_WindowEvent * Event, SDLX::Window * Win, void * Data
 void FillAudioData ( uint32_t & Counter, uint8_t * DataBuffer, int PacketLength );
 
 Red::Audio :: AudioBuffer * FileBuffer = NULL;
+
+Red::Math :: FFT_1DReal_Float TestFFT;
 
 int main ( int argc, char const * argv [] )
 {
@@ -71,7 +75,7 @@ int main ( int argc, char const * argv [] )
 	
 	/*================================*/
 	
-	SDLX :: AudioDevice * Device = SDLX::AudioDevice :: RequestAudioDevice ( NULL, 44100, SDLX::AudioDevice :: kBufferFormat_I16_LE, 2, 4096, false, false );
+	SDLX :: AudioDevice * Device = SDLX::AudioDevice :: RequestAudioDevice ( NULL, 44100, SDLX::AudioDevice :: kBufferFormat_I16_LE, 2, 8192, false, false );
 	
 	if ( Device == NULL )
 	{
@@ -83,6 +87,8 @@ int main ( int argc, char const * argv [] )
 		return 0;
 		
 	}
+	
+	TestFFT.Setup ( 8192 );
 		
 	uint32_t * Counter = new uint32_t ();
 	
@@ -116,30 +122,36 @@ void FillAudioData ( uint32_t & Counter, uint8_t * DataBuffer, int PacketLength 
 	
 	(void) PacketLength;
 	
-	float TempData [ 4096 * 2 ];
+	float TempData [ 8192 * 2 ];
 	
-	Red::Audio :: AudioBuffer ConversionBuffer ( reinterpret_cast <void *> ( TempData ), Red::Audio :: kAudioBufferType_Float32_BigEndian, 2, 4096, NULL );
+	Red::Audio :: AudioBuffer ConversionBuffer ( reinterpret_cast <void *> ( TempData ), Red::Audio :: kAudioBufferType_Float32_LittleEndian, 2, 8192, NULL );
 	
-	Red::Audio :: AudioBuffer FillBuffer ( reinterpret_cast <void *> ( DataBuffer ), Red::Audio :: kAudioBufferType_Int16_LittleEndian, 2, 4096, NULL );
+	Red::Audio :: AudioBuffer FillBuffer ( reinterpret_cast <void *> ( DataBuffer ), Red::Audio :: kAudioBufferType_Int16_LittleEndian, 2, 8192, NULL );
 	FillBuffer.Reference ();
 	
 	if ( FileBuffer != NULL )
 	{
 		
-		if ( FileBuffer -> GetSampleCount () > Counter + 4096 )
+		if ( FileBuffer -> GetSampleCount () > Counter + 8192 )
 		{
 			
-			ConversionBuffer.BlitBuffer ( * FileBuffer, 0, 4096, Counter, 0 );
-			ConversionBuffer.BlitBuffer ( * FileBuffer, 1, 4096, Counter, 0 );
+			ConversionBuffer.ClearBufferFloat ( 0, 0.0f );
 			
-			FillBuffer.BlitBuffer ( ConversionBuffer, 0, 4096, 0, 0 );
-			FillBuffer.BlitBuffer ( ConversionBuffer, 1, 4096, 0, 0 );
+			ConversionBuffer.AddBufferScaled ( * FileBuffer, 0.5f, 0, 8192, Counter, 0, 0 );
+			ConversionBuffer.AddBufferScaled ( * FileBuffer, 0.5f, 1, 8192, Counter, 0, 0 );
+			
+			TestFFT.Run ( reinterpret_cast <float *> ( ConversionBuffer.GetRawBuffer () ), 2 );
+			
+			std :: cout << "FFT: [ " << std :: abs ( TestFFT.GetResult () [ 0 ] ) << ", " << std :: abs ( TestFFT.GetResult () [ 1 ] ) << ", " << std :: abs ( TestFFT.GetResult () [ 2 ] ) << ", " << std :: abs ( TestFFT.GetResult () [ 3 ] ) << " ]" << std :: endl;
+			
+			FillBuffer.BlitBuffer ( ConversionBuffer, 0, 8192, 0, 0 );
+			FillBuffer.ClearBufferInt( 1, 0 );
 			
 		}
 		
 	}
 	
-	Counter += 4096;
+	Counter += 8192;
 	
 }
 
