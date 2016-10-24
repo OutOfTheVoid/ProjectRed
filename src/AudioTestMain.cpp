@@ -27,6 +27,7 @@ void FillAudioData ( uint32_t & Counter, uint8_t * DataBuffer, int PacketLength 
 Red::Audio :: AudioBuffer * FileBuffer = NULL;
 
 Red::Math :: FFT_1DReal_Float TestFFT;
+Red::Math :: IFFT_1DReal_Float TestIFFT;
 
 int main ( int argc, char const * argv [] )
 {
@@ -89,6 +90,7 @@ int main ( int argc, char const * argv [] )
 	}
 	
 	TestFFT.Setup ( 8192 );
+	TestIFFT.Setup( 8192 );
 		
 	uint32_t * Counter = new uint32_t ();
 	
@@ -140,12 +142,16 @@ void FillAudioData ( uint32_t & Counter, uint8_t * DataBuffer, int PacketLength 
 			ConversionBuffer.AddBufferScaled ( * FileBuffer, 0.5f, 0, 8192, Counter, 0, 0 );
 			ConversionBuffer.AddBufferScaled ( * FileBuffer, 0.5f, 1, 8192, Counter, 0, 0 );
 			
+			float FFTBuff [ 8192 ];
+			
 			TestFFT.Run ( reinterpret_cast <float *> ( ConversionBuffer.GetRawBuffer () ), 2 );
+			TestIFFT.Run ( TestFFT.GetResult (), 1 );
+			TestIFFT.GetResultReal ( FFTBuff, 1 );
 			
-			std :: cout << "FFT: [ " << std :: abs ( TestFFT.GetResult () [ 0 ] ) << ", " << std :: abs ( TestFFT.GetResult () [ 1 ] ) << ", " << std :: abs ( TestFFT.GetResult () [ 2 ] ) << ", " << std :: abs ( TestFFT.GetResult () [ 3 ] ) << " ]" << std :: endl;
+			Red::Audio :: AudioBuffer FFTAudioBuffer ( reinterpret_cast <void *> ( FFTBuff ), Red::Audio :: kAudioBufferType_Float32_LittleEndian, 1, 8192, NULL );
 			
-			FillBuffer.BlitBuffer ( ConversionBuffer, 0, 8192, 0, 0 );
-			FillBuffer.ClearBufferInt( 1, 0 );
+			FillBuffer.BlitBuffer ( FFTAudioBuffer, 0, 8192, 0, 0 );
+			FillBuffer.BlitBuffer ( FFTAudioBuffer, 0, 8192, 0, 0, 1 );
 			
 		}
 		
