@@ -21,13 +21,16 @@ namespace Red
 			void Setup ( uint32_t ElementCount );
 			void Destroy ();
 			
-			void Run ( const float * InputData, uint32_t Stride = 1 );
+			void Run ( const float * InputData, bool BitReverse, uint32_t Stride = 1 );
 			
 			uint32_t GetResultLength ();
 			const std :: complex <float> * GetResult ();
 			
 			void GetResultMagnitude ( float * Output, uint32_t Stride = 1 );
+			void GetResultMagnitudeBitReversed ( float * Output, uint32_t Stride = 1 );
 			void GetResultReal ( float * Output, uint32_t Stride = 1 );
+			void GetResultRealBitReversed ( float * Output, uint32_t Stride = 1 );
+			void GetResultBitReversed ( std :: complex <float> * Output, uint32_t Stride = 1 );
 			
 		private:
 			
@@ -52,7 +55,7 @@ namespace Red
 			void Setup ( uint32_t ElementCount );
 			void Destroy ();
 			
-			void Run ( const std :: complex <float> * InputData, uint32_t Stride );
+			void Run ( const std :: complex <float> * InputData, bool UnBitReverse = true, uint32_t Stride = 1 );
 			
 			uint32_t GetResultLength ();
 			const std :: complex <float> * GetResult ();

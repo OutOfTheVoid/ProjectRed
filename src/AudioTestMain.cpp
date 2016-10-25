@@ -90,7 +90,7 @@ int main ( int argc, char const * argv [] )
 	}
 	
 	TestFFT.Setup ( 8192 );
-	TestIFFT.Setup( 8192 );
+	TestIFFT.Setup ( 8192 );
 		
 	uint32_t * Counter = new uint32_t ();
 	
@@ -144,8 +144,8 @@ void FillAudioData ( uint32_t & Counter, uint8_t * DataBuffer, int PacketLength 
 			
 			float FFTBuff [ 8192 ];
 			
-			TestFFT.Run ( reinterpret_cast <float *> ( ConversionBuffer.GetRawBuffer () ), 2 );
-			TestIFFT.Run ( TestFFT.GetResult (), 1 );
+			TestFFT.Run ( reinterpret_cast <float *> ( ConversionBuffer.GetRawBuffer () ), true, 2 );
+			TestIFFT.Run ( TestFFT.GetResult (), true, 1 );
 			TestIFFT.GetResultReal ( FFTBuff, 1 );
 			
 			Red::Audio :: AudioBuffer FFTAudioBuffer ( reinterpret_cast <void *> ( FFTBuff ), Red::Audio :: kAudioBufferType_Float32_LittleEndian, 1, 8192, NULL );

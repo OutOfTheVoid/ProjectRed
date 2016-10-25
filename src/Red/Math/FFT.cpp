@@ -90,16 +90,26 @@ void Red::Math::FFT_1DReal_Float :: Destroy ()
 	
 }
 
-void Red::Math::FFT_1DReal_Float :: Run ( const float * InputData, uint32_t Stride )
+void Red::Math::FFT_1DReal_Float :: Run ( const float * InputData, bool Reverse, uint32_t Stride )
 {
 	
 	uint32_t I;
 	uint32_t J;
 	uint32_t K;
 	
-	for ( I = 0; I < ElementCount; I ++ )
+	if ( Reverse )
 	{
-		Data [ _ReverseBits ( I, Level ) ] = InputData [ I * Stride ];
+		
+		for ( I = 0; I < ElementCount; I ++ )
+			Data [ _ReverseBits ( I, Level ) ] = InputData [ I * Stride ];
+		
+	}
+	else
+	{
+		
+		for ( I = 0; I < ElementCount; I ++ )
+			Data [ I ] = InputData [ I * Stride ];
+		
 	}
 	
 	uint32_t L = 0;
@@ -151,11 +161,35 @@ void Red::Math::FFT_1DReal_Float :: GetResultMagnitude ( float * Output, uint32_
 	
 }
 
+void Red::Math::FFT_1DReal_Float :: GetResultMagnitudeBitReversed ( float * Output, uint32_t Stride )
+{
+	
+	for ( uint32_t I = 0; I < ElementCount; I ++ )
+		Output [ I * Stride ] = abs ( Data [ _ReverseBits ( I, Level ) ] );
+	
+}
+
 void Red::Math::FFT_1DReal_Float :: GetResultReal ( float * Output, uint32_t Stride )
 {
 	
 	for ( uint32_t I = 0; I < ElementCount; I ++ )
 		Output [ I * Stride ] = Data [ I ].real ();
+	
+}
+
+void Red::Math::FFT_1DReal_Float :: GetResultRealBitReversed ( float * Output, uint32_t Stride )
+{
+	
+	for ( uint32_t I = 0; I < ElementCount; I ++ )
+		Output [ I * Stride ] = Data [ _ReverseBits ( I, Level ) ].real ();
+	
+}
+
+void Red::Math::FFT_1DReal_Float :: GetResultBitReversed ( std :: complex <float> * Output, uint32_t Stride )
+{
+	
+	for ( uint32_t I = 0; I < ElementCount; I ++ )
+		Output [ I * Stride ] = Data [ _ReverseBits ( I, Level ) ];
 	
 }
 
@@ -226,16 +260,26 @@ void Red::Math::IFFT_1DReal_Float :: Destroy ()
 	
 }
 
-void Red::Math::IFFT_1DReal_Float :: Run ( const std :: complex <float> * InputData, uint32_t Stride )
+void Red::Math::IFFT_1DReal_Float :: Run ( const std :: complex <float> * InputData, bool UnReverse, uint32_t Stride )
 {
 	
 	uint32_t I;
 	uint32_t J;
 	uint32_t K;
 	
-	for ( I = 0; I < ElementCount; I ++ )
+	if ( UnReverse )
 	{
-		Data [ _ReverseBits ( I, Level ) ] = std :: conj ( InputData [ I * Stride ] );
+		
+		for ( I = 0; I < ElementCount; I ++ )
+			Data [ _ReverseBits ( I, Level ) ] = std :: conj ( InputData [ I * Stride ] );
+		
+	}
+	else
+	{
+		
+		for ( I = 0; I < ElementCount; I ++ )
+			Data [ I ] = std :: conj ( InputData [ I * Stride ] );
+		
 	}
 	
 	uint32_t L = 0;
