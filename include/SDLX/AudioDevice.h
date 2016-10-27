@@ -68,6 +68,7 @@ namespace SDLX
 		
 		void SetFillCallback ( Red::Util :: IFunction2 <void, uint8_t *, int> * FillFunction );
 		
+		const Red::Util::Time :: Duration GetFillDuration ();
 		
 	private:
 		

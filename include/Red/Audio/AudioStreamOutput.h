@@ -15,10 +15,23 @@ namespace Red
 		{
 		public:
 			
-			AudioStreamOutput ( AudioBufferType IntermediaryBufferType =  );
+			AudioStreamOutput ( IAudioOutputDevice * OutputDevice = NULL, uint32_t MaxChannelCount = 8, AudioBufferType IntermediaryBufferType = kAudioBufferType_PerferredQuality );
 			~AudioStreamOutput ();
 			
-		}
+			void SetOutputDevice ( IAudioOutputDevice * OutputDevice = NULL );
+			void SetStreamSource ( uint32_t Channel, IStreamSource * Source = NULL );
+			
+			void Start ();
+			void Stop ();
+			
+		private:
+			
+			void AudioCallback ( uint8_t * Data, int DataSize );
+			
+			IStreamSource ** Sources;
+			uint32_t ChannelCount;
+			
+		};
 		
 	}
 	

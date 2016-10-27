@@ -15,7 +15,7 @@ namespace Red
 	namespace Audio
 	{
 		
-		class AudioBuffer : virtual public Util :: IRefCounted
+		class AudioBuffer : public virtual Util :: IRefCounted
 		{
 		public:
 			
@@ -29,6 +29,7 @@ namespace Red
 			
 			virtual ~AudioBuffer ();
 			
+			AudioBuffer ( AudioBufferType Type, uint32_t Channels, uint64_t SampleCount, Util :: IFunction1 <bool, AudioBuffer *> * OnUnReferenced = NULL );
 			AudioBuffer ( void * Data, AudioBufferType Type, uint32_t Channels, uint64_t SampleCount, Util :: IFunction1 <void, void *> * OnFree = NULL, Util :: IFunction1 <bool, AudioBuffer *> * OnUnReferenced = NULL );
 			
 			static AudioBuffer * CopyReformated ( AudioBuffer & Source, AudioBufferType NewDataType, uint32_t NewChannelCount = 0 );

@@ -1,14 +1,14 @@
 #ifndef RED_THREADING_TIME_H
 #define RED_THREADING_TIME_H
 
-#include <Red/Threading/Threading.h>
+#include <Red/Util/Util.h>
 
 #include <chrono>
 
 namespace Red
 {
 	
-	namespace Threading
+	namespace Util
 	{
 		
 		namespace Time
@@ -37,6 +37,8 @@ namespace Red
 			};
 			
 			void BlockFor ( const Duration & TimeSpan );
+			
+			
 			
 		}
 		

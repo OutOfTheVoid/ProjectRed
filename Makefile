@@ -73,8 +73,9 @@ OBJECTS=obj/SDLX/Lib.o \
 		obj/Red/Events/EventDispatcher.o \
 		obj/Red/Threading/Thread.o \
 		obj/Red/Threading/ThreadEvent.o \
-		obj/Red/Threading/Time.o \
 		obj/Red/Threading/Mutex.o \
+		obj/Red/Threading/RWLock.o \
+		obj/Red/Util/Time.o \
 		obj/Red/Text/Rendering/RawFontTextureAtlas.o \
 		obj/Red/Text/Rendering/FreeType/FTLibrary.o \
 		obj/Red/Text/Rendering/FreeType/FontFace.o \
@@ -84,6 +85,7 @@ OBJECTS=obj/SDLX/Lib.o \
 		obj/Red/Graphics/DeferredModelRenderer.o \
 		obj/Red/Audio/AudioBuffer.o \
 		obj/Red/Audio/EmptyAudioBufferPool.o \
+		obj/Red/Audio/StreamMixer.o \
 		obj/Red/Math/FFT.o \
 		obj/Xenon/GPU/RenderBuffer.o
 	
@@ -281,11 +283,14 @@ obj/Red/Threading/Thread.o: include/Red/Threading/Thread.h src/Red/Threading/Thr
 obj/Red/Threading/Mutex.o: include/Red/Threading/Mutex.h src/Red/Threading/Mutex.cpp include/Red/Threading/Threading.h include/Red/Red.h
 	$(CXX) -c $(CXX_FLAGS) src/Red/Threading/Mutex.cpp -o obj/Red/Threading/Mutex.o
 	
+obj/Red/Threading/RWLock.o: include/Red/Threading/RWLock.h src/Red/Threading/RWLock.cpp include/Red/Threading/Threading.h include/Red/Red.h
+	$(CXX) -c $(CXX_FLAGS) src/Red/Threading/RWLock.cpp -o obj/Red/Threading/RWLock.o
+	
 obj/Red/Threading/ThreadEvent.o: include/Red/Threading/ThreadEvent.h src/Red/Threading/ThreadEvent.cpp include/Red/Threading/Thread.h include/Red/Threading/Threading.h include/Red/Events/IEvent.h include/Red/Events/BasicEvent.h include/Red/Red.h
 	$(CXX) -c $(CXX_FLAGS) src/Red/Threading/ThreadEvent.cpp -o obj/Red/Threading/ThreadEvent.o
 	
-obj/Red/Threading/Time.o: include/Red/Threading/Time.h src/Red/Threading/Time.cpp include/Red/Threading/Threading.h include/Red/Red.h
-	$(CXX) -c $(CXX_FLAGS) src/Red/Threading/Time.cpp -o obj/Red/Threading/Time.o
+obj/Red/Util/Time.o: include/Red/Util/Time.h src/Red/Util/Time.cpp include/Red/Threading/Threading.h include/Red/Red.h
+	$(CXX) -c $(CXX_FLAGS) src/Red/Util/Time.cpp -o obj/Red/Util/Time.o
 	
 obj/Red/Text/Rendering/RawFontTextureAtlas.o: include/Red/Text/Rendering/RawFontTextureAtlas.h src/Red/Text/Rendering/RawFontTextureAtlas.cpp  include/Red/Text/Rendering/Rendering.h include/Red/Text/Text.h include/Red/Red.h include/Red/Options.h
 	$(CXX) -c $(CXX_FLAGS) src/Red/Text/Rendering/RawFontTextureAtlas.cpp -o obj/Red/Text/Rendering/RawFontTextureAtlas.o
@@ -314,6 +319,9 @@ obj/Red/Audio/AudioBuffer.o: include/Red/Audio/Audio.h include/Red/Audio/AudioBu
 obj/Red/Audio/EmptyAudioBufferPool.o: include/Red/Audio/Audio.h include/Red/Audio/EmptyAudioBufferPool.h src/Red/Audio/EmptyAudioBufferPool.cpp include/Red/Util/RefCounted.h include/Red/Util/MethodObjectClosure.h 
 	$(CXX) -c $(CXX_FLAGS) src/Red/Audio/EmptyAudioBufferPool.cpp -o obj/Red/Audio/EmptyAudioBufferPool.o
 	
+obj/Red/Audio/StreamMixer.o: include/Red/Audio/Audio.h include/Red/Audio/StreamMixer.h src/Red/Audio/StreamMixer.cpp include/Red/Audio/AudioBuffer.h include/Red/Audio/IStreamSource.h include/Red/Util/RefCounted.h include/Red/Audio/Audio.h include/Red/Red.h include/Red/Util/Endian.h
+	$(CXX) -c $(CXX_FLAGS) src/Red/Audio/StreamMixer.cpp -o obj/Red/Audio/StreamMixer.o
+	
 obj/Red/Math/FFT.o: include/Red/Math/Math.h include/Red/Math/FFT.h src/Red/Math/FFT.cpp
 	$(CXX) -c $(CXX_FLAGS) src/Red/Math/FFT.cpp -o obj/Red/Math/FFT.o
 	
@@ -334,6 +342,7 @@ clean:
 	-@mkdir obj/Red/Threading
 	-@mkdir obj/Red/Math
 	-@mkdir obj/Red/Text
+	-@mkdir obj/Red/Util
 	-@mkdir obj/Red/Text/Rendering
 	-@mkdir obj/Red/Text/Rendering/FreeType
 	

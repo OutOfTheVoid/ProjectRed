@@ -181,3 +181,10 @@ void SDLX::AudioDevice :: SetFillCallback ( Red::Util :: IFunction2 <void, uint8
 	this -> FillFunction = FillFunction;
 	
 }
+
+const Red::Util::Time :: Duration SDLX::AudioDevice :: GetFillDuration ()
+{
+	
+	return Red::Util::Time :: Duration ( 1.0 / static_cast <double> ( Spec.freq ) * static_cast <double> ( Spec.samples ) );
+	
+}

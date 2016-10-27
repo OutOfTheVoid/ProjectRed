@@ -54,6 +54,19 @@ Red::Audio::AudioBuffer :: AudioBuffer ( void * Data, AudioBufferType Type, uint
 {
 }
 
+Red::Audio::AudioBuffer :: AudioBuffer ( AudioBufferType Type, uint32_t Channels, uint64_t SampleCount, Util :: IFunction1 <bool, AudioBuffer *> * OnUnReferenced ):
+	DataType ( Type ),
+	ChannelCount ( Channels ),
+	SampleCount ( SampleCount ),
+	OnUnReferenced ( OnUnReferenced ),
+	RefCount ( 0 )
+{
+	
+	Data = malloc ( GetSizeFromDataType ( Type ) * Channels * SampleCount );
+	OnFree = & StdFreeWrapper;
+	
+}
+
 Red::Audio::AudioBuffer :: ~AudioBuffer ()
 {
 	

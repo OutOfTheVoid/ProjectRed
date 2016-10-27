@@ -7,6 +7,8 @@
 #include <Red/Util/Function.h>
 #include <Red/Util/IRefCounted.h>
 
+#include <Red/Util/Time.h>
+
 namespace Red
 {
 	
@@ -30,6 +32,8 @@ namespace Red
 			virtual uint32_t GetSampleFrequencey () = 0;
 			virtual uint32_t GetSampleSize () = 0;
 			virtual uint32_t GetChannelCount () = 0;
+			
+			virtual const Util::Time :: Duration GetFillDuration () = 0;
 			
 			virtual AudioBufferType GetSampleFormat () = 0;
 			

@@ -33,14 +33,39 @@ namespace Red
 			
 		} AudioBufferType;
 		
-		AudioBufferType GetPerferredEndianTypeInt16 ();
-		AudioBufferType GetPerferredEndianTypeUInt16 ();
+		#ifndef RED_BIG_ENDIAN_DEFINITE
+			static const AudioBufferType kAudioBufferType_Int16_Best = kAudioBufferType_Int16_LittleEndian;
+		#else
+			static const AudioBufferType kAudioBufferType_Int16_Best = kAudioBufferType_Int16_BigEndian;
+		#endif
+			
+		#ifndef RED_BIG_ENDIAN_DEFINITE
+			static const AudioBufferType kAudioBufferType_UInt16_Best = kAudioBufferType_UInt16_LittleEndian;
+		#else
+			static const AudioBufferType kAudioBufferType_UInt16_Best = kAudioBufferType_UInt16_BigEndian;
+		#endif
+			
+		#ifndef RED_BIG_ENDIAN_DEFINITE
+			static const AudioBufferType kAudioBufferType_Int32_Best = kAudioBufferType_Int32_LittleEndian;
+		#else
+			static const AudioBufferType kAudioBufferType_Int32_Best = kAudioBufferType_Int32_BigEndian;
+		#endif
+			
+		#ifndef RED_BIG_ENDIAN_DEFINITE
+			static const AudioBufferType kAudioBufferType_UInt32_Best = kAudioBufferType_UInt32_LittleEndian;
+		#else
+			static const AudioBufferType kAudioBufferType_UInt32_Best = kAudioBufferType_UInt32_BigEndian;
+		#endif
+			
+		#ifndef RED_BIG_ENDIAN_DEFINITE
+			static const AudioBufferType kAudioBufferType_Float32_Best = kAudioBufferType_Float32_LittleEndian;
+		#else
+			static const AudioBufferType kAudioBufferType_Float32_Best = kAudioBufferType_Float32_BigEndian;
+		#endif
+			
+		static const AudioBufferType kAudioBufferType_PerferredQuality = kAudioBufferType_Float32_Best;
 		
-		AudioBufferType GetPerferredEndianTypeInt32 ();
-		AudioBufferType GetPerferredEndianTypeUInt32 ();
-		
-		AudioBufferType GetPerferredEndianTypeFloat32 ();
-		AudioBufferType GetPerferredEndianTypeUInt32 ();
+		static const AudioBufferType kAudioBufferType_PerferredPerformance = kAudioBufferType_Int32_Best;
 		
 	}
 	
