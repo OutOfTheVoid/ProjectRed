@@ -8,6 +8,8 @@
 #include <SDLX/AudioDevice.h>
 
 #include <Red/Audio/AudioBuffer.h>
+#include <Red/Audio/AudioStreamOutput.h>
+#include <Red/Audio/RawBufferStreamSource.h>
 
 #include <Red/Math/FFT.h>
 
@@ -25,9 +27,6 @@ void WindowCloseEvent ( SDL_WindowEvent * Event, SDLX::Window * Win, void * Data
 void FillAudioData ( uint32_t & Counter, uint8_t * DataBuffer, int PacketLength );
 
 Red::Audio :: AudioBuffer * FileBuffer = NULL;
-
-Red::Math :: FFT_1DReal_Float TestFFT;
-Red::Math :: IFFT_1DReal_Float TestIFFT;
 
 int main ( int argc, char const * argv [] )
 {
@@ -70,9 +69,15 @@ int main ( int argc, char const * argv [] )
 		if ( FileBuffer != NULL )
 			std :: cout << "WAV Load success!" << std :: endl;
 		
-		FileBuffer -> Reference ();
+		TestWAV.Close ( & Status );
 		
 	}
+	
+	Red::Audio :: RawBufferStreamSource WAVSourceLeftChannel ( FileBuffer, 0 );
+	Red::Audio :: RawBufferStreamSource WAVSourceRightChannel ( FileBuffer, 1 );
+	
+	WAVSourceLeftChannel.Reference ();
+	WAVSourceRightChannel.Reference ();
 	
 	/*================================*/
 	
@@ -89,27 +94,23 @@ int main ( int argc, char const * argv [] )
 		
 	}
 	
-	TestFFT.Setup ( 8192 );
-	TestIFFT.Setup ( 8192 );
-		
-	uint32_t * Counter = new uint32_t ();
+	Device -> Reference ();
 	
-	Red::Util :: Closure3_1 <void, uint32_t &, uint8_t *, int> FillDataClosure ( & FillAudioData, * Counter );
+	Red::Audio :: AudioStreamOutput AudioOutput ( Device );
 	
-	Device -> Lock ();
-	Device -> SetFillCallback ( & FillDataClosure );
-	Device -> Unlock ();
+	AudioOutput.SetStreamSource ( 0, & WAVSourceLeftChannel );
+	AudioOutput.SetStreamSource ( 1, & WAVSourceRightChannel );
 	
-	Device -> Start ();
+	AudioOutput.Start ();
 	
 	/*================================*/
 	
 	SDLX::Lib :: EventLoop ( & Status );
 	
-	Device -> Stop ();
+	/*================================*/
 	
-	delete Counter;
-	delete Device;
+	Device -> Stop ();
+	Device -> Dereference ();
 	 
 	Win -> Disown ();
 	
@@ -117,48 +118,6 @@ int main ( int argc, char const * argv [] )
 	
 	return 0;
 
-}
-
-void FillAudioData ( uint32_t & Counter, uint8_t * DataBuffer, int PacketLength )
-{
-	
-	(void) PacketLength;
-	
-	float TempData [ 8192 * 2 ];
-	
-	Red::Audio :: AudioBuffer ConversionBuffer ( reinterpret_cast <void *> ( TempData ), Red::Audio :: kAudioBufferType_Float32_LittleEndian, 2, 8192, NULL );
-	
-	Red::Audio :: AudioBuffer FillBuffer ( reinterpret_cast <void *> ( DataBuffer ), Red::Audio :: kAudioBufferType_Int16_LittleEndian, 2, 8192, NULL );
-	FillBuffer.Reference ();
-	
-	if ( FileBuffer != NULL )
-	{
-		
-		if ( FileBuffer -> GetSampleCount () > Counter + 8192 )
-		{
-			
-			ConversionBuffer.ClearBufferFloat ( 0, 0.0f );
-			
-			ConversionBuffer.AddBufferScaled ( * FileBuffer, 0.5f, 0, 8192, Counter, 0, 0 );
-			ConversionBuffer.AddBufferScaled ( * FileBuffer, 0.5f, 1, 8192, Counter, 0, 0 );
-			
-			float FFTBuff [ 8192 ];
-			
-			TestFFT.Run ( reinterpret_cast <float *> ( ConversionBuffer.GetRawBuffer () ), true, 2 );
-			TestIFFT.Run ( TestFFT.GetResult (), true, 1 );
-			TestIFFT.GetResultReal ( FFTBuff, 1 );
-			
-			Red::Audio :: AudioBuffer FFTAudioBuffer ( reinterpret_cast <void *> ( FFTBuff ), Red::Audio :: kAudioBufferType_Float32_LittleEndian, 1, 8192, NULL );
-			
-			FillBuffer.BlitBuffer ( FFTAudioBuffer, 0, 8192, 0, 0 );
-			FillBuffer.BlitBuffer ( FFTAudioBuffer, 0, 8192, 0, 0, 1 );
-			
-		}
-		
-	}
-	
-	Counter += 8192;
-	
 }
 
 void WindowCloseEvent ( SDL_WindowEvent * Event, SDLX::Window * Win, void * Data )

@@ -9,7 +9,7 @@
 
 #include <Red/Util/RefCounted.h>
 
-#include <Red/Threading/RWLock.h>
+#include <Red/Threading/Mutex.h>
 
 namespace Red
 {
@@ -36,7 +36,7 @@ namespace Red
 			
 			// IStreamSource
 			void SetExpectedFillSize ( uint32_t FillSize );
-			void FillAudioBuffer ( AudioBuffer * Buffer, uint32_t TargetChannel );
+			StreamFillCode FillAudioBuffer ( AudioBuffer * Buffer, uint32_t TargetChannel );
 			
 		private:
 			
@@ -52,7 +52,7 @@ namespace Red
 			
 			Stream * Streams;
 			uint32_t StreamCount;
-			Threading :: RWLock StreamsLock;
+			Threading :: Mutex StreamsLock;
 			
 			uint32_t FillSize;
 			

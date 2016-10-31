@@ -4,6 +4,11 @@
 #include <Red/Audio/Audio.h>
 #include <Red/Audio/AudioBuffer.h>
 #include <Red/Audio/IStreamSource.h>
+#include <Red/Audio/IAudioOutputDevice.h>
+
+#include <Red/Util/MethodObjectClosure.h>
+
+#include <stdint.h>
 
 namespace Red
 {
@@ -15,7 +20,7 @@ namespace Red
 		{
 		public:
 			
-			AudioStreamOutput ( IAudioOutputDevice * OutputDevice = NULL, uint32_t MaxChannelCount = 8, AudioBufferType IntermediaryBufferType = kAudioBufferType_PerferredQuality );
+			AudioStreamOutput ( IAudioOutputDevice * OutputDevice = NULL, uint32_t MaxChannelCount = 8 );
 			~AudioStreamOutput ();
 			
 			void SetOutputDevice ( IAudioOutputDevice * OutputDevice = NULL );
@@ -28,8 +33,12 @@ namespace Red
 			
 			void AudioCallback ( uint8_t * Data, int DataSize );
 			
+			Util :: MethodObjectClosure2 <AudioStreamOutput, void, uint8_t *, int> CallbackClosure;
+			
 			IStreamSource ** Sources;
 			uint32_t ChannelCount;
+			
+			IAudioOutputDevice * OutputDevice;
 			
 		};
 		

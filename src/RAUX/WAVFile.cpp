@@ -32,6 +32,20 @@ const std :: string & RAUX::WAVFile :: GetName () const
 	
 }
 
+void RAUX::WAVFile :: Close ( uint32_t * Status )
+{
+
+	uint32_t DummyStatus;
+	
+	FileInstance.Close ( & DummyStatus );
+	
+	if ( DummyStatus != kStatus_Success )
+		* Status = kStatus_Failure_Load;
+	else
+		* Status = kStatus_Success;
+	
+}
+
 void RAUX::WAVFile :: Load ( uint32_t * Status )
 {
 	

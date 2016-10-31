@@ -33,6 +33,7 @@ namespace RAUX
 		const std :: string & GetName () const;
 		
 		void Load ( uint32_t * Status );
+		void Close ( uint32_t * Status );
 		
 		Red::Audio :: AudioBufferType GetFileDataType ();
 		

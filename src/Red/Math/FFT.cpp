@@ -11,7 +11,7 @@ inline bool _IsPowerOfTwo ( uint32_t Num )
 inline uint8_t _ReverseByteBits ( uint8_t In )
 {
 	
-	return static_cast <uint8_t> ( ( ( static_cast <uint64_t> ( In ) * 0x80200802ULL ) & 0x0884422110ULL ) * 0x0101010101ULL >> 32 );
+	return static_cast <uint8_t> ( ( ( In * 0x0802LU & 0x22110LU ) | ( In * 0x8020LU & 0x88440LU ) ) * 0x10101LU >> 16 );
 	
 }
 
@@ -101,7 +101,7 @@ void Red::Math::FFT_1DReal_Float :: Run ( const float * InputData, bool Reverse,
 	{
 		
 		for ( I = 0; I < ElementCount; I ++ )
-			Data [ _ReverseBits ( I, Level ) ] = InputData [ I * Stride ];
+			Data [ _ReverseBits ( I, Level ) ] = std :: complex <float> ( InputData [ I * Stride ], 0.0 );
 		
 	}
 	else
@@ -165,7 +165,7 @@ void Red::Math::FFT_1DReal_Float :: GetResultMagnitudeBitReversed ( float * Outp
 {
 	
 	for ( uint32_t I = 0; I < ElementCount; I ++ )
-		Output [ I * Stride ] = abs ( Data [ _ReverseBits ( I, Level ) ] );
+		Output [ _ReverseBits ( I, Level ) * Stride ] = std :: abs ( Data [ I ] );
 	
 }
 
@@ -189,7 +189,7 @@ void Red::Math::FFT_1DReal_Float :: GetResultBitReversed ( std :: complex <float
 {
 	
 	for ( uint32_t I = 0; I < ElementCount; I ++ )
-		Output [ I * Stride ] = Data [ _ReverseBits ( I, Level ) ];
+		Output [ _ReverseBits ( I, Level ) * Stride ] = Data [ I ];
 	
 }
 

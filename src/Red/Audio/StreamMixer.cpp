@@ -43,7 +43,7 @@ Red::Audio::StreamMixer :: ~StreamMixer ()
 uint32_t Red::Audio::StreamMixer :: AddStream ( IStreamSource * Source, float InitialScaleFactor, bool InitiallyMuted )
 {
 	
-	StreamsLock.LockWrite ();
+	StreamsLock.Lock ();
 	
 	for ( uint32_t I = 0; I < StreamCount; I ++ )
 	{
@@ -55,7 +55,7 @@ uint32_t Red::Audio::StreamMixer :: AddStream ( IStreamSource * Source, float In
 			Streams [ I ].Scale = InitialScaleFactor;
 			Streams [ I ].Muted = InitiallyMuted;
 			
-			StreamsLock.UnlockWrite ();
+			StreamsLock.Unlock ();
 			
 			Source -> Reference ();
 			Source -> SetExpectedFillSize ( FillSize );
@@ -66,7 +66,7 @@ uint32_t Red::Audio::StreamMixer :: AddStream ( IStreamSource * Source, float In
 		
 	}
 	
-	StreamsLock.UnlockWrite ();
+	StreamsLock.Unlock ();
 	
 	return kStream_Invalid;
 	
@@ -75,7 +75,7 @@ uint32_t Red::Audio::StreamMixer :: AddStream ( IStreamSource * Source, float In
 uint32_t Red::Audio::StreamMixer :: GetFirstStreamBySource ( IStreamSource * Source )
 {
 	
-	StreamsLock.LockRead ();
+	StreamsLock.Lock ();
 	
 	for ( uint32_t I = 0; I < StreamCount; I ++ )
 	{
@@ -83,7 +83,7 @@ uint32_t Red::Audio::StreamMixer :: GetFirstStreamBySource ( IStreamSource * Sou
 		if ( Streams [ I ].Source == Source )
 		{
 			
-			StreamsLock.UnlockRead ();
+			StreamsLock.Unlock ();
 			
 			return I;
 			
@@ -91,7 +91,7 @@ uint32_t Red::Audio::StreamMixer :: GetFirstStreamBySource ( IStreamSource * Sou
 		
 	}
 	
-	StreamsLock.UnlockRead ();
+	StreamsLock.Unlock ();
 	
 	return kStream_Invalid;
 	
@@ -105,7 +105,7 @@ void Red::Audio::StreamMixer :: RemoveStream ( uint32_t Index )
 	
 	IStreamSource * ToDereference = NULL;
 	
-	StreamsLock.LockWrite ();
+	StreamsLock.Lock ();
 	
 	if ( Streams [ Index ].Source != NULL )
 	{
@@ -115,7 +115,7 @@ void Red::Audio::StreamMixer :: RemoveStream ( uint32_t Index )
 		
 	}
 	
-	StreamsLock.UnlockWrite ();
+	StreamsLock.Unlock ();
 	
 	if ( ToDereference != NULL )
 		ToDereference -> Dereference ();
@@ -128,11 +128,11 @@ void Red::Audio::StreamMixer :: SetStreamScale ( uint32_t Index, float ScaleFact
 	if ( Index >= StreamCount )
 		return;
 	
-	StreamsLock.LockRead ();
+	StreamsLock.Lock ();
 	
 	Streams [ Index ].Scale = ScaleFactor;
 	
-	StreamsLock.UnlockRead ();
+	StreamsLock.Unlock ();
 	
 }
 
@@ -142,11 +142,11 @@ void Red::Audio::StreamMixer :: SetStreamMuted ( uint32_t Index, bool Muted )
 	if ( Index >= StreamCount )
 		return;
 	
-	StreamsLock.LockRead ();
+	StreamsLock.Lock ();
 	
 	Streams [ Index ].Muted = Muted;
 	
-	StreamsLock.UnlockRead ();
+	StreamsLock.Unlock ();
 	
 }
 
@@ -172,7 +172,7 @@ void Red::Audio::StreamMixer :: SetExpectedFillSize ( uint32_t FillSize )
 	else
 		IntermediaryBuffer = new AudioBuffer ( IntermediaryBufferType, 1, FillSize );
 	
-	StreamsLock.LockRead ();
+	StreamsLock.Lock ();
 	
 	for ( uint32_t I = 0; I < StreamCount; I ++ )
 	{
@@ -182,34 +182,45 @@ void Red::Audio::StreamMixer :: SetExpectedFillSize ( uint32_t FillSize )
 		
 	}
 	
-	StreamsLock.UnlockRead ();
+	StreamsLock.Unlock ();
 	
 }
 
-void Red::Audio::StreamMixer :: FillAudioBuffer ( AudioBuffer * Buffer, uint32_t TargetChannel )
+Red::Audio::IStreamSource :: StreamFillCode Red::Audio::StreamMixer :: FillAudioBuffer ( AudioBuffer * Buffer, uint32_t TargetChannel )
 {
 	
 	Buffer -> ClearBufferInt ( TargetChannel );
 	
-	StreamsLock.LockRead ();
+	StreamsLock.Lock ();
+	
+	uint32_t AudioCount = 0;
 	
 	for ( uint32_t I = 0; I < StreamCount; I ++ )
 	{
 		
 		if ( ( Streams [ I ].Source != NULL ) && ( ! Streams [ I ].Muted ) )
 		{
+		
+			StreamFillCode FillCode = Streams [ I ].Source -> FillAudioBuffer ( IntermediaryBuffer, 0 );
 			
-			Streams [ I ].Source -> FillAudioBuffer ( IntermediaryBuffer, 0 );
-			
-			if ( Streams [ I ].Scale == 1.0f )
-				Buffer -> AddBuffer ( * IntermediaryBuffer, 0, Buffer -> GetSampleCount (), 0, 0, TargetChannel );
-			else
-				Buffer -> AddBufferScaled ( * IntermediaryBuffer, Streams [ I ].Scale, 0, Buffer -> GetSampleCount (), 0, 0, TargetChannel );
+			if ( ( ( FillCode & kStreamFillCode_ErrorFlag ) == 0 ) && ( FillCode != kStreamFillCode_Success_Silence ) )
+			{
+				
+				AudioCount ++;
+				
+				if ( Streams [ I ].Scale == 1.0f )
+					Buffer -> AddBuffer ( * IntermediaryBuffer, 0, Buffer -> GetSampleCount (), 0, 0, TargetChannel );
+				else
+					Buffer -> AddBufferScaled ( * IntermediaryBuffer, Streams [ I ].Scale, 0, Buffer -> GetSampleCount (), 0, 0, TargetChannel );
+				
+			}
 			
 		}
 		
 	}
 	
-	StreamsLock.UnlockRead ();
+	StreamsLock.Unlock ();
+	
+	return ( AudioCount > 0 ) ? kStreamFillCode_Success_Normal : kStreamFillCode_Success_Silence;
 	
 }

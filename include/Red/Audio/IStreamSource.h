@@ -18,11 +18,24 @@ namespace Red
 		{
 		public:
 			
+			typedef uint32_t StreamFillCode;
+			
+			static const StreamFillCode kStreamFillCode_Success_Normal = 0;
+			static const StreamFillCode kStreamFillCode_Success_Silence = 1;
+			static const StreamFillCode kStreamFillCode_Success_DC = 2;
+			static const StreamFillCode kStreamFillCode_Success_ControlParameter_Varying = 3;
+			static const StreamFillCode kStreamFillCode_Success_ControlParameter_Constant = 4;
+			
+			static const StreamFillCode kStreamFillCode_ErrorFlag = 0x80000000;
+			
+			static const StreamFillCode kStreamFillCode_Failure_Silence = 0x7FFFFFFE | kStreamFillCode_ErrorFlag;
+			static const StreamFillCode kStreamFillCode_Failure_NoFill = 0x7FFFFFFF | kStreamFillCode_ErrorFlag;
+			
 			virtual inline ~IStreamSource () {};
 			
 			virtual void SetExpectedFillSize ( uint32_t FillSize ) = 0;
 			
-			virtual void FillAudioBuffer ( AudioBuffer * Buffer, uint32_t TargetChannel ) = 0;
+			virtual StreamFillCode FillAudioBuffer ( AudioBuffer * Buffer, uint32_t TargetChannel ) = 0;
 			
 		};
 		

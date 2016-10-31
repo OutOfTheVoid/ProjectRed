@@ -86,6 +86,7 @@ OBJECTS=obj/SDLX/Lib.o \
 		obj/Red/Audio/AudioBuffer.o \
 		obj/Red/Audio/EmptyAudioBufferPool.o \
 		obj/Red/Audio/StreamMixer.o \
+		obj/Red/Audio/AudioStreamOutput.o \
 		obj/Red/Math/FFT.o \
 		obj/Xenon/GPU/RenderBuffer.o
 	
@@ -321,6 +322,9 @@ obj/Red/Audio/EmptyAudioBufferPool.o: include/Red/Audio/Audio.h include/Red/Audi
 	
 obj/Red/Audio/StreamMixer.o: include/Red/Audio/Audio.h include/Red/Audio/StreamMixer.h src/Red/Audio/StreamMixer.cpp include/Red/Audio/AudioBuffer.h include/Red/Audio/IStreamSource.h include/Red/Util/RefCounted.h include/Red/Audio/Audio.h include/Red/Red.h include/Red/Util/Endian.h
 	$(CXX) -c $(CXX_FLAGS) src/Red/Audio/StreamMixer.cpp -o obj/Red/Audio/StreamMixer.o
+	
+obj/Red/Audio/AudioStreamOutput.o: include/Red/Audio/Audio.h include/Red/Audio/AudioStreamOutput.h src/Red/Audio/AudioStreamOutput.cpp include/Red/Audio/AudioBuffer.h include/Red/Audio/IStreamSource.h include/Red/Util/RefCounted.h include/Red/Audio/IAudioOutputDevice.h include/Red/Red.h include/Red/Util/Endian.h
+	$(CXX) -c $(CXX_FLAGS) src/Red/Audio/AudioStreamOutput.cpp -o obj/Red/Audio/AudioStreamOutput.o
 	
 obj/Red/Math/FFT.o: include/Red/Math/Math.h include/Red/Math/FFT.h src/Red/Math/FFT.cpp
 	$(CXX) -c $(CXX_FLAGS) src/Red/Math/FFT.cpp -o obj/Red/Math/FFT.o

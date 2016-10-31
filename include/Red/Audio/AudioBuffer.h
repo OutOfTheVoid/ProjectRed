@@ -42,17 +42,17 @@ namespace Red
 			
 			uint64_t GetSampleCount ();
 			
-			void BlitBuffer ( AudioBuffer & Source, uint32_t SourceChannel, uint64_t SampleCount, uint32_t SourceStartSample = 0, uint32_t TargetStartSample = 0, uint32_t TargetChannel = 0xFFFFFFFF );
-			void BlitBufferResampled ( AudioBuffer & Source, ResampleMode Mode, uint32_t Channel, uint64_t SampleCount, uint32_t SourceStartSample = 0, uint32_t TargetStartSample = 0, float SampleRatio = 1.0f, uint32_t TargetChannel = 0xFFFFFFFF );
+			void BlitBuffer ( AudioBuffer & Source, uint32_t SourceChannel, uint64_t SampleCount, uint64_t SourceStartSample = 0, uint64_t TargetStartSample = 0, uint32_t TargetChannel = 0xFFFFFFFF );
+			void BlitBufferResampled ( AudioBuffer & Source, ResampleMode Mode, uint32_t Channel, uint64_t SampleCount, uint64_t SourceStartSample = 0, uint64_t TargetStartSample = 0, float SampleRatio = 1.0f, uint32_t TargetChannel = 0xFFFFFFFF );
 			
-			void AddBuffer ( AudioBuffer & Source, uint32_t SourceChannel, uint64_t SampleCount, uint32_t SourceStartSample = 0, uint32_t TargetStartSample = 0, uint32_t TargetChannel = 0xFFFFFFFF );
-			void AddBufferResampled ( AudioBuffer & Source, ResampleMode Mode, uint32_t Channel, uint64_t SampleCount, uint32_t SourceStartSample = 0, uint32_t TargetStartSample = 0, uint32_t TargetChannel = 0xFFFFFFFF, float SampleRatio = 1.0f );
+			void AddBuffer ( AudioBuffer & Source, uint32_t SourceChannel, uint64_t SampleCount, uint64_t SourceStartSample = 0, uint64_t TargetStartSample = 0, uint32_t TargetChannel = 0xFFFFFFFF );
+			void AddBufferResampled ( AudioBuffer & Source, ResampleMode Mode, uint32_t Channel, uint64_t SampleCount, uint64_t SourceStartSample = 0, uint64_t TargetStartSample = 0, uint32_t TargetChannel = 0xFFFFFFFF, float SampleRatio = 1.0f );
 			
-			void AddBufferScaled ( AudioBuffer & Source, float Scale, uint32_t SourceChannel, uint64_t SampleCount, uint32_t SourceStartSample = 0, uint32_t TargetStartSample = 0, uint32_t TargetChannel = 0xFFFFFFFF );
-			void AddBufferResampledScaled ( AudioBuffer & Source, float Scale, ResampleMode Mode, uint32_t Channel, uint64_t SampleCount, uint32_t SourceStartSample = 0, uint32_t TargetStartSample = 0, uint32_t TargetChannel = 0xFFFFFFFF, float SampleRatio = 1.0f );
+			void AddBufferScaled ( AudioBuffer & Source, float Scale, uint32_t SourceChannel, uint64_t SampleCount, uint64_t SourceStartSample = 0, uint64_t TargetStartSample = 0, uint32_t TargetChannel = 0xFFFFFFFF );
+			void AddBufferResampledScaled ( AudioBuffer & Source, float Scale, ResampleMode Mode, uint32_t Channel, uint64_t SampleCount, uint64_t SourceStartSample = 0, uint64_t TargetStartSample = 0, uint32_t TargetChannel = 0xFFFFFFFF, float SampleRatio = 1.0f );
 			
-			void ClearBufferFloat ( uint32_t Channel, float Value = 0.0f, uint64_t SampleCount = 0xFFFFFFFFFFFFFFFF );
-			void ClearBufferInt ( uint32_t Channel, int64_t Value = 0, uint64_t SampleCount = 0xFFFFFFFFFFFFFFFF );
+			void ClearBufferFloat ( uint32_t Channel, float Value = 0.0f, uint64_t StartSample = 0, uint64_t SampleCount = 0xFFFFFFFFFFFFFFFF );
+			void ClearBufferInt ( uint32_t Channel, int64_t Value = 0, uint64_t StartSample = 0, uint64_t SampleCount = 0xFFFFFFFFFFFFFFFF );
 			
 			void Reference ();
 			void Dereference ();
