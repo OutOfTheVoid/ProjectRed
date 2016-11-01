@@ -58,11 +58,12 @@ int main ( int argc, char const * argv [] )
 	
 	/*================================*/
 	
-	RAUX :: WAVFile TestWAV ( "guitar_loop.wav" );
+	RAUX :: WAVFile TestWAV ( "LittlePistol.wav" );
 	
 	TestWAV.Load ( & Status );
 	
 	Red::Audio :: AudioBuffer * FileBuffer = NULL;
+	Red::Audio::AudioBuffer * ResampleBuffer = NULL;
 	
 	if ( Status == RAUX :: WAVFile :: kStatus_Success )
 	{
@@ -70,20 +71,23 @@ int main ( int argc, char const * argv [] )
 		FileBuffer = TestWAV.LoadToBuffer ();
 		
 		if ( FileBuffer != NULL )
+		{
+			
 			std :: cout << "WAV Load success!" << std :: endl;
+			
+			ResampleBuffer = Red::Audio::AudioBuffer :: CopyReformatedResampled ( * FileBuffer, Red::Audio::AudioBuffer :: kResampleMode_Linear, FileBuffer -> GetDataType (), 3.0 );
+			
+		}
 		
 		TestWAV.Close ( & Status );
 		
 	}
 	else
-	{
-		
 		std :: cout << "WAV Load failure: " << Status << std :: endl;
 		
-	}
 	
-	Red::Audio :: RawBufferStreamSource WAVSourceLeftChannel ( FileBuffer, 0 );
-	Red::Audio :: RawBufferStreamSource WAVSourceRightChannel ( FileBuffer, 1 );
+	Red::Audio :: RawBufferStreamSource WAVSourceLeftChannel ( ResampleBuffer, 0 );
+	Red::Audio :: RawBufferStreamSource WAVSourceRightChannel ( ResampleBuffer, 1 );
 	
 	Red::Util :: Function1 <bool, Red::Audio :: RawBufferStreamSource *> RepeatePTR ( & DoRepeateSource );
 	

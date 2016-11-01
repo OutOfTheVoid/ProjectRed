@@ -33,7 +33,7 @@ namespace Red
 			AudioBuffer ( void * Data, AudioBufferType Type, uint32_t Channels, uint64_t SampleCount, Util :: IFunction1 <void, void *> * OnFree = NULL, Util :: IFunction1 <bool, AudioBuffer *> * OnUnReferenced = NULL );
 			
 			static AudioBuffer * CopyReformated ( AudioBuffer & Source, AudioBufferType NewDataType, uint32_t NewChannelCount = 0 );
-			static AudioBuffer * CopyReformatedResampled ( AudioBuffer & Source, ResampleMode Mode, AudioBufferType NewDataType, uint32_t NewChannelCount = 0, float SampleRatio = 1.0f );
+			static AudioBuffer * CopyReformatedResampled ( AudioBuffer & Source, ResampleMode Mode, AudioBufferType NewDataType, float SampleRatio, uint32_t NewChannelCount = 0 );
 			
 			void * GetRawBuffer ();
 			
