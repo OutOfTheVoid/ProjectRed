@@ -136,15 +136,6 @@ void RAUX::WAVFile :: Load ( uint32_t * Status )
 		
 		SectionCount ++;
 		
-		if ( SectionCount >= 10 )
-		{
-			
-			* Status = kStatus_Failure_Decode;
-			
-			return;
-			
-		}
-		
 		ProcessChunk ( Offset, & DummyStatus );
 		
 		if ( DummyStatus != kStatus_Success )

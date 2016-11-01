@@ -74,7 +74,6 @@ OBJECTS=obj/SDLX/Lib.o \
 		obj/Red/Threading/Thread.o \
 		obj/Red/Threading/ThreadEvent.o \
 		obj/Red/Threading/Mutex.o \
-		obj/Red/Threading/RWLock.o \
 		obj/Red/Util/Time.o \
 		obj/Red/Text/Rendering/RawFontTextureAtlas.o \
 		obj/Red/Text/Rendering/FreeType/FTLibrary.o \
@@ -87,6 +86,7 @@ OBJECTS=obj/SDLX/Lib.o \
 		obj/Red/Audio/EmptyAudioBufferPool.o \
 		obj/Red/Audio/StreamMixer.o \
 		obj/Red/Audio/AudioStreamOutput.o \
+		obj/Red/Audio/RawBufferStreamSource.o \
 		obj/Red/Math/FFT.o \
 		obj/Xenon/GPU/RenderBuffer.o
 	
@@ -284,9 +284,6 @@ obj/Red/Threading/Thread.o: include/Red/Threading/Thread.h src/Red/Threading/Thr
 obj/Red/Threading/Mutex.o: include/Red/Threading/Mutex.h src/Red/Threading/Mutex.cpp include/Red/Threading/Threading.h include/Red/Red.h
 	$(CXX) -c $(CXX_FLAGS) src/Red/Threading/Mutex.cpp -o obj/Red/Threading/Mutex.o
 	
-obj/Red/Threading/RWLock.o: include/Red/Threading/RWLock.h src/Red/Threading/RWLock.cpp include/Red/Threading/Threading.h include/Red/Red.h
-	$(CXX) -c $(CXX_FLAGS) src/Red/Threading/RWLock.cpp -o obj/Red/Threading/RWLock.o
-	
 obj/Red/Threading/ThreadEvent.o: include/Red/Threading/ThreadEvent.h src/Red/Threading/ThreadEvent.cpp include/Red/Threading/Thread.h include/Red/Threading/Threading.h include/Red/Events/IEvent.h include/Red/Events/BasicEvent.h include/Red/Red.h
 	$(CXX) -c $(CXX_FLAGS) src/Red/Threading/ThreadEvent.cpp -o obj/Red/Threading/ThreadEvent.o
 	
@@ -325,6 +322,9 @@ obj/Red/Audio/StreamMixer.o: include/Red/Audio/Audio.h include/Red/Audio/StreamM
 	
 obj/Red/Audio/AudioStreamOutput.o: include/Red/Audio/Audio.h include/Red/Audio/AudioStreamOutput.h src/Red/Audio/AudioStreamOutput.cpp include/Red/Audio/AudioBuffer.h include/Red/Audio/IStreamSource.h include/Red/Util/RefCounted.h include/Red/Audio/IAudioOutputDevice.h include/Red/Red.h include/Red/Util/Endian.h
 	$(CXX) -c $(CXX_FLAGS) src/Red/Audio/AudioStreamOutput.cpp -o obj/Red/Audio/AudioStreamOutput.o
+	
+obj/Red/Audio/RawBufferStreamSource.o: include/Red/Audio/Audio.h include/Red/Audio/RawBufferStreamSource.h src/Red/Audio/RawBufferStreamSource.cpp include/Red/Audio/IStreamSource.h include/Red/Audio/AudioBuffer.h include/Red/Util/Function.h Red/Util/RefCounted.h include/Red/Threading/Mutex.h
+	$(CXX) -c $(CXX_FLAGS) src/Red/Audio/RawBufferStreamSource.cpp -o obj/Red/Audio/RawBufferStreamSource.o
 	
 obj/Red/Math/FFT.o: include/Red/Math/Math.h include/Red/Math/FFT.h src/Red/Math/FFT.cpp
 	$(CXX) -c $(CXX_FLAGS) src/Red/Math/FFT.cpp -o obj/Red/Math/FFT.o

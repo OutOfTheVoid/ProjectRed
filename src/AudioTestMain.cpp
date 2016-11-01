@@ -4,6 +4,7 @@
 #include <SDLX/Window.h>
 
 #include <Red/Util/Closure.h>
+#include <Red/Util/Function.h>
 
 #include <SDLX/AudioDevice.h>
 
@@ -26,7 +27,7 @@ void WindowCloseEvent ( SDL_WindowEvent * Event, SDLX::Window * Win, void * Data
 
 void FillAudioData ( uint32_t & Counter, uint8_t * DataBuffer, int PacketLength );
 
-Red::Audio :: AudioBuffer * FileBuffer = NULL;
+bool DoRepeateSource ( Red::Audio :: RawBufferStreamSource * Source );
 
 int main ( int argc, char const * argv [] )
 {
@@ -57,9 +58,11 @@ int main ( int argc, char const * argv [] )
 	
 	/*================================*/
 	
-	RAUX :: WAVFile TestWAV ( "LittlePistol.wav" );
+	RAUX :: WAVFile TestWAV ( "guitar_loop.wav" );
 	
 	TestWAV.Load ( & Status );
+	
+	Red::Audio :: AudioBuffer * FileBuffer = NULL;
 	
 	if ( Status == RAUX :: WAVFile :: kStatus_Success )
 	{
@@ -72,12 +75,23 @@ int main ( int argc, char const * argv [] )
 		TestWAV.Close ( & Status );
 		
 	}
+	else
+	{
+		
+		std :: cout << "WAV Load failure: " << Status << std :: endl;
+		
+	}
 	
 	Red::Audio :: RawBufferStreamSource WAVSourceLeftChannel ( FileBuffer, 0 );
 	Red::Audio :: RawBufferStreamSource WAVSourceRightChannel ( FileBuffer, 1 );
 	
+	Red::Util :: Function1 <bool, Red::Audio :: RawBufferStreamSource *> RepeatePTR ( & DoRepeateSource );
+	
 	WAVSourceLeftChannel.Reference ();
 	WAVSourceRightChannel.Reference ();
+	
+	WAVSourceLeftChannel.SetFinishedCallback ( & RepeatePTR );
+	WAVSourceRightChannel.SetFinishedCallback ( & RepeatePTR );
 	
 	/*================================*/
 	
@@ -105,7 +119,7 @@ int main ( int argc, char const * argv [] )
 	
 	/*================================*/
 	
-	SDLX::Lib :: EventLoop ( & Status );
+	SDLX::Lib :: EventLoop ( & Status ); // GAME LOOP
 	
 	/*================================*/
 	
@@ -118,6 +132,15 @@ int main ( int argc, char const * argv [] )
 	
 	return 0;
 
+}
+
+bool DoRepeateSource ( Red::Audio :: RawBufferStreamSource * Source )
+{
+	
+	Source -> SetOffset ( 0 );
+	
+	return true;
+	
 }
 
 void WindowCloseEvent ( SDL_WindowEvent * Event, SDLX::Window * Win, void * Data )
