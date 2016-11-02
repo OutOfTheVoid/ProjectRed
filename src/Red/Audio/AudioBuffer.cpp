@@ -132,7 +132,7 @@ Red::Audio :: AudioBuffer * Red::Audio::AudioBuffer :: CopyReformated ( AudioBuf
 	
 }
 
-Red::Audio :: AudioBuffer * Red::Audio::AudioBuffer :: CopyReformatedResampled ( AudioBuffer & Source, ResampleMode Mode, AudioBufferType NewDataType, float SampleRatio, uint32_t NewChannelCount )
+Red::Audio :: AudioBuffer * Red::Audio::AudioBuffer :: CopyReformatedResampled ( AudioBuffer & Source, ResampleMode Mode, AudioBufferType NewDataType, double SampleRatio, uint32_t NewChannelCount )
 {
 	
 	if ( NewDataType == kAudioBufferType_Invalid )
@@ -1823,7 +1823,7 @@ void Red::Audio::AudioBuffer :: BlitBuffer ( AudioBuffer & Source, uint32_t Sour
 	
 }
 
-void Red::Audio::AudioBuffer :: BlitBufferResampled ( AudioBuffer & Source, ResampleMode Mode, uint32_t SourceChannel, uint64_t SampleCount, uint64_t SourceStartSample, uint64_t TargetStartSample, float SampleRatio, uint32_t TargetChannel )
+void Red::Audio::AudioBuffer :: BlitBufferResampled ( AudioBuffer & Source, ResampleMode Mode, uint32_t SourceChannel, uint64_t SampleCount, uint64_t SourceStartSample, uint64_t TargetStartSample, double SampleRatio, uint32_t TargetChannel )
 {
 	
 	uint64_t I;
@@ -1857,7 +1857,7 @@ void Red::Audio::AudioBuffer :: BlitBufferResampled ( AudioBuffer & Source, Resa
 		
 	}
 	
-	double RatioInverse = 1.0 / static_cast <double> ( SampleRatio );
+	double RatioInverse = 1.0 / SampleRatio;
 	
 	#define _BLITBUFFERRESAMPLED_NEAREST_ABSOURCEDATA_INT8 static_cast <int32_t> ( reinterpret_cast <int8_t *> ( Source.Data ) [ Source.ChannelCount * ( SourceStartSample + static_cast <uint64_t> ( static_cast <double> ( I ) * RatioInverse ) ) + SourceChannel ] )
 	#define _BLITBUFFERRESAMPLED_NEAREST_ABSOURCEDATA_UINT8 static_cast <uint32_t> ( reinterpret_cast <uint8_t *> ( Source.Data ) [ Source.ChannelCount * ( SourceStartSample + static_cast <uint64_t> ( static_cast <double> ( I ) * RatioInverse ) ) + SourceChannel ] )
@@ -8169,7 +8169,7 @@ void Red::Audio::AudioBuffer :: AddBufferScaled ( AudioBuffer & Source, float Sc
 	
 }
 
-void Red::Audio::AudioBuffer :: AddBufferResampledScaled ( AudioBuffer & Source, float Scale, ResampleMode Mode, uint32_t SourceChannel, uint64_t SampleCount, uint64_t SourceStartSample, uint64_t TargetStartSample, uint32_t TargetChannel, float SampleRatio )
+void Red::Audio::AudioBuffer :: AddBufferResampledScaled ( AudioBuffer & Source, float Scale, ResampleMode Mode, uint32_t SourceChannel, uint64_t SampleCount, uint64_t SourceStartSample, uint64_t TargetStartSample, uint32_t TargetChannel, double SampleRatio )
 {
 	
 	uint64_t I;
@@ -8253,7 +8253,7 @@ void Red::Audio::AudioBuffer :: AddBufferResampledScaled ( AudioBuffer & Source,
 		
 	}
 	
-	double RatioInverse = 1.0 / static_cast <double> ( SampleRatio );
+	double RatioInverse = 1.0 / SampleRatio;
 	
 	#define _ADDBUFFERRESAMPLEDSCALED_NEAREST_ABSOURCEDATA_INT8 ( ( static_cast <int32_t> ( reinterpret_cast <int8_t *> ( Source.Data ) [ Source.ChannelCount * ( SourceStartSample + static_cast <uint64_t> ( static_cast <double> ( I ) * RatioInverse ) ) + SourceChannel ] ) * ScaleFactors.ScaleI8 ) >> 8 )
 	#define _ADDBUFFERRESAMPLEDSCALED_NEAREST_ABSOURCEDATA_UINT8 ( ( static_cast <uint32_t> ( reinterpret_cast <uint8_t *> ( Source.Data ) [ Source.ChannelCount * ( SourceStartSample + static_cast <uint64_t> ( static_cast <double> ( I ) * RatioInverse ) ) + SourceChannel ] ) * ScaleFactors.ScaleU8 ) >> 8 )
@@ -11414,7 +11414,7 @@ void Red::Audio::AudioBuffer :: AddBufferResampledScaled ( AudioBuffer & Source,
 }
 
 
-void Red::Audio::AudioBuffer :: AddBufferResampled ( AudioBuffer & Source, ResampleMode Mode, uint32_t SourceChannel, uint64_t SampleCount, uint64_t SourceStartSample, uint64_t TargetStartSample, uint32_t TargetChannel, float SampleRatio )
+void Red::Audio::AudioBuffer :: AddBufferResampled ( AudioBuffer & Source, ResampleMode Mode, uint32_t SourceChannel, uint64_t SampleCount, uint64_t SourceStartSample, uint64_t TargetStartSample, uint32_t TargetChannel, double SampleRatio )
 {
 	
 	uint64_t I;
@@ -11448,7 +11448,7 @@ void Red::Audio::AudioBuffer :: AddBufferResampled ( AudioBuffer & Source, Resam
 		
 	}
 	
-	double RatioInverse = 1.0 / static_cast <double> ( SampleRatio );
+	double RatioInverse = 1.0 / SampleRatio;
 	
 	switch ( DataType )
 	{
