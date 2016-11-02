@@ -223,6 +223,120 @@ inline uint32_t _AB_Alias_I32ToU32 ( const int32_t RValue )
 	
 }
 
+float Red::Audio::AudioBuffer :: ReadSampleFloat ( uint32_t Channel, uint64_t Sample )
+{
+	
+	if ( Channel >= ChannelCount )
+		return 0.0f;
+	
+	if ( Sample >= SampleCount )
+		return 0.0f;
+	
+	switch ( DataType )
+	{
+		
+		case kAudioBufferType_Int8:
+			return static_cast <float> ( reinterpret_cast <int8_t *> ( Data ) [ ChannelCount * Sample + Channel ] ) / 128.0f;
+			
+		case kAudioBufferType_UInt8:
+			return static_cast <float> ( reinterpret_cast <uint8_t *> ( Data ) [ ChannelCount * Sample + Channel ] ) / 128.0f + 1.0f;
+			
+		case kAudioBufferType_Int16_LittleEndian:
+			return static_cast <float> ( _AB_Alias_U16ToI16 ( LittleToHostEndian16 ( reinterpret_cast <uint16_t *> ( Data ) [ ChannelCount * Sample + Channel ] ) ) ) / 32768.0f;
+		
+		case kAudioBufferType_Int16_BigEndian:
+			return static_cast <float> ( _AB_Alias_U16ToI16 ( BigToHostEndian16 ( reinterpret_cast <uint16_t *> ( Data ) [ ChannelCount * Sample + Channel ] ) ) ) / 32768.0f;
+		
+		case kAudioBufferType_UInt16_LittleEndian:
+			return static_cast <float> ( LittleToHostEndian16 ( reinterpret_cast <uint16_t *> ( Data ) [ ChannelCount * Sample + Channel ] ) ) / 32768.0f + 1.0f;
+		
+		case kAudioBufferType_UInt16_BigEndian:
+			return static_cast <float> ( BigToHostEndian16 ( reinterpret_cast <uint16_t *> ( Data ) [ ChannelCount * Sample + Channel ] ) ) / 32768.0f + 1.0f;
+			
+		case kAudioBufferType_Int32_LittleEndian:
+			return static_cast <float> ( _AB_Alias_U32ToI32 ( LittleToHostEndian32 ( reinterpret_cast <uint32_t *> ( Data ) [ ChannelCount * Sample + Channel ] ) ) ) / 2147483647.0f;
+		
+		case kAudioBufferType_Int32_BigEndian:
+			return static_cast <float> ( _AB_Alias_U32ToI32 ( BigToHostEndian32 ( reinterpret_cast <uint32_t *> ( Data ) [ ChannelCount * Sample + Channel ] ) ) ) / 2147483647.0f;
+		
+		case kAudioBufferType_UInt32_LittleEndian:
+			return static_cast <float> ( LittleToHostEndian32 ( reinterpret_cast <uint32_t *> ( Data ) [ ChannelCount * Sample + Channel ] ) ) / 2147483647.0f - 1.0f;
+		
+		case kAudioBufferType_UInt32_BigEndian:
+			return static_cast <float> ( LittleToHostEndian32 ( reinterpret_cast <uint32_t *> ( Data ) [ ChannelCount * Sample + Channel ] ) ) / 2147483647.0f - 1.0f;
+		
+		case kAudioBufferType_Float32_LittleEndian:
+			return LittleToHostEndianFloat ( reinterpret_cast <float *> ( Data ) [ ChannelCount * Sample + Channel ] ) / 2147483647.0f - 1.0f;
+			
+		case kAudioBufferType_Float32_BigEndian:
+			return BigToHostEndianFloat ( reinterpret_cast <float *> ( Data ) [ ChannelCount * Sample + Channel ] ) / 2147483647.0f - 1.0f;
+			
+		default:
+			break;
+		
+	}
+	
+	return 0.0f;
+	
+}
+
+int64_t Red::Audio::AudioBuffer :: ReadSampleInt ( uint32_t Channel, uint64_t Sample )
+{
+	
+	if ( Channel >= ChannelCount )
+		return 0.0f;
+	
+	if ( Sample >= SampleCount )
+		return 0.0f;
+	
+	switch ( DataType )
+	{
+		
+		case kAudioBufferType_Int8:
+			return reinterpret_cast <int8_t *> ( Data ) [ ChannelCount * Sample + Channel ];
+			
+		case kAudioBufferType_UInt8:
+			return reinterpret_cast <uint8_t *> ( Data ) [ ChannelCount * Sample + Channel ];
+			
+		case kAudioBufferType_Int16_LittleEndian:
+			return _AB_Alias_U16ToI16 ( LittleToHostEndian16 ( reinterpret_cast <uint16_t *> ( Data ) [ ChannelCount * Sample + Channel ] ) );
+		
+		case kAudioBufferType_Int16_BigEndian:
+			return _AB_Alias_U16ToI16 ( BigToHostEndian16 ( reinterpret_cast <uint16_t *> ( Data ) [ ChannelCount * Sample + Channel ] ) );;
+		
+		case kAudioBufferType_UInt16_LittleEndian:
+			return LittleToHostEndian16 ( reinterpret_cast <uint16_t *> ( Data ) [ ChannelCount * Sample + Channel ] );
+		
+		case kAudioBufferType_UInt16_BigEndian:
+			return BigToHostEndian16 ( reinterpret_cast <uint16_t *> ( Data ) [ ChannelCount * Sample + Channel ] );
+			
+		case kAudioBufferType_Int32_LittleEndian:
+			return LittleToHostEndian32 ( reinterpret_cast <uint32_t *> ( Data ) [ ChannelCount * Sample + Channel ] );
+		
+		case kAudioBufferType_Int32_BigEndian:
+			return BigToHostEndian32 ( reinterpret_cast <uint32_t *> ( Data ) [ ChannelCount * Sample + Channel ] );
+		
+		case kAudioBufferType_UInt32_LittleEndian:
+			return LittleToHostEndian32 ( reinterpret_cast <uint32_t *> ( Data ) [ ChannelCount * Sample + Channel ] );
+		
+		case kAudioBufferType_UInt32_BigEndian:
+			return BigToHostEndian32 ( reinterpret_cast <uint32_t *> ( Data ) [ ChannelCount * Sample + Channel ] );
+		
+		case kAudioBufferType_Float32_LittleEndian:
+			return static_cast <int32_t> ( LittleToHostEndianFloat ( reinterpret_cast <float *> ( Data ) [ ChannelCount * Sample + Channel ] ) * 2147483647.5f - 0.5f );
+			
+		case kAudioBufferType_Float32_BigEndian:
+			return static_cast <int32_t> ( BigToHostEndianFloat ( reinterpret_cast <float *> ( Data ) [ ChannelCount * Sample + Channel ] )  * 2147483647.5f - 0.5f );
+			
+		default:
+			break;
+		
+	}
+	
+	return 0;
+	
+}
+
 void Red::Audio::AudioBuffer :: BlitBuffer ( AudioBuffer & Source, uint32_t SourceChannel, uint64_t SampleCount, uint64_t SourceStartSample, uint64_t TargetStartSample, uint32_t TargetChannel )
 {
 	
@@ -3363,7 +3477,257 @@ void Red::Audio::AudioBuffer :: BlitBufferResampled ( AudioBuffer & Source, Resa
 		case kAudioBufferType_Int32_LittleEndian:
 		{
 			
-			
+			switch ( Mode )
+			{
+				
+				case kResampleMode_Nearest:
+				{
+					
+					switch ( Source.DataType )
+					{
+						
+						case kAudioBufferType_Int8:
+						{
+							
+							for ( I = 0; I < SampleCount; I ++ )
+								_BLITBUFFERRESAMPLED_ABDESTDATA_INT32_LE ( _BLITBUFFERRESAMPLED_NEAREST_ABSOURCEDATA_INT8 * 0x1000000 );
+							
+						}
+						break;
+						
+						case kAudioBufferType_UInt8:
+						{
+							
+							for ( I = 0; I < SampleCount; I ++ )
+								_BLITBUFFERRESAMPLED_ABDESTDATA_INT32_LE ( static_cast <int32_t> ( _BLITBUFFERRESAMPLED_NEAREST_ABSOURCEDATA_UINT8 << 24 ) - 0x80000000 );
+							
+						}
+						break;
+						
+						case kAudioBufferType_Int16_LittleEndian:
+						{
+							
+							for ( I = 0; I < SampleCount; I ++ )
+								_BLITBUFFERRESAMPLED_ABDESTDATA_INT32_LE ( _BLITBUFFERRESAMPLED_NEAREST_ABSOURCEDATA_INT16_LE * 0x10000 );
+							
+						}
+						break;
+						
+						case kAudioBufferType_Int16_BigEndian:
+						{
+							
+							for ( I = 0; I < SampleCount; I ++ )
+								_BLITBUFFERRESAMPLED_ABDESTDATA_INT32_LE ( _BLITBUFFERRESAMPLED_NEAREST_ABSOURCEDATA_INT16_BE * 0x10000 );
+							
+						}
+						break;
+						
+						case kAudioBufferType_UInt16_LittleEndian:
+						{
+							
+							for ( I = 0; I < SampleCount; I ++ )
+								_BLITBUFFERRESAMPLED_ABDESTDATA_INT32_LE ( ( static_cast <int32_t> ( _BLITBUFFERRESAMPLED_NEAREST_ABSOURCEDATA_UINT16_LE ) - 0x7FFF ) * 0x10000 );
+							
+						}
+						break;
+						
+						case kAudioBufferType_UInt16_BigEndian:
+						{
+							
+							for ( I = 0; I < SampleCount; I ++ )
+								_BLITBUFFERRESAMPLED_ABDESTDATA_INT32_LE ( ( static_cast <int32_t> ( _BLITBUFFERRESAMPLED_NEAREST_ABSOURCEDATA_UINT16_BE ) - 0x7FFF ) * 0x10000 );
+							
+						}
+						break;
+						
+						case kAudioBufferType_Int32_LittleEndian:
+						{
+							
+							for ( I = 0; I < SampleCount; I ++ )
+								_BLITBUFFERRESAMPLED_ABDESTDATA_INT32_LE ( _BLITBUFFERRESAMPLED_NEAREST_ABSOURCEDATA_INT32_LE );
+							
+						}
+						break;
+						
+						case kAudioBufferType_Int32_BigEndian:
+						{
+							
+							for ( I = 0; I < SampleCount; I ++ )
+								_BLITBUFFERRESAMPLED_ABDESTDATA_INT32_LE ( _BLITBUFFERRESAMPLED_NEAREST_ABSOURCEDATA_INT32_BE );
+							
+						}
+						break;
+						
+						case kAudioBufferType_UInt32_LittleEndian:
+						{
+							
+							for ( I = 0; I < SampleCount; I ++ )
+								_BLITBUFFERRESAMPLED_ABDESTDATA_INT32_LE ( static_cast <int64_t> ( _BLITBUFFERRESAMPLED_NEAREST_ABSOURCEDATA_UINT32_LE ) - 0x7FFFFFFF );
+							
+						}
+						break;
+						
+						case kAudioBufferType_UInt32_BigEndian:
+						{
+							
+							for ( I = 0; I < SampleCount; I ++ )
+								_BLITBUFFERRESAMPLED_ABDESTDATA_INT32_LE ( static_cast <int64_t> ( _BLITBUFFERRESAMPLED_NEAREST_ABSOURCEDATA_UINT32_BE ) - 0x7FFFFFFF );
+							
+						}
+						break;
+						
+						case kAudioBufferType_Float32_LittleEndian:
+						{
+							
+							for ( I = 0; I < SampleCount; I ++ )
+								_BLITBUFFERRESAMPLED_ABDESTDATA_INT32_LE ( static_cast <int32_t> ( _BLITBUFFERRESAMPLED_NEAREST_ABSOURCEDATA_FLOAT32_LE * 2147483647.0f ) );
+							
+						}
+						break;
+						
+						case kAudioBufferType_Float32_BigEndian:
+						{
+							
+							for ( I = 0; I < SampleCount; I ++ )
+								_BLITBUFFERRESAMPLED_ABDESTDATA_INT32_LE ( static_cast <int32_t> ( _BLITBUFFERRESAMPLED_NEAREST_ABSOURCEDATA_FLOAT32_BE * 2147483647.0f ) );
+							
+						}
+						break;
+						
+						default:
+							break;
+						
+					}
+					
+				}
+				break;
+				
+				case kResampleMode_Linear:
+				{
+					
+					switch ( Source.DataType )
+					{
+						
+						case kAudioBufferType_Int8:
+						{
+							
+							for ( I = 0; I < SampleCount; I ++ )
+								_BLITBUFFERRESAMPLED_ABDESTDATA_INT32_LE ( _BLITBUFFERRESAMPLED_LINEAR_ABSOURCEDATA_INT8 * 0x1000000 );
+							
+						}
+						break;
+						
+						case kAudioBufferType_UInt8:
+						{
+							
+							for ( I = 0; I < SampleCount; I ++ )
+								_BLITBUFFERRESAMPLED_ABDESTDATA_INT32_LE ( static_cast <int32_t> ( _BLITBUFFERRESAMPLED_LINEAR_ABSOURCEDATA_UINT8 << 24 ) - 0x80000000 );
+							
+						}
+						break;
+						
+						case kAudioBufferType_Int16_LittleEndian:
+						{
+							
+							for ( I = 0; I < SampleCount; I ++ )
+								_BLITBUFFERRESAMPLED_ABDESTDATA_INT32_LE ( _BLITBUFFERRESAMPLED_LINEAR_ABSOURCEDATA_INT16_LE * 0x10000 );
+							
+						}
+						break;
+						
+						case kAudioBufferType_Int16_BigEndian:
+						{
+							
+							for ( I = 0; I < SampleCount; I ++ )
+								_BLITBUFFERRESAMPLED_ABDESTDATA_INT32_LE ( _BLITBUFFERRESAMPLED_LINEAR_ABSOURCEDATA_INT16_BE * 0x10000 );
+							
+						}
+						break;
+						
+						case kAudioBufferType_UInt16_LittleEndian:
+						{
+							
+							for ( I = 0; I < SampleCount; I ++ )
+								_BLITBUFFERRESAMPLED_ABDESTDATA_INT32_LE ( ( static_cast <int32_t> ( _BLITBUFFERRESAMPLED_LINEAR_ABSOURCEDATA_UINT16_LE ) - 0x7FFF ) * 0x10000 );
+							
+						}
+						break;
+						
+						case kAudioBufferType_UInt16_BigEndian:
+						{
+							
+							for ( I = 0; I < SampleCount; I ++ )
+								_BLITBUFFERRESAMPLED_ABDESTDATA_INT32_LE ( ( static_cast <int32_t> ( _BLITBUFFERRESAMPLED_LINEAR_ABSOURCEDATA_UINT16_BE ) - 0x7FFF ) * 0x10000 );
+							
+						}
+						break;
+						
+						case kAudioBufferType_Int32_LittleEndian:
+						{
+							
+							for ( I = 0; I < SampleCount; I ++ )
+								_BLITBUFFERRESAMPLED_ABDESTDATA_INT32_LE ( _BLITBUFFERRESAMPLED_LINEAR_ABSOURCEDATA_INT32_LE );
+							
+						}
+						break;
+						
+						case kAudioBufferType_Int32_BigEndian:
+						{
+							
+							for ( I = 0; I < SampleCount; I ++ )
+								_BLITBUFFERRESAMPLED_ABDESTDATA_INT32_LE ( _BLITBUFFERRESAMPLED_LINEAR_ABSOURCEDATA_INT32_BE );
+							
+						}
+						break;
+						
+						case kAudioBufferType_UInt32_LittleEndian:
+						{
+							
+							for ( I = 0; I < SampleCount; I ++ )
+								_BLITBUFFERRESAMPLED_ABDESTDATA_INT32_LE ( static_cast <int64_t> ( _BLITBUFFERRESAMPLED_LINEAR_ABSOURCEDATA_UINT32_LE ) - 0x7FFFFFFF );
+							
+						}
+						break;
+						
+						case kAudioBufferType_UInt32_BigEndian:
+						{
+							
+							for ( I = 0; I < SampleCount; I ++ )
+								_BLITBUFFERRESAMPLED_ABDESTDATA_INT32_LE ( static_cast <int64_t> ( _BLITBUFFERRESAMPLED_LINEAR_ABSOURCEDATA_UINT32_BE ) - 0x7FFFFFFF );
+							
+						}
+						break;
+						
+						case kAudioBufferType_Float32_LittleEndian:
+						{
+							
+							for ( I = 0; I < SampleCount; I ++ )
+								_BLITBUFFERRESAMPLED_ABDESTDATA_INT32_LE ( static_cast <int32_t> ( _BLITBUFFERRESAMPLED_LINEAR_ABSOURCEDATA_FLOAT32_LE * 2147483647.f ) );
+							
+						}
+						break;
+						
+						case kAudioBufferType_Float32_BigEndian:
+						{
+							
+							for ( I = 0; I < SampleCount; I ++ )
+								_BLITBUFFERRESAMPLED_ABDESTDATA_INT32_LE ( static_cast <int32_t> ( _BLITBUFFERRESAMPLED_LINEAR_ABSOURCEDATA_FLOAT32_BE * 2147483647.f ) );
+							
+						}
+						break;
+						
+						default:
+							break;
+						
+					}
+					
+				}
+				break;
+				
+				default:
+					break;
+				
+			}
 			
 		}
 		break;
@@ -3371,7 +3735,257 @@ void Red::Audio::AudioBuffer :: BlitBufferResampled ( AudioBuffer & Source, Resa
 		case kAudioBufferType_Int32_BigEndian:
 		{
 			
-			
+			switch ( Mode )
+			{
+				
+				case kResampleMode_Nearest:
+				{
+					
+					switch ( Source.DataType )
+					{
+						
+						case kAudioBufferType_Int8:
+						{
+							
+							for ( I = 0; I < SampleCount; I ++ )
+								_BLITBUFFERRESAMPLED_ABDESTDATA_INT32_BE ( _BLITBUFFERRESAMPLED_NEAREST_ABSOURCEDATA_INT8 * 0x1000000 );
+							
+						}
+						break;
+						
+						case kAudioBufferType_UInt8:
+						{
+							
+							for ( I = 0; I < SampleCount; I ++ )
+								_BLITBUFFERRESAMPLED_ABDESTDATA_INT32_BE ( static_cast <int32_t> ( _BLITBUFFERRESAMPLED_NEAREST_ABSOURCEDATA_UINT8 << 24 ) - 0x80000000 );
+							
+						}
+						break;
+						
+						case kAudioBufferType_Int16_LittleEndian:
+						{
+							
+							for ( I = 0; I < SampleCount; I ++ )
+								_BLITBUFFERRESAMPLED_ABDESTDATA_INT32_BE ( _BLITBUFFERRESAMPLED_NEAREST_ABSOURCEDATA_INT16_LE * 0x10000 );
+							
+						}
+						break;
+						
+						case kAudioBufferType_Int16_BigEndian:
+						{
+							
+							for ( I = 0; I < SampleCount; I ++ )
+								_BLITBUFFERRESAMPLED_ABDESTDATA_INT32_BE ( _BLITBUFFERRESAMPLED_NEAREST_ABSOURCEDATA_INT16_BE * 0x10000 );
+							
+						}
+						break;
+						
+						case kAudioBufferType_UInt16_LittleEndian:
+						{
+							
+							for ( I = 0; I < SampleCount; I ++ )
+								_BLITBUFFERRESAMPLED_ABDESTDATA_INT32_BE ( ( static_cast <int32_t> ( _BLITBUFFERRESAMPLED_NEAREST_ABSOURCEDATA_UINT16_LE ) - 0x7FFF ) * 0x10000 );
+							
+						}
+						break;
+						
+						case kAudioBufferType_UInt16_BigEndian:
+						{
+							
+							for ( I = 0; I < SampleCount; I ++ )
+								_BLITBUFFERRESAMPLED_ABDESTDATA_INT32_BE ( ( static_cast <int32_t> ( _BLITBUFFERRESAMPLED_NEAREST_ABSOURCEDATA_UINT16_BE ) - 0x7FFF ) * 0x10000 );
+							
+						}
+						break;
+						
+						case kAudioBufferType_Int32_LittleEndian:
+						{
+							
+							for ( I = 0; I < SampleCount; I ++ )
+								_BLITBUFFERRESAMPLED_ABDESTDATA_INT32_BE ( _BLITBUFFERRESAMPLED_NEAREST_ABSOURCEDATA_INT32_LE );
+							
+						}
+						break;
+						
+						case kAudioBufferType_Int32_BigEndian:
+						{
+							
+							for ( I = 0; I < SampleCount; I ++ )
+								_BLITBUFFERRESAMPLED_ABDESTDATA_INT32_BE ( _BLITBUFFERRESAMPLED_NEAREST_ABSOURCEDATA_INT32_BE );
+							
+						}
+						break;
+						
+						case kAudioBufferType_UInt32_LittleEndian:
+						{
+							
+							for ( I = 0; I < SampleCount; I ++ )
+								_BLITBUFFERRESAMPLED_ABDESTDATA_INT32_BE ( static_cast <int64_t> ( _BLITBUFFERRESAMPLED_NEAREST_ABSOURCEDATA_UINT32_LE ) - 0x7FFFFFFF );
+							
+						}
+						break;
+						
+						case kAudioBufferType_UInt32_BigEndian:
+						{
+							
+							for ( I = 0; I < SampleCount; I ++ )
+								_BLITBUFFERRESAMPLED_ABDESTDATA_INT32_BE ( static_cast <int64_t> ( _BLITBUFFERRESAMPLED_NEAREST_ABSOURCEDATA_UINT32_BE ) - 0x7FFFFFFF );
+							
+						}
+						break;
+						
+						case kAudioBufferType_Float32_LittleEndian:
+						{
+							
+							for ( I = 0; I < SampleCount; I ++ )
+								_BLITBUFFERRESAMPLED_ABDESTDATA_INT32_BE ( static_cast <int32_t> ( _BLITBUFFERRESAMPLED_NEAREST_ABSOURCEDATA_FLOAT32_LE * 2147483647.0f ) );
+							
+						}
+						break;
+						
+						case kAudioBufferType_Float32_BigEndian:
+						{
+							
+							for ( I = 0; I < SampleCount; I ++ )
+								_BLITBUFFERRESAMPLED_ABDESTDATA_INT32_BE ( static_cast <int32_t> ( _BLITBUFFERRESAMPLED_NEAREST_ABSOURCEDATA_FLOAT32_BE * 2147483647.0f ) );
+							
+						}
+						break;
+						
+						default:
+							break;
+						
+					}
+					
+				}
+				break;
+				
+				case kResampleMode_Linear:
+				{
+					
+					switch ( Source.DataType )
+					{
+						
+						case kAudioBufferType_Int8:
+						{
+							
+							for ( I = 0; I < SampleCount; I ++ )
+								_BLITBUFFERRESAMPLED_ABDESTDATA_INT32_BE ( _BLITBUFFERRESAMPLED_LINEAR_ABSOURCEDATA_INT8 * 0x1000000 );
+							
+						}
+						break;
+						
+						case kAudioBufferType_UInt8:
+						{
+							
+							for ( I = 0; I < SampleCount; I ++ )
+								_BLITBUFFERRESAMPLED_ABDESTDATA_INT32_BE ( static_cast <int32_t> ( _BLITBUFFERRESAMPLED_LINEAR_ABSOURCEDATA_UINT8 << 24 ) - 0x80000000 );
+							
+						}
+						break;
+						
+						case kAudioBufferType_Int16_LittleEndian:
+						{
+							
+							for ( I = 0; I < SampleCount; I ++ )
+								_BLITBUFFERRESAMPLED_ABDESTDATA_INT32_BE ( _BLITBUFFERRESAMPLED_LINEAR_ABSOURCEDATA_INT16_LE * 0x10000 );
+							
+						}
+						break;
+						
+						case kAudioBufferType_Int16_BigEndian:
+						{
+							
+							for ( I = 0; I < SampleCount; I ++ )
+								_BLITBUFFERRESAMPLED_ABDESTDATA_INT32_BE ( _BLITBUFFERRESAMPLED_LINEAR_ABSOURCEDATA_INT16_BE * 0x10000 );
+							
+						}
+						break;
+						
+						case kAudioBufferType_UInt16_LittleEndian:
+						{
+							
+							for ( I = 0; I < SampleCount; I ++ )
+								_BLITBUFFERRESAMPLED_ABDESTDATA_INT32_BE ( ( static_cast <int32_t> ( _BLITBUFFERRESAMPLED_LINEAR_ABSOURCEDATA_UINT16_LE ) - 0x7FFF ) * 0x10000 );
+							
+						}
+						break;
+						
+						case kAudioBufferType_UInt16_BigEndian:
+						{
+							
+							for ( I = 0; I < SampleCount; I ++ )
+								_BLITBUFFERRESAMPLED_ABDESTDATA_INT32_BE ( ( static_cast <int32_t> ( _BLITBUFFERRESAMPLED_LINEAR_ABSOURCEDATA_UINT16_BE ) - 0x7FFF ) * 0x10000 );
+							
+						}
+						break;
+						
+						case kAudioBufferType_Int32_LittleEndian:
+						{
+							
+							for ( I = 0; I < SampleCount; I ++ )
+								_BLITBUFFERRESAMPLED_ABDESTDATA_INT32_BE ( _BLITBUFFERRESAMPLED_LINEAR_ABSOURCEDATA_INT32_LE );
+							
+						}
+						break;
+						
+						case kAudioBufferType_Int32_BigEndian:
+						{
+							
+							for ( I = 0; I < SampleCount; I ++ )
+								_BLITBUFFERRESAMPLED_ABDESTDATA_INT32_BE ( _BLITBUFFERRESAMPLED_LINEAR_ABSOURCEDATA_INT32_BE );
+							
+						}
+						break;
+						
+						case kAudioBufferType_UInt32_LittleEndian:
+						{
+							
+							for ( I = 0; I < SampleCount; I ++ )
+								_BLITBUFFERRESAMPLED_ABDESTDATA_INT32_BE ( static_cast <int64_t> ( _BLITBUFFERRESAMPLED_LINEAR_ABSOURCEDATA_UINT32_LE ) - 0x7FFFFFFF );
+							
+						}
+						break;
+						
+						case kAudioBufferType_UInt32_BigEndian:
+						{
+							
+							for ( I = 0; I < SampleCount; I ++ )
+								_BLITBUFFERRESAMPLED_ABDESTDATA_INT32_BE ( static_cast <int64_t> ( _BLITBUFFERRESAMPLED_LINEAR_ABSOURCEDATA_UINT32_BE ) - 0x7FFFFFFF );
+							
+						}
+						break;
+						
+						case kAudioBufferType_Float32_LittleEndian:
+						{
+							
+							for ( I = 0; I < SampleCount; I ++ )
+								_BLITBUFFERRESAMPLED_ABDESTDATA_INT32_BE ( static_cast <int32_t> ( _BLITBUFFERRESAMPLED_LINEAR_ABSOURCEDATA_FLOAT32_LE * 2147483647.0f ) );
+							
+						}
+						break;
+						
+						case kAudioBufferType_Float32_BigEndian:
+						{
+							
+							for ( I = 0; I < SampleCount; I ++ )
+								_BLITBUFFERRESAMPLED_ABDESTDATA_INT32_BE ( static_cast <int32_t> ( _BLITBUFFERRESAMPLED_LINEAR_ABSOURCEDATA_FLOAT32_BE * 2147483647.0f ) );
+							
+						}
+						break;
+						
+						default:
+							break;
+						
+					}
+					
+				}
+				break;
+				
+				default:
+					break;
+				
+			}
 			
 		}
 		break;
@@ -3379,7 +3993,257 @@ void Red::Audio::AudioBuffer :: BlitBufferResampled ( AudioBuffer & Source, Resa
 		case kAudioBufferType_UInt32_LittleEndian:
 		{
 			
+			switch ( Mode )
+			{
+				
+				case kResampleMode_Nearest:
+				{
+					
+					switch ( Source.DataType )
+					{
+						
+						case kAudioBufferType_Int8:
+						{
+							
+							for ( I = 0; I < SampleCount; I ++ )
+								_BLITBUFFERRESAMPLED_ABDESTDATA_UINT32_LE ( static_cast <uint32_t> ( _BLITBUFFERRESAMPLED_NEAREST_ABSOURCEDATA_INT8 + 128 ) << 24 );
+							
+						}
+						break;
+						
+						case kAudioBufferType_UInt8:
+						{
+							
+							for ( I = 0; I < SampleCount; I ++ )
+								_BLITBUFFERRESAMPLED_ABDESTDATA_UINT32_LE ( _BLITBUFFERRESAMPLED_NEAREST_ABSOURCEDATA_UINT8 << 24 );
+							
+						}
+						break;
+						
+						case kAudioBufferType_Int16_LittleEndian:
+						{
+							
+							for ( I = 0; I < SampleCount; I ++ )
+								_BLITBUFFERRESAMPLED_ABDESTDATA_UINT32_LE ( static_cast <uint32_t> ( _BLITBUFFERRESAMPLED_NEAREST_ABSOURCEDATA_INT16_LE + 0x8000 ) << 16 );
+							
+						}
+						break;
+						
+						case kAudioBufferType_Int16_BigEndian:
+						{
+							
+							for ( I = 0; I < SampleCount; I ++ )
+								_BLITBUFFERRESAMPLED_ABDESTDATA_UINT32_LE ( static_cast <uint32_t> ( _BLITBUFFERRESAMPLED_NEAREST_ABSOURCEDATA_INT16_BE + 0x8000 ) << 16 );
+							
+						}
+						break;
+						
+						case kAudioBufferType_UInt16_LittleEndian:
+						{
+							
+							for ( I = 0; I < SampleCount; I ++ )
+								_BLITBUFFERRESAMPLED_ABDESTDATA_UINT32_LE ( _BLITBUFFERRESAMPLED_NEAREST_ABSOURCEDATA_UINT16_LE << 16 );
+							
+						}
+						break;
+						
+						case kAudioBufferType_UInt16_BigEndian:
+						{
+							
+							for ( I = 0; I < SampleCount; I ++ )
+								_BLITBUFFERRESAMPLED_ABDESTDATA_UINT32_LE ( _BLITBUFFERRESAMPLED_NEAREST_ABSOURCEDATA_UINT16_BE << 16 );
+							
+						}
+						break;
+						
+						case kAudioBufferType_Int32_LittleEndian:
+						{
+							
+							for ( I = 0; I < SampleCount; I ++ )
+								_BLITBUFFERRESAMPLED_ABDESTDATA_UINT32_LE ( static_cast <int64_t> ( _BLITBUFFERRESAMPLED_NEAREST_ABSOURCEDATA_INT32_LE ) + 0x80000000 );
+							
+						}
+						break;
+						
+						case kAudioBufferType_Int32_BigEndian:
+						{
+							
+							for ( I = 0; I < SampleCount; I ++ )
+								_BLITBUFFERRESAMPLED_ABDESTDATA_UINT32_LE ( static_cast <int64_t> ( _BLITBUFFERRESAMPLED_NEAREST_ABSOURCEDATA_INT32_BE ) + 0x80000000 );
+							
+						}
+						break;
+						
+						case kAudioBufferType_UInt32_LittleEndian:
+						{
+							
+							for ( I = 0; I < SampleCount; I ++ )
+								_BLITBUFFERRESAMPLED_ABDESTDATA_UINT32_LE ( _BLITBUFFERRESAMPLED_NEAREST_ABSOURCEDATA_UINT32_LE );
+							
+						}
+						break;
+						
+						case kAudioBufferType_UInt32_BigEndian:
+						{
+							
+							for ( I = 0; I < SampleCount; I ++ )
+								_BLITBUFFERRESAMPLED_ABDESTDATA_UINT32_LE ( _BLITBUFFERRESAMPLED_NEAREST_ABSOURCEDATA_UINT32_BE );
+							
+						}
+						break;
+						
+						case kAudioBufferType_Float32_LittleEndian:
+						{
+							
+							for ( I = 0; I < SampleCount; I ++ )
+								_BLITBUFFERRESAMPLED_ABDESTDATA_UINT32_LE ( static_cast <uint32_t> ( _BLITBUFFERRESAMPLED_NEAREST_ABSOURCEDATA_FLOAT32_LE * 2147483647.0f + 2147483648.0f ) );
+							
+						}
+						break;
+						
+						case kAudioBufferType_Float32_BigEndian:
+						{
+							
+							for ( I = 0; I < SampleCount; I ++ )
+								_BLITBUFFERRESAMPLED_ABDESTDATA_UINT32_LE ( static_cast <uint32_t> ( _BLITBUFFERRESAMPLED_NEAREST_ABSOURCEDATA_FLOAT32_BE * 2147483647.0f + 2147483648.0f ) );
+							
+						}
+						break;
+						
+						default:
+							break;
+						
+					}
+					
+				}
+				break;
+				
+				case kResampleMode_Linear:
+				{
+					
+					switch ( Source.DataType )
+					{
+						
+						case kAudioBufferType_Int8:
+						{
+							
+							for ( I = 0; I < SampleCount; I ++ )
+								_BLITBUFFERRESAMPLED_ABDESTDATA_UINT32_LE ( static_cast <uint32_t> ( _BLITBUFFERRESAMPLED_LINEAR_ABSOURCEDATA_INT8 + 128 ) << 24 );
+							
+						}
+						break;
+						
+						case kAudioBufferType_UInt8:
+						{
+							
+							for ( I = 0; I < SampleCount; I ++ )
+								_BLITBUFFERRESAMPLED_ABDESTDATA_UINT32_LE ( _BLITBUFFERRESAMPLED_LINEAR_ABSOURCEDATA_UINT8 << 24 );
+							
+						}
+						break;
+						
+						case kAudioBufferType_Int16_LittleEndian:
+						{
+							
+							for ( I = 0; I < SampleCount; I ++ )
+								_BLITBUFFERRESAMPLED_ABDESTDATA_UINT32_LE ( static_cast <uint32_t> ( _BLITBUFFERRESAMPLED_LINEAR_ABSOURCEDATA_INT16_LE + 0x8000 ) << 16 );
+							
+						}
+						break;
+						
+						case kAudioBufferType_Int16_BigEndian:
+						{
+							
+							for ( I = 0; I < SampleCount; I ++ )
+								_BLITBUFFERRESAMPLED_ABDESTDATA_UINT32_LE ( static_cast <uint32_t> ( _BLITBUFFERRESAMPLED_LINEAR_ABSOURCEDATA_INT16_BE + 0x8000 ) << 16 );
+							
+						}
+						break;
+						
+						case kAudioBufferType_UInt16_LittleEndian:
+						{
+							
+							for ( I = 0; I < SampleCount; I ++ )
+								_BLITBUFFERRESAMPLED_ABDESTDATA_UINT32_LE ( _BLITBUFFERRESAMPLED_LINEAR_ABSOURCEDATA_UINT16_LE << 16 );
+							
+						}
+						break;
+						
+						case kAudioBufferType_UInt16_BigEndian:
+						{
+							
+							for ( I = 0; I < SampleCount; I ++ )
+								_BLITBUFFERRESAMPLED_ABDESTDATA_UINT32_LE ( _BLITBUFFERRESAMPLED_LINEAR_ABSOURCEDATA_UINT16_BE << 16 );
+							
+						}
+						break;
+						
+						case kAudioBufferType_Int32_LittleEndian:
+						{
+							
+							for ( I = 0; I < SampleCount; I ++ )
+								_BLITBUFFERRESAMPLED_ABDESTDATA_UINT32_LE ( static_cast <int64_t> ( _BLITBUFFERRESAMPLED_LINEAR_ABSOURCEDATA_INT32_LE ) + 0x80000000 );
+							
+						}
+						break;
+						
+						case kAudioBufferType_Int32_BigEndian:
+						{
+							
+							for ( I = 0; I < SampleCount; I ++ )
+								_BLITBUFFERRESAMPLED_ABDESTDATA_UINT32_LE ( static_cast <int64_t> ( _BLITBUFFERRESAMPLED_LINEAR_ABSOURCEDATA_INT32_BE ) + 0x80000000 );
+							
+						}
+						break;
+						
+						case kAudioBufferType_UInt32_LittleEndian:
+						{
+							
+							for ( I = 0; I < SampleCount; I ++ )
+								_BLITBUFFERRESAMPLED_ABDESTDATA_UINT32_LE ( _BLITBUFFERRESAMPLED_LINEAR_ABSOURCEDATA_UINT32_LE );
+							
+						}
+						break;
+						
+						case kAudioBufferType_UInt32_BigEndian:
+						{
+							
+							for ( I = 0; I < SampleCount; I ++ )
+								_BLITBUFFERRESAMPLED_ABDESTDATA_UINT32_LE ( _BLITBUFFERRESAMPLED_LINEAR_ABSOURCEDATA_UINT32_BE );
+							
+						}
+						break;
+						
+						case kAudioBufferType_Float32_LittleEndian:
+						{
+							
+							for ( I = 0; I < SampleCount; I ++ )
+								_BLITBUFFERRESAMPLED_ABDESTDATA_UINT32_LE ( static_cast <uint32_t> ( _BLITBUFFERRESAMPLED_LINEAR_ABSOURCEDATA_FLOAT32_LE * 2147483647.0f + 2147483648.0f ) );
+							
+						}
+						break;
+						
+						case kAudioBufferType_Float32_BigEndian:
+						{
+							
+							for ( I = 0; I < SampleCount; I ++ )
+								_BLITBUFFERRESAMPLED_ABDESTDATA_UINT32_LE ( static_cast <uint32_t> ( _BLITBUFFERRESAMPLED_LINEAR_ABSOURCEDATA_FLOAT32_BE * 2147483647.0f + 2147483648.0f ) );
+							
+						}
+						break;
+						
+						default:
+							break;
+						
+					}
+					
+				}
+				break;
+				
+				default:
+					break;
 			
+			}
 			
 		}
 		break;
@@ -3387,7 +4251,257 @@ void Red::Audio::AudioBuffer :: BlitBufferResampled ( AudioBuffer & Source, Resa
 		case kAudioBufferType_UInt32_BigEndian:
 		{
 			
+			switch ( Mode )
+			{
+				
+				case kResampleMode_Nearest:
+				{
+					
+					switch ( Source.DataType )
+					{
+						
+						case kAudioBufferType_Int8:
+						{
+							
+							for ( I = 0; I < SampleCount; I ++ )
+								_BLITBUFFERRESAMPLED_ABDESTDATA_UINT32_BE ( static_cast <uint32_t> ( _BLITBUFFERRESAMPLED_NEAREST_ABSOURCEDATA_INT8 + 128 ) << 24 );
+							
+						}
+						break;
+						
+						case kAudioBufferType_UInt8:
+						{
+							
+							for ( I = 0; I < SampleCount; I ++ )
+								_BLITBUFFERRESAMPLED_ABDESTDATA_UINT32_BE ( _BLITBUFFERRESAMPLED_NEAREST_ABSOURCEDATA_UINT8 << 24 );
+							
+						}
+						break;
+						
+						case kAudioBufferType_Int16_LittleEndian:
+						{
+							
+							for ( I = 0; I < SampleCount; I ++ )
+								_BLITBUFFERRESAMPLED_ABDESTDATA_UINT32_BE ( static_cast <uint32_t> ( _BLITBUFFERRESAMPLED_NEAREST_ABSOURCEDATA_INT16_LE + 0x8000 ) << 16 );
+							
+						}
+						break;
+						
+						case kAudioBufferType_Int16_BigEndian:
+						{
+							
+							for ( I = 0; I < SampleCount; I ++ )
+								_BLITBUFFERRESAMPLED_ABDESTDATA_UINT32_BE ( static_cast <uint32_t> ( _BLITBUFFERRESAMPLED_NEAREST_ABSOURCEDATA_INT16_BE + 0x8000 ) << 16 );
+							
+						}
+						break;
+						
+						case kAudioBufferType_UInt16_LittleEndian:
+						{
+							
+							for ( I = 0; I < SampleCount; I ++ )
+								_BLITBUFFERRESAMPLED_ABDESTDATA_UINT32_BE ( _BLITBUFFERRESAMPLED_NEAREST_ABSOURCEDATA_UINT16_LE << 16 );
+							
+						}
+						break;
+						
+						case kAudioBufferType_UInt16_BigEndian:
+						{
+							
+							for ( I = 0; I < SampleCount; I ++ )
+								_BLITBUFFERRESAMPLED_ABDESTDATA_UINT32_BE ( _BLITBUFFERRESAMPLED_NEAREST_ABSOURCEDATA_UINT16_BE << 16 );
+							
+						}
+						break;
+						
+						case kAudioBufferType_Int32_LittleEndian:
+						{
+							
+							for ( I = 0; I < SampleCount; I ++ )
+								_BLITBUFFERRESAMPLED_ABDESTDATA_UINT32_BE ( static_cast <int64_t> ( _BLITBUFFERRESAMPLED_NEAREST_ABSOURCEDATA_INT32_LE ) + 0x80000000 );
+							
+						}
+						break;
+						
+						case kAudioBufferType_Int32_BigEndian:
+						{
+							
+							for ( I = 0; I < SampleCount; I ++ )
+								_BLITBUFFERRESAMPLED_ABDESTDATA_UINT32_BE ( static_cast <int64_t> ( _BLITBUFFERRESAMPLED_NEAREST_ABSOURCEDATA_INT32_BE ) + 0x80000000 );
+							
+						}
+						break;
+						
+						case kAudioBufferType_UInt32_LittleEndian:
+						{
+							
+							for ( I = 0; I < SampleCount; I ++ )
+								_BLITBUFFERRESAMPLED_ABDESTDATA_UINT32_BE ( _BLITBUFFERRESAMPLED_NEAREST_ABSOURCEDATA_UINT32_LE );
+							
+						}
+						break;
+						
+						case kAudioBufferType_UInt32_BigEndian:
+						{
+							
+							for ( I = 0; I < SampleCount; I ++ )
+								_BLITBUFFERRESAMPLED_ABDESTDATA_UINT32_BE ( _BLITBUFFERRESAMPLED_NEAREST_ABSOURCEDATA_UINT32_BE );
+							
+						}
+						break;
+						
+						case kAudioBufferType_Float32_LittleEndian:
+						{
+							
+							for ( I = 0; I < SampleCount; I ++ )
+								_BLITBUFFERRESAMPLED_ABDESTDATA_UINT32_BE ( static_cast <uint32_t> ( _BLITBUFFERRESAMPLED_NEAREST_ABSOURCEDATA_FLOAT32_LE * 2147483647.0f + 2147483648.0f ) );
+							
+						}
+						break;
+						
+						case kAudioBufferType_Float32_BigEndian:
+						{
+							
+							for ( I = 0; I < SampleCount; I ++ )
+								_BLITBUFFERRESAMPLED_ABDESTDATA_UINT32_BE ( static_cast <uint32_t> ( _BLITBUFFERRESAMPLED_NEAREST_ABSOURCEDATA_FLOAT32_BE * 2147483647.0f + 2147483648.0f ) );
+							
+						}
+						break;
+						
+						default:
+							break;
+						
+					}
+					
+				}
+				break;
+				
+				case kResampleMode_Linear:
+				{
+					
+					switch ( Source.DataType )
+					{
+						
+						case kAudioBufferType_Int8:
+						{
+							
+							for ( I = 0; I < SampleCount; I ++ )
+								_BLITBUFFERRESAMPLED_ABDESTDATA_UINT32_BE ( static_cast <uint32_t> ( _BLITBUFFERRESAMPLED_LINEAR_ABSOURCEDATA_INT8 + 128 ) << 24 );
+							
+						}
+						break;
+						
+						case kAudioBufferType_UInt8:
+						{
+							
+							for ( I = 0; I < SampleCount; I ++ )
+								_BLITBUFFERRESAMPLED_ABDESTDATA_UINT32_BE ( _BLITBUFFERRESAMPLED_LINEAR_ABSOURCEDATA_UINT8 << 24 );
+							
+						}
+						break;
+						
+						case kAudioBufferType_Int16_LittleEndian:
+						{
+							
+							for ( I = 0; I < SampleCount; I ++ )
+								_BLITBUFFERRESAMPLED_ABDESTDATA_UINT32_BE ( static_cast <uint32_t> ( _BLITBUFFERRESAMPLED_LINEAR_ABSOURCEDATA_INT16_LE + 0x8000 ) << 16 );
+							
+						}
+						break;
+						
+						case kAudioBufferType_Int16_BigEndian:
+						{
+							
+							for ( I = 0; I < SampleCount; I ++ )
+								_BLITBUFFERRESAMPLED_ABDESTDATA_UINT32_BE ( static_cast <uint32_t> ( _BLITBUFFERRESAMPLED_LINEAR_ABSOURCEDATA_INT16_BE + 0x8000 ) << 16 );
+							
+						}
+						break;
+						
+						case kAudioBufferType_UInt16_LittleEndian:
+						{
+							
+							for ( I = 0; I < SampleCount; I ++ )
+								_BLITBUFFERRESAMPLED_ABDESTDATA_UINT32_BE ( _BLITBUFFERRESAMPLED_LINEAR_ABSOURCEDATA_UINT16_LE << 16 );
+							
+						}
+						break;
+						
+						case kAudioBufferType_UInt16_BigEndian:
+						{
+							
+							for ( I = 0; I < SampleCount; I ++ )
+								_BLITBUFFERRESAMPLED_ABDESTDATA_UINT32_BE ( _BLITBUFFERRESAMPLED_LINEAR_ABSOURCEDATA_UINT16_BE << 16 );
+							
+						}
+						break;
+						
+						case kAudioBufferType_Int32_LittleEndian:
+						{
+							
+							for ( I = 0; I < SampleCount; I ++ )
+								_BLITBUFFERRESAMPLED_ABDESTDATA_UINT32_BE ( static_cast <int64_t> ( _BLITBUFFERRESAMPLED_LINEAR_ABSOURCEDATA_INT32_LE ) + 0x80000000 );
+							
+						}
+						break;
+						
+						case kAudioBufferType_Int32_BigEndian:
+						{
+							
+							for ( I = 0; I < SampleCount; I ++ )
+								_BLITBUFFERRESAMPLED_ABDESTDATA_UINT32_BE ( static_cast <int64_t> ( _BLITBUFFERRESAMPLED_LINEAR_ABSOURCEDATA_INT32_BE ) + 0x80000000 );
+							
+						}
+						break;
+						
+						case kAudioBufferType_UInt32_LittleEndian:
+						{
+							
+							for ( I = 0; I < SampleCount; I ++ )
+								_BLITBUFFERRESAMPLED_ABDESTDATA_UINT32_BE ( _BLITBUFFERRESAMPLED_LINEAR_ABSOURCEDATA_UINT32_LE );
+							
+						}
+						break;
+						
+						case kAudioBufferType_UInt32_BigEndian:
+						{
+							
+							for ( I = 0; I < SampleCount; I ++ )
+								_BLITBUFFERRESAMPLED_ABDESTDATA_UINT32_BE ( _BLITBUFFERRESAMPLED_LINEAR_ABSOURCEDATA_UINT32_BE );
+							
+						}
+						break;
+						
+						case kAudioBufferType_Float32_LittleEndian:
+						{
+							
+							for ( I = 0; I < SampleCount; I ++ )
+								_BLITBUFFERRESAMPLED_ABDESTDATA_UINT32_BE ( static_cast <uint32_t> ( _BLITBUFFERRESAMPLED_LINEAR_ABSOURCEDATA_FLOAT32_LE * 2147483647.0f + 2147483648.0f ) );
+							
+						}
+						break;
+						
+						case kAudioBufferType_Float32_BigEndian:
+						{
+							
+							for ( I = 0; I < SampleCount; I ++ )
+								_BLITBUFFERRESAMPLED_ABDESTDATA_UINT32_BE ( static_cast <uint32_t> ( _BLITBUFFERRESAMPLED_LINEAR_ABSOURCEDATA_FLOAT32_BE * 2147483647.0f + 2147483648.0f ) );
+							
+						}
+						break;
+						
+						default:
+							break;
+						
+					}
+					
+				}
+				break;
+				
+				default:
+					break;
 			
+			}
 			
 		}
 		break;
@@ -3395,7 +4509,257 @@ void Red::Audio::AudioBuffer :: BlitBufferResampled ( AudioBuffer & Source, Resa
 		case kAudioBufferType_Float32_LittleEndian:
 		{
 			
-			
+			switch ( Mode )
+			{
+				
+				case kResampleMode_Nearest:
+				{
+					
+					switch ( Source.DataType )
+					{
+						
+						case kAudioBufferType_Int8:
+						{
+							
+							for ( I = 0; I < SampleCount; I ++ )
+								_BLITBUFFERRESAMPLED_ABDESTDATA_FLOAT32_LE ( static_cast <float> ( _BLITBUFFERRESAMPLED_NEAREST_ABSOURCEDATA_INT8 ) / 128.0f );
+							
+						}
+						break;
+						
+						case kAudioBufferType_UInt8:
+						{
+							
+							for ( I = 0; I < SampleCount; I ++ )
+								_BLITBUFFERRESAMPLED_ABDESTDATA_FLOAT32_LE ( static_cast <float> ( _BLITBUFFERRESAMPLED_NEAREST_ABSOURCEDATA_UINT8 ) / 127.5f - 1.0f );
+							
+						}
+						break;
+						
+						case kAudioBufferType_Int16_LittleEndian:
+						{
+							
+							for ( I = 0; I < SampleCount; I ++ )
+								_BLITBUFFERRESAMPLED_ABDESTDATA_FLOAT32_LE ( static_cast <float> ( _BLITBUFFERRESAMPLED_NEAREST_ABSOURCEDATA_INT16_LE ) / 32768.0f );
+							
+						}
+						break;
+						
+						case kAudioBufferType_Int16_BigEndian:
+						{
+							
+							for ( I = 0; I < SampleCount; I ++ )
+								_BLITBUFFERRESAMPLED_ABDESTDATA_FLOAT32_LE ( static_cast <float> ( _BLITBUFFERRESAMPLED_NEAREST_ABSOURCEDATA_INT16_BE ) / 32768.0f );
+							
+						}
+						break;
+						
+						case kAudioBufferType_UInt16_LittleEndian:
+						{
+							
+							for ( I = 0; I < SampleCount; I ++ )
+								_BLITBUFFERRESAMPLED_ABDESTDATA_FLOAT32_LE ( static_cast <float> ( _BLITBUFFERRESAMPLED_NEAREST_ABSOURCEDATA_UINT16_LE ) / 32767.5f - 1.0f );
+							
+						}
+						break;
+						
+						case kAudioBufferType_UInt16_BigEndian:
+						{
+							
+							for ( I = 0; I < SampleCount; I ++ )
+								_BLITBUFFERRESAMPLED_ABDESTDATA_FLOAT32_LE ( static_cast <float> ( _BLITBUFFERRESAMPLED_NEAREST_ABSOURCEDATA_UINT16_BE ) / 32767.5f - 1.0f );
+							
+						}
+						break;
+						
+						case kAudioBufferType_Int32_LittleEndian:
+						{
+							
+							for ( I = 0; I < SampleCount; I ++ )
+								_BLITBUFFERRESAMPLED_ABDESTDATA_FLOAT32_LE ( static_cast <float> ( _BLITBUFFERRESAMPLED_NEAREST_ABSOURCEDATA_INT32_LE ) / 2147483648.0f );
+							
+						}
+						break;
+						
+						case kAudioBufferType_Int32_BigEndian:
+						{
+							
+							for ( I = 0; I < SampleCount; I ++ )
+								_BLITBUFFERRESAMPLED_ABDESTDATA_FLOAT32_LE ( static_cast <float> ( _BLITBUFFERRESAMPLED_NEAREST_ABSOURCEDATA_INT32_BE ) / 2147483648.0f );
+							
+						}
+						break;
+						
+						case kAudioBufferType_UInt32_LittleEndian:
+						{
+							
+							for ( I = 0; I < SampleCount; I ++ )
+								_BLITBUFFERRESAMPLED_ABDESTDATA_FLOAT32_LE ( static_cast <float> ( _BLITBUFFERRESAMPLED_NEAREST_ABSOURCEDATA_UINT32_LE ) / 2147483647.5f - 1.0f );
+							
+						}
+						break;
+						
+						case kAudioBufferType_UInt32_BigEndian:
+						{
+							
+							for ( I = 0; I < SampleCount; I ++ )
+								_BLITBUFFERRESAMPLED_ABDESTDATA_FLOAT32_LE ( static_cast <float> ( _BLITBUFFERRESAMPLED_NEAREST_ABSOURCEDATA_UINT32_BE ) / 2147483647.5f - 1.0f );
+							
+						}
+						break;
+						
+						case kAudioBufferType_Float32_LittleEndian:
+						{
+							
+							for ( I = 0; I < SampleCount; I ++ )
+								_BLITBUFFERRESAMPLED_ABDESTDATA_FLOAT32_LE ( _BLITBUFFERRESAMPLED_NEAREST_ABSOURCEDATA_FLOAT32_LE );
+							
+						}
+						break;
+						
+						case kAudioBufferType_Float32_BigEndian:
+						{
+							
+							for ( I = 0; I < SampleCount; I ++ )
+								_BLITBUFFERRESAMPLED_ABDESTDATA_FLOAT32_LE ( _BLITBUFFERRESAMPLED_NEAREST_ABSOURCEDATA_FLOAT32_BE );
+							
+						}
+						break;
+						
+						default:
+							break;
+						
+					}
+					
+				}
+				break;
+				
+				case kResampleMode_Linear:
+				{
+					
+					switch ( Source.DataType )
+					{
+						
+						case kAudioBufferType_Int8:
+						{
+							
+							for ( I = 0; I < SampleCount; I ++ )
+								_BLITBUFFERRESAMPLED_ABDESTDATA_FLOAT32_LE ( static_cast <float> ( _BLITBUFFERRESAMPLED_LINEAR_ABSOURCEDATA_INT8 ) / 128.0f );
+							
+						}
+						break;
+						
+						case kAudioBufferType_UInt8:
+						{
+							
+							for ( I = 0; I < SampleCount; I ++ )
+								_BLITBUFFERRESAMPLED_ABDESTDATA_FLOAT32_LE ( static_cast <float> ( _BLITBUFFERRESAMPLED_LINEAR_ABSOURCEDATA_UINT8 ) / 127.5f - 1.0f );
+							
+						}
+						break;
+						
+						case kAudioBufferType_Int16_LittleEndian:
+						{
+							
+							for ( I = 0; I < SampleCount; I ++ )
+								_BLITBUFFERRESAMPLED_ABDESTDATA_FLOAT32_LE ( static_cast <float> ( _BLITBUFFERRESAMPLED_LINEAR_ABSOURCEDATA_INT16_LE ) / 32768.0f );
+							
+						}
+						break;
+						
+						case kAudioBufferType_Int16_BigEndian:
+						{
+							
+							for ( I = 0; I < SampleCount; I ++ )
+								_BLITBUFFERRESAMPLED_ABDESTDATA_FLOAT32_LE ( static_cast <float> ( _BLITBUFFERRESAMPLED_LINEAR_ABSOURCEDATA_INT16_BE ) / 32768.0f );
+							
+						}
+						break;
+						
+						case kAudioBufferType_UInt16_LittleEndian:
+						{
+							
+							for ( I = 0; I < SampleCount; I ++ )
+								_BLITBUFFERRESAMPLED_ABDESTDATA_FLOAT32_LE ( static_cast <float> ( _BLITBUFFERRESAMPLED_LINEAR_ABSOURCEDATA_UINT16_LE ) / 32767.5f - 1.0f );
+							
+						}
+						break;
+						
+						case kAudioBufferType_UInt16_BigEndian:
+						{
+							
+							for ( I = 0; I < SampleCount; I ++ )
+								_BLITBUFFERRESAMPLED_ABDESTDATA_FLOAT32_LE ( static_cast <float> ( _BLITBUFFERRESAMPLED_LINEAR_ABSOURCEDATA_UINT16_BE ) / 32767.5f - 1.0f );
+							
+						}
+						break;
+						
+						case kAudioBufferType_Int32_LittleEndian:
+						{
+							
+							for ( I = 0; I < SampleCount; I ++ )
+								_BLITBUFFERRESAMPLED_ABDESTDATA_FLOAT32_LE ( static_cast <float> ( _BLITBUFFERRESAMPLED_LINEAR_ABSOURCEDATA_INT32_LE ) / 2147483648.0f );
+							
+						}
+						break;
+						
+						case kAudioBufferType_Int32_BigEndian:
+						{
+							
+							for ( I = 0; I < SampleCount; I ++ )
+								_BLITBUFFERRESAMPLED_ABDESTDATA_FLOAT32_LE ( static_cast <float> ( _BLITBUFFERRESAMPLED_LINEAR_ABSOURCEDATA_INT32_BE ) / 2147483648.0f );
+							
+						}
+						break;
+						
+						case kAudioBufferType_UInt32_LittleEndian:
+						{
+							
+							for ( I = 0; I < SampleCount; I ++ )
+								_BLITBUFFERRESAMPLED_ABDESTDATA_FLOAT32_LE ( static_cast <float> ( _BLITBUFFERRESAMPLED_LINEAR_ABSOURCEDATA_UINT32_LE ) / 2147483647.5f - 1.0f );
+							
+						}
+						break;
+						
+						case kAudioBufferType_UInt32_BigEndian:
+						{
+							
+							for ( I = 0; I < SampleCount; I ++ )
+								_BLITBUFFERRESAMPLED_ABDESTDATA_FLOAT32_LE ( static_cast <float> ( _BLITBUFFERRESAMPLED_LINEAR_ABSOURCEDATA_UINT32_BE ) / 2147483647.5f - 1.0f );
+							
+						}
+						break;
+						
+						case kAudioBufferType_Float32_LittleEndian:
+						{
+							
+							for ( I = 0; I < SampleCount; I ++ )
+								_BLITBUFFERRESAMPLED_ABDESTDATA_FLOAT32_LE ( _BLITBUFFERRESAMPLED_LINEAR_ABSOURCEDATA_FLOAT32_LE );
+							
+						}
+						break;
+						
+						case kAudioBufferType_Float32_BigEndian:
+						{
+							
+							for ( I = 0; I < SampleCount; I ++ )
+								_BLITBUFFERRESAMPLED_ABDESTDATA_FLOAT32_LE ( _BLITBUFFERRESAMPLED_LINEAR_ABSOURCEDATA_FLOAT32_BE );
+							
+						}
+						break;
+						
+						default:
+							break;
+						
+					}
+					
+				}
+				break;
+				
+				default:
+					break;
+				
+			}
 			
 		}
 		break;
@@ -3403,7 +4767,257 @@ void Red::Audio::AudioBuffer :: BlitBufferResampled ( AudioBuffer & Source, Resa
 		case kAudioBufferType_Float32_BigEndian:
 		{
 			
-			
+			switch ( Mode )
+			{
+				
+				case kResampleMode_Nearest:
+				{
+					
+					switch ( Source.DataType )
+					{
+						
+						case kAudioBufferType_Int8:
+						{
+							
+							for ( I = 0; I < SampleCount; I ++ )
+								_BLITBUFFERRESAMPLED_ABDESTDATA_FLOAT32_BE ( static_cast <float> ( _BLITBUFFERRESAMPLED_NEAREST_ABSOURCEDATA_INT8 ) / 128.0f );
+							
+						}
+						break;
+						
+						case kAudioBufferType_UInt8:
+						{
+							
+							for ( I = 0; I < SampleCount; I ++ )
+								_BLITBUFFERRESAMPLED_ABDESTDATA_FLOAT32_BE ( static_cast <float> ( _BLITBUFFERRESAMPLED_NEAREST_ABSOURCEDATA_UINT8 ) / 127.5f - 1.0f );
+							
+						}
+						break;
+						
+						case kAudioBufferType_Int16_LittleEndian:
+						{
+							
+							for ( I = 0; I < SampleCount; I ++ )
+								_BLITBUFFERRESAMPLED_ABDESTDATA_FLOAT32_BE ( static_cast <float> ( _BLITBUFFERRESAMPLED_NEAREST_ABSOURCEDATA_INT16_LE ) / 32768.0f );
+							
+						}
+						break;
+						
+						case kAudioBufferType_Int16_BigEndian:
+						{
+							
+							for ( I = 0; I < SampleCount; I ++ )
+								_BLITBUFFERRESAMPLED_ABDESTDATA_FLOAT32_BE ( static_cast <float> ( _BLITBUFFERRESAMPLED_NEAREST_ABSOURCEDATA_INT16_BE ) / 32768.0f );
+							
+						}
+						break;
+						
+						case kAudioBufferType_UInt16_LittleEndian:
+						{
+							
+							for ( I = 0; I < SampleCount; I ++ )
+								_BLITBUFFERRESAMPLED_ABDESTDATA_FLOAT32_BE ( static_cast <float> ( _BLITBUFFERRESAMPLED_NEAREST_ABSOURCEDATA_UINT16_LE ) / 32767.5f - 1.0f );
+							
+						}
+						break;
+						
+						case kAudioBufferType_UInt16_BigEndian:
+						{
+							
+							for ( I = 0; I < SampleCount; I ++ )
+								_BLITBUFFERRESAMPLED_ABDESTDATA_FLOAT32_BE ( static_cast <float> ( _BLITBUFFERRESAMPLED_NEAREST_ABSOURCEDATA_UINT16_BE ) / 32767.5f - 1.0f );
+							
+						}
+						break;
+						
+						case kAudioBufferType_Int32_LittleEndian:
+						{
+							
+							for ( I = 0; I < SampleCount; I ++ )
+								_BLITBUFFERRESAMPLED_ABDESTDATA_FLOAT32_BE ( static_cast <float> ( _BLITBUFFERRESAMPLED_NEAREST_ABSOURCEDATA_INT32_LE ) / 2147483648.0f );
+							
+						}
+						break;
+						
+						case kAudioBufferType_Int32_BigEndian:
+						{
+							
+							for ( I = 0; I < SampleCount; I ++ )
+								_BLITBUFFERRESAMPLED_ABDESTDATA_FLOAT32_BE ( static_cast <float> ( _BLITBUFFERRESAMPLED_NEAREST_ABSOURCEDATA_INT32_BE ) / 2147483648.0f );
+							
+						}
+						break;
+						
+						case kAudioBufferType_UInt32_LittleEndian:
+						{
+							
+							for ( I = 0; I < SampleCount; I ++ )
+								_BLITBUFFERRESAMPLED_ABDESTDATA_FLOAT32_BE ( static_cast <float> ( _BLITBUFFERRESAMPLED_NEAREST_ABSOURCEDATA_UINT32_LE ) / 2147483647.5f - 1.0f );
+							
+						}
+						break;
+						
+						case kAudioBufferType_UInt32_BigEndian:
+						{
+							
+							for ( I = 0; I < SampleCount; I ++ )
+								_BLITBUFFERRESAMPLED_ABDESTDATA_FLOAT32_BE ( static_cast <float> ( _BLITBUFFERRESAMPLED_NEAREST_ABSOURCEDATA_UINT32_BE ) / 2147483647.5f - 1.0f );
+							
+						}
+						break;
+						
+						case kAudioBufferType_Float32_LittleEndian:
+						{
+							
+							for ( I = 0; I < SampleCount; I ++ )
+								_BLITBUFFERRESAMPLED_ABDESTDATA_FLOAT32_BE ( _BLITBUFFERRESAMPLED_NEAREST_ABSOURCEDATA_FLOAT32_LE );
+							
+						}
+						break;
+						
+						case kAudioBufferType_Float32_BigEndian:
+						{
+							
+							for ( I = 0; I < SampleCount; I ++ )
+								_BLITBUFFERRESAMPLED_ABDESTDATA_FLOAT32_BE ( _BLITBUFFERRESAMPLED_NEAREST_ABSOURCEDATA_FLOAT32_BE );
+							
+						}
+						break;
+						
+						default:
+							break;
+						
+					}
+					
+				}
+				break;
+				
+				case kResampleMode_Linear:
+				{
+					
+					switch ( Source.DataType )
+					{
+						
+						case kAudioBufferType_Int8:
+						{
+							
+							for ( I = 0; I < SampleCount; I ++ )
+								_BLITBUFFERRESAMPLED_ABDESTDATA_FLOAT32_BE ( static_cast <float> ( _BLITBUFFERRESAMPLED_LINEAR_ABSOURCEDATA_INT8 ) / 128.0f );
+							
+						}
+						break;
+						
+						case kAudioBufferType_UInt8:
+						{
+							
+							for ( I = 0; I < SampleCount; I ++ )
+								_BLITBUFFERRESAMPLED_ABDESTDATA_FLOAT32_BE ( static_cast <float> ( _BLITBUFFERRESAMPLED_LINEAR_ABSOURCEDATA_UINT8 ) / 127.5f - 1.0f );
+							
+						}
+						break;
+						
+						case kAudioBufferType_Int16_LittleEndian:
+						{
+							
+							for ( I = 0; I < SampleCount; I ++ )
+								_BLITBUFFERRESAMPLED_ABDESTDATA_FLOAT32_BE ( static_cast <float> ( _BLITBUFFERRESAMPLED_LINEAR_ABSOURCEDATA_INT16_LE ) / 32768.0f );
+							
+						}
+						break;
+						
+						case kAudioBufferType_Int16_BigEndian:
+						{
+							
+							for ( I = 0; I < SampleCount; I ++ )
+								_BLITBUFFERRESAMPLED_ABDESTDATA_FLOAT32_BE ( static_cast <float> ( _BLITBUFFERRESAMPLED_LINEAR_ABSOURCEDATA_INT16_BE ) / 32768.0f );
+							
+						}
+						break;
+						
+						case kAudioBufferType_UInt16_LittleEndian:
+						{
+							
+							for ( I = 0; I < SampleCount; I ++ )
+								_BLITBUFFERRESAMPLED_ABDESTDATA_FLOAT32_BE ( static_cast <float> ( _BLITBUFFERRESAMPLED_LINEAR_ABSOURCEDATA_UINT16_LE ) / 32767.5f - 1.0f );
+							
+						}
+						break;
+						
+						case kAudioBufferType_UInt16_BigEndian:
+						{
+							
+							for ( I = 0; I < SampleCount; I ++ )
+								_BLITBUFFERRESAMPLED_ABDESTDATA_FLOAT32_BE ( static_cast <float> ( _BLITBUFFERRESAMPLED_LINEAR_ABSOURCEDATA_UINT16_BE ) / 32767.5f - 1.0f );
+							
+						}
+						break;
+						
+						case kAudioBufferType_Int32_LittleEndian:
+						{
+							
+							for ( I = 0; I < SampleCount; I ++ )
+								_BLITBUFFERRESAMPLED_ABDESTDATA_FLOAT32_BE ( static_cast <float> ( _BLITBUFFERRESAMPLED_LINEAR_ABSOURCEDATA_INT32_LE ) / 2147483648.0f );
+							
+						}
+						break;
+						
+						case kAudioBufferType_Int32_BigEndian:
+						{
+							
+							for ( I = 0; I < SampleCount; I ++ )
+								_BLITBUFFERRESAMPLED_ABDESTDATA_FLOAT32_BE ( static_cast <float> ( _BLITBUFFERRESAMPLED_LINEAR_ABSOURCEDATA_INT32_BE ) / 2147483648.0f );
+							
+						}
+						break;
+						
+						case kAudioBufferType_UInt32_LittleEndian:
+						{
+							
+							for ( I = 0; I < SampleCount; I ++ )
+								_BLITBUFFERRESAMPLED_ABDESTDATA_FLOAT32_BE ( static_cast <float> ( _BLITBUFFERRESAMPLED_LINEAR_ABSOURCEDATA_UINT32_LE ) / 2147483647.5f - 1.0f );
+							
+						}
+						break;
+						
+						case kAudioBufferType_UInt32_BigEndian:
+						{
+							
+							for ( I = 0; I < SampleCount; I ++ )
+								_BLITBUFFERRESAMPLED_ABDESTDATA_FLOAT32_BE ( static_cast <float> ( _BLITBUFFERRESAMPLED_LINEAR_ABSOURCEDATA_UINT32_BE ) / 2147483647.5f - 1.0f );
+							
+						}
+						break;
+						
+						case kAudioBufferType_Float32_LittleEndian:
+						{
+							
+							for ( I = 0; I < SampleCount; I ++ )
+								_BLITBUFFERRESAMPLED_ABDESTDATA_FLOAT32_BE ( _BLITBUFFERRESAMPLED_LINEAR_ABSOURCEDATA_FLOAT32_LE );
+							
+						}
+						break;
+						
+						case kAudioBufferType_Float32_BigEndian:
+						{
+							
+							for ( I = 0; I < SampleCount; I ++ )
+								_BLITBUFFERRESAMPLED_ABDESTDATA_FLOAT32_BE ( _BLITBUFFERRESAMPLED_LINEAR_ABSOURCEDATA_FLOAT32_BE );
+							
+						}
+						break;
+						
+						default:
+							break;
+						
+					}
+					
+				}
+				break;
+				
+				default:
+					break;
+				
+			}
 			
 		}
 		break;
@@ -3412,8 +5026,6 @@ void Red::Audio::AudioBuffer :: BlitBufferResampled ( AudioBuffer & Source, Resa
 			break;
 		
 	}
-	
-	// TODO: Implement
 	
 }
 

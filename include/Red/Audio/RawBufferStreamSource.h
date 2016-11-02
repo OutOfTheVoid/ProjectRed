@@ -22,16 +22,21 @@ namespace Red
 		{
 		public:
 			
-			RawBufferStreamSource ( AudioBuffer * SourceData, uint32_t Channel = 0, uint64_t Offset = 0, uint64_t FinishPoint = 0xFFFFFFFFFFFFFFFFULL );
+			RawBufferStreamSource ( AudioBuffer * SourceData, uint32_t Channel = 0, uint64_t Offset = 0, uint64_t FinishPoint = 0xFFFFFFFFFFFFFFFFULL, uint64_t StartDelay = 0, bool InitiallyPlaying = true );
 			~RawBufferStreamSource ();
 			
-			void SetFinishedCallback ( Util :: IFunction1 <bool, RawBufferStreamSource *> * Callback = NULL );
+			void ResetDelayCounter ( uint64_t DelayCounter = 0 );
+			void SetStartDelay ( uint64_t StartDelay );
+			void SetFinishedCallback ( Util :: IFunction1 <void, RawBufferStreamSource *> * Callback = NULL );
 			void SetOffset ( uint64_t Offset );
 			void SetFinishPoint ( uint64_t Finish );
 			
-			void SetExpectedFillSize ( uint32_t FillSize );
+			void SetPlaying ( bool Playing );
 			
-			void ResetSource ( AudioBuffer * SourceData, uint32_t Channel = 0, uint64_t Offset = 0, uint64_t FinishPoint = 0xFFFFFFFFFFFFFFFFULL );
+			void ResetSource ( AudioBuffer * SourceData, uint32_t Channel = 0, uint64_t Offset = 0, uint64_t FinishPoint = 0xFFFFFFFFFFFFFFFFULL, uint64_t StartDelay = 0, bool InitiallyPlaying = true );
+			
+			// IStreamSource
+			void SetExpectedFillSize ( uint32_t FillSize );
 			
 			StreamFillCode FillAudioBuffer ( AudioBuffer * Buffer, uint32_t TargetChannel );
 			
@@ -44,7 +49,12 @@ namespace Red
 			uint64_t Offset;
 			uint64_t FinishOffset;
 			
-			Util :: IFunction1 <bool, RawBufferStreamSource *> * FinishedCallback;
+			uint64_t StartDelay;
+			uint64_t DelayCounter;
+			
+			bool Playing;
+			
+			Util :: IFunction1 <void, RawBufferStreamSource *> * FinishedCallback;
 			
 			Threading :: Mutex Lock;
 			

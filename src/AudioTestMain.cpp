@@ -27,7 +27,7 @@ void WindowCloseEvent ( SDL_WindowEvent * Event, SDLX::Window * Win, void * Data
 
 void FillAudioData ( uint32_t & Counter, uint8_t * DataBuffer, int PacketLength );
 
-bool DoRepeateSource ( Red::Audio :: RawBufferStreamSource * Source );
+void DoRepeateSource ( Red::Audio :: RawBufferStreamSource * Source );
 
 int main ( int argc, char const * argv [] )
 {
@@ -63,7 +63,6 @@ int main ( int argc, char const * argv [] )
 	TestWAV.Load ( & Status );
 	
 	Red::Audio :: AudioBuffer * FileBuffer = NULL;
-	Red::Audio::AudioBuffer * ResampleBuffer = NULL;
 	
 	if ( Status == RAUX :: WAVFile :: kStatus_Success )
 	{
@@ -75,8 +74,6 @@ int main ( int argc, char const * argv [] )
 			
 			std :: cout << "WAV Load success!" << std :: endl;
 			
-			ResampleBuffer = Red::Audio::AudioBuffer :: CopyReformatedResampled ( * FileBuffer, Red::Audio::AudioBuffer :: kResampleMode_Linear, FileBuffer -> GetDataType (), 3.0 );
-			
 		}
 		
 		TestWAV.Close ( & Status );
@@ -86,16 +83,19 @@ int main ( int argc, char const * argv [] )
 		std :: cout << "WAV Load failure: " << Status << std :: endl;
 		
 	
-	Red::Audio :: RawBufferStreamSource WAVSourceLeftChannel ( ResampleBuffer, 0 );
-	Red::Audio :: RawBufferStreamSource WAVSourceRightChannel ( ResampleBuffer, 1 );
+	Red::Audio :: RawBufferStreamSource WAVSourceLeftChannel ( FileBuffer, 0 );
+	Red::Audio :: RawBufferStreamSource WAVSourceRightChannel ( FileBuffer, 1 );
 	
-	Red::Util :: Function1 <bool, Red::Audio :: RawBufferStreamSource *> RepeatePTR ( & DoRepeateSource );
+	Red::Util :: Function1 <void, Red::Audio :: RawBufferStreamSource *> RepeatePTR ( & DoRepeateSource );
 	
 	WAVSourceLeftChannel.Reference ();
 	WAVSourceRightChannel.Reference ();
 	
 	WAVSourceLeftChannel.SetFinishedCallback ( & RepeatePTR );
 	WAVSourceRightChannel.SetFinishedCallback ( & RepeatePTR );
+	
+	WAVSourceLeftChannel.SetOffset ( 80000 );
+	WAVSourceRightChannel.SetOffset ( 80000 );
 	
 	/*================================*/
 	
@@ -138,12 +138,13 @@ int main ( int argc, char const * argv [] )
 
 }
 
-bool DoRepeateSource ( Red::Audio :: RawBufferStreamSource * Source )
+void DoRepeateSource ( Red::Audio :: RawBufferStreamSource * Source )
 {
 	
 	Source -> SetOffset ( 0 );
+	Source -> SetPlaying ( true );
 	
-	return true;
+	return;
 	
 }
 

@@ -127,7 +127,38 @@ void Red::Audio::AudioStreamOutput :: AudioCallback ( uint8_t * Data, int DataSi
 	{
 		
 		if ( Sources [ I ] != NULL )
-			Sources [ I ] -> FillAudioBuffer ( & FillBuffer, I );
+		{
+			
+			IStreamSource :: StreamFillCode FillCode = Sources [ I ] -> FillAudioBuffer ( & FillBuffer, I );
+			
+			switch ( FillCode )
+			{
+				
+				case IStreamSource :: kStreamFillCode_Success_Normal:
+					break;
+				
+				case IStreamSource :: kStreamFillCode_Success_ControlParameter_Constant:	
+				case IStreamSource :: kStreamFillCode_Success_DC:
+				{
+					
+					if ( ( FillBuffer.GetDataType () == kAudioBufferType_Float32_LittleEndian ) || ( FillBuffer.GetDataType () == kAudioBufferType_Float32_BigEndian ) )
+						FillBuffer.ClearBufferFloat ( I, FillBuffer.ReadSampleFloat ( I, 0 ) );
+					else
+						FillBuffer.ClearBufferInt ( I, FillBuffer.ReadSampleInt ( I, 0 ) );
+					
+				}
+				break;
+				
+				case IStreamSource :: kStreamFillCode_Success_Silence:
+				default:
+					
+					FillBuffer.ClearBufferInt ( I );
+					
+					break;
+				
+			}
+			
+		}
 		else
 			FillBuffer.ClearBufferInt ( I );
 		

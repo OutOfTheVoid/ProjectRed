@@ -1,10 +1,13 @@
 #include <Red/Audio/RawBufferStreamSource.h>
 
-Red::Audio::RawBufferStreamSource :: RawBufferStreamSource ( AudioBuffer * SourceData, uint32_t Channel, uint64_t Offset, uint64_t FinishOffset ):
+Red::Audio::RawBufferStreamSource :: RawBufferStreamSource ( AudioBuffer * SourceData, uint32_t Channel, uint64_t Offset, uint64_t FinishOffset, uint64_t StartDelay, bool InitiallyPlaying ):
 	SourceData ( SourceData ),
 	Channel ( Channel ),
 	Offset ( Offset ),
 	FinishOffset ( FinishOffset ),
+	StartDelay ( StartDelay ),
+	DelayCounter ( 0 ),
+	Playing ( InitiallyPlaying ),
 	FinishedCallback ( NULL ),
 	Lock ()
 {
@@ -24,7 +27,7 @@ Red::Audio::RawBufferStreamSource :: RawBufferStreamSource ( AudioBuffer * Sourc
 	
 }
 
-void Red::Audio::RawBufferStreamSource :: ResetSource ( AudioBuffer * SourceData, uint32_t Channel, uint64_t Offset, uint64_t FinishOffset )
+void Red::Audio::RawBufferStreamSource :: ResetSource ( AudioBuffer * SourceData, uint32_t Channel, uint64_t Offset, uint64_t FinishOffset, uint64_t StartDelay, bool InitiallyPlaying )
 {
 	
 	Lock.Lock ();
@@ -58,6 +61,10 @@ void Red::Audio::RawBufferStreamSource :: ResetSource ( AudioBuffer * SourceData
 	
 	this -> Channel = Channel;
 	
+	this -> StartDelay = StartDelay;
+	this -> Playing = InitiallyPlaying;
+	this -> DelayCounter = 0;
+	
 	Lock.Unlock ();
 	
 }
@@ -79,12 +86,23 @@ Red::Audio::RawBufferStreamSource :: ~RawBufferStreamSource ()
 	
 }
 
-void Red::Audio::RawBufferStreamSource :: SetFinishedCallback ( Util :: IFunction1 <bool, RawBufferStreamSource *> * Callback )
+void Red::Audio::RawBufferStreamSource :: SetFinishedCallback ( Util :: IFunction1 <void, RawBufferStreamSource *> * Callback )
 {
 	
 	Lock.Lock ();
 	
 	this -> FinishedCallback = Callback;
+	
+	Lock.Unlock ();
+	
+}
+
+void Red::Audio::RawBufferStreamSource :: ResetDelayCounter ( uint64_t DelayCounter )
+{
+	
+	Lock.Lock ();
+	
+	this -> DelayCounter = DelayCounter;
 	
 	Lock.Unlock ();
 	
@@ -96,6 +114,17 @@ void Red::Audio::RawBufferStreamSource :: SetOffset ( uint64_t Offset )
 	Lock.Lock ();
 	
 	this -> Offset = Offset;
+	
+	Lock.Unlock ();
+	
+}
+
+void Red::Audio::RawBufferStreamSource :: SetPlaying ( bool Playing )
+{
+	
+	Lock.Lock ();
+	
+	this -> Playing = Playing;
 	
 	Lock.Unlock ();
 	
@@ -141,6 +170,15 @@ Red::Audio::IStreamSource :: StreamFillCode Red::Audio::RawBufferStreamSource ::
 		
 	}
 	
+	if ( ! Playing )
+	{
+		
+		Lock.Unlock ();
+		
+		return kStreamFillCode_Success_Silence;
+		
+	}
+	
 	if ( Offset >= FinishOffset )
 	{
 		
@@ -150,30 +188,55 @@ Red::Audio::IStreamSource :: StreamFillCode Red::Audio::RawBufferStreamSource ::
 		
 	}
 	
-	uint64_t FillSize = FinishOffset - Offset;
 	uint64_t BufferSampleCount = Buffer -> GetSampleCount ();
+	uint64_t DelayOffset = 0;
+	
+	if ( DelayCounter < StartDelay )
+	{
+		
+		if ( DelayCounter + BufferSampleCount < StartDelay )
+		{
+			
+			DelayCounter += BufferSampleCount;
+			
+			Lock.Unlock ();
+			
+			return kStreamFillCode_Success_Silence;
+			
+		}
+		else
+			DelayOffset = StartDelay - DelayCounter;
+		
+	}
+	
+	uint64_t FillSize = FinishOffset - Offset;
 	
 	if ( BufferSampleCount < FillSize )
 		FillSize = BufferSampleCount;
 	
-	Buffer -> BlitBuffer ( * SourceData, Channel, FillSize, Offset, 0, TargetChannel );
+	Buffer -> ClearBufferInt ( TargetChannel, 0, DelayOffset );
+	Buffer -> BlitBuffer ( * SourceData, Channel, FillSize - DelayOffset, Offset, DelayOffset, TargetChannel );
 	
 	if ( FillSize < BufferSampleCount )
-		Buffer -> ClearBufferInt ( TargetChannel, 0, FillSize, BufferSampleCount - FillSize );
+		Buffer -> ClearBufferInt ( TargetChannel, 0, FillSize, BufferSampleCount - FillSize - DelayOffset );
 	
-	Offset += FillSize;
+	Offset += FillSize - DelayOffset;
 	
-	if ( Offset == FinishOffset )
+	if ( Offset >= FinishOffset )
 	{
 		
-		Util :: IFunction1 <bool, RawBufferStreamSource *> * OnFinished = FinishedCallback;
+		Playing = false;
+		
+		Util :: IFunction1 <void, RawBufferStreamSource *> * OnFinished = FinishedCallback;
 		
 		Lock.Unlock ();
 		
 		if ( OnFinished != NULL )
 		{
 			
-			if ( ( FillSize < BufferSampleCount ) && ( * OnFinished ) ( this ) )
+			( * OnFinished ) ( this );
+			
+			if ( Playing )
 				FillAudioBuffer ( Buffer, TargetChannel );
 			
 		}

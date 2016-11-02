@@ -54,15 +54,15 @@ namespace Red
 			void ClearBufferFloat ( uint32_t Channel, float Value = 0.0f, uint64_t StartSample = 0, uint64_t SampleCount = 0xFFFFFFFFFFFFFFFF );
 			void ClearBufferInt ( uint32_t Channel, int64_t Value = 0, uint64_t StartSample = 0, uint64_t SampleCount = 0xFFFFFFFFFFFFFFFF );
 			
+			float ReadSampleFloat ( uint32_t Channel, uint64_t Sample );
+			int64_t ReadSampleInt ( uint32_t Channel, uint64_t Sample );
+			
 			void Reference ();
 			void Dereference ();
 			
 			static Util :: Function1 <void, void *> StdFreeWrapper;
 			
 		private:
-			
-			void BlitBufferResampledNearest (  );
-			void BlitBufferResampledLinear (  );
 			
 			void * Data;
 			
