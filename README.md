@@ -14,25 +14,4 @@ It is broken up into several discrete parts, which include:
   * Xenon: An OOP OpenGL abstraction library with 3D management and generation utilities
   * RAUX: A OOP Resource management and aquisition library.
 	
-You can see what i'm working on, as well as get and Idea of a typical game loop, by looking at src/Main.cpp
-
-Dependancies
-============
-SDLX
-----
-	* SDL2
-	* Xenon ( Optional )
-Xenon
------
-	* OpenGL 3.2
-	* Red
-	* Autodesk FBX ( Eventually ) ( Optional )
-RAUX
-----
-	* LibPNG
-	* Red ( Optional ) ( Eventually )
-	* Xenon ( Optional )
-RED
----
-	* LibFreeType 2 ( Optional )
-	* Xenon
+You can see what i'm working on, as well as get and Idea of a typical game loop by looking at src/Main.cpp
