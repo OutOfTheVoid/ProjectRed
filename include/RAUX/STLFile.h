@@ -17,7 +17,7 @@
 namespace RAUX
 {
 	
-	class StlFile
+	class STLFile
 	{
 	public:
 		
@@ -173,8 +173,8 @@ namespace RAUX
 			
 		} Triangle;
 		
-		StlFile ( const std :: string & Name );
-		~StlFile ();
+		STLFile ( const std :: string & Name );
+		~STLFile ();
 		
 		bool Exists () const;
 		

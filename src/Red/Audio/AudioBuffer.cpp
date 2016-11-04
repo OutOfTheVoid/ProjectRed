@@ -7,6 +7,7 @@
 #include <string.h>
 #include <math.h>
 
+#include <new>
 
 Red::Util :: Function1 <void, void *> Red::Audio::AudioBuffer :: StdFreeWrapper ( & free );
 
@@ -43,27 +44,51 @@ inline size_t GetSizeFromDataType ( Red::Audio :: AudioBufferType Type )
 	
 }
 
-Red::Audio::AudioBuffer :: AudioBuffer ( void * Data, AudioBufferType Type, uint32_t Channels, uint64_t SampleCount, Util :: IFunction1 <void, void *> * OnFree, Util :: IFunction1 <bool, AudioBuffer *> * OnUnReferenced ):
+Red::Audio::AudioBuffer :: AudioBuffer ( NoInit NO_INIT ):
+	Data ( NULL ),
+	DataType ( kAudioBufferType_Invalid ),
+	ChannelCount ( 0 ),
+	SampleCount ( 0 ),
+	OnFree ( NULL ),
+	OnUnReferenced ( NULL ),
+	RefCount ( 0 ),
+	Parent ( NULL )
+{
+	
+	(void) NO_INIT;
+	
+}
+
+Red::Audio::AudioBuffer :: AudioBuffer ( void * Data, AudioBufferType Type, uint32_t Channels, uint64_t SampleCount, Util :: IFunction1 <void, void *> * OnFree, Util :: IFunction1 <bool, AudioBuffer *> * OnUnReferenced, AudioBuffer * Parent ):
 	Data ( Data ),
 	DataType ( Type ),
 	ChannelCount ( Channels ),
 	SampleCount ( SampleCount ),
 	OnFree ( OnFree ),
 	OnUnReferenced ( OnUnReferenced ),
-	RefCount ( 0 )
+	RefCount ( 0 ),
+	Parent ( Parent )
 {
+	
+	if ( Parent != NULL )
+		Parent -> Reference ();
+	
 }
 
-Red::Audio::AudioBuffer :: AudioBuffer ( AudioBufferType Type, uint32_t Channels, uint64_t SampleCount, Util :: IFunction1 <bool, AudioBuffer *> * OnUnReferenced ):
+Red::Audio::AudioBuffer :: AudioBuffer ( AudioBufferType Type, uint32_t Channels, uint64_t SampleCount, Util :: IFunction1 <bool, AudioBuffer *> * OnUnReferenced, AudioBuffer * Parent ):
 	DataType ( Type ),
 	ChannelCount ( Channels ),
 	SampleCount ( SampleCount ),
 	OnUnReferenced ( OnUnReferenced ),
-	RefCount ( 0 )
+	RefCount ( 0 ),
+	Parent ( Parent )
 {
 	
 	Data = malloc ( GetSizeFromDataType ( Type ) * Channels * SampleCount );
 	OnFree = & StdFreeWrapper;
+	
+	if ( Parent != NULL )
+		Parent -> Reference ();
 	
 }
 
@@ -74,6 +99,9 @@ Red::Audio::AudioBuffer :: ~AudioBuffer ()
 		( * OnFree ) ( Data );
 	
 	Data = NULL;
+	
+	if ( Parent != NULL )
+		Parent -> Dereference ();
 	
 }
 
@@ -101,7 +129,7 @@ void Red::Audio::AudioBuffer :: Dereference ()
 	
 }
 
-Red::Audio :: AudioBuffer * Red::Audio::AudioBuffer :: CopyReformated ( AudioBuffer & Source, AudioBufferType NewDataType, uint32_t NewChannelCount )
+Red::Audio :: AudioBuffer * Red::Audio::AudioBuffer :: CopyReformated ( AudioBuffer & Source, AudioBufferType NewDataType, uint32_t NewChannelCount, AudioBuffer * Placement )
 {
 	
 	if ( NewDataType == kAudioBufferType_Invalid )
@@ -112,27 +140,30 @@ Red::Audio :: AudioBuffer * Red::Audio::AudioBuffer :: CopyReformated ( AudioBuf
 	if ( NewData == NULL )
 		return NULL;
 	
-	AudioBuffer * NewBuffer = new AudioBuffer ( NewData, NewDataType, NewChannelCount, Source.SampleCount, & StdFreeWrapper );
+	if ( Placement == NULL )
+		Placement = new AudioBuffer ( NewData, NewDataType, NewChannelCount, Source.SampleCount, & StdFreeWrapper );
+	else
+		Placement = new ( reinterpret_cast <void *> ( Placement ) ) AudioBuffer ( NewData, NewDataType, NewChannelCount, Source.SampleCount, & StdFreeWrapper );
 	
 	uint32_t LeastTotalChannels = ( Source.ChannelCount < NewChannelCount ) ? Source.ChannelCount : NewChannelCount;
 	
 	uint32_t Channel;
 	
 	for ( Channel = 0; Channel < LeastTotalChannels; Channel ++ )
-		NewBuffer -> BlitBuffer ( Source, Channel, Source.SampleCount, 0, 0 );
+		Placement -> BlitBuffer ( Source, Channel, Source.SampleCount, 0, 0 );
 	
 	if ( ( NewDataType == kAudioBufferType_Float32_LittleEndian ) || ( NewDataType == kAudioBufferType_Float32_BigEndian ) )
 		for ( ; Channel < NewChannelCount; Channel ++ )
-			NewBuffer -> ClearBufferFloat ( Channel, 0.0f );
+			Placement -> ClearBufferFloat ( Channel, 0.0f );
 	else
 		for ( ; Channel < NewChannelCount; Channel ++ )
-			NewBuffer -> ClearBufferInt ( Channel, 0 );
+			Placement -> ClearBufferInt ( Channel, 0 );
 	
-	return NewBuffer;
+	return Placement;
 	
 }
 
-Red::Audio :: AudioBuffer * Red::Audio::AudioBuffer :: CopyReformatedResampled ( AudioBuffer & Source, ResampleMode Mode, AudioBufferType NewDataType, double SampleRatio, uint32_t NewChannelCount )
+Red::Audio :: AudioBuffer * Red::Audio::AudioBuffer :: CopyReformatedResampled ( AudioBuffer & Source, ResampleMode Mode, AudioBufferType NewDataType, double SampleRatio, uint32_t NewChannelCount, AudioBuffer * Placement )
 {
 	
 	if ( NewDataType == kAudioBufferType_Invalid )
@@ -147,23 +178,43 @@ Red::Audio :: AudioBuffer * Red::Audio::AudioBuffer :: CopyReformatedResampled (
 	if ( NewData == NULL )
 		return NULL;
 	
-	AudioBuffer * NewBuffer = new AudioBuffer ( NewData, NewDataType, NewChannelCount, NewSampleCount, & StdFreeWrapper );
+	if ( Placement == NULL )
+		Placement = new AudioBuffer ( NewData, NewDataType, NewChannelCount, NewSampleCount, & StdFreeWrapper );
+	else
+		Placement = new ( reinterpret_cast <void *> ( Placement ) ) AudioBuffer ( NewData, NewDataType, NewChannelCount, NewSampleCount, & StdFreeWrapper );
 	
 	uint32_t LeastTotalChannels = ( Source.ChannelCount < NewChannelCount ) ? Source.ChannelCount : NewChannelCount;
 	
 	uint32_t Channel;
 	
 	for ( Channel = 0; Channel < LeastTotalChannels; Channel ++ )
-		NewBuffer -> BlitBufferResampled ( Source, Mode, Channel, NewSampleCount, 0, 0, SampleRatio );
+		Placement -> BlitBufferResampled ( Source, Mode, Channel, NewSampleCount, 0, 0, SampleRatio );
 	
 	if ( ( NewDataType == kAudioBufferType_Float32_LittleEndian ) || ( NewDataType == kAudioBufferType_Float32_BigEndian ) )
 		for ( ; Channel < NewChannelCount; Channel ++ )
-			NewBuffer -> ClearBufferFloat ( Channel, 0.0f );
+			Placement -> ClearBufferFloat ( Channel, 0.0f );
 	else
 		for ( ; Channel < NewChannelCount; Channel ++ )
-			NewBuffer -> ClearBufferInt ( Channel, 0 );
+			Placement -> ClearBufferInt ( Channel, 0 );
 	
-	return NewBuffer;
+	return Placement;
+	
+}
+
+Red::Audio :: AudioBuffer * Red::Audio::AudioBuffer :: CreateChildWindow ( AudioBuffer * Parent, uint64_t StartSample, uint64_t SampleCount, AudioBuffer * Placement )
+{
+	
+	if ( Parent -> SampleCount <= StartSample )
+		return NULL;
+	
+	SampleCount = ( Parent -> SampleCount < SampleCount + StartSample ) ? StartSample - Parent -> SampleCount : SampleCount;
+	
+	if ( Placement == NULL )
+		Placement = new AudioBuffer ( reinterpret_cast <void *> ( & reinterpret_cast <char *> ( Parent ) [ GetSizeFromDataType ( Parent -> GetDataType () ) * StartSample * Parent -> GetChannelCount () ] ), Parent -> GetDataType (), Parent -> GetChannelCount (), SampleCount, NULL, NULL, Parent );
+	else
+		Placement = new ( reinterpret_cast <void *> ( Placement ) ) AudioBuffer ( reinterpret_cast <void *> ( & reinterpret_cast <char *> ( Parent ) [ GetSizeFromDataType ( Parent -> GetDataType () ) * StartSample * Parent -> GetChannelCount () ] ), Parent -> GetDataType (), Parent -> GetChannelCount (), SampleCount, NULL, NULL, Parent );
+	
+	return Placement;
 	
 }
 
@@ -14766,6 +14817,262 @@ void Red::Audio::AudioBuffer :: ClearBufferInt ( uint32_t Channel, int64_t Value
 		
 		default:
 			return;
+		
+	}
+	
+}
+
+int64_t Red::Audio::AudioBuffer :: GetCenterValueInt ()
+{
+	
+	switch ( DataType )
+	{
+	
+	case kAudioBufferType_Int8:
+	case kAudioBufferType_Int16_LittleEndian:
+	case kAudioBufferType_Int16_BigEndian:
+	case kAudioBufferType_Int32_LittleEndian:
+	case kAudioBufferType_Int32_BigEndian:
+	case kAudioBufferType_Float32_LittleEndian:
+	case kAudioBufferType_Float32_BigEndian:
+		
+		return 0;
+		
+	case kAudioBufferType_UInt8:
+		
+		return 128;
+		
+	case kAudioBufferType_UInt16_LittleEndian:
+	case kAudioBufferType_UInt16_BigEndian:
+		
+		return 32768;
+		
+	case kAudioBufferType_UInt32_LittleEndian:
+	case kAudioBufferType_UInt32_BigEndian:
+		
+		return 2147483648;
+		
+	default:
+		break;
+		
+	}
+	
+	// Probably better to do NAN here but that's less fault tolerant
+	return 0;
+	
+}
+
+float Red::Audio::AudioBuffer :: GetCenterValueFloat ()
+{
+	
+	switch ( DataType )
+	{
+	
+	case kAudioBufferType_Int8:
+	case kAudioBufferType_Int16_LittleEndian:
+	case kAudioBufferType_Int16_BigEndian:
+	case kAudioBufferType_Int32_LittleEndian:
+	case kAudioBufferType_Int32_BigEndian:
+	case kAudioBufferType_Float32_LittleEndian:
+	case kAudioBufferType_Float32_BigEndian:
+		
+		return 0.0f;
+		
+	case kAudioBufferType_UInt8:
+		
+		return 127.5f;
+		
+	case kAudioBufferType_UInt16_LittleEndian:
+	case kAudioBufferType_UInt16_BigEndian:
+		
+		return 32767.5f;
+		
+	case kAudioBufferType_UInt32_LittleEndian:
+	case kAudioBufferType_UInt32_BigEndian:
+		
+		return 2147483647.5f;
+		
+	default:
+		break;
+		
+	}
+	
+	// Probably better to do NAN here but that's less fault tolerant
+	return 0.0f;
+	
+}
+
+void Red::Audio::AudioBuffer :: ScaleBufferByConstant ( float Scale, uint32_t Channel, uint64_t SampleCount, uint64_t StartSample )
+{
+	
+	if ( Channel > ChannelCount )
+		return;
+	
+	if ( SampleCount + StartSample > this -> SampleCount )
+		SampleCount = this -> SampleCount - StartSample;
+	
+	if ( Scale == 1.0f )
+		return;
+	
+	union
+	{
+		
+		int32_t ScaleI8;
+		uint32_t ScaleU8;
+		int32_t ScaleI16;
+		uint32_t ScaleU16;
+		int64_t ScaleI32;
+		uint64_t ScaleU32;
+		
+	} ScaleFactors;
+	
+	switch ( DataType )
+	{
+		
+		case kAudioBufferType_Int8:
+			ScaleFactors.ScaleI8 = static_cast <int32_t> ( Scale * 256.0f );
+			break;
+			
+		case kAudioBufferType_UInt8:
+			ScaleFactors.ScaleI8 = static_cast <uint32_t> ( Scale * 256.0f );
+			break;
+		
+		case kAudioBufferType_Int16_LittleEndian:
+		case kAudioBufferType_Int16_BigEndian:
+			ScaleFactors.ScaleI16 = static_cast <int32_t> ( Scale * 65536.0f );
+			break;
+			
+		case kAudioBufferType_UInt16_LittleEndian:
+		case kAudioBufferType_UInt16_BigEndian:
+			ScaleFactors.ScaleU16 = static_cast <uint32_t> ( Scale * 65536.0f );
+			break;
+			
+		case kAudioBufferType_Int32_LittleEndian:
+		case kAudioBufferType_Int32_BigEndian:
+			ScaleFactors.ScaleI32 = static_cast <int64_t> ( Scale * 4294967296.0f );
+			break;
+			
+		case kAudioBufferType_UInt32_LittleEndian:
+		case kAudioBufferType_UInt32_BigEndian:
+			ScaleFactors.ScaleU32 = static_cast <uint64_t> ( Scale * 4294967296.0f );
+			break;
+			
+		default:
+			break;
+	
+	}
+	
+	switch ( DataType )
+	{
+		
+		case kAudioBufferType_Int8:
+		{
+			
+			for ( uint64_t I = ChannelCount * StartSample + Channel; I < SampleCount; I += ChannelCount )
+				static_cast <int8_t *> ( Data ) [ I ] = static_cast <int16_t> ( static_cast <int8_t *> ( Data ) [ I ] * ScaleFactors.ScaleI8 ) >> 8;
+			
+		}
+		break;
+		
+		case kAudioBufferType_UInt8:
+		{
+			
+			for ( uint64_t I = ChannelCount * StartSample + Channel; I < SampleCount; I += ChannelCount )
+				static_cast <uint8_t *> ( Data ) [ I ] = static_cast <uint16_t> ( static_cast <uint8_t *> ( Data ) [ I ] * ScaleFactors.ScaleU8 ) >> 8;
+			
+		}
+		break;
+		
+		case kAudioBufferType_Int16_LittleEndian:
+		{
+			
+			for ( uint64_t I = ChannelCount * StartSample + Channel; I < SampleCount; I += ChannelCount )
+				static_cast <uint16_t *> ( Data ) [ I ] = HostToLittleEndian16 ( static_cast <uint16_t> ( ( static_cast <int32_t> ( static_cast <int16_t> ( LittleToHostEndian16 ( static_cast <uint16_t *> ( Data ) [ I ] ) ) ) * ScaleFactors.ScaleI16 )>> 16 ) );
+			
+		}
+		break;
+		
+		case kAudioBufferType_Int16_BigEndian:
+		{
+			
+			for ( uint64_t I = ChannelCount * StartSample + Channel; I < SampleCount; I += ChannelCount )
+				static_cast <uint16_t *> ( Data ) [ I ] = HostToBigEndian16 ( static_cast <uint16_t> ( ( static_cast <int32_t> ( static_cast <int16_t> ( BigToHostEndian16 ( static_cast <uint16_t *> ( Data ) [ I ] ) ) ) * ScaleFactors.ScaleI16 )>> 16 ) );
+			
+		}
+		break;
+		
+		case kAudioBufferType_UInt16_LittleEndian:
+		{
+			
+			for ( uint64_t I = ChannelCount * StartSample + Channel; I < SampleCount; I += ChannelCount )
+				static_cast <uint16_t *> ( Data ) [ I ] = HostToLittleEndian16 ( ( static_cast <uint32_t> ( LittleToHostEndian16 ( static_cast <uint16_t *> ( Data ) [ I ] ) ) * ScaleFactors.ScaleU16 ) >> 16 );
+			
+		}
+		break;
+		
+		case kAudioBufferType_UInt16_BigEndian:
+		{
+			
+			for ( uint64_t I = ChannelCount * StartSample + Channel; I < SampleCount; I += ChannelCount )
+				static_cast <uint16_t *> ( Data ) [ I ] = HostToBigEndian16 ( ( static_cast <uint32_t> ( BigToHostEndian16 ( static_cast <uint16_t *> ( Data ) [ I ] ) ) * ScaleFactors.ScaleU16 ) >> 16 );
+			
+		}
+		break;
+		
+		case kAudioBufferType_Int32_LittleEndian:
+		{
+			
+			for ( uint64_t I = ChannelCount * StartSample + Channel; I < SampleCount; I += ChannelCount )
+				static_cast <uint32_t *> ( Data ) [ I ] = HostToLittleEndian32 ( static_cast <uint32_t> ( ( static_cast <int64_t> ( static_cast <int32_t> ( LittleToHostEndian16 ( static_cast <uint32_t *> ( Data ) [ I ] ) ) ) * ScaleFactors.ScaleI32 )>> 16 ) );
+			
+		}
+		break;
+		
+		case kAudioBufferType_Int32_BigEndian:
+		{
+			
+			for ( uint64_t I = ChannelCount * StartSample + Channel; I < SampleCount; I += ChannelCount )
+				static_cast <uint32_t *> ( Data ) [ I ] = HostToBigEndian32 ( static_cast <uint32_t> ( ( static_cast <int64_t> ( static_cast <int32_t> ( BigToHostEndian16 ( static_cast <uint32_t *> ( Data ) [ I ] ) ) ) * ScaleFactors.ScaleI32 )>> 16 ) );
+			
+		}
+		break;
+		
+		case kAudioBufferType_UInt32_LittleEndian:
+		{
+			
+			for ( uint64_t I = ChannelCount * StartSample + Channel; I < SampleCount; I += ChannelCount )
+				static_cast <uint32_t *> ( Data ) [ I ] = HostToLittleEndian32 ( ( static_cast <uint64_t> ( LittleToHostEndian32 ( static_cast <uint32_t *> ( Data ) [ I ] ) ) * ScaleFactors.ScaleU32 ) >> 32 );
+			
+		}
+		break;
+		
+		case kAudioBufferType_UInt32_BigEndian:
+		{
+			
+			for ( uint64_t I = ChannelCount * StartSample + Channel; I < SampleCount; I += ChannelCount )
+				static_cast <uint32_t *> ( Data ) [ I ] = HostToBigEndian32 ( ( static_cast <uint64_t> ( BigToHostEndian32 ( static_cast <uint32_t *> ( Data ) [ I ] ) ) * ScaleFactors.ScaleU32 ) >> 32 );
+			
+		}
+		break;
+		
+		case kAudioBufferType_Float32_LittleEndian:
+		{
+			
+			for ( uint64_t I = ChannelCount * StartSample + Channel; I < SampleCount; I += ChannelCount )
+				static_cast <float *> ( Data ) [ I ] = HostToLittleEndianFloat ( LittleToHostEndianFloat ( static_cast <float *> ( Data ) [ I ] ) * Scale );
+			
+		}
+		
+		case kAudioBufferType_Float32_BigEndian:
+		{
+			
+			for ( uint64_t I = ChannelCount * StartSample + Channel; I < SampleCount; I += ChannelCount )
+				static_cast <float *> ( Data ) [ I ] = HostToBigEndianFloat ( BigToHostEndianFloat ( static_cast <float *> ( Data ) [ I ] ) * Scale );
+			
+		}
+		
+		default:
+			break;
 		
 	}
 	

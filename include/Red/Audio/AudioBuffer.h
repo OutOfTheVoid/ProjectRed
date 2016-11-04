@@ -27,13 +27,22 @@ namespace Red
 				
 			} ResampleMode;
 			
+			typedef enum
+			{
+				
+				NO_INIT
+				
+			} NoInit;
+			
 			virtual ~AudioBuffer ();
 			
-			AudioBuffer ( AudioBufferType Type, uint32_t Channels, uint64_t SampleCount, Util :: IFunction1 <bool, AudioBuffer *> * OnUnReferenced = NULL );
-			AudioBuffer ( void * Data, AudioBufferType Type, uint32_t Channels, uint64_t SampleCount, Util :: IFunction1 <void, void *> * OnFree = NULL, Util :: IFunction1 <bool, AudioBuffer *> * OnUnReferenced = NULL );
+			explicit AudioBuffer ( NoInit NO_INIT );
+			AudioBuffer ( AudioBufferType Type, uint32_t Channels, uint64_t SampleCount, Util :: IFunction1 <bool, AudioBuffer *> * OnUnReferenced = NULL, AudioBuffer * Parent = NULL );
+			AudioBuffer ( void * Data, AudioBufferType Type, uint32_t Channels, uint64_t SampleCount, Util :: IFunction1 <void, void *> * OnFree = NULL, Util :: IFunction1 <bool, AudioBuffer *> * OnUnReferenced = NULL, AudioBuffer * Parent = NULL );
 			
-			static AudioBuffer * CopyReformated ( AudioBuffer & Source, AudioBufferType NewDataType, uint32_t NewChannelCount = 0 );
-			static AudioBuffer * CopyReformatedResampled ( AudioBuffer & Source, ResampleMode Mode, AudioBufferType NewDataType, double SampleRatio, uint32_t NewChannelCount = 0 );
+			static AudioBuffer * CreateChildWindow ( AudioBuffer * Parent, uint64_t StartSample, uint64_t SampleCount, AudioBuffer * Placement = NULL );
+			static AudioBuffer * CopyReformated ( AudioBuffer & Source, AudioBufferType NewDataType, uint32_t NewChannelCount = 0, AudioBuffer * Placement = NULL );
+			static AudioBuffer * CopyReformatedResampled ( AudioBuffer & Source, ResampleMode Mode, AudioBufferType NewDataType, double SampleRatio, uint32_t NewChannelCount = 0, AudioBuffer * Placement = NULL );
 			
 			void * GetRawBuffer ();
 			
@@ -41,6 +50,9 @@ namespace Red
 			uint32_t GetChannelCount ();
 			
 			uint64_t GetSampleCount ();
+			
+			int64_t GetCenterValueInt ();
+			float GetCenterValueFloat ();
 			
 			void BlitBuffer ( AudioBuffer & Source, uint32_t SourceChannel, uint64_t SampleCount, uint64_t SourceStartSample = 0, uint64_t TargetStartSample = 0, uint32_t TargetChannel = 0xFFFFFFFF );
 			void BlitBufferResampled ( AudioBuffer & Source, ResampleMode Mode, uint32_t Channel, uint64_t SampleCount, uint64_t SourceStartSample = 0, uint64_t TargetStartSample = 0, double SampleRatio = 1.0f, uint32_t TargetChannel = 0xFFFFFFFF );
@@ -50,6 +62,13 @@ namespace Red
 			
 			void AddBufferScaled ( AudioBuffer & Source, float Scale, uint32_t SourceChannel, uint64_t SampleCount, uint64_t SourceStartSample = 0, uint64_t TargetStartSample = 0, uint32_t TargetChannel = 0xFFFFFFFF );
 			void AddBufferResampledScaled ( AudioBuffer & Source, float Scale, ResampleMode Mode, uint32_t Channel, uint64_t SampleCount, uint64_t SourceStartSample = 0, uint64_t TargetStartSample = 0, uint32_t TargetChannel = 0xFFFFFFFF, double SampleRatio = 1.0f );
+			
+			void ScaleBufferByConstant ( float Scale, uint32_t Channel, uint64_t SampleCount = 0xFFFFFFFFFFFFFFFF, uint64_t StartSample = 0 );
+			
+			// TODO:
+			// void MultiplyBuffer ( AudioBuffer & Source, uint32_t SourceChannel, uint64_t SampleCount, uint64_t SourceStartSample = 0, uint64_t TargetStartSample = 0, uint32_t TargetChannel = 0xFFFFFFFF );
+			// TODO:
+			// void MultiplyBufferScaled ( AudioBuffer & Source, float Scale, uint32_t SourceChannel, uint64_t SampleCount, uint64_t SourceStartSample = 0, uint64_t TargetStartSample = 0, uint32_t TargetChannel = 0xFFFFFFFF );
 			
 			void ClearBufferFloat ( uint32_t Channel, float Value = 0.0f, uint64_t StartSample = 0, uint64_t SampleCount = 0xFFFFFFFFFFFFFFFF );
 			void ClearBufferInt ( uint32_t Channel, int64_t Value = 0, uint64_t StartSample = 0, uint64_t SampleCount = 0xFFFFFFFFFFFFFFFF );
@@ -75,6 +94,8 @@ namespace Red
 			Util :: IFunction1 <bool, AudioBuffer *> * OnUnReferenced;
 			
 			std::atomic <uint32_t> RefCount;
+			
+			AudioBuffer * Parent;
 			
 		};
 		

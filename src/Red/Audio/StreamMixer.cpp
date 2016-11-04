@@ -203,15 +203,37 @@ Red::Audio::IStreamSource :: StreamFillCode Red::Audio::StreamMixer :: FillAudio
 		
 			StreamFillCode FillCode = Streams [ I ].Source -> FillAudioBuffer ( IntermediaryBuffer, 0 );
 			
-			if ( ( ( FillCode & kStreamFillCode_ErrorFlag ) == 0 ) && ( FillCode != kStreamFillCode_Success_Silence ) )
+			switch ( FillCode )
 			{
 				
-				AudioCount ++;
+				case kStreamFillCode_Success_Normal:
+				case kStreamFillCode_Success_ControlParameter_Varying:
+				{
+					
+					AudioCount ++;
+					
+					if ( Streams [ I ].Scale == 1.0f )
+						Buffer -> AddBuffer ( * IntermediaryBuffer, 0, Buffer -> GetSampleCount (), 0, 0, TargetChannel );
+					else
+						Buffer -> AddBufferScaled ( * IntermediaryBuffer, Streams [ I ].Scale, 0, Buffer -> GetSampleCount (), 0, 0, TargetChannel );
+					
+				}
+				break;
+					
+				case kStreamFillCode_Success_DC:
+				case kStreamFillCode_Success_ControlParameter_Constant:
+				{
+					
+					// Should only increment in the case that the constant is non-zero.
+					AudioCount ++;
+					
+					// TODO: Implement in AudioBuffer a BufferDCAdd or some sort of method like it.
+					
+				}
+				break;
 				
-				if ( Streams [ I ].Scale == 1.0f )
-					Buffer -> AddBuffer ( * IntermediaryBuffer, 0, Buffer -> GetSampleCount (), 0, 0, TargetChannel );
-				else
-					Buffer -> AddBufferScaled ( * IntermediaryBuffer, Streams [ I ].Scale, 0, Buffer -> GetSampleCount (), 0, 0, TargetChannel );
+				default:
+					break;
 				
 			}
 			

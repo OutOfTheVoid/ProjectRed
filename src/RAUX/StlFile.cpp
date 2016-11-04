@@ -1,4 +1,4 @@
-#include <RAUX/StlFile.h>
+#include <RAUX/STLFile.h>
 
 #ifdef RAUX_XENON_INTERFACE
 
@@ -19,7 +19,7 @@
 #include <iostream>
 #include <float.h>
 
-RAUX::StlFile :: StlFile ( const std :: string & Name ):
+RAUX::STLFile :: STLFile ( const std :: string & Name ):
 	FileInstance ( Name ),
 	TriangleCount ( 0 ),
 	TriangleList ( NULL ),
@@ -27,7 +27,7 @@ RAUX::StlFile :: StlFile ( const std :: string & Name ):
 {
 }
 
-RAUX::StlFile :: ~StlFile ()
+RAUX::STLFile :: ~STLFile ()
 {
 	
 	if ( TriangleList != NULL )
@@ -40,14 +40,14 @@ RAUX::StlFile :: ~StlFile ()
 	
 }
 
-bool RAUX::StlFile :: Exists () const
+bool RAUX::STLFile :: Exists () const
 {
 	
 	return FileInstance.Exists ();
 	
 }
 
-void RAUX::StlFile :: Load ( uint32_t * Status, uint32_t Flags )
+void RAUX::STLFile :: Load ( uint32_t * Status, uint32_t Flags )
 {
 	
 	if ( TriangleList != NULL )
@@ -306,7 +306,7 @@ void RAUX::StlFile :: Load ( uint32_t * Status, uint32_t Flags )
 	
 }
 
-void RAUX::StlFile :: CloseFile ()
+void RAUX::STLFile :: CloseFile ()
 {
 	
 	uint32_t Status;
@@ -317,7 +317,7 @@ void RAUX::StlFile :: CloseFile ()
 
 #ifdef RAUX_XENON_INTERFACE
 
-Xenon::Geometry :: Mesh * RAUX::StlFile :: CreateMesh ( const MeshParameters & Params ) const
+Xenon::Geometry :: Mesh * RAUX::STLFile :: CreateMesh ( const MeshParameters & Params ) const
 {
 	
 	if ( ( TriangleList == NULL ) || ( TriangleCount == 0 ) )
@@ -493,14 +493,14 @@ Xenon::Geometry :: Mesh * RAUX::StlFile :: CreateMesh ( const MeshParameters & P
 
 #endif
 
-uint32_t RAUX::StlFile :: GetTriangleCount () const
+uint32_t RAUX::STLFile :: GetTriangleCount () const
 {
 	
 	return TriangleCount;
 	
 }
 
-const RAUX::StlFile :: Triangle * RAUX::StlFile :: GetTriangle ( uint32_t Index ) const
+const RAUX::STLFile :: Triangle * RAUX::STLFile :: GetTriangle ( uint32_t Index ) const
 {
 	
 	if ( Index < TriangleCount )

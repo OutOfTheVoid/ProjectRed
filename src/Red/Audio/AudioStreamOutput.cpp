@@ -152,7 +152,7 @@ void Red::Audio::AudioStreamOutput :: AudioCallback ( uint8_t * Data, int DataSi
 				case IStreamSource :: kStreamFillCode_Success_Silence:
 				default:
 					
-					FillBuffer.ClearBufferInt ( I );
+					FillBuffer.ClearBufferFloat ( I, FillBuffer.GetCenterValueFloat () );
 					
 					break;
 				
@@ -165,7 +165,7 @@ void Red::Audio::AudioStreamOutput :: AudioCallback ( uint8_t * Data, int DataSi
 	}
 	
 	for ( I = ActiveChannelCount; I < OutputDevice -> GetChannelCount (); I ++ )
-		FillBuffer.ClearBufferInt ( I );
+		FillBuffer.ClearBufferFloat ( I, FillBuffer.GetCenterValueFloat () );
 	
 }
 

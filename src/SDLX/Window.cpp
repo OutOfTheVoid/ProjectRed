@@ -8,7 +8,7 @@
 
 const char * SDLX::Window :: kDataName_WindowClassInstancePointer = "_WinInst";
 
-SDLX::Window * SDLX::Window :: CreateWindow ( uint32_t * Status, std :: string Name, uint32_t Width, uint32_t Height, uint32_t Flags )
+SDLX::Window * SDLX::Window :: CreateWindow ( uint32_t * Status, const std :: string & Name, uint32_t Width, uint32_t Height, uint32_t Flags )
 {
 	
 	SDL_Window * WHandle = SDL_CreateWindow ( Name.c_str (), SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, Width, Height, ( ( Flags & kCreateFlag_OpenGL ) ? SDL_WINDOW_OPENGL : 0 ) | ( ( Flags & kCreateFlag_Shown ) ? SDL_WINDOW_SHOWN : 0 ) | ( ( Flags & kCreateFlag_Resizable ) ? SDL_WINDOW_RESIZABLE : 0 ) | ( ( Flags & kCreateFlag_HighDPI ) ? SDL_WINDOW_ALLOW_HIGHDPI : 0 ) );
@@ -78,7 +78,7 @@ SDLX::Mutex * SDLX::Window :: GetMutex ()
 	
 }
 
-void SDLX::Window :: AddEventHook ( uint8_t SDLWindowEventID, void ( * EventCallback ) ( SDL_WindowEvent * Event, Window * Origin, void * Data ), void * Data, int32_t Position )
+void SDLX::Window :: AddEventHook ( uint32_t SDLWindowEventID, void ( * EventCallback ) ( SDL_WindowEvent * Event, Window * Origin, void * Data ), void * Data, int32_t Position )
 {
 	
 	if ( EventMap.count ( SDLWindowEventID ) <= 0 )
@@ -95,7 +95,7 @@ void SDLX::Window :: AddEventHook ( uint8_t SDLWindowEventID, void ( * EventCall
 	
 }
 
-void SDLX::Window :: RemoveEventHook ( uint8_t SDLWindowEventID, void ( * EventCallbackPtr ) ( SDL_WindowEvent * Event, Window * Origin, void * Data ) )
+void SDLX::Window :: RemoveEventHook ( uint32_t SDLWindowEventID, void ( * EventCallbackPtr ) ( SDL_WindowEvent * Event, Window * Origin, void * Data ) )
 {
 	
 	if ( EventMap.count ( SDLWindowEventID ) > 0 )

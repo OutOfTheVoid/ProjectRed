@@ -44,12 +44,30 @@ namespace SDLX
 		static const uint32_t kFullscreenMode_Desktop = SDL_WINDOW_FULLSCREEN_DESKTOP;
 		static const uint32_t kFullscreenMode_Windowed = 0;
 		
-		static Window * CreateWindow ( uint32_t * Status, std :: string Name, uint32_t Width, uint32_t Height, uint32_t Flags = kCreateFlag_HighDPI | kCreateFlag_Resizable | kCreateFlag_Shown | kCreateFlag_AcceleratedRender );
+		static const uint32_t kWindowEventID_Shown = SDL_WINDOWEVENT_SHOWN;
+		static const uint32_t kWindowEventID_Hidden = SDL_WINDOWEVENT_HIDDEN;
+		static const uint32_t kWindowEventID_Exposed = SDL_WINDOWEVENT_EXPOSED;
+		static const uint32_t kWindowEventID_Moved = SDL_WINDOWEVENT_MOVED;
+		static const uint32_t kWindowEventID_Resized = SDL_WINDOWEVENT_RESIZED;
+		static const uint32_t kWindowEventID_SizeChanged = SDL_WINDOWEVENT_SIZE_CHANGED;
+		static const uint32_t kWindowEventID_Minimized = SDL_WINDOWEVENT_MINIMIZED;
+		static const uint32_t kWindowEventID_Maximized = SDL_WINDOWEVENT_MAXIMIZED;
+		static const uint32_t kWindowEventID_Restored = SDL_WINDOWEVENT_RESTORED;
+		static const uint32_t kWindowEventID_Enter = SDL_WINDOWEVENT_ENTER;
+		static const uint32_t kWindowEventID_Leave = SDL_WINDOWEVENT_LEAVE;
+		static const uint32_t kWindowEventID_FocusGained = SDL_WINDOWEVENT_FOCUS_GAINED;
+		static const uint32_t kWindowEventID_FocusLost = SDL_WINDOWEVENT_FOCUS_LOST;
+#if SDL_VERSION_ATLEAST(2, 0, 5)
+		static const uint32_t kWindowEventID_TakeFocus = SDL_WINDOWEVENT_TAKE_FOCUS;
+		static const uint32_t kWindowEventID_HitTest = SDL_WINDOWEVENT_HIT_TEST;
+#endif
+		
+		static Window * CreateWindow ( uint32_t * Status, const std :: string & Name, uint32_t Width, uint32_t Height, uint32_t Flags = kCreateFlag_HighDPI | kCreateFlag_Resizable | kCreateFlag_Shown | kCreateFlag_AcceleratedRender );
 		
 		~Window ();
 		
-		void AddEventHook ( uint8_t SDLWindowEventID, void ( * EventCallback ) ( SDL_WindowEvent * Event, Window * Origin, void * Data ), void * Data, int32_t Position = - 1 );
-		void RemoveEventHook ( uint8_t SDLWindowEventID, void ( * EventCallback ) ( SDL_WindowEvent * Event, Window * Origin, void * Data ) );
+		void AddEventHook ( uint32_t SDLWindowEventID, void ( * EventCallback ) ( SDL_WindowEvent * Event, Window * Origin, void * Data ), void * Data, int32_t Position = - 1 );
+		void RemoveEventHook ( uint32_t SDLWindowEventID, void ( * EventCallback ) ( SDL_WindowEvent * Event, Window * Origin, void * Data ) );
 		
 		void Close ( uint32_t * Status );
 		
@@ -124,7 +142,7 @@ namespace SDLX
 		
 		bool Destroyed;
 		
-		std :: map <uint8_t, std :: vector <CallbackPair>> EventMap;
+		std :: map <uint32_t, std :: vector <CallbackPair>> EventMap;
 		
 	};
 
