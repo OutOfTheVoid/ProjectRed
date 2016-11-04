@@ -29,7 +29,7 @@ namespace Red
 			virtual void Start () = 0;
 			virtual void Stop () = 0;
 			
-			virtual uint32_t GetSampleFrequencey () = 0;
+			virtual uint32_t GetSampleFrequency () = 0;
 			virtual uint32_t GetSampleSize () = 0;
 			virtual uint32_t GetChannelCount () = 0;
 			

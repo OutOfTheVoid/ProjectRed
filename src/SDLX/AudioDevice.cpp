@@ -21,13 +21,13 @@ const char * SDLX::AudioDevice :: GetDeviceName ( uint32_t DeviceIndex, bool Req
 	
 }
 
-SDLX :: AudioDevice * SDLX::AudioDevice :: RequestAudioDevice ( const char * DeviceName, uint32_t Frequencey, BufferFormat Format, uint32_t ChannelCount, uint32_t SampleSize, bool FlexibleSource, bool RequireRecording )
+SDLX :: AudioDevice * SDLX::AudioDevice :: RequestAudioDevice ( const char * DeviceName, uint32_t Frequency, BufferFormat Format, uint32_t ChannelCount, uint32_t SampleSize, bool FlexibleSource, bool RequireRecording )
 {
 	
 	AudioDevice * NewDevice = new AudioDevice ();
 	
 	SDL_AudioSpec Requested;
-	Requested.freq = Frequencey;
+	Requested.freq = Frequency;
 	Requested.format = Format;
 	Requested.channels = ChannelCount;
 	Requested.samples = SampleSize;
@@ -63,7 +63,7 @@ SDLX::AudioDevice :: ~AudioDevice ()
 	
 }
 
-uint32_t SDLX::AudioDevice :: GetSampleFrequencey ()
+uint32_t SDLX::AudioDevice :: GetSampleFrequency ()
 {
 	
 	return Spec.freq;
