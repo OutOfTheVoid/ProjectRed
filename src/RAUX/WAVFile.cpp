@@ -1,7 +1,7 @@
 #include <RAUX/WAVFile.h>
 #include <Red/Util/Endian.h>
 
-#include <iostream>
+#include <stdlib.h>
 
 RAUX::WAVFile :: WAVFile ( const std :: string & Name ):
 	FileInstance ( Name, false ),
@@ -279,8 +279,6 @@ void RAUX::WAVFile :: ProcessFormatChunk ( uint32_t & Offset, uint32_t * Status 
 	
 	BitsPerSample = LittleToHostEndian16 ( Temp16 );
 	
-	std :: cout << "Bits per sample: " << BitsPerSample << std :: endl;
-	
 	Offset += ChunkSize + 8;
 	
 }
@@ -399,8 +397,6 @@ Red::Audio :: AudioBuffer * RAUX::WAVFile :: LoadToBuffer ()
 		
 		default:
 		{
-			
-			std :: cout << "f" << std :: endl;
 			
 			free ( DataBuff );
 			

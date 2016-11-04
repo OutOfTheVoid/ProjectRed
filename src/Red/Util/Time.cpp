@@ -4,14 +4,14 @@
 #include <thread>
 
 Red::Util::Time::Duration :: Duration ( uint64_t Seconds, uint64_t NanoSeconds ):
-	Seconds ( Seconds ),
-	NanoSeconds ( NanoSeconds )
+	Seconds ( std::chrono :: seconds ( Seconds ) ),
+	NanoSeconds ( std::chrono::nanoseconds ( NanoSeconds ) )
 {
 }
 
 Red::Util::Time::Duration :: Duration ( double Seconds ):
-	Seconds ( static_cast <uint64_t> ( Seconds ) ),
-	NanoSeconds ( static_cast <uint64_t> ( ( Seconds - floor ( Seconds ) ) * 1000000000.0 ) )
+	Seconds ( std::chrono :: seconds ( static_cast <uint64_t> ( Seconds ) ) ),
+	NanoSeconds ( std::chrono :: nanoseconds ( static_cast <uint64_t> ( ( Seconds - floor ( Seconds ) ) * 1000000000.0 ) ) )
 {
 }
 

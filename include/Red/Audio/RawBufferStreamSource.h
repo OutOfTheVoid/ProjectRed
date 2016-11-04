@@ -33,6 +33,8 @@ namespace Red
 			
 			void SetPlaying ( bool Playing );
 			
+			bool IsPlaying ();
+			
 			void ResetSource ( AudioBuffer * SourceData, uint32_t Channel = 0, uint64_t Offset = 0, uint64_t FinishPoint = 0xFFFFFFFFFFFFFFFFULL, uint64_t StartDelay = 0, bool InitiallyPlaying = true );
 			
 			// IStreamSource

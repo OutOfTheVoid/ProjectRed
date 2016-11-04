@@ -250,3 +250,16 @@ Red::Audio::IStreamSource :: StreamFillCode Red::Audio::RawBufferStreamSource ::
 	return kStreamFillCode_Success_Normal;
 	
 }
+
+bool Red::Audio::RawBufferStreamSource :: IsPlaying ()
+{
+	
+	Lock.Lock ();
+	
+	bool Temp = Playing;
+	
+	Lock.Unlock ();
+	
+	return Temp;
+	
+}

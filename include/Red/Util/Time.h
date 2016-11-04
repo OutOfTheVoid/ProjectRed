@@ -18,8 +18,8 @@ namespace Red
 			{
 			public:
 				
-				Duration ( uint64_t Seconds, uint64_t NanoSeconds = 0 );
-				Duration ( double Seconds );
+				explicit Duration ( uint64_t Seconds, uint64_t NanoSeconds );
+				explicit Duration ( double Seconds );
 				~Duration ();
 				
 				int64_t GetNanoSeconds ();
@@ -37,8 +37,6 @@ namespace Red
 			};
 			
 			void BlockFor ( const Duration & TimeSpan );
-			
-			
 			
 		}
 		
