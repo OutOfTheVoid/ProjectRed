@@ -54,7 +54,7 @@ int main ( int argc, char const * argv [] )
 	}
 	
 	Win -> Own ();
-	Win -> AddEventHook ( SDL_WINDOWEVENT_CLOSE, & WindowCloseEvent, NULL );
+	Win -> AddEventHook ( SDLX::Window :: kWindowEventID_Closed, & WindowCloseEvent, NULL );
 	
 	/*================================*/
 	

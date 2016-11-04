@@ -57,6 +57,7 @@ namespace SDLX
 		static const uint32_t kWindowEventID_Leave = SDL_WINDOWEVENT_LEAVE;
 		static const uint32_t kWindowEventID_FocusGained = SDL_WINDOWEVENT_FOCUS_GAINED;
 		static const uint32_t kWindowEventID_FocusLost = SDL_WINDOWEVENT_FOCUS_LOST;
+		static const uint32_t kWindowEventID_Closed = SDL_WINDOWEVENT_CLOSE;
 #if SDL_VERSION_ATLEAST(2, 0, 5)
 		static const uint32_t kWindowEventID_TakeFocus = SDL_WINDOWEVENT_TAKE_FOCUS;
 		static const uint32_t kWindowEventID_HitTest = SDL_WINDOWEVENT_HIT_TEST;
