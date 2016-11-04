@@ -3,6 +3,8 @@ Project Red
 An open-source experimental game engine in C++
 ----------------------------------------------
 
+[Project Wiki](https://github.com/OutOfTheVoid/ProjectRed/wiki)
+
 I love making games, and I love programming, but I don't love working with existing 3D engines. I thought I might try and build my own, just for some fun.
 
 This engine is (currently) an OpenGL based game engine that supports 2D and 3D graphics, and will eventually be a fully featured game engine with extensive tooling and utility code to manage content creation and game development. I chose C++11 as the development language because I feel most at home with it, and it will still allow considerable performance.
