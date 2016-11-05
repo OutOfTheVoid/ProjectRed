@@ -14,8 +14,10 @@
 	  #include <windows.h>
 	
 	#endif
+
+	#define GL_GLEXT_PROTOTYPES
 	
-	#include <GL/glcorearb.h>
+	#include <GL/gl.h>
 	
 #endif
 

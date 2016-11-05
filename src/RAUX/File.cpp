@@ -237,11 +237,11 @@ void RAUX::File :: Close ( uint32_t * Status )
 	
 #elif defined ( _WIN32 )
 	
-	_fclose64 ( Handle );
+	_fclose ( Handle );
 	
 #else
 	
-	fclose64 ( Handle );
+	fclose ( Handle );
 	
 #endif
 	
@@ -282,11 +282,11 @@ void RAUX::File :: Seek ( uint32_t * Status, int64_t Position, SeekMode Mode )
 	
 	if ( FD == - 1 )
 	{
-		
+
 		* Status = kStatus_Failure_FileNotOpen;
-		
-		return - 1;
-		
+
+		return;
+
 	}
 	
 	if ( lseek64 ( FD, Position, Mode ) == 0 )

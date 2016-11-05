@@ -4,7 +4,8 @@
 
 #include <Red/Text/Rendering/FreeType/FTLibrary.h>
 
-#include <freetype/fttypes.h>
+#include <ft2build.h>
+#include FT_TYPES_H
 
 Red::Text::Rendering::FreeType :: FontFace * Red::Text::Rendering::FreeType::FontFace :: NewFromFile ( const std :: string & FileName, uint32_t FaceIndex, const std :: string & RefName )
 {

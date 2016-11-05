@@ -5,6 +5,8 @@
 
 #include <Xenon/Geometry/Primitives.h>
 
+#include <Xenon/GPU/GLInclude.h>
+
 const char * Red::Graphics::DeferredModelRenderer :: kModelAttributeName_Position = "Position";
 const char * Red::Graphics::DeferredModelRenderer :: kModelAttributeName_Normal = "Normal";
 const char * Red::Graphics::DeferredModelRenderer :: kModelAttributeName_Tangent = "Tangent";

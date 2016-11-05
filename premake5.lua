@@ -18,7 +18,9 @@ workspace "ProjectRed"
 		
 	filter "system:linux"
 		
-		buildoptions "-std=c++11 -stdlib=libc++"
+		buildoptions "-std=c++11"
+		includedirs "/usr/include/freetype2/"
+		libdirs "/usr/lib"
 		links { "GL", "SDL2", "png", "freetype" }
 		
 	filter {}

@@ -4,7 +4,7 @@
 #include <Xenon/Xenon.h>
 #include <Xenon/Math/Math.h>
 #include <Xenon/Math/Matrix3x3.h>
-#include <Xenon/GPU/GLinclude.h>
+#include <Xenon/GPU/GLInclude.h>
 #include <Xenon/GPU/IMatrix3x3UniformSource.h>
 
 #include <Red/Util/RefCounted.h>

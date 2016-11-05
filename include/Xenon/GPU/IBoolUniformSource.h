@@ -3,7 +3,7 @@
 
 #include <Xenon/Xenon.h>
 #include <Xenon/GPU/GPU.h>
-#include <Xenon/GPU/GLinclude.h>
+#include <Xenon/GPU/GLInclude.h>
 #include <Red/Util/IRefCounted.h>
 
 #include <stdint.h>

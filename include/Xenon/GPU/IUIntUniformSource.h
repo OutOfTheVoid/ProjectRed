@@ -1,5 +1,5 @@
-#ifndef XENON_GPU_IFLOATVEC3UNIFORMSOURCE_H
-#define XENON_GPU_IFLOATVEC3UNIFORMSOURCE_H
+#ifndef XENON_GPU_IUINTUNIFORMSOURCE_H
+#define XENON_GPU_IUINTUNIFORMSOURCE_H
 
 #include <Xenon/Xenon.h>
 #include <Xenon/GPU/GPU.h>
@@ -7,17 +7,19 @@
 
 #include <Red/Util/IRefCounted.h>
 
+#include <stdint.h>
+
 namespace Xenon
 {
 	
 	namespace GPU
 	{
 		
-		class IFloatVec3UniformSource : public virtual Red::Util :: IRefCounted
+		class IUIntUniformSource : public virtual Red::Util :: IRefCounted
 		{
 		public:
 			
-			virtual const GLfloat * GetFloatVector () const = 0;
+			virtual GLuint GetValue () const = 0;
 			
 			virtual int64_t GetIteration () const = 0;
 			

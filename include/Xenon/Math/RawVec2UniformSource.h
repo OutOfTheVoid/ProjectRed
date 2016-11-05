@@ -4,7 +4,7 @@
 #include <Xenon/Xenon.h>
 #include <Xenon/Math/Math.h>
 #include <Xenon/Math/Vec2.h>
-#include <Xenon/GPU/GLinclude.h>
+#include <Xenon/GPU/GLInclude.h>
 #include <Xenon/GPU/IFloatVec2UniformSource.h>
 
 #include <Red/Util/RefCounted.h>

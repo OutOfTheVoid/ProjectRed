@@ -100,9 +100,15 @@ void RAUX::PNGFile :: Load ( uint32_t * Status )
 	int ColorType;
 	int BitDepth;
 	int InterlaceType;
+
+	png_uint_32 W;
+	png_uint_32 H;
 	
-	png_get_IHDR ( LibPNGRuntimeInfo, ImageInfo, & Width, & Height, & BitDepth, & ColorType, & InterlaceType, NULL, NULL );
+	png_get_IHDR ( LibPNGRuntimeInfo, ImageInfo, & W, & H, & BitDepth, & ColorType, & InterlaceType, NULL, NULL );
 	
+	Width = W;
+	Height = H;
+
 	Alpha = ( ColorType & PNG_COLOR_MASK_ALPHA ) != 0;
 	
 	size_t BytesPerRow = png_get_rowbytes ( LibPNGRuntimeInfo, ImageInfo );
