@@ -7,11 +7,19 @@ workspace "ProjectRed"
 	flags { "C++11" }
 	
 	filter "system:macosx"
+	
+		buildoptions "-std=c++11 -stdlib=libc++ -F/Library/Frameworks"
+		linkoptions "-stdlib=libc++"
 		
 		includedirs { "/opt/local/include", "/opt/local/include/freetype2", "include" }
-		libdirs { "/opt/local/lib" }
-		frameworkdirs { "/Library/Frameworks/**"}
-		links { "OpenGL.framework", "SDL2.framework", "png", "freetype" }
+		libdirs "/opt/local/lib"
+		frameworkdirs "/Library/Frameworks/**"
+		links { "OpenGL.framework", "SDL2", "png", "freetype" }
+		
+	filter "system:linux"
+		
+		buildoptions "-std=c++11 -stdlib=libc++"
+		links { "GL", "SDL2", "png", "freetype" }
 		
 	filter {}
 	

@@ -323,7 +323,7 @@ Red::Text::Rendering :: RawFontTextureAtlas * Red::Text::Rendering::FreeType::Fr
 {
 	
 	uint32_t I;
-	uint32_t GlyphCount;
+	uint32_t GlyphCount = 0;
 	
 	char32_t MaxCodePoint = 0;
 	
