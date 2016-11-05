@@ -8,13 +8,16 @@ workspace "ProjectRed"
 	
 	filter "system:macosx"
 	
-		buildoptions "-std=c++11 -stdlib=libc++ -F/Library/Frameworks"
-		linkoptions "-stdlib=libc++"
+		buildoptions "-std=c++11 -F/Library/Frameworks"
 		
 		includedirs { "/opt/local/include", "/opt/local/include/freetype2", "include" }
 		libdirs "/opt/local/lib"
 		frameworkdirs "/Library/Frameworks/**"
 		links { "OpenGL.framework", "SDL2", "png", "freetype" }
+		
+	filter "action:xcode*"
+		
+		linkoptions "-stdlib=libc++"
 		
 	filter "system:linux"
 		
