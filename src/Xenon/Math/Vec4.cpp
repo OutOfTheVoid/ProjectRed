@@ -194,7 +194,7 @@ void Xenon::Math::Vec4 :: Normalize ( Vec4 & Target, const Vec4 & Source )
 	
 #else
 	
-	Multiply ( Source, 1.0 / Length ( Source ), Target );
+	Multiply ( Target, Source, 1.0 / Length ( Source ) );
 	
 #endif
 	

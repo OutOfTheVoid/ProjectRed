@@ -1190,7 +1190,7 @@ void Xenon::Math::Matrix4x4 :: Copy ( Matrix4x4 & Target, const Matrix4x4 & Sour
 void Xenon::Math::Matrix4x4 :: Invert ( Matrix4x4 & Target )
 {
 	
-#ifdef XENON_SSE
+#ifdef XENON_SSE4_1
 	
 	Transpose ( Target );
 	
@@ -1344,7 +1344,7 @@ bool Xenon::Math::Matrix4x4 :: Invertible ( const Matrix4x4 & Source, float Prec
 void Xenon::Math::Matrix4x4 :: Invert ( Matrix4x4 & Target, const Matrix4x4 & Source )
 {
 	
-#ifdef XENON_SSE
+#ifdef XENON_SSE4_1
 	
 	Matrix4x4 Temporary ( NO_INIT );
 	
