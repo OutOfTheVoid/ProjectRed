@@ -1,7 +1,7 @@
 #ifndef SDLX_WINDOW_H
 #define SDLX_WINDOW_H
 
-#include <SDL2/SDL.h>
+#include <SDLX/SDLX.h>
 
 #include <SDLX/SDLX.h>
 #include <SDLX/RefCounted.h>

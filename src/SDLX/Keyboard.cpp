@@ -25,7 +25,7 @@ bool SDLX::Keyboard :: GetKeyState ( int32_t Key )
 	if ( ScanCode >= KeyCount )
 		return false;
 	
-	return KeyArray [ ScanCode ];
+	return KeyArray [ ScanCode ] != 0;
 	
 }
 
@@ -35,7 +35,7 @@ bool SDLX::Keyboard :: GetScanState ( int32_t ScanCode )
 	if ( ScanCode >= KeyCount )
 		return false;
 	
-	return KeyArray [ ScanCode ];
+	return KeyArray [ ScanCode ] != 0;
 	
 }
 

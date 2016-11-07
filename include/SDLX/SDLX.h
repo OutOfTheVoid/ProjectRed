@@ -9,6 +9,8 @@
 
 #include <SDL2/SDL.h>
 
+#undef main
+
 #define SDLX_XENON_GL_INTERFACE
 
 namespace SDLX

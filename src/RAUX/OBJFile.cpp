@@ -545,7 +545,7 @@ bool RAUX::OBJFile :: ProcessFace ( const std :: string & Line, uint32_t Index )
 		}
 		
 		if ( VertexPositionIndex < 0 )
-			VertexPositionIndex += VertexPositions.size ();
+			VertexPositionIndex += static_cast <int32_t> ( VertexPositions.size () );
 		else
 			VertexPositionIndex --;
 		
@@ -583,7 +583,7 @@ bool RAUX::OBJFile :: ProcessFace ( const std :: string & Line, uint32_t Index )
 				}
 				
 				if ( VertexTexturePositionIndex < 0 )
-					VertexTexturePositionIndex += VertexTexturePositions.size ();
+					VertexTexturePositionIndex += static_cast <int32_t> ( VertexTexturePositions.size () );
 				else
 					VertexTexturePositionIndex --;
 				
@@ -617,7 +617,7 @@ bool RAUX::OBJFile :: ProcessFace ( const std :: string & Line, uint32_t Index )
 				}
 				
 				if ( VertexNormalIndex < 0 )
-					VertexNormalIndex += VertexNormals.size ();
+					VertexNormalIndex += static_cast <int32_t> ( VertexNormals.size () );
 				else
 					VertexNormalIndex --;
 				
@@ -1011,7 +1011,7 @@ Xenon::Geometry :: Mesh * RAUX::OBJFile :: CreateMesh ( const MeshParameters & P
 			
 		}
 		
-		TriCount += FGroup -> FaceIndecies.size ();
+		TriCount += static_cast <uint32_t> ( FGroup -> FaceIndecies.size () );
 		
 	}
 	

@@ -32,7 +32,7 @@ namespace Red
 		
 		class DeferredModelRenderer;
 		
-		class DeferredModelRenderer : public Util :: RefCounted, public virtual IRenderer3D
+		class alignas ( 16 ) DeferredModelRenderer : public Util :: RefCounted, public virtual IRenderer3D
 		{
 		public:
 			
@@ -50,6 +50,24 @@ namespace Red
 			
 			DeferredModelRenderer ();
 			~DeferredModelRenderer ();
+
+#ifdef _WIN32
+			
+			inline void * operator new ( size_t Size )
+			{
+
+				return _mm_malloc ( Size, 16 );
+
+			}
+
+			inline void operator delete ( void * ToFree )
+			{
+
+				_mm_free ( ToFree );
+
+			}
+
+#endif
 			
 			void Initialize ( Xenon::GPU :: Context * GPUContext );
 			

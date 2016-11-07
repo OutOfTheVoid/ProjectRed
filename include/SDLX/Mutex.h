@@ -3,8 +3,6 @@
 
 #include <SDLX/SDLX.h>
 
-#include <SDL2/SDL.h>
-
 namespace SDLX
 {
 

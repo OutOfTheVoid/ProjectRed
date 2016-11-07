@@ -1,7 +1,7 @@
 #ifndef SDLX_TIMER_H
 #define SDLX_TIMER_H
 
-#include <SDL2/SDL.h>
+#include <SDLX/SDLX.h>
 
 #include <SDLX/RefCounted.h>
 #include <SDLX/Mutex.h>

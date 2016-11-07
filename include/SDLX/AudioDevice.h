@@ -5,8 +5,6 @@
 
 #include <stdint.h>
 
-#include <SDL2/SDL.h>
-
 #include <Red/Util/Function.h>
 #include <Red/Util/RefCounted.h>
 

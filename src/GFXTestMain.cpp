@@ -158,7 +158,7 @@ typedef struct
 	
 } KeyboardStruct;
 
-int main ( int argc, const char * argv [] )
+extern "C" int main ( int argc, const char * argv [] )
 {
 	
 	( void ) argc;

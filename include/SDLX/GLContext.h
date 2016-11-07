@@ -2,7 +2,6 @@
 #define SDLX_GLCONTEXT_H
 
 #include <SDLX/SDLX.h>
-#include <SDL2/SDL.h>
 
 #ifdef SDLX_XENON_GL_INTERFACE
 	#include <Xenon/GPU/IGLContext.h>

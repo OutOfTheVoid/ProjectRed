@@ -42,7 +42,7 @@ int main ( int argc, char const * argv [] )
 	if ( Status != SDLX :: kStatus_Success )
 		return - 1;
 	
-	SDLX::Window * Win = SDLX::Window :: Create ( & Status, "Test", WINDOW_WIDTH, WINDOW_HEIGHT, SDLX::Window :: kCreateFlag_Shown | SDLX::Window :: kCreateFlag_HighDPI | SDLX::Window :: kCreateFlag_OpenGL );
+	SDLX::Window * Win = SDLX::Window :: Create ( & Status, "Test", WINDOW_WIDTH, WINDOW_HEIGHT, SDLX::Window :: kCreateFlag_Shown | SDLX::Window :: kCreateFlag_HighDPI );
 	
 	if ( Status != SDLX::Window :: kStatus_Success )
 	{
@@ -81,8 +81,7 @@ int main ( int argc, char const * argv [] )
 	}
 	else
 		std :: cout << "WAV Load failure: " << Status << std :: endl;
-		
-	
+
 	Red::Audio :: RawBufferStreamSource WAVSourceLeftChannel ( FileBuffer, 0 );
 	Red::Audio :: RawBufferStreamSource WAVSourceRightChannel ( FileBuffer, 1 );
 	
@@ -99,7 +98,7 @@ int main ( int argc, char const * argv [] )
 	
 	/*================================*/
 	
-	SDLX :: AudioDevice * Device = SDLX::AudioDevice :: RequestAudioDevice ( NULL, 44100, SDLX::AudioDevice :: kBufferFormat_I16_LE, 2, 8192, false, false );
+	SDLX :: AudioDevice * Device = SDLX::AudioDevice :: RequestAudioDevice ( NULL, 44100, SDLX::AudioDevice :: kBufferFormat_I32_SE, 2, 8192, true, false );
 	
 	if ( Device == NULL )
 	{
@@ -126,6 +125,8 @@ int main ( int argc, char const * argv [] )
 	SDLX::Lib :: EventLoop ( & Status ); // GAME LOOP
 	
 	/*================================*/
+
+	AudioOutput.Stop ();
 	
 	Device -> Stop ();
 	Device -> Dereference ();

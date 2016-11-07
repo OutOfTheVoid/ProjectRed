@@ -287,6 +287,13 @@ void Red::Graphics::DeferredModelRenderer :: SetProjection ( Xenon::Math :: Matr
 	
 }
 
+void Red::Graphics::DeferredModelRenderer :: SetView ( Xenon::Math::Matrix4x4 & ViewMatrix )
+{
+
+	// TODO: Implement
+
+}
+
 void Red::Graphics::DeferredModelRenderer :: SetupRender ( Xenon::GPU :: FrameBuffer * RenderTarget, Xenon::Math :: Vec2 Dimensions )
 {
 	

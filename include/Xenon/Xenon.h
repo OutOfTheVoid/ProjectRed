@@ -12,10 +12,15 @@
 // Leave defined for error messages.
 #define XENON_DEBUG
 
+// Leave defined to use gl3w to load OpenGL functions. ( needed for windows, mostly )
+#define XENON_GL3W_GL_LOADER
+
 #define XENON_LOG_ERROR( ... ) ::Xenon::_Xenon_Log ( __FILE__, __LINE__, __VA_ARGS__ )
 
 namespace Xenon
 {
+
+	void Init ();
 	
 	inline void _Xenon_Log ( const char * FileName, unsigned int LineNumber, const char * Format, ... )
 	{

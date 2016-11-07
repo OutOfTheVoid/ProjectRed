@@ -4,7 +4,7 @@
 #include <SDLX/SDLX.h>
 #include <SDLX/Mutex.h>
 
-#include <SDL2/SDL.h>
+#include <SDLX/SDLX.h>
 
 #include <vector>
 #include <algorithm>

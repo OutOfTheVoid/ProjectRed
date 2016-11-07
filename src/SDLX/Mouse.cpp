@@ -21,7 +21,7 @@ void SDLX::Mouse :: Init ()
 	uint32_t ButtonMask = SDL_GetMouseState ( NULL, NULL );
 	
 	for ( uint32_t I = 0; I < 32; I ++ )
-		ButtonStates [ I ] = SDL_BUTTON ( I ) & ButtonMask;
+		ButtonStates [ I ] = ( SDL_BUTTON ( I ) & ButtonMask ) != 0;
 	
 	SDL_SetRelativeMouseMode ( SDL_FALSE );
 	

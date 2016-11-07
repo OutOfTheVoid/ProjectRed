@@ -1,7 +1,5 @@
 #include <SDLX/AudioDevice.h>
 
-void __SDLX_AudioDevice_AudioCallback ( void * DeviceInstance, uint8_t * Packet, int PacketLength );
-
 uint32_t SDLX::AudioDevice :: GetDeviceCount ( bool RequireRecording )
 {
 	
@@ -33,7 +31,7 @@ SDLX :: AudioDevice * SDLX::AudioDevice :: RequestAudioDevice ( const char * Dev
 	Requested.samples = SampleSize;
 	Requested.userdata = reinterpret_cast <void *> ( NewDevice );
 	Requested.callback = & AudioCallback;
-	
+
 	NewDevice -> Device = SDL_OpenAudioDevice ( DeviceName, RequireRecording ? 1 : 0, & Requested, & NewDevice -> Spec, FlexibleSource ? SDL_AUDIO_ALLOW_ANY_CHANGE : 0 );
 	
 	if ( NewDevice -> Device > 0 )
@@ -45,7 +43,6 @@ SDLX :: AudioDevice * SDLX::AudioDevice :: RequestAudioDevice ( const char * Dev
 }
 
 SDLX::AudioDevice :: AudioDevice ():
-	IAudioOutputDevice (),
 	RefCounted (),
 	FillFunction ( NULL ),
 	Device ( 0 ),

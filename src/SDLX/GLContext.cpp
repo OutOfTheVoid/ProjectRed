@@ -119,10 +119,10 @@ bool SDLX::GLContext :: RequestMSAA ( bool Enabled, uint32_t Level )
 		if ( ! SDL_GL_SetAttribute ( SDL_GL_MULTISAMPLEBUFFERS, 1 ) )
 			return false;
 		
-		return SDL_GL_SetAttribute ( SDL_GL_MULTISAMPLESAMPLES, Level );
+		return SDL_GL_SetAttribute ( SDL_GL_MULTISAMPLESAMPLES, Level ) == 0;
 		
 	}
 	else
-		return SDL_GL_SetAttribute ( SDL_GL_MULTISAMPLEBUFFERS, 0 );
+		return SDL_GL_SetAttribute ( SDL_GL_MULTISAMPLEBUFFERS, 0 ) == 0;
 	
 }

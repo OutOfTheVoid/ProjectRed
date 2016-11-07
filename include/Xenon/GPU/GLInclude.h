@@ -1,7 +1,21 @@
 #ifndef XENON_GLINCLUDE_H
 #define XENON_GLINCLUDE_H
 
-#define GL3_PROTOTYPES
+//#define GL3_PROTOTYPES
+
+#ifdef XENON_GL3W_GL_LOADER
+
+#ifdef _WIN32
+
+#include <windows.h>
+
+#endif
+
+#define GL_GLEXT_PROTOTYPES
+
+#include <gl\gl3w.h>
+
+#else
 
 #if defined ( __APPLE__ )
 
@@ -23,6 +37,8 @@
 	#include <GL/gl.h>
 	
 	#endif
+
+#endif
 
 #endif
 

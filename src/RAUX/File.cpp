@@ -1,4 +1,5 @@
 #define _LARGEFILE64_SOURCE
+#define _CRT_SECURE_NO_WARNINGS
 
 #include <RAUX/File.h>
 
@@ -73,7 +74,7 @@ bool RAUX::File :: Exists () const
 	if ( Opened )
 	{
 		
-		int FD = fileno ( Handle );
+		int FD = _fileno ( Handle );
 		
 		if ( FD == - 1 )
 			return false;
@@ -138,7 +139,7 @@ void RAUX::File :: Open ( uint32_t * Status, bool Overwrite )
 	
 #elif defined ( _WIN32 )
 	
-	Handle = fopen(Name.c_str(), Writable ? (Overwrite ? "a+b" : "w+b") : "rb");
+	Handle = fopen ( Name.c_str (), Writable ? ( Overwrite ? "a+b" : "w+b" ) : "rb" );
 	
 #else
 	
@@ -433,7 +434,7 @@ int64_t RAUX::File :: GetLength ( uint32_t * Status ) const
 	if ( Opened )
 	{
 		
-		int FD = fileno ( Handle );
+		int FD = _fileno ( Handle );
 		
 		if ( FD == - 1 )
 		{
