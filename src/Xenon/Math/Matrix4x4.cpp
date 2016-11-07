@@ -72,25 +72,25 @@ void Xenon::Math::Matrix4x4 :: MultiplyScalar ( Matrix4x4 & Target, float Scalar
 	
 #else
 	
-	Target.Elements [ 0 ].E0 * Scalar;
-	Target.Elements [ 0 ].E1 * Scalar;
-	Target.Elements [ 0 ].E2 * Scalar;
-	Target.Elements [ 0 ].E3 * Scalar;
+	Target.Elements [ 0 ].E0 *= Scalar;
+	Target.Elements [ 0 ].E1 *= Scalar;
+	Target.Elements [ 0 ].E2 *= Scalar;
+	Target.Elements [ 0 ].E3 *= Scalar;
 	
-	Target.Elements [ 1 ].E0 * Scalar;
-	Target.Elements [ 1 ].E1 * Scalar;
-	Target.Elements [ 1 ].E2 * Scalar;
-	Target.Elements [ 1 ].E3 * Scalar;
+	Target.Elements [ 1 ].E0 *= Scalar;
+	Target.Elements [ 1 ].E1 *= Scalar;
+	Target.Elements [ 1 ].E2 *= Scalar;
+	Target.Elements [ 1 ].E3 *= Scalar;
 	
-	Target.Elements [ 2 ].E0 * Scalar;
-	Target.Elements [ 2 ].E1 * Scalar;
-	Target.Elements [ 2 ].E2 * Scalar;
-	Target.Elements [ 2 ].E3 * Scalar;
+	Target.Elements [ 2 ].E0 *= Scalar;
+	Target.Elements [ 2 ].E1 *= Scalar;
+	Target.Elements [ 2 ].E2 *= Scalar;
+	Target.Elements [ 2 ].E3 *= Scalar;
 	
-	Target.Elements [ 3 ].E0 * Scalar;
-	Target.Elements [ 3 ].E1 * Scalar;
-	Target.Elements [ 3 ].E2 * Scalar;
-	Target.Elements [ 3 ].E3 * Scalar;
+	Target.Elements [ 3 ].E0 *= Scalar;
+	Target.Elements [ 3 ].E1 *= Scalar;
+	Target.Elements [ 3 ].E2 *= Scalar;
+	Target.Elements [ 3 ].E3 *= Scalar;
 	
 #endif
 	
@@ -603,20 +603,20 @@ void Xenon::Math::Matrix4x4 :: AppendScale ( Matrix4x4 & Target, const float X, 
 	
 #else
 	
-	Target.Elements [ 0 ].E0 * X;
-	Target.Elements [ 0 ].E1 * X;
-	Target.Elements [ 0 ].E2 * X;
-	Target.Elements [ 0 ].E3 * X;
+	Target.Elements [ 0 ].E0 *= X;
+	Target.Elements [ 0 ].E1 *= X;
+	Target.Elements [ 0 ].E2 *= X;
+	Target.Elements [ 0 ].E3 *= X;
 	
-	Target.Elements [ 1 ].E0 * Y;
-	Target.Elements [ 1 ].E1 * Y;
-	Target.Elements [ 1 ].E2 * Y;
-	Target.Elements [ 1 ].E3 * Y;
+	Target.Elements [ 1 ].E0 *= Y;
+	Target.Elements [ 1 ].E1 *= Y;
+	Target.Elements [ 1 ].E2 *= Y;
+	Target.Elements [ 1 ].E3 *= Y;
 	
-	Target.Elements [ 2 ].E0 * Z;
-	Target.Elements [ 2 ].E1 * Z;
-	Target.Elements [ 2 ].E2 * Z;
-	Target.Elements [ 2 ].E3 * Z;
+	Target.Elements [ 2 ].E0 *= Z;
+	Target.Elements [ 2 ].E1 *= Z;
+	Target.Elements [ 2 ].E2 *= Z;
+	Target.Elements [ 2 ].E3 *= Z;
 	
 #endif
 	
@@ -633,20 +633,20 @@ void Xenon::Math::Matrix4x4 :: AppendScale ( Matrix4x4 & Target, const Vec3 & Sc
 	
 #else
 	
-	Target.Elements [ 0 ].E0 * Scale.X;
-	Target.Elements [ 0 ].E1 * Scale.X;
-	Target.Elements [ 0 ].E2 * Scale.X;
-	Target.Elements [ 0 ].E3 * Scale.X;
+	Target.Elements [ 0 ].E0 *= Scale.X;
+	Target.Elements [ 0 ].E1 *= Scale.X;
+	Target.Elements [ 0 ].E2 *= Scale.X;
+	Target.Elements [ 0 ].E3 *= Scale.X;
 	
-	Target.Elements [ 1 ].E0 * Scale.Y;
-	Target.Elements [ 1 ].E1 * Scale.Y;
-	Target.Elements [ 1 ].E2 * Scale.Y;
-	Target.Elements [ 1 ].E3 * Scale.Y;
+	Target.Elements [ 1 ].E0 *= Scale.Y;
+	Target.Elements [ 1 ].E1 *= Scale.Y;
+	Target.Elements [ 1 ].E2 *= Scale.Y;
+	Target.Elements [ 1 ].E3 *= Scale.Y;
 	
-	Target.Elements [ 2 ].E0 * Scale.Z;
-	Target.Elements [ 2 ].E1 * Scale.Z;
-	Target.Elements [ 2 ].E2 * Scale.Z;
-	Target.Elements [ 2 ].E3 * Scale.Z;
+	Target.Elements [ 2 ].E0 *= Scale.Z;
+	Target.Elements [ 2 ].E1 *= Scale.Z;
+	Target.Elements [ 2 ].E2 *= Scale.Z;
+	Target.Elements [ 2 ].E3 *= Scale.Z;
 	
 #endif
 	
@@ -726,21 +726,21 @@ void Xenon::Math::Matrix4x4 :: PrependScale ( Matrix4x4 & Target, const float X,
 	
 #else
 	
-	Target.Elements [ 0 ].E0 * X;
-	Target.Elements [ 0 ].E1 * Y;
-	Target.Elements [ 0 ].E2 * Z;
+	Target.Elements [ 0 ].E0 *= X;
+	Target.Elements [ 0 ].E1 *= Y;
+	Target.Elements [ 0 ].E2 *= Z;
 	
-	Target.Elements [ 1 ].E0 * X;
-	Target.Elements [ 1 ].E1 * Y;
-	Target.Elements [ 1 ].E2 * Z;
+	Target.Elements [ 1 ].E0 *= X;
+	Target.Elements [ 1 ].E1 *= Y;
+	Target.Elements [ 1 ].E2 *= Z;
 	
-	Target.Elements [ 2 ].E0 * X;
-	Target.Elements [ 2 ].E1 * Y;
-	Target.Elements [ 2 ].E2 * Z;
+	Target.Elements [ 2 ].E0 *= X;
+	Target.Elements [ 2 ].E1 *= Y;
+	Target.Elements [ 2 ].E2 *= Z;
 	
-	Target.Elements [ 3 ].E0 * X;
-	Target.Elements [ 3 ].E1 * Y;
-	Target.Elements [ 3 ].E2 * Z;
+	Target.Elements [ 3 ].E0 *= X;
+	Target.Elements [ 3 ].E1 *= Y;
+	Target.Elements [ 3 ].E2 *= Z;
 	
 #endif
 	
@@ -760,21 +760,21 @@ void Xenon::Math::Matrix4x4 :: PrependScale ( Matrix4x4 & Source, const Vec3 & S
 	
 #else
 	
-	Source.Elements [ 0 ].E0 * Scale.X;
-	Source.Elements [ 0 ].E1 * Scale.Y;
-	Source.Elements [ 0 ].E2 * Scale.Z;
+	Source.Elements [ 0 ].E0 *= Scale.X;
+	Source.Elements [ 0 ].E1 *= Scale.Y;
+	Source.Elements [ 0 ].E2 *= Scale.Z;
 	
-	Source.Elements [ 1 ].E0 * Scale.X;
-	Source.Elements [ 1 ].E1 * Scale.Y;
-	Source.Elements [ 1 ].E2 * Scale.Z;
+	Source.Elements [ 1 ].E0 *= Scale.X;
+	Source.Elements [ 1 ].E1 *= Scale.Y;
+	Source.Elements [ 1 ].E2 *= Scale.Z;
 	
-	Source.Elements [ 2 ].E0 * Scale.X;
-	Source.Elements [ 2 ].E1 * Scale.Y;
-	Source.Elements [ 2 ].E2 * Scale.Z;
+	Source.Elements [ 2 ].E0 *= Scale.X;
+	Source.Elements [ 2 ].E1 *= Scale.Y;
+	Source.Elements [ 2 ].E2 *= Scale.Z;
 	
-	Source.Elements [ 3 ].E0 * Scale.X;
-	Source.Elements [ 3 ].E1 * Scale.Y;
-	Source.Elements [ 3 ].E2 * Scale.Z;
+	Source.Elements [ 3 ].E0 *= Scale.X;
+	Source.Elements [ 3 ].E1 *= Scale.Y;
+	Source.Elements [ 3 ].E2 *= Scale.Z;
 	
 #endif
 	

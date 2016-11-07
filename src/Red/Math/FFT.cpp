@@ -1,5 +1,10 @@
 #include <Red/Math/FFT.h>
-#include <cmath>
+#include <math.h>
+
+// Why wouldn't windows math.h deifne M_PI?????
+#ifndef M_PI
+	#define M_PI 3.14159265358979323846264338327950288
+#endif
 
 inline bool _IsPowerOfTwo ( uint32_t Num )
 {

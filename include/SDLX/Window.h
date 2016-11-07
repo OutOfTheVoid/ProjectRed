@@ -63,7 +63,7 @@ namespace SDLX
 		static const uint32_t kWindowEventID_HitTest = SDL_WINDOWEVENT_HIT_TEST;
 #endif
 		
-		static Window * CreateWindow ( uint32_t * Status, const std :: string & Name, uint32_t Width, uint32_t Height, uint32_t Flags = kCreateFlag_HighDPI | kCreateFlag_Resizable | kCreateFlag_Shown | kCreateFlag_AcceleratedRender );
+		static Window * Create ( uint32_t * Status, const std :: string & Name, uint32_t Width, uint32_t Height, uint32_t Flags = kCreateFlag_HighDPI | kCreateFlag_Resizable | kCreateFlag_Shown | kCreateFlag_AcceleratedRender );
 		
 		~Window ();
 		

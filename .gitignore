@@ -17,3 +17,8 @@ build
 *.make
 Makefile
 *.xcworkspace
+*.vcxproj*
+*.sln*
+*.db
+*.suo
+*.VC.opendb

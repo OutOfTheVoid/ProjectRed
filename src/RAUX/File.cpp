@@ -4,7 +4,12 @@
 
 #include <sys/stat.h>
 #include <sys/types.h>
-#include <unistd.h>
+
+#ifndef _WIN32
+	#include <unistd.h>
+#endif
+
+#include <stdio.h>
 #include <errno.h>
 
 RAUX::File :: File ( const std :: string & Name, bool Writable ):
@@ -133,7 +138,7 @@ void RAUX::File :: Open ( uint32_t * Status, bool Overwrite )
 	
 #elif defined ( _WIN32 )
 	
-	Handle = _fopen64 ( Name.c_str (), Writable ? ( Overwrite ? "a+b" : "w+b" ) : "rb" )
+	Handle = fopen(Name.c_str(), Writable ? (Overwrite ? "a+b" : "w+b") : "rb");
 	
 #else
 	
@@ -237,7 +242,7 @@ void RAUX::File :: Close ( uint32_t * Status )
 	
 #elif defined ( _WIN32 )
 	
-	_fclose ( Handle );
+	fclose ( Handle );
 	
 #else
 	

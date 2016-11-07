@@ -25,6 +25,10 @@
 
 #endif
 
+#ifdef _WIN32
+	#define RED_LITTLE_ENDIAN_DEFINITE
+#endif
+
 inline uint32_t LittleToHostEndian32 ( const uint32_t In )
 {
 	
@@ -36,7 +40,7 @@ inline uint32_t LittleToHostEndian32 ( const uint32_t In )
 	
 	const uint8_t * Bytes = reinterpret_cast <const uint8_t *> ( & In );
 	
-	return ( Bytes [ 0 ] & 0xFF ) | ( ( Bytes [ 1 ] << 8 ) & 0xFF00 ) | ( Bytes [ 2 ] << 16 ) & 0xFF0000 ) | ( ( Bytes [ 3 ] << 24 ) & 0xFF000000 );
+	return ( Bytes [ 0 ] & 0xFF ) | ( ( Bytes [ 1 ] << 8 ) & 0xFF00 ) | ( ( Bytes [ 2 ] << 16 ) & 0xFF0000 ) | ( ( Bytes [ 3 ] << 24 ) & 0xFF000000 );
 	
 #endif
 	
@@ -122,8 +126,8 @@ inline uint16_t HostToLittleEndian16 ( const uint16_t In )
 	
 	uint16_t Out;
 	
-	reinterpret_cast <uint8_t *> ( & Out ) [ 0 ] = In;
-	reinterpret_cast <uint8_t *> ( & Out ) [ 1 ] = In >> 8;
+	reinterpret_cast <uint8_t *> ( reinterpret_cast <void *> ( & Out ) ) [ 0 ] = In;
+	reinterpret_cast <uint8_t *> ( reinterpret_cast <void *> ( & Out ) ) [ 1 ] = In >> 8;
 	
 	return Out;
 	

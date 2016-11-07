@@ -11,14 +11,19 @@
 	
 	#ifdef _WIN32
 	  
-	  #include <windows.h>
+	#include <windows.h>
 	
-	#endif
-
 	#define GL_GLEXT_PROTOTYPES
+	#include <gl/glcorearb.h>
+	
+	#else
+	
+	#undef GL_GLEXT_PROTOTYPES
 	
 	#include <GL/gl.h>
 	
+	#endif
+
 #endif
 
 #endif

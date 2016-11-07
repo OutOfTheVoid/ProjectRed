@@ -22,7 +22,7 @@ namespace Red
 			{
 			};
 			
-			inline virtual ~RefCounted ()
+			inline ~RefCounted ()
 			{
 			};
 			

@@ -331,7 +331,7 @@ void Red::Text::Rendering::ShadedRenderer :: SetRenderTarget ( Xenon::GPU :: Con
 	
 }
 
-void Red::Text::Rendering::ShadedRenderer :: SetColor ( const Xenon::Math :: Vec4 Color )
+void Red::Text::Rendering::ShadedRenderer :: SetColor ( const Xenon::Math :: Vec4 & Color )
 {
 	
 	this -> Color = Color;

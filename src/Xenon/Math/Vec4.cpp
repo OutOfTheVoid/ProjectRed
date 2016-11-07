@@ -110,7 +110,7 @@ void Xenon::Math::Vec4 :: Add ( Vec4 & Target, const Vec4 & SourceA, const Vec4 
 	Target.X = SourceA.X + SourceB.X;
 	Target.Y = SourceA.Y + SourceB.Y;
 	Target.Z = SourceA.Z + SourceB.Z;
-	Target.W = SourceA.W + BSourceB.W;
+	Target.W = SourceA.W + SourceB.W;
 	
 #endif
 	
@@ -255,7 +255,7 @@ void Xenon::Math::Vec4 :: Interpolate ( Vec4 & Target, const Vec4 & Source, floa
 	Vec4 Temp;
 	
 	Multiply ( Target, Fraction );
-	Multiply ( Source, 1.0f - Fraction, Temp );
+	Multiply ( Temp, Source, 1.0f - Fraction );
 	
 	Add ( Target, Temp );
 	

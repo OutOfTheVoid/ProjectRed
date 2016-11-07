@@ -77,7 +77,7 @@ namespace Red
 				
 				void SetRenderTarget ( Xenon::GPU :: Context * Context, Xenon::GPU :: FrameBuffer * RenderTarget, Xenon::Math :: Vec2 Dimensions );
 				
-				void SetColor ( const Xenon::Math :: Vec4 Color );
+				void SetColor ( const Xenon::Math :: Vec4 & Color );
 				Xenon::Math :: Vec4 GetColor ();
 				
 				void SetRegistrationMetrics ( RegistrationMetric X, RegistrationMetric Y );
