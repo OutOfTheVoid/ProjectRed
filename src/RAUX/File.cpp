@@ -74,7 +74,15 @@ bool RAUX::File :: Exists () const
 	if ( Opened )
 	{
 		
+#ifdef _WIN32
+		
 		int FD = _fileno ( Handle );
+		
+#else
+		
+		int FD = fileno ( Handle );
+		
+#endif
 		
 		if ( FD == - 1 )
 			return false;
@@ -434,7 +442,15 @@ int64_t RAUX::File :: GetLength ( uint32_t * Status ) const
 	if ( Opened )
 	{
 		
+#ifdef _WIN32
+		
 		int FD = _fileno ( Handle );
+		
+#else
+		
+		int FD = fileno ( Handle );
+		
+#endif
 		
 		if ( FD == - 1 )
 		{

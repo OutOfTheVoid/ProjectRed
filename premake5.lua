@@ -5,8 +5,6 @@ workspace "ProjectRed"
 	flags { "C++11" }
 
 	includedirs "include"
-
-	platforms { "x64" }
 	
 	filter "system:macosx"
 	
@@ -29,16 +27,18 @@ workspace "ProjectRed"
 		links { "GL", "SDL2", "png", "freetype" }
 
 	filter "system:windows"
+		
+		platforms { "x64" }
 
 		includedirs "%HOMEPATH%/include"
 		libdirs "%HOMEPATH%/lib"
 		links { "SDL2", "libpng16", "freetype27MT", "OpenGL32", "GlU32", "gl3w" }
 
-		filter "configurations:Debug"
+		filter { "system:windows", "configurations:Debug" }
 
 			buildoptions "/MDd /wd4250 /wd4244 /FS"
 
-		filter "configurations:Release"
+		filter { "system:windows", "configurations:Release" }
 
 			buildoptions "/MD /wd4250 /wd4244 /FS"
 		
