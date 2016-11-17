@@ -163,11 +163,6 @@ Red::Audio::IStreamSource :: StreamFillCode Red::Audio::Effects::Echo :: FillAud
 	
 		uint64_t PassSize = ( ( FillSize - EffectOffset ) < EchoDepth ) ? ( FillSize - EffectOffset ) : EchoDepth;
 		
-		std :: cout << std :: endl;
-		std :: cout << "Echo offset: " << EchoOffset << std :: endl;
-		std :: cout << "Next echo offset: " << EchoOffsetNext << std :: endl;
-		std :: cout << "PassSize: " << PassSize << std :: endl;
-		
 		bool EchoReadWraps = ( EchoOffset + PassSize ) > EchoBuffSize;
 		bool EchoWriteWraps = ( EchoOffsetNext + PassSize ) > EchoBuffSize;
 		

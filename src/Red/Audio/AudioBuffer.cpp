@@ -14633,8 +14633,6 @@ void Red::Audio::AudioBuffer :: ClearBufferFloat ( uint32_t Channel, float Value
 		case kAudioBufferType_Float32_LittleEndian:
 		{
 			
-			std :: cout << "ClearBufferFloat: " << StartSample << " - " << ( SampleCount + StartSample ) << std :: endl;
-			
 			float CValue = HostToLittleEndianFloat ( Value );
 			
 			for ( I = StartSample; I < StartSample + SampleCount; I ++ )
