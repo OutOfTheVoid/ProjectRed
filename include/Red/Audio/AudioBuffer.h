@@ -65,10 +65,8 @@ namespace Red
 			
 			void ScaleBufferByConstant ( float Scale, uint32_t Channel, uint64_t SampleCount = 0xFFFFFFFFFFFFFFFF, uint64_t StartSample = 0 );
 			
-			// TODO:
-			// void MultiplyBuffer ( AudioBuffer & Source, uint32_t SourceChannel, uint64_t SampleCount, uint64_t SourceStartSample = 0, uint64_t TargetStartSample = 0, uint32_t TargetChannel = 0xFFFFFFFF );
-			// TODO:
-			// void MultiplyBufferScaled ( AudioBuffer & Source, float Scale, uint32_t SourceChannel, uint64_t SampleCount, uint64_t SourceStartSample = 0, uint64_t TargetStartSample = 0, uint32_t TargetChannel = 0xFFFFFFFF );
+			void MultiplyBuffer ( AudioBuffer & Source, uint32_t SourceChannel, uint64_t SampleCount, uint64_t SourceStartSample = 0, uint64_t TargetStartSample = 0, uint32_t TargetChannel = 0xFFFFFFFF );
+			void MultiplyBufferScaled ( AudioBuffer & Source, float Scale, uint32_t SourceChannel, uint64_t SampleCount, uint64_t SourceStartSample = 0, uint64_t TargetStartSample = 0, uint32_t TargetChannel = 0xFFFFFFFF );
 			
 			void ClearBufferFloat ( uint32_t Channel, float Value = 0.0f, uint64_t StartSample = 0, uint64_t SampleCount = 0xFFFFFFFFFFFFFFFF );
 			void ClearBufferInt ( uint32_t Channel, int64_t Value = 0, uint64_t StartSample = 0, uint64_t SampleCount = 0xFFFFFFFFFFFFFFFF );
