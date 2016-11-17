@@ -121,7 +121,7 @@ uint32_t SDLX::AudioDevice :: GetChannelCount ()
 	
 }
 
-uint32_t SDLX::AudioDevice ::  GetSampleSize ()
+uint64_t SDLX::AudioDevice ::  GetSampleSize ()
 {
 	
 	return Spec.samples;

@@ -7,6 +7,8 @@
 #include <string.h>
 #include <math.h>
 
+#include <iostream>
+
 #include <new>
 
 Red::Util :: Function1 <void, void *> Red::Audio::AudioBuffer :: StdFreeWrapper ( & free );
@@ -207,12 +209,15 @@ Red::Audio :: AudioBuffer * Red::Audio::AudioBuffer :: CreateChildWindow ( Audio
 	if ( Parent -> SampleCount <= StartSample )
 		return NULL;
 	
+	if ( SampleCount + StartSample >= Parent -> SampleCount )
+		SampleCount = Parent -> SampleCount - StartSample;
+	
 	SampleCount = ( Parent -> SampleCount < SampleCount + StartSample ) ? StartSample - Parent -> SampleCount : SampleCount;
 	
 	if ( Placement == NULL )
-		Placement = new AudioBuffer ( reinterpret_cast <void *> ( & reinterpret_cast <char *> ( Parent ) [ GetSizeFromDataType ( Parent -> GetDataType () ) * StartSample * Parent -> GetChannelCount () ] ), Parent -> GetDataType (), Parent -> GetChannelCount (), SampleCount, NULL, NULL, Parent );
+		Placement = new AudioBuffer ( reinterpret_cast <void *> ( & reinterpret_cast <char *> ( Parent -> Data ) [ GetSizeFromDataType ( Parent -> GetDataType () ) * StartSample * Parent -> GetChannelCount () ] ), Parent -> GetDataType (), Parent -> GetChannelCount (), SampleCount, NULL, NULL, Parent );
 	else
-		Placement = new ( reinterpret_cast <void *> ( Placement ) ) AudioBuffer ( reinterpret_cast <void *> ( & reinterpret_cast <char *> ( Parent ) [ GetSizeFromDataType ( Parent -> GetDataType () ) * StartSample * Parent -> GetChannelCount () ] ), Parent -> GetDataType (), Parent -> GetChannelCount (), SampleCount, NULL, NULL, Parent );
+		Placement = new ( reinterpret_cast <void *> ( Placement ) ) AudioBuffer ( reinterpret_cast <void *> ( & reinterpret_cast <char *> ( Parent -> Data ) [ GetSizeFromDataType ( Parent -> GetDataType () ) * StartSample * Parent -> GetChannelCount () ] ), Parent -> GetDataType (), Parent -> GetChannelCount (), SampleCount, NULL, NULL, Parent );
 	
 	return Placement;
 	
@@ -5111,19 +5116,6 @@ void Red::Audio::AudioBuffer :: AddBuffer ( AudioBuffer & Source, uint32_t Sourc
 	else
 	{
 		
-		#define _BLITBUFFER_ABSOURCEDATA_INT8 static_cast <int32_t> ( reinterpret_cast <int8_t *> ( Source.Data ) [ Source.ChannelCount * ( SourceStartSample + I ) + SourceChannel ] )
-		#define _BLITBUFFER_ABSOURCEDATA_UINT8 static_cast <uint32_t> ( reinterpret_cast <uint8_t *> ( Source.Data ) [ Source.ChannelCount * ( SourceStartSample + I ) + SourceChannel ] )
-		#define _BLITBUFFER_ABSOURCEDATA_INT16_LE static_cast <int32_t> ( _AB_Alias_U16ToI16 ( LittleToHostEndian16 ( reinterpret_cast <uint16_t *> ( Source.Data ) [ Source.ChannelCount * ( SourceStartSample + I ) + SourceChannel ] ) ) )
-		#define _BLITBUFFER_ABSOURCEDATA_INT16_BE static_cast <int32_t> ( _AB_Alias_U16ToI16 ( BigToHostEndian16 ( reinterpret_cast <uint16_t *> ( Source.Data ) [ Source.ChannelCount * ( SourceStartSample + I ) + SourceChannel ] ) ) )
-		#define _BLITBUFFER_ABSOURCEDATA_UINT16_LE static_cast <uint32_t> ( LittleToHostEndian16 ( reinterpret_cast <uint16_t *> ( Source.Data ) [ Source.ChannelCount * ( SourceStartSample + I ) + SourceChannel ] ) )
-		#define _BLITBUFFER_ABSOURCEDATA_UINT16_BE static_cast <uint32_t> ( BigToHostEndian16 ( reinterpret_cast <uint16_t *> ( Source.Data ) [ Source.ChannelCount * ( SourceStartSample + I ) + SourceChannel ] ) )
-		#define _BLITBUFFER_ABSOURCEDATA_INT32_LE _AB_Alias_U32ToI32 ( LittleToHostEndian32 ( reinterpret_cast <uint32_t *> ( Source.Data ) [ Source.ChannelCount * ( SourceStartSample + I ) + SourceChannel ] ) )
-		#define _BLITBUFFER_ABSOURCEDATA_INT32_BE _AB_Alias_U32ToI32 ( BigToHostEndian32 ( reinterpret_cast <uint32_t *> ( Source.Data ) [ Source.ChannelCount * ( SourceStartSample + I ) + SourceChannel ] ) )
-		#define _BLITBUFFER_ABSOURCEDATA_UINT32_LE LittleToHostEndian32 ( reinterpret_cast <uint32_t *> ( Source.Data ) [ Source.ChannelCount * ( SourceStartSample + I ) + SourceChannel ] )
-		#define _BLITBUFFER_ABSOURCEDATA_UINT32_BE BigToHostEndian32 ( reinterpret_cast <uint32_t *> ( Source.Data ) [ Source.ChannelCount * ( SourceStartSample + I ) + SourceChannel ] )
-		#define _BLITBUFFER_ABSOURCEDATA_FLOAT32_LE LittleToHostEndianFloat ( reinterpret_cast <float *> ( Source.Data ) [ Source.ChannelCount * ( SourceStartSample + I ) + SourceChannel ] )
-		#define _BLITBUFFER_ABSOURCEDATA_FLOAT32_BE BigToHostEndianFloat ( reinterpret_cast <float *> ( Source.Data ) [ Source.ChannelCount * ( SourceStartSample + I ) + SourceChannel ] )
-		
 		#define _ADDBUFFER_ABDESTDATA_INT8(x) reinterpret_cast <uint8_t *> ( Data ) [ ChannelCount * ( TargetStartSample + I ) + TargetChannel ] += static_cast <int8_t> ( x )
 		#define _ADDBUFFER_ABDESTDATA_UINT8(x) reinterpret_cast <uint8_t *> ( Data ) [ ChannelCount * ( TargetStartSample + I ) + TargetChannel ] += static_cast <uint8_t> ( x )
 		#define _ADDBUFFER_ABDESTDATA_INT16_LE(x) reinterpret_cast <int16_t *> ( Data ) [ ChannelCount * ( TargetStartSample + I ) + TargetChannel ] = _AB_Alias_U16ToI16 ( HostToLittleEndian16 ( _AB_Alias_I16ToU16 ( static_cast <int16_t> ( static_cast <int32_t> ( x ) ) + _AB_Alias_U16ToI16 ( LittleToHostEndian16 ( _AB_Alias_I16ToU16 ( reinterpret_cast <int16_t *> ( Data ) [ ChannelCount * ( TargetStartSample + I ) + TargetChannel ] ) ) ) ) ) )
@@ -5978,7 +5970,7 @@ void Red::Audio::AudioBuffer :: AddBuffer ( AudioBuffer & Source, uint32_t Sourc
 					{
 						
 						for ( I = 0; I < SampleCount; I ++ )
-							_ADDBUFFER_ABDESTDATA_INT32_LE ( ( _BLITBUFFER_ABSOURCEDATA_FLOAT32_BE * 2147483647.5 ) - 0.5 );
+							_ADDBUFFER_ABDESTDATA_INT32_LE ( ( _BLITBUFFER_ABSOURCEDATA_FLOAT32_LE * 2147483647.5 ) - 0.5 );
 						
 					}
 					break;
@@ -6639,6 +6631,18 @@ void Red::Audio::AudioBuffer :: AddBufferScaled ( AudioBuffer & Source, float Sc
 	if ( SourceChannel >= Source.ChannelCount )
 		return;
 	
+	if ( TargetStartSample >= this -> SampleCount )
+		return;
+	
+	if ( SourceStartSample >= Source.SampleCount )
+		return;
+	
+	if ( TargetStartSample + SampleCount >= this -> SampleCount )
+		SampleCount = this -> SampleCount - TargetStartSample;
+	
+	if ( SourceStartSample + SampleCount >= Source.SampleCount )
+		SampleCount = Source.SampleCount - SourceStartSample;
+	
 	union
 	{
 		
@@ -6693,16 +6697,7 @@ void Red::Audio::AudioBuffer :: AddBufferScaled ( AudioBuffer & Source, float Sc
 		return;
 	
 	if ( Source.DataType == kAudioBufferType_Invalid )
-	{
-		
-		if ( ( DataType == kAudioBufferType_Float32_LittleEndian ) || ( DataType == kAudioBufferType_Float32_BigEndian ) )
-			ClearBufferFloat ( TargetChannel, 0.0f );
-		else
-			ClearBufferInt ( TargetChannel, 0 );
-			
 		return;
-		
-	}
 	else
 	{
 		
@@ -6718,20 +6713,6 @@ void Red::Audio::AudioBuffer :: AddBufferScaled ( AudioBuffer & Source, float Sc
 		#define _ADDBUFFERSCALED_ABSOURCEDATA_UINT32_BE static_cast <uint32_t> ( ( static_cast <uint64_t> ( BigToHostEndian32 ( reinterpret_cast <uint32_t *> ( Source.Data ) [ Source.ChannelCount * ( SourceStartSample + I ) + SourceChannel ] ) ) * ScaleFactors.ScaleU32 ) >> 32 )
 		#define _ADDBUFFERSCALED_ABSOURCEDATA_FLOAT32_LE ( LittleToHostEndianFloat ( reinterpret_cast <float *> ( Source.Data ) [ Source.ChannelCount * ( SourceStartSample + I ) + SourceChannel ] ) * Scale )
 		#define _ADDBUFFERSCALED_ABSOURCEDATA_FLOAT32_BE ( BigToHostEndianFloat ( reinterpret_cast <float *> ( Source.Data ) [ Source.ChannelCount * ( SourceStartSample + I ) + SourceChannel ] ) * Scale )
-		
-		
-		#define _ADDBUFFER_ABDESTDATA_INT8(x) reinterpret_cast <uint8_t *> ( Data ) [ ChannelCount * ( TargetStartSample + I ) + TargetChannel ] += static_cast <int8_t> ( x )
-		#define _ADDBUFFER_ABDESTDATA_UINT8(x) reinterpret_cast <uint8_t *> ( Data ) [ ChannelCount * ( TargetStartSample + I ) + TargetChannel ] += static_cast <uint8_t> ( x )
-		#define _ADDBUFFER_ABDESTDATA_INT16_LE(x) reinterpret_cast <int16_t *> ( Data ) [ ChannelCount * ( TargetStartSample + I ) + TargetChannel ] = _AB_Alias_U16ToI16 ( HostToLittleEndian16 ( _AB_Alias_I16ToU16 ( static_cast <int16_t> ( static_cast <int32_t> ( x ) ) + _AB_Alias_U16ToI16 ( LittleToHostEndian16 ( _AB_Alias_I16ToU16 ( reinterpret_cast <int16_t *> ( Data ) [ ChannelCount * ( TargetStartSample + I ) + TargetChannel ] ) ) ) ) ) )
-		#define _ADDBUFFER_ABDESTDATA_INT16_BE(x) reinterpret_cast <int16_t *> ( Data ) [ ChannelCount * ( TargetStartSample + I ) + TargetChannel ] = _AB_Alias_U16ToI16 ( HostToBigEndian16 ( _AB_Alias_I16ToU16 ( static_cast <int16_t> ( x ) + _AB_Alias_U16ToI16 ( BigToHostEndian16 ( _AB_Alias_I16ToU16 ( reinterpret_cast <int16_t *> ( Data ) [ ChannelCount * ( TargetStartSample + I ) + TargetChannel ] ) ) ) ) ) )
-		#define _ADDBUFFER_ABDESTDATA_UINT16_LE(x) reinterpret_cast <uint16_t *> ( Data ) [ ChannelCount * ( TargetStartSample + I ) + TargetChannel ] = HostToLittleEndian16 ( static_cast <uint16_t> ( x ) + LittleToHostEndian16 ( reinterpret_cast <uint16_t *> ( Data ) [ ChannelCount * ( TargetStartSample + I ) + TargetChannel ] ) )
-		#define _ADDBUFFER_ABDESTDATA_UINT16_BE(x) reinterpret_cast <uint16_t *> ( Data ) [ ChannelCount * ( TargetStartSample + I ) + TargetChannel ] = HostToBigEndian16 ( static_cast <uint16_t> ( x ) + LittleToHostEndian16 ( reinterpret_cast <uint16_t *> ( Data ) [ ChannelCount * ( TargetStartSample + I ) + TargetChannel ] ) )
-		#define _ADDBUFFER_ABDESTDATA_INT32_LE(x) reinterpret_cast <int32_t *> ( Data ) [ ChannelCount * ( TargetStartSample + I ) + TargetChannel ] = _AB_Alias_U32ToI32 ( HostToLittleEndian32 ( _AB_Alias_I32ToU32 ( static_cast <int32_t> ( x ) + _AB_Alias_U32ToI32 ( LittleToHostEndian32 ( _AB_Alias_I32ToU32 ( reinterpret_cast <int32_t *> ( Data ) [ ChannelCount * ( TargetStartSample + I ) + TargetChannel ] ) ) ) ) ) )
-		#define _ADDBUFFER_ABDESTDATA_INT32_BE(x) reinterpret_cast <int32_t *> ( Data ) [ ChannelCount * ( TargetStartSample + I ) + TargetChannel ] = _AB_Alias_U32ToI32 ( HostToBigEndian32 ( _AB_Alias_I32ToU32 ( static_cast <int32_t> ( x ) + _AB_Alias_U32ToI32 ( BigToHostEndian32 ( _AB_Alias_I32ToU32 ( reinterpret_cast <int32_t *> ( Data ) [ ChannelCount * ( TargetStartSample + I ) + TargetChannel ] ) ) ) ) ) )
-		#define _ADDBUFFER_ABDESTDATA_UINT32_LE(x) reinterpret_cast <uint32_t *> ( Data ) [ ChannelCount * ( TargetStartSample + I ) + TargetChannel ] = HostToLittleEndian32 ( static_cast <uint32_t> ( x ) + LittleToHostEndian32 ( reinterpret_cast <int32_t *> ( Data ) [ ChannelCount * ( TargetStartSample + I ) + TargetChannel ] ) )
-		#define _ADDBUFFER_ABDESTDATA_UINT32_BE(x) reinterpret_cast <uint32_t *> ( Data ) [ ChannelCount * ( TargetStartSample + I ) + TargetChannel ] = HostToBigEndian32 ( static_cast <uint32_t> ( x ) + BigToHostEndian32 ( reinterpret_cast <int32_t *> ( Data ) [ ChannelCount * ( TargetStartSample + I ) + TargetChannel ] ) )
-		#define _ADDBUFFER_ABDESTDATA_FLOAT32_LE(x) reinterpret_cast <float *> ( Data ) [ ChannelCount * ( TargetStartSample + I ) + TargetChannel ] = HostToLittleEndianFloat ( static_cast <float> ( x ) + LittleToHostEndianFloat ( reinterpret_cast <float *> ( Data ) [ ChannelCount * ( TargetStartSample + I ) + TargetChannel ] ) )
-		#define _ADDBUFFER_ABDESTDATA_FLOAT32_BE(x) reinterpret_cast <float *> ( Data ) [ ChannelCount * ( TargetStartSample + I ) + TargetChannel ] = HostToBigEndianFloat ( static_cast <float> ( x ) + BigToHostEndianFloat ( reinterpret_cast <float *> ( Data ) [ ChannelCount * ( TargetStartSample + I ) + TargetChannel ] ) )
 		
 		switch ( DataType )
 		{
@@ -7574,7 +7555,7 @@ void Red::Audio::AudioBuffer :: AddBufferScaled ( AudioBuffer & Source, float Sc
 					{
 						
 						for ( I = 0; I < SampleCount; I ++ )
-							_ADDBUFFER_ABDESTDATA_INT32_LE ( ( _ADDBUFFERSCALED_ABSOURCEDATA_FLOAT32_BE * 2147483647.5 ) - 0.5 );
+							_ADDBUFFER_ABDESTDATA_INT32_LE ( ( _ADDBUFFERSCALED_ABSOURCEDATA_FLOAT32_LE * 2147483647.5 ) - 0.5 );
 						
 					}
 					break;
@@ -8029,8 +8010,10 @@ void Red::Audio::AudioBuffer :: AddBufferScaled ( AudioBuffer & Source, float Sc
 					case kAudioBufferType_Int32_LittleEndian:
 					{
 						
+						I = 0;
+						
 						for ( I = 0; I < SampleCount; I ++ ) // The center shift here is pointless as a float32 has only 23 fraction bits
-							_ADDBUFFER_ABDESTDATA_FLOAT32_LE ( static_cast <float> ( _ADDBUFFERSCALED_ABSOURCEDATA_INT32_LE ) * 4.6566129e-10 );
+							_ADDBUFFER_ABDESTDATA_FLOAT32_LE ( static_cast <float> ( _ADDBUFFERSCALED_ABSOURCEDATA_INT32_LE ) * 4.6566129e-10f );
 						
 					}
 					break;
@@ -14636,8 +14619,11 @@ void Red::Audio::AudioBuffer :: ClearBufferFloat ( uint32_t Channel, float Value
 	if ( Channel > ChannelCount )
 		return;
 	
-	if ( SampleCount > this -> SampleCount )
-		SampleCount = this -> SampleCount;
+	if ( StartSample > this -> SampleCount )
+		return;
+	
+	if ( SampleCount + StartSample >= this -> SampleCount )
+		SampleCount = this -> SampleCount - StartSample;
 	
 	uint64_t I = 0;
 	
@@ -14647,9 +14633,11 @@ void Red::Audio::AudioBuffer :: ClearBufferFloat ( uint32_t Channel, float Value
 		case kAudioBufferType_Float32_LittleEndian:
 		{
 			
+			std :: cout << "ClearBufferFloat: " << StartSample << " - " << ( SampleCount + StartSample ) << std :: endl;
+			
 			float CValue = HostToLittleEndianFloat ( Value );
 			
-			for ( I = StartSample; I < SampleCount; I ++ )
+			for ( I = StartSample; I < StartSample + SampleCount; I ++ )
 				reinterpret_cast <float *> ( Data ) [ I * ChannelCount + Channel ] = CValue;
 			
 		}
@@ -14660,7 +14648,7 @@ void Red::Audio::AudioBuffer :: ClearBufferFloat ( uint32_t Channel, float Value
 			
 			float CValue = HostToBigEndianFloat ( Value );
 			
-			for ( I = StartSample; I < SampleCount; I ++ )
+			for ( I = StartSample; I < StartSample + SampleCount; I ++ )
 				reinterpret_cast <float *> ( Data ) [ I * ChannelCount + Channel ] = CValue;
 			
 		}
@@ -14693,8 +14681,11 @@ void Red::Audio::AudioBuffer :: ClearBufferInt ( uint32_t Channel, int64_t Value
 	
 	uint64_t I;
 	
-	if ( SampleCount > this -> SampleCount )
-		SampleCount = this -> SampleCount;
+	if ( StartSample >= this -> SampleCount )
+		return;
+	
+	if ( StartSample + SampleCount >= this -> SampleCount )
+		SampleCount = this -> SampleCount - StartSample;
 	
 	switch ( DataType )
 	{
@@ -14705,7 +14696,7 @@ void Red::Audio::AudioBuffer :: ClearBufferInt ( uint32_t Channel, int64_t Value
 			if ( ChannelCount == 1 )
 				memset ( reinterpret_cast <char *> ( Data ), static_cast <char> ( static_cast <int8_t> ( Value ) ), SampleCount );
 			else
-				for ( I = StartSample; I < SampleCount; I ++ )
+				for ( I = StartSample; I < SampleCount + StartSample; I ++ )
 					reinterpret_cast <int8_t *> ( Data ) [ I * ChannelCount + Channel ] = static_cast <int8_t> ( Value );
 			
 		}
@@ -14717,7 +14708,7 @@ void Red::Audio::AudioBuffer :: ClearBufferInt ( uint32_t Channel, int64_t Value
 			if ( ChannelCount == 1 )
 				memset ( reinterpret_cast <char *> ( Data ), static_cast <char> ( static_cast <uint8_t> ( Value ) ), SampleCount );
 			else
-				for ( I = StartSample; I < SampleCount; I ++ )
+				for ( I = StartSample; I < SampleCount + StartSample; I ++ )
 					reinterpret_cast <uint8_t *> ( Data ) [ I * ChannelCount + Channel ] = static_cast <uint8_t> ( Value );
 			
 		}
@@ -14728,7 +14719,7 @@ void Red::Audio::AudioBuffer :: ClearBufferInt ( uint32_t Channel, int64_t Value
 			
 			uint16_t CValue = HostToLittleEndian16 ( _AB_Alias_I16ToU16 ( static_cast <int16_t> ( Value ) ) );
 			
-			for ( I = StartSample; I < SampleCount; I ++ )
+			for ( I = StartSample; I < SampleCount + StartSample; I ++ )
 				reinterpret_cast <uint16_t *> ( Data ) [ I * ChannelCount + Channel ] = CValue;
 			
 		}
@@ -14739,7 +14730,7 @@ void Red::Audio::AudioBuffer :: ClearBufferInt ( uint32_t Channel, int64_t Value
 			
 			uint16_t CValue = HostToBigEndian16 ( _AB_Alias_I16ToU16 ( static_cast <int16_t> ( Value ) ) );
 			
-			for ( I = StartSample; I < SampleCount; I ++ )
+			for ( I = StartSample; I < SampleCount + StartSample; I ++ )
 				reinterpret_cast <uint16_t *> ( Data ) [ I * ChannelCount + Channel ] = CValue;
 			
 		}
@@ -14750,7 +14741,7 @@ void Red::Audio::AudioBuffer :: ClearBufferInt ( uint32_t Channel, int64_t Value
 			
 			uint16_t CValue = HostToLittleEndian16 ( static_cast <uint16_t> ( Value ) );
 			
-			for ( I = StartSample; I < SampleCount; I ++ )
+			for ( I = StartSample; I < SampleCount + StartSample; I ++ )
 				reinterpret_cast <uint16_t *> ( Data ) [ I * ChannelCount + Channel ] = CValue;
 			
 		}
@@ -14761,7 +14752,7 @@ void Red::Audio::AudioBuffer :: ClearBufferInt ( uint32_t Channel, int64_t Value
 			
 			uint16_t CValue = HostToBigEndian16 ( static_cast <uint16_t> ( Value ) );
 			
-			for ( I = StartSample; I < SampleCount; I ++ )
+			for ( I = StartSample; I < SampleCount + StartSample; I ++ )
 				reinterpret_cast <uint16_t *> ( Data ) [ I * ChannelCount + Channel ] = CValue;
 			
 		}
@@ -14772,7 +14763,7 @@ void Red::Audio::AudioBuffer :: ClearBufferInt ( uint32_t Channel, int64_t Value
 			
 			uint32_t CValue = HostToLittleEndian32 ( _AB_Alias_I32ToU32 ( static_cast <int32_t> ( Value ) ) );
 			
-			for ( I = StartSample; I < SampleCount; I ++ )
+			for ( I = StartSample; I < SampleCount + StartSample; I ++ )
 				reinterpret_cast <uint32_t *> ( Data ) [ I * ChannelCount + Channel ] = CValue;
 			
 		}
@@ -14783,7 +14774,7 @@ void Red::Audio::AudioBuffer :: ClearBufferInt ( uint32_t Channel, int64_t Value
 			
 			uint32_t CValue = HostToBigEndian32 ( _AB_Alias_I32ToU32 ( static_cast <int32_t> ( Value ) ) );
 			
-			for ( I = StartSample; I < SampleCount; I ++ )
+			for ( I = StartSample; I < SampleCount + StartSample; I ++ )
 				reinterpret_cast <uint32_t *> ( Data ) [ I * ChannelCount + Channel ] = CValue;
 			
 		}
@@ -14794,7 +14785,7 @@ void Red::Audio::AudioBuffer :: ClearBufferInt ( uint32_t Channel, int64_t Value
 			
 			uint32_t CValue = HostToLittleEndian32 ( static_cast <uint32_t> ( Value ) );
 			
-			for ( I = StartSample; I < SampleCount; I ++ )
+			for ( I = StartSample; I < SampleCount + StartSample; I ++ )
 				reinterpret_cast <uint32_t *> ( Data ) [ I * ChannelCount + Channel ] = CValue;
 			
 		}
@@ -14805,7 +14796,7 @@ void Red::Audio::AudioBuffer :: ClearBufferInt ( uint32_t Channel, int64_t Value
 			
 			uint32_t CValue = HostToBigEndian32 ( static_cast <uint32_t> ( Value ) );
 			
-			for ( I = StartSample; I < SampleCount; I ++ )
+			for ( I = StartSample; I < SampleCount + StartSample; I ++ )
 				reinterpret_cast <uint32_t *> ( Data ) [ I * ChannelCount + Channel ] = CValue;
 			
 		}
@@ -14905,10 +14896,10 @@ float Red::Audio::AudioBuffer :: GetCenterValueFloat ()
 void Red::Audio::AudioBuffer :: ScaleBufferByConstant ( float Scale, uint32_t Channel, uint64_t SampleCount, uint64_t StartSample )
 {
 	
-	if ( Channel > ChannelCount )
+	if ( Channel >= ChannelCount )
 		return;
 	
-	if ( SampleCount + StartSample > this -> SampleCount )
+	if ( SampleCount + StartSample >= this -> SampleCount )
 		SampleCount = this -> SampleCount - StartSample;
 	
 	if ( Scale == 1.0f )
@@ -14930,31 +14921,31 @@ void Red::Audio::AudioBuffer :: ScaleBufferByConstant ( float Scale, uint32_t Ch
 	{
 		
 		case kAudioBufferType_Int8:
-			ScaleFactors.ScaleI8 = static_cast <int32_t> ( Scale * 256.0f );
+			ScaleFactors.ScaleI8 = static_cast <int32_t> ( Scale * 0x100 );
 			break;
 			
 		case kAudioBufferType_UInt8:
-			ScaleFactors.ScaleI8 = static_cast <uint32_t> ( Scale * 256.0f );
+			ScaleFactors.ScaleI8 = static_cast <uint32_t> ( Scale * 0x100 );
 			break;
 		
 		case kAudioBufferType_Int16_LittleEndian:
 		case kAudioBufferType_Int16_BigEndian:
-			ScaleFactors.ScaleI16 = static_cast <int32_t> ( Scale * 65536.0f );
+			ScaleFactors.ScaleI16 = static_cast <int32_t> ( Scale * 0x10000 );
 			break;
 			
 		case kAudioBufferType_UInt16_LittleEndian:
 		case kAudioBufferType_UInt16_BigEndian:
-			ScaleFactors.ScaleU16 = static_cast <uint32_t> ( Scale * 65536.0f );
+			ScaleFactors.ScaleU16 = static_cast <uint32_t> ( Scale * 0x10000 );
 			break;
 			
 		case kAudioBufferType_Int32_LittleEndian:
 		case kAudioBufferType_Int32_BigEndian:
-			ScaleFactors.ScaleI32 = static_cast <int64_t> ( Scale * 4294967296.0f );
+			ScaleFactors.ScaleI32 = static_cast <int64_t> ( Scale * 0x100000000ULL );
 			break;
 			
 		case kAudioBufferType_UInt32_LittleEndian:
 		case kAudioBufferType_UInt32_BigEndian:
-			ScaleFactors.ScaleU32 = static_cast <uint64_t> ( Scale * 4294967296.0f );
+			ScaleFactors.ScaleU32 = static_cast <uint64_t> ( Scale * 0x100000000ULL );
 			break;
 			
 		default:
@@ -14962,13 +14953,16 @@ void Red::Audio::AudioBuffer :: ScaleBufferByConstant ( float Scale, uint32_t Ch
 	
 	}
 	
+	uint64_t Initial = ChannelCount * StartSample + Channel;
+	uint64_t Max = ( SampleCount + StartSample ) * ChannelCount + Channel;
+	
 	switch ( DataType )
 	{
 		
 		case kAudioBufferType_Int8:
 		{
 			
-			for ( uint64_t I = ChannelCount * StartSample + Channel; I < SampleCount; I += ChannelCount )
+			for ( uint64_t I = Initial; I < Max; I += ChannelCount )
 				static_cast <int8_t *> ( Data ) [ I ] = static_cast <int16_t> ( static_cast <int8_t *> ( Data ) [ I ] * ScaleFactors.ScaleI8 ) >> 8;
 			
 		}
@@ -14977,7 +14971,7 @@ void Red::Audio::AudioBuffer :: ScaleBufferByConstant ( float Scale, uint32_t Ch
 		case kAudioBufferType_UInt8:
 		{
 			
-			for ( uint64_t I = ChannelCount * StartSample + Channel; I < SampleCount; I += ChannelCount )
+			for ( uint64_t I = Initial; I < Max; I += ChannelCount )
 				static_cast <uint8_t *> ( Data ) [ I ] = static_cast <uint16_t> ( static_cast <uint8_t *> ( Data ) [ I ] * ScaleFactors.ScaleU8 ) >> 8;
 			
 		}
@@ -14986,7 +14980,7 @@ void Red::Audio::AudioBuffer :: ScaleBufferByConstant ( float Scale, uint32_t Ch
 		case kAudioBufferType_Int16_LittleEndian:
 		{
 			
-			for ( uint64_t I = ChannelCount * StartSample + Channel; I < SampleCount; I += ChannelCount )
+			for ( uint64_t I = Initial; I < Max; I += ChannelCount )
 				static_cast <uint16_t *> ( Data ) [ I ] = HostToLittleEndian16 ( static_cast <uint16_t> ( ( static_cast <int32_t> ( static_cast <int16_t> ( LittleToHostEndian16 ( static_cast <uint16_t *> ( Data ) [ I ] ) ) ) * ScaleFactors.ScaleI16 )>> 16 ) );
 			
 		}
@@ -14995,7 +14989,7 @@ void Red::Audio::AudioBuffer :: ScaleBufferByConstant ( float Scale, uint32_t Ch
 		case kAudioBufferType_Int16_BigEndian:
 		{
 			
-			for ( uint64_t I = ChannelCount * StartSample + Channel; I < SampleCount; I += ChannelCount )
+			for ( uint64_t I = Initial; I < Max; I += ChannelCount )
 				static_cast <uint16_t *> ( Data ) [ I ] = HostToBigEndian16 ( static_cast <uint16_t> ( ( static_cast <int32_t> ( static_cast <int16_t> ( BigToHostEndian16 ( static_cast <uint16_t *> ( Data ) [ I ] ) ) ) * ScaleFactors.ScaleI16 )>> 16 ) );
 			
 		}
@@ -15004,7 +14998,7 @@ void Red::Audio::AudioBuffer :: ScaleBufferByConstant ( float Scale, uint32_t Ch
 		case kAudioBufferType_UInt16_LittleEndian:
 		{
 			
-			for ( uint64_t I = ChannelCount * StartSample + Channel; I < SampleCount; I += ChannelCount )
+			for ( uint64_t I = Initial; I < Max; I += ChannelCount )
 				static_cast <uint16_t *> ( Data ) [ I ] = HostToLittleEndian16 ( ( static_cast <uint32_t> ( LittleToHostEndian16 ( static_cast <uint16_t *> ( Data ) [ I ] ) ) * ScaleFactors.ScaleU16 ) >> 16 );
 			
 		}
@@ -15013,7 +15007,7 @@ void Red::Audio::AudioBuffer :: ScaleBufferByConstant ( float Scale, uint32_t Ch
 		case kAudioBufferType_UInt16_BigEndian:
 		{
 			
-			for ( uint64_t I = ChannelCount * StartSample + Channel; I < SampleCount; I += ChannelCount )
+			for ( uint64_t I = Initial; I < Max; I += ChannelCount )
 				static_cast <uint16_t *> ( Data ) [ I ] = HostToBigEndian16 ( ( static_cast <uint32_t> ( BigToHostEndian16 ( static_cast <uint16_t *> ( Data ) [ I ] ) ) * ScaleFactors.ScaleU16 ) >> 16 );
 			
 		}
@@ -15022,8 +15016,8 @@ void Red::Audio::AudioBuffer :: ScaleBufferByConstant ( float Scale, uint32_t Ch
 		case kAudioBufferType_Int32_LittleEndian:
 		{
 			
-			for ( uint64_t I = ChannelCount * StartSample + Channel; I < SampleCount; I += ChannelCount )
-				static_cast <uint32_t *> ( Data ) [ I ] = HostToLittleEndian32 ( static_cast <uint32_t> ( ( static_cast <int64_t> ( static_cast <int32_t> ( LittleToHostEndian16 ( static_cast <uint32_t *> ( Data ) [ I ] ) ) ) * ScaleFactors.ScaleI32 )>> 16 ) );
+			for ( uint64_t I = Initial; I < Max; I += ChannelCount )
+				static_cast <uint32_t *> ( Data ) [ I ] = HostToLittleEndian32 ( _AB_Alias_I32ToU32 ( static_cast <int32_t> ( ( static_cast <int64_t> ( _AB_Alias_U32ToI32 ( LittleToHostEndian32 ( static_cast <uint32_t *> ( Data ) [ I ] ) ) ) * ScaleFactors.ScaleI32 ) >> 32 ) ) );
 			
 		}
 		break;
@@ -15031,8 +15025,8 @@ void Red::Audio::AudioBuffer :: ScaleBufferByConstant ( float Scale, uint32_t Ch
 		case kAudioBufferType_Int32_BigEndian:
 		{
 			
-			for ( uint64_t I = ChannelCount * StartSample + Channel; I < SampleCount; I += ChannelCount )
-				static_cast <uint32_t *> ( Data ) [ I ] = HostToBigEndian32 ( static_cast <uint32_t> ( ( static_cast <int64_t> ( static_cast <int32_t> ( BigToHostEndian16 ( static_cast <uint32_t *> ( Data ) [ I ] ) ) ) * ScaleFactors.ScaleI32 )>> 16 ) );
+			for ( uint64_t I = Initial; I < Max; I += ChannelCount )
+				static_cast <uint32_t *> ( Data ) [ I ] = HostToBigEndian32 ( _AB_Alias_I32ToU32 ( static_cast <int32_t> ( ( static_cast <int64_t> ( _AB_Alias_U32ToI32 ( BigToHostEndian32 ( static_cast <uint32_t *> ( Data ) [ I ] ) ) ) * ScaleFactors.ScaleI32 ) >> 32 ) ) );
 			
 		}
 		break;
@@ -15040,7 +15034,7 @@ void Red::Audio::AudioBuffer :: ScaleBufferByConstant ( float Scale, uint32_t Ch
 		case kAudioBufferType_UInt32_LittleEndian:
 		{
 			
-			for ( uint64_t I = ChannelCount * StartSample + Channel; I < SampleCount; I += ChannelCount )
+			for ( uint64_t I = Initial; I < Max; I += ChannelCount )
 				static_cast <uint32_t *> ( Data ) [ I ] = HostToLittleEndian32 ( ( static_cast <uint64_t> ( LittleToHostEndian32 ( static_cast <uint32_t *> ( Data ) [ I ] ) ) * ScaleFactors.ScaleU32 ) >> 32 );
 			
 		}
@@ -15049,7 +15043,7 @@ void Red::Audio::AudioBuffer :: ScaleBufferByConstant ( float Scale, uint32_t Ch
 		case kAudioBufferType_UInt32_BigEndian:
 		{
 			
-			for ( uint64_t I = ChannelCount * StartSample + Channel; I < SampleCount; I += ChannelCount )
+			for ( uint64_t I = Initial; I < Max; I += ChannelCount )
 				static_cast <uint32_t *> ( Data ) [ I ] = HostToBigEndian32 ( ( static_cast <uint64_t> ( BigToHostEndian32 ( static_cast <uint32_t *> ( Data ) [ I ] ) ) * ScaleFactors.ScaleU32 ) >> 32 );
 			
 		}
@@ -15058,7 +15052,7 @@ void Red::Audio::AudioBuffer :: ScaleBufferByConstant ( float Scale, uint32_t Ch
 		case kAudioBufferType_Float32_LittleEndian:
 		{
 			
-			for ( uint64_t I = ChannelCount * StartSample + Channel; I < SampleCount; I += ChannelCount )
+			for ( uint64_t I = Initial; I < Max; I += ChannelCount )
 				static_cast <float *> ( Data ) [ I ] = HostToLittleEndianFloat ( LittleToHostEndianFloat ( static_cast <float *> ( Data ) [ I ] ) * Scale );
 			
 		}
@@ -15066,7 +15060,7 @@ void Red::Audio::AudioBuffer :: ScaleBufferByConstant ( float Scale, uint32_t Ch
 		case kAudioBufferType_Float32_BigEndian:
 		{
 			
-			for ( uint64_t I = ChannelCount * StartSample + Channel; I < SampleCount; I += ChannelCount )
+			for ( uint64_t I = Initial; I < Max; I += ChannelCount )
 				static_cast <float *> ( Data ) [ I ] = HostToBigEndianFloat ( BigToHostEndianFloat ( static_cast <float *> ( Data ) [ I ] ) * Scale );
 			
 		}

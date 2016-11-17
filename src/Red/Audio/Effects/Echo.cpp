@@ -1,9 +1,13 @@
 #include <Red/Audio/Effects/Echo.h>
 
-Red::Audio::Effects::Echo :: Echo ( uint64_t MaxBackSampleCount, IStreamSource * Input, float PassLevel, float EchoLevel, float Feedback, float FeedForward ):
+#include <iostream>
+
+Red::Audio::Effects::Echo :: Echo ( uint64_t Depth, IStreamSource * Input, float PassLevel, float EchoLevel, float Feedback, float FeedForward, uint64_t MaxBackSampleCount ):
 	EchoBuffer ( NULL ),
-	EchoDepth ( EchoLevel ),
+	EchoDepth ( Depth ),
+	EchoOffset ( 0 ),
 	Input ( Input ),
+	ExpectedFillSize ( 0 ),
 	PassLevel ( PassLevel ),
 	EchoLevel ( EchoLevel ),
 	Feedback ( Feedback ),
@@ -17,7 +21,12 @@ Red::Audio::Effects::Echo :: Echo ( uint64_t MaxBackSampleCount, IStreamSource *
 	else
 		Enabled = false;
 	
-	EchoBuffer = new AudioBuffer ( Red::Audio :: kAudioBufferType_PerferredQuality, 1, MaxBackSampleCount );
+	if ( EchoDepth > MaxBackSampleCount )
+		MaxBackSampleCount = EchoDepth;
+	
+	EchoBuffer = new AudioBuffer ( Red::Audio :: kAudioBufferType_PerferredQuality, 1, MaxBackSampleCount * 2 );
+	
+	EchoBuffer -> ClearBufferFloat ( 0, EchoBuffer -> GetCenterValueFloat () );
 	
 }
 
@@ -44,10 +53,23 @@ Red::Audio::Effects::Echo :: ~Echo ()
 	
 }
 
-void Red::Audio::Effects::Echo :: SetExpectedFillSize ( uint32_t FillSize )
+void Red::Audio::Effects::Echo :: SetExpectedFillSize ( uint64_t FillSize )
 {
 	
-	(void) FillSize;
+	Lock.Lock ();
+	
+	this -> ExpectedFillSize = FillSize;
+	
+	if ( Input != NULL )
+	{
+		
+		Lock.Unlock ();
+		
+		Input -> SetExpectedFillSize ( FillSize );
+		
+	}
+	else
+		Lock.Unlock ();
 	
 }
 
@@ -55,6 +77,8 @@ Red::Audio::IStreamSource :: StreamFillCode Red::Audio::Effects::Echo :: FillAud
 {
 	
 	Lock.Lock ();
+	
+	IStreamSource :: StreamFillCode FillCode;
 	
 	if ( Input == NULL )
 	{
@@ -66,69 +90,173 @@ Red::Audio::IStreamSource :: StreamFillCode Red::Audio::Effects::Echo :: FillAud
 	}
 	
 	if ( Enabled == false )
-		return Input -> FillAudioBuffer ( Buffer, TargetChannel );
-	
-	//StreamFillCode SourceFillCode = Input -> FillAudioBuffer ( Buffer, TargetChannel );
-	//Buffer -> ScaleBufferByConstant ( PassLevel, TargetChannel );
-	
-	uint64_t FillOffset = 0;
-	//uint64_t EchoOffset = 0;
-	
-	AudioBuffer SubBuffer ( AudioBuffer :: NO_INIT );
-	
-	while ( FillOffset < Buffer -> GetSampleCount () )
 	{
 		
-		uint64_t SubSampleSize = ( EchoDepth < Buffer -> GetSampleCount () - FillOffset ) ? EchoDepth : Buffer -> GetSampleCount () - FillOffset;
+		FillCode = Input -> FillAudioBuffer ( Buffer, TargetChannel );
 		
-		AudioBuffer :: CreateChildWindow ( Buffer, FillOffset, SubSampleSize, & SubBuffer );
+		Lock.Unlock ();
 		
-		SubBuffer.Reference ();
+		return FillCode;
 		
-		StreamFillCode SourceFillCode = Input -> FillAudioBuffer ( & SubBuffer, TargetChannel );
+	}
+	
+	FillCode = Input -> FillAudioBuffer ( Buffer, TargetChannel );
+	
+	bool Silent = false;
+	
+	switch ( FillCode )
+	{
 		
-		switch ( SourceFillCode )
+		case kStreamFillCode_Success_Normal:
+		case kStreamFillCode_Success_ControlParameter_Varying:
+			break;
+			
+		case kStreamFillCode_Success_DC:
+		case kStreamFillCode_Success_ControlParameter_Constant:
 		{
 			
-			case kStreamFillCode_Success_Normal:
-			case kStreamFillCode_Success_ControlParameter_Varying:
-			{
-				
-				
-				
-			}
-			break;
+			float Parameter = Buffer -> ReadSampleFloat ( TargetChannel, 0 );
 			
-			case kStreamFillCode_Success_Silence:
-			{
+			Buffer -> ClearBufferFloat ( TargetChannel, Parameter );
 			
+			Silent = ( Parameter == 0.0f ) || ( Parameter == - 0.0f );
 			
-			
-			}
-			break;
-			
-			default:
-				break;
+		}
+		break;
 		
+		case kStreamFillCode_Success_Silence:
+		{
+			
+			Silent = true;
+			
+			Buffer -> ClearBufferFloat ( TargetChannel, Buffer -> GetCenterValueFloat () );
+			
+		}
+		break;
+		
+		case kStreamFillCode_Failure_NoFill:
+		case kStreamFillCode_Failure_Silence:
+		default:
+		{
+			
+			Buffer -> ClearBufferFloat ( TargetChannel, Buffer -> GetCenterValueFloat () );
+			EchoBuffer -> ClearBufferFloat ( 0, EchoBuffer -> GetCenterValueFloat (), Buffer -> GetSampleCount (), EchoOffset + EchoDepth );
+			
+			Enabled = false;
+			
+			Lock.Unlock ();
+			
+			return FillCode;
+			
 		}
 		
 	}
+	
+	uint64_t EffectOffset = 0;
+	uint64_t FillSize = Buffer -> GetSampleCount ();
+	uint64_t EchoBuffSize = EchoBuffer -> GetSampleCount ();
+	
+	uint64_t EchoOffsetNext = ( EchoOffset + EchoDepth ) % EchoBuffSize;
+	
+	while ( EffectOffset < FillSize )
+	{
+	
+		uint64_t PassSize = ( ( FillSize - EffectOffset ) < EchoDepth ) ? ( FillSize - EffectOffset ) : EchoDepth;
+		
+		std :: cout << std :: endl;
+		std :: cout << "Echo offset: " << EchoOffset << std :: endl;
+		std :: cout << "Next echo offset: " << EchoOffsetNext << std :: endl;
+		std :: cout << "PassSize: " << PassSize << std :: endl;
+		
+		bool EchoReadWraps = ( EchoOffset + PassSize ) > EchoBuffSize;
+		bool EchoWriteWraps = ( EchoOffsetNext + PassSize ) > EchoBuffSize;
+		
+		if ( ( FeedForward != 0.0f ) && ( ! Silent ) )
+		{
+			
+			EchoBuffer -> AddBufferScaled ( * Buffer, FeedForward, TargetChannel, PassSize, EffectOffset, EchoOffsetNext, 0 );
+			if ( EchoWriteWraps )
+				EchoBuffer -> AddBufferScaled ( * Buffer, FeedForward, TargetChannel, PassSize - ( EchoBuffSize - EchoOffsetNext ), EffectOffset + ( EchoBuffSize - EchoOffsetNext ), 0, 0 );
+			
+		}
+		
+		if ( PassLevel != 1.0f )
+			Buffer -> ScaleBufferByConstant ( PassLevel, TargetChannel, PassSize, EffectOffset );
+		
+		if ( EchoLevel != 0.0f )
+		{
+			
+			Buffer -> AddBufferScaled ( * EchoBuffer, EchoLevel, 0, PassSize, EchoOffset, EffectOffset, TargetChannel );
+			if ( EchoReadWraps )
+				Buffer -> AddBufferScaled ( * EchoBuffer, EchoLevel, 0, PassSize - ( EchoBuffSize - EchoOffset ), 0, EffectOffset + ( EchoBuffSize - EchoOffset ), TargetChannel );
+			
+		}
+		
+		if ( Feedback != 0.0f )
+		{
+			
+			EchoBuffer -> AddBufferScaled ( * Buffer, Feedback, TargetChannel, PassSize, EffectOffset, EchoOffsetNext, 0 );
+			if ( EchoWriteWraps )
+				EchoBuffer -> AddBufferScaled ( * Buffer, Feedback, TargetChannel, PassSize - ( EchoBuffSize - EchoOffsetNext ), EffectOffset + ( EchoBuffSize - EchoOffsetNext ), 0, 0 );
+			
+		}
+		
+		EchoBuffer -> ClearBufferFloat ( 0, EchoBuffer -> GetCenterValueFloat (), EchoOffset, PassSize );
+		if ( EchoReadWraps )
+			EchoBuffer -> ClearBufferFloat ( 0, EchoBuffer -> GetCenterValueFloat (), 0, PassSize - ( EchoBuffSize - EchoOffset ) );
+		
+		EffectOffset += PassSize;
+		EchoOffset += PassSize;
+		EchoOffset %= EchoBuffSize;
+		EchoOffsetNext = ( EchoOffset + EchoDepth ) % EchoBuffSize;
+		
+	}
+	
+	Lock.Unlock ();
 	
 	return kStreamFillCode_Success_Normal;
 	
 }
 
-void Red::Audio::Effects::Echo :: SetInput ( IStreamSource * Source )
+void Red::Audio::Effects::Echo :: SetInput ( IStreamSource * Input )
 {
 	
-	(void) Source;
+	Lock.Lock ();
+	
+	if ( this -> Input == Input )
+	{
+		
+		Lock.Unlock ();
+		
+		return;
+		
+	}
+	
+	if ( this -> Input != NULL )
+		this -> Input -> Dereference ();
+	
+	this -> Input = Input;
+	
+	if ( Input != NULL )
+		Input -> Reference ();
+	
+	Lock.Unlock ();
 	
 }
 
 void Red::Audio::Effects::Echo :: SetEchoDelay ( uint64_t SampleCount )
 {
 	
-	(void) SampleCount;
+	Lock.Lock ();
+	
+	if ( SampleCount > EchoBuffer -> GetSampleCount () / 2 )
+	{
+		
+		
+		
+	}
+	
+	Lock.Unlock ();
 	
 }
 
@@ -142,9 +270,13 @@ void Red::Audio::Effects::Echo :: SetEnabled ( bool Enabled )
 void Red::Audio::Effects::Echo :: SetCoefficients ( float PassLevel, float EchoLevel, float Feedback, float FeedForward )
 {
 	
-	(void) PassLevel;
-	(void) EchoLevel;
-	(void) Feedback;
-	(void) FeedForward;
+	Lock.Lock ();
+	
+	this -> PassLevel = PassLevel;
+	this -> EchoLevel = EchoLevel;
+	this -> Feedback = Feedback;
+	this -> FeedForward = FeedForward;
+	
+	Lock.Unlock ();
 	
 }

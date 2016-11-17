@@ -30,7 +30,7 @@ namespace Red
 			virtual void Stop () = 0;
 			
 			virtual uint32_t GetSampleFrequency () = 0;
-			virtual uint32_t GetSampleSize () = 0;
+			virtual uint64_t GetSampleSize () = 0;
 			virtual uint32_t GetChannelCount () = 0;
 			
 			virtual const Util::Time :: Duration GetFillDuration () = 0;

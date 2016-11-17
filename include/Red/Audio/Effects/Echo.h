@@ -23,12 +23,11 @@ namespace Red
 			{
 			public:
 				
-				Echo ( uint64_t MaxBackSampleCount, IStreamSource * Input, float PassLevel = 0.8f, float EchoLevel = 0.2f, float Feedback = 0.0f, float FeedForward = 1.0f );
+				Echo ( uint64_t Depth, IStreamSource * Input, float PassLevel = 0.8f, float EchoLevel = 0.2f, float Feedback = 0.0f, float FeedForward = 1.0f, uint64_t MaxBackSampleCount = 0 );
 				~Echo ();
 				
-				void SetExpectedFillSize ( uint32_t FillSize ) = 0;
-				
-				StreamFillCode FillAudioBuffer ( AudioBuffer * Buffer, uint32_t TargetChannel ) = 0;
+				void SetExpectedFillSize ( uint64_t FillSize );
+				StreamFillCode FillAudioBuffer ( AudioBuffer * Buffer, uint32_t TargetChannel );
 				
 				void SetInput ( IStreamSource * Source );
 				void SetEchoDelay ( uint64_t SampleCount );
@@ -44,8 +43,11 @@ namespace Red
 				AudioBuffer * EchoBuffer;
 				
 				uint64_t EchoDepth;
+				uint64_t EchoOffset;
 				
 				IStreamSource * Input;
+				
+				uint64_t ExpectedFillSize;
 				
 				float PassLevel;
 				float EchoLevel;

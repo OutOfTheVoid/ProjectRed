@@ -8,6 +8,8 @@
 
 #include <Red/Util/MethodObjectClosure.h>
 
+#include <Red/Threading/Mutex.h>
+
 #include <stdint.h>
 
 namespace Red
@@ -39,6 +41,8 @@ namespace Red
 			uint32_t ChannelCount;
 			
 			IAudioOutputDevice * OutputDevice;
+			
+			Threading :: Mutex Lock;
 			
 		};
 		

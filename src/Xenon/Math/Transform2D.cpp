@@ -12,6 +12,18 @@ Xenon::Math::Transform2D :: Transform2D ():
 {
 }
 
+Xenon::Math::Transform2D :: Transform2D ( const Transform2D & CopyFrom ):
+	RefCounted ( 0 ),
+	Translation ( CopyFrom.Translation ),
+	Scale ( CopyFrom.Scale ),
+	Rotation ( CopyFrom.Rotation ),
+	Dirty ( CopyFrom.Dirty ),
+	Matrix ( CopyFrom.Matrix ),
+	MatrixSource ( * this ),
+	Iteration ( 0 )
+{
+}
+
 Xenon::Math::Transform2D :: Transform2D ( const Vec2 & Translation ):
 	RefCounted ( 0 ),
 	Translation ( Translation ),
@@ -93,6 +105,18 @@ int64_t Xenon::Math::Transform2D::InternalMatrix3x3UniformSource :: GetIteration
 {
 	
 	return Source.Iteration;
+	
+}
+
+void Xenon::Math::Transform2D :: SetAs ( const Transform2D & Source )
+{
+	
+	Translation = Source.Translation;
+	Scale = Source.Scale;
+	Rotation = Source.Rotation;
+	Dirty = Source.Dirty;
+	
+	Xenon::Math::Matrix3x3 :: Copy ( Matrix, Source.Matrix );
 	
 }
 

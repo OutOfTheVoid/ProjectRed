@@ -4,7 +4,8 @@ Red::Audio::AudioStreamOutput :: AudioStreamOutput ( IAudioOutputDevice * Output
 	CallbackClosure ( & Red::Audio::AudioStreamOutput :: AudioCallback, this ),
 	Sources ( new IStreamSource * [ ( MaxChannelCount == 0 ) ? OutputDevice -> GetChannelCount () : MaxChannelCount ] ),
 	ChannelCount ( MaxChannelCount ),
-	OutputDevice ( OutputDevice )
+	OutputDevice ( OutputDevice ),
+	Lock ()
 {
 	
 	for ( uint32_t I = 0; I < MaxChannelCount; I ++ )
@@ -45,6 +46,8 @@ Red::Audio::AudioStreamOutput :: ~AudioStreamOutput ()
 void Red::Audio::AudioStreamOutput :: SetOutputDevice ( IAudioOutputDevice * OutputDevice )
 {
 	
+	Lock.Lock ();
+	
 	if ( this -> OutputDevice != NULL )
 	{
 		
@@ -66,6 +69,8 @@ void Red::Audio::AudioStreamOutput :: SetOutputDevice ( IAudioOutputDevice * Out
 		
 	}
 	
+	Lock.Unlock ();
+	
 }
 
 void Red::Audio::AudioStreamOutput :: SetStreamSource ( uint32_t Channel, IStreamSource * Source )
@@ -74,11 +79,10 @@ void Red::Audio::AudioStreamOutput :: SetStreamSource ( uint32_t Channel, IStrea
 	if ( Channel >= ChannelCount )
 		return;
 	
+	Lock.Lock ();
+	
 	if ( Sources [ Channel ] == Source )
 		return;
-	
-	if ( this -> OutputDevice != NULL )
-		OutputDevice -> Lock ();
 	
 	if ( Sources [ Channel ] != NULL )
 		Sources [ Channel ] -> Dereference ();
@@ -86,31 +90,47 @@ void Red::Audio::AudioStreamOutput :: SetStreamSource ( uint32_t Channel, IStrea
 	Sources [ Channel ] = Source;
 	
 	if ( Source != NULL )
+	{
+		
 		Source -> Reference ();
+		
+		if ( this -> OutputDevice != NULL )
+			Source -> SetExpectedFillSize ( OutputDevice -> GetSampleSize () );
+		
+	}
 	
-	if ( this -> OutputDevice != NULL )
-		OutputDevice -> Unlock ();
+	Lock.Unlock ();
 	
 }
 
 void Red::Audio::AudioStreamOutput :: Start ()
 {
 	
+	Lock.Lock ();
+	
 	if ( this -> OutputDevice != NULL )
 		OutputDevice -> Start ();
+	
+	Lock.Unlock ();
 	
 }
 
 void Red::Audio::AudioStreamOutput :: Stop ()
 {
 	
+	Lock.Lock ();
+	
 	if ( this -> OutputDevice != NULL )
 		OutputDevice -> Stop ();
+	
+	Lock.Unlock ();
 	
 }
 
 void Red::Audio::AudioStreamOutput :: AudioCallback ( uint8_t * Data, int DataSize )
 {
+	
+	Lock.Lock ();
 	
 	(void) DataSize;
 
@@ -166,6 +186,8 @@ void Red::Audio::AudioStreamOutput :: AudioCallback ( uint8_t * Data, int DataSi
 	
 	for ( I = ActiveChannelCount; I < OutputDevice -> GetChannelCount (); I ++ )
 		FillBuffer.ClearBufferFloat ( I, FillBuffer.GetCenterValueFloat () );
+	
+	Lock.Unlock ();
 	
 }
 

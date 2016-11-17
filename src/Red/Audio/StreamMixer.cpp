@@ -150,8 +150,8 @@ void Red::Audio::StreamMixer :: SetStreamMuted ( uint32_t Index, bool Muted )
 	
 }
 
-			// IStreamSource
-void Red::Audio::StreamMixer :: SetExpectedFillSize ( uint32_t FillSize )
+// IStreamSource
+void Red::Audio::StreamMixer :: SetExpectedFillSize ( uint64_t FillSize )
 {
 	
 	this -> FillSize = FillSize;

@@ -21,12 +21,14 @@ namespace Xenon
 		public:
 			
 			Transform2D ();
+			Transform2D ( const Transform2D & CopyFrom );
 			Transform2D ( const Vec2 & Translation );
 			Transform2D ( const Vec2 & Translation, const Vec2 & Scale );
 			Transform2D ( const Vec2 & Translation, const Vec2 & Scale, const float Rotation );
 			
 			~Transform2D ();
 			
+			void SetAs ( const Transform2D & Source );
 			void SetTranslation ( const Vec2 & Translation );
 			void SetScale ( const Vec2 & Scale );
 			void SetRotation ( float Rotation );

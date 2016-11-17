@@ -33,7 +33,7 @@ namespace Red
 			
 			virtual inline ~IStreamSource () {};
 			
-			virtual void SetExpectedFillSize ( uint32_t FillSize ) = 0;
+			virtual void SetExpectedFillSize ( uint64_t FillSize ) = 0;
 			
 			virtual StreamFillCode FillAudioBuffer ( AudioBuffer * Buffer, uint32_t TargetChannel ) = 0;
 			

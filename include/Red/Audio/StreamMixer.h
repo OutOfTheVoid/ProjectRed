@@ -35,7 +35,7 @@ namespace Red
 			void SetStreamMuted ( uint32_t Index, bool Muted );
 			
 			// IStreamSource
-			void SetExpectedFillSize ( uint32_t FillSize );
+			void SetExpectedFillSize ( uint64_t FillSize );
 			StreamFillCode FillAudioBuffer ( AudioBuffer * Buffer, uint32_t TargetChannel );
 			
 		private:
@@ -54,7 +54,7 @@ namespace Red
 			uint32_t StreamCount;
 			Threading :: Mutex StreamsLock;
 			
-			uint32_t FillSize;
+			uint64_t FillSize;
 			
 			AudioBuffer * IntermediaryBuffer;
 			

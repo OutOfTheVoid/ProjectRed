@@ -12,6 +12,8 @@
 #include <Red/Audio/AudioStreamOutput.h>
 #include <Red/Audio/RawBufferStreamSource.h>
 
+#include <Red/Audio/Effects/Echo.h>
+
 #include <Red/Math/FFT.h>
 
 #include <Red/Util/Endian.h>
@@ -93,12 +95,18 @@ int main ( int argc, char const * argv [] )
 	WAVSourceLeftChannel.SetFinishedCallback ( & RepeatePTR );
 	WAVSourceRightChannel.SetFinishedCallback ( & RepeatePTR );
 	
-	WAVSourceLeftChannel.SetOffset ( 80000 );
-	WAVSourceRightChannel.SetOffset ( 80000 );
+	WAVSourceLeftChannel.SetOffset ( 0 );
+	WAVSourceRightChannel.SetOffset ( 0 );
+	
+	Red::Audio::Effects :: Echo LeftChannelEcho ( 4096, & WAVSourceLeftChannel, 0.5f, 1.0f, 0.5f, 0.0f );
+	Red::Audio::Effects :: Echo RightChannelEcho ( 4096, & WAVSourceRightChannel, 0.5f, 1.0f, 0.5f, 0.0f );
+	
+	LeftChannelEcho.Reference ();
+	RightChannelEcho.Reference ();
 	
 	/*================================*/
 	
-	SDLX :: AudioDevice * Device = SDLX::AudioDevice :: RequestAudioDevice ( NULL, 44100, SDLX::AudioDevice :: kBufferFormat_I32_SE, 2, 8192, true, false );
+	SDLX :: AudioDevice * Device = SDLX::AudioDevice :: RequestAudioDevice ( NULL, 44100, SDLX::AudioDevice :: kBufferFormat_I32_SE, 2, 4096, true, false );
 	
 	if ( Device == NULL )
 	{
@@ -115,8 +123,8 @@ int main ( int argc, char const * argv [] )
 	
 	Red::Audio :: AudioStreamOutput AudioOutput ( Device );
 	
-	AudioOutput.SetStreamSource ( 0, & WAVSourceLeftChannel );
-	AudioOutput.SetStreamSource ( 1, & WAVSourceRightChannel );
+	AudioOutput.SetStreamSource ( 0, & LeftChannelEcho );
+	AudioOutput.SetStreamSource ( 1, & RightChannelEcho );
 	
 	AudioOutput.Start ();
 	
@@ -125,7 +133,7 @@ int main ( int argc, char const * argv [] )
 	SDLX::Lib :: EventLoop ( & Status ); // GAME LOOP
 	
 	/*================================*/
-
+	
 	AudioOutput.Stop ();
 	
 	Device -> Stop ();

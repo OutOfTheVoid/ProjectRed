@@ -149,7 +149,7 @@ void Red::Audio::RawBufferStreamSource :: SetFinishPoint ( uint64_t Finish )
 	
 }
 
-void Red::Audio::RawBufferStreamSource :: SetExpectedFillSize ( uint32_t FillSize )
+void Red::Audio::RawBufferStreamSource :: SetExpectedFillSize ( uint64_t FillSize )
 {
 	
 	(void) FillSize;

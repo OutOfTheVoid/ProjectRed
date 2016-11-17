@@ -38,7 +38,7 @@ namespace Red
 			void ResetSource ( AudioBuffer * SourceData, uint32_t Channel = 0, uint64_t Offset = 0, uint64_t FinishPoint = 0xFFFFFFFFFFFFFFFFULL, uint64_t StartDelay = 0, bool InitiallyPlaying = true );
 			
 			// IStreamSource
-			void SetExpectedFillSize ( uint32_t FillSize );
+			void SetExpectedFillSize ( uint64_t FillSize );
 			
 			StreamFillCode FillAudioBuffer ( AudioBuffer * Buffer, uint32_t TargetChannel );
 			

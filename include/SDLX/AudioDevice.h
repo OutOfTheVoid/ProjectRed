@@ -49,7 +49,7 @@ namespace SDLX
 		static AudioDevice * RequestAudioDevice ( const char * DeviceName, uint32_t Frequency, BufferFormat Format, uint32_t ChannelCount, uint32_t SampleSize, bool FlexibleSource, bool RequireRecording );
 		
 		uint32_t GetSampleFrequency ();
-		uint32_t GetSampleSize ();
+		uint64_t GetSampleSize ();
 		
 		uint32_t GetChannelCount ();
 		
