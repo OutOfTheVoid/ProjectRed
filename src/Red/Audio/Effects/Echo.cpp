@@ -244,10 +244,15 @@ void Red::Audio::Effects::Echo :: SetEchoDelay ( uint64_t SampleCount )
 	
 	Lock.Lock ();
 	
-	if ( SampleCount > EchoBuffer -> GetSampleCount () / 2 )
+	if ( SampleCount > MaxBackSampleCount )
 	{
 		
+		MaxBackSampleCount = SampleCount;
 		
+		delete EchoBuffer;
+		
+		EchoBuffer = new AudioBuffer ( Red::Audio :: kAudioBufferType_PerferredQuality, 1, MaxBackSampleCount * 2 );
+		EchoBuffer -> ClearBufferFloat ( 0, EchoBuffer -> GetCenterValueFloat () );
 		
 	}
 	
@@ -258,7 +263,14 @@ void Red::Audio::Effects::Echo :: SetEchoDelay ( uint64_t SampleCount )
 void Red::Audio::Effects::Echo :: SetEnabled ( bool Enabled )
 {
 	
-	(void) Enabled;
+	Lock.Lock ();
+	
+	if ( ( ! this -> Enabled ) && Enabled )
+		EchoBuffer -> ClearBufferFloat ( 0, EchoBuffer -> GetCenterValueFloat () );
+	
+	this -> Enabled = Enabled;
+	
+	Lock.Unlock ();
 	
 }
 
