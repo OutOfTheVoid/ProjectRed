@@ -3,7 +3,7 @@ Project Red
 An open-source experimental game engine in C++
 ----------------------------------------------
 
-[Project Wiki](https://github.com/OutOfTheVoid/ProjectRed/wiki)
+[Project Wiki](https://github.com/OutOfTheVoid/ProjectRed/wiki/Wiki-Home)
 
 I love making games, and I love programming, but I don't love working with existing 3D engines. I thought I might try and build my own, just for some fun.
 
