@@ -72,14 +72,12 @@ void Xenon::GPU::Texture2D :: TextureImage ( GLint DetailLevel, InternalFormat F
 	
 	Bind ();
 	
-	//if ( Pitch != 0 )
-		glPixelStorei ( GL_UNPACK_ROW_LENGTH, Pitch );
+	glPixelStorei ( GL_UNPACK_ROW_LENGTH, Pitch );
 	
 	glPixelStorei ( GL_UNPACK_ALIGNMENT, Alignment );
 	glTexImage2D ( GL_TEXTURE_2D, DetailLevel, FInternal, Width, Height, 0, EFormat, ELayout, Data );
 	
-	//if ( Pitch != 0 )
-		glPixelStorei ( GL_UNPACK_ROW_LENGTH, 0 );
+	glPixelStorei ( GL_UNPACK_ROW_LENGTH, 0 );
 	
 }
 

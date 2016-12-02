@@ -27,8 +27,6 @@
 
 void WindowCloseEvent ( SDL_WindowEvent * Event, SDLX::Window * Win, void * Data );
 
-void FillAudioData ( uint32_t & Counter, uint8_t * DataBuffer, int PacketLength );
-
 void DoRepeateSource ( Red::Audio :: RawBufferStreamSource * Source );
 
 int main ( int argc, char const * argv [] )
@@ -98,8 +96,8 @@ int main ( int argc, char const * argv [] )
 	WAVSourceLeftChannel.SetOffset ( 0 );
 	WAVSourceRightChannel.SetOffset ( 0 );
 	
-	Red::Audio::Effects :: Echo LeftChannelEcho ( 4096, & WAVSourceLeftChannel, 0.5f, 1.0f, 0.5f, 0.0f );
-	Red::Audio::Effects :: Echo RightChannelEcho ( 4096, & WAVSourceRightChannel, 0.5f, 1.0f, 0.5f, 0.0f );
+	Red::Audio::Effects :: Echo LeftChannelEcho ( 4096, & WAVSourceLeftChannel, 0.5f, 1.0f, 0.4f, 0.2f );
+	Red::Audio::Effects :: Echo RightChannelEcho ( 4096, & WAVSourceRightChannel, 0.5f, 1.0f, 0.4f, 0.2f );
 	
 	LeftChannelEcho.Reference ();
 	RightChannelEcho.Reference ();

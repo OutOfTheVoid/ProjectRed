@@ -476,7 +476,6 @@ Red::Graphics::DeferredModelRenderer::PerModelRenderData :: PerModelRenderData (
 	DoNormalTextureUniform ( ( Flags & kRenderFlags_NormalTexture ) != 0 ),
 	DoColorTextureUniform ( ( Flags & kRenderFlags_ColorTexture ) != 0 ),
 	Uniforms (),
-	AttributeArray (),
 	GPUAllocated ( false )
 {
 }

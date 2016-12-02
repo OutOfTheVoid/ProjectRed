@@ -24,6 +24,8 @@ namespace Xenon
 			
 			virtual void Bind () = 0;
 			
+			virtual void AssignToTextureUnit ( GLuint ) = 0;
+			
 		};
 		
 	}

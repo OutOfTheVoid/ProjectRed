@@ -41,13 +41,8 @@ namespace Red
 			void GPUAlloc ();
 			void GPUFree ();
 			
-			Xenon::GPU :: VertexArray & GetVertexArray ();
-			void InternalApplyVertexArray ();
-			
 			DrawMethod Method;
 			uint32_t InstanceCount;
-			
-			Xenon::GPU::VertexArray VertexAttributes;
 			
 			Xenon::Geometry :: Mesh * ModelMesh;
 			

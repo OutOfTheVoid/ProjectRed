@@ -41,7 +41,16 @@ workspace "ProjectRed"
 		filter { "system:windows", "configurations:Release" }
 
 			buildoptions "/MD /wd4250 /wd4244 /FS"
+	
+	filter "configurations:Release"
 		
+		optimize "Full"
+		flags { "LinkTimeOptimization" }
+		
+	filter "configurations:Debug"
+		
+		defines { "RED_DEBUG" }
+	
 	filter {}
 	
 project "AudioTest"
@@ -49,10 +58,14 @@ project "AudioTest"
 	kind "ConsoleApp"
 	
 	files { "src/Red/**.cpp", "src/RAUX/**.cpp", "src/Xenon/**.cpp", "src/SDLX/**.cpp", "src/AudioTestMain.cpp", "include/**.h" }
-	
-	filter "configurations:Debug"
 		
-		defines { "RED_DEBUG" }
+	filter {}
+	
+project "LogicTest"
+	
+	kind "ConsoleApp"
+	
+	files { "src/Red/**.cpp", "src/RAUX/**.cpp", "src/Xenon/**.cpp", "src/SDLX/**.cpp", "src/LogicTestMain.cpp", "include/**.h" }
 		
 	filter {}
 	
@@ -61,10 +74,6 @@ project "GFXTest"
 	kind "ConsoleApp"
 	
 	files { "src/Red/**.cpp", "src/RAUX/**.cpp", "src/Xenon/**.cpp", "src/SDLX/**.cpp", "src/GFXTestMain.cpp", "include/**.h" }
-	
-	filter "configurations:Debug"
-		
-		defines { "RED_DEBUG" }
 		
 	filter {}
 	

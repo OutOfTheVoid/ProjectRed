@@ -100,7 +100,6 @@ namespace Red
 				Xenon::Math :: ConstantBoolUniformSource DoColorTextureUniform;
 				
 				Xenon::GPU :: UniformSet Uniforms;
-				Xenon::GPU :: VertexArray AttributeArray; 
 				
 				bool GPUAllocated;
 				

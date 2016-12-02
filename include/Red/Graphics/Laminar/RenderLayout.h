@@ -29,13 +29,16 @@ namespace Red
 					
 				} RenderMode;
 				
-				
-				RenderLayout (  );
+				RenderLayout ( RenderMode Mode,  );
 				~RenderLayout ();
 				
 				bool GetZSortRequired ();
 				
 				uint32_t GetTextureCount ();
+				
+			private:
+				
+				RenderMode Mode;
 				
 				
 			}
