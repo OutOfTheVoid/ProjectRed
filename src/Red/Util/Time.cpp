@@ -34,6 +34,13 @@ int64_t Red::Util::Time::Duration :: GetNanoSeconds () const
 	
 }
 
+int64_t Red::Util::Time::Duration :: GetTotalNanoSeconds () const
+{
+	
+	return static_cast <int64_t> ( NanoSeconds.count () ) + static_cast <int64_t> ( Seconds.count () ) * 1000000000;
+	
+}
+
 int64_t Red::Util::Time::Duration :: GetSeconds () const
 {
 	

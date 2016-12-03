@@ -52,6 +52,8 @@ namespace Red
 				int64_t GetNanoSeconds () const;
 				int64_t GetSeconds () const;
 				
+				int64_t GetTotalNanoSeconds () const;
+				
 				double GetFPSeconds () const;
 				
 				Duration operator+ ( const Duration & Right );
