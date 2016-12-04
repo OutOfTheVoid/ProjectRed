@@ -43,6 +43,6 @@ bool __Platform_Red_Threading_Semaphore_TryWait ( __Platform_Semaphore_t & Targe
 bool __Platform_Red_Threading_Semaphore_TimeoutWait ( __Platform_Semaphore_t & Target, const Red::Util::Time :: Duration & Timeout );
 bool __Platform_Red_Threading_Semaphore_Wait ( __Platform_Semaphore_t & Target );
 
-void __Platform_Red_Threading_Semaphore_Post ( __Platform_Semaphore_t & Target );
+void __Platform_Red_Threading_Semaphore_Post ( __Platform_Semaphore_t & Target, uint32_t PostCount );
 
 #endif
