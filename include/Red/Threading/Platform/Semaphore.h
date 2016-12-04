@@ -30,7 +30,7 @@
 	
 #ifndef _PLATFORM_SEMAPHORE_NOSYSV
 	
-	#include <sys/sem.h>
+	#include <semaphore.h>
 	
 	typedef sem_t __Platform_Semaphore_t;
 	

@@ -88,7 +88,7 @@ bool __Platform_Red_Threading_Semaphore_TimeoutWait ( __Platform_Semaphore_t & T
 bool __Platform_Red_Threading_Semaphore_Wait ( __Platform_Semaphore_t & Target )
 {
 	
-	WaitForSingleObject ( Target, INFINITE ) == WAIT_OBJECT_0;
+	return WaitForSingleObject ( Target, INFINITE ) == WAIT_OBJECT_0;
 	
 }
 

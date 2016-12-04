@@ -1,7 +1,7 @@
 #ifndef RED_THREADING_MUTEX_H
 #define RED_THREADING_MUTEX_H
 
-#include <mutex>
+#include <Red/Threading/Platform/Mutex.h>
 
 #include <Red/Threading/Threading.h>
 
@@ -24,7 +24,7 @@ namespace Red
 			
 		private:
 			
-			std :: mutex Mut;
+			__Platform_Mutex_t Mut;
 			
 		};
 		
