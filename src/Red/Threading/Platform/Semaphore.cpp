@@ -159,7 +159,8 @@ bool __Platform_Red_Threading_Semaphore_Wait ( __Platform_Semaphore_t & Target )
 void __Platform_Red_Threading_Semaphore_Post ( __Platform_Semaphore_t & Target, uint32_t PostCount )
 {
 	
-	sem_post ( & Target, PostCount );
+	for ( uint32_t I = 0; I < PostCount; I ++ )
+		sem_post ( & Target );
 	
 }
 

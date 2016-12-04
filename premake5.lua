@@ -13,7 +13,7 @@ workspace "ProjectRed"
 		includedirs { "/opt/local/include", "/opt/local/include/freetype2", "include" }
 		libdirs "/opt/local/lib"
 		frameworkdirs "/Library/Frameworks/**"
-		links { "OpenGL.framework", "SDL2", "png", "freetype" }
+		links { "OpenGL.framework", "SDL2", "png", "freetype", "pthread" }
 		
 	filter "action:xcode*"
 		
@@ -24,7 +24,7 @@ workspace "ProjectRed"
 		buildoptions "-std=c++11"
 		includedirs "/usr/include/freetype2/"
 		libdirs "/usr/lib"
-		links { "GL", "SDL2", "png", "freetype" }
+		links { "GL", "SDL2", "png", "freetype", "pthread" }
 
 	filter "system:windows"
 		
