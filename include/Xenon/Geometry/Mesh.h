@@ -9,6 +9,9 @@
 
 #include <Xenon/GPU/IGPUResourceUser.h>
 #include <Xenon/GPU/GLInclude.h>
+#include <Xenon/GPU/DrawCall.h>
+#include <Xenon/GPU/IndexedDrawCall.h>
+#include <Xenon/GPU/InstancedIndexedDrawCall.h>
 #include <Xenon/GPU/IndexBuffer.h>
 #include <Xenon/GPU/VertexArray.h>
 #include <Xenon/GPU/VertexBuffer.h>
@@ -28,24 +31,6 @@ namespace Xenon
 		{
 		public:
 			
-			typedef GLenum DrawMode;
-			
-			static const DrawMode kDrawMode_Point = GL_POINTS;
-			
-			static const DrawMode kDrawMode_Line_Strip = GL_LINE_STRIP;
-			static const DrawMode kDrawMode_Line_Loop = GL_LINE_LOOP;
-			static const DrawMode kDrawMode_Line = GL_LINES;
-			static const DrawMode kDrawMode_Line_Adjecent = GL_LINES_ADJACENCY;
-			static const DrawMode kDrawMode_Line_Strip_Adjacent = GL_LINE_STRIP_ADJACENCY;
-			
-			static const DrawMode kDrawMode_Triangle_Strip = GL_TRIANGLE_STRIP;
-			static const DrawMode kDrawMode_Triangle_Fan = GL_TRIANGLE_FAN;
-			static const DrawMode kDrawMode_Triangle = GL_TRIANGLES;
-			static const DrawMode kDrawMode_Triangle_Strip_Adjacent = GL_TRIANGLE_STRIP_ADJACENCY;
-			static const DrawMode kDrawMode_Triangle_Adjacency = GL_TRIANGLES_ADJACENCY;
-			
-			static const DrawMode kDrawMode_Patches = GL_PATCHES;
-			
 			enum MemMapIndexData
 			{
 				
@@ -53,12 +38,12 @@ namespace Xenon
 				
 			};
 			
-			Mesh ( DrawMode Mode, Red::Util :: RCMem * IndexData, uint32_t IndexCount, GPU::IndexBuffer :: IndexType IType = GPU::IndexBuffer :: kIndexType_UInts, GPU::IndexBuffer :: UsageType IUsage = GPU::IndexBuffer :: kUsageType_Static_Draw );
-			Mesh ( MemMapIndexData MAP_INDEXBUFFER_WRITEONLY, DrawMode Mode, uint32_t IndexCount, GPU::IndexBuffer :: IndexType IType = GPU::IndexBuffer :: kIndexType_UInts, bool Draw = true );
+			Mesh ( GPU::DrawCall :: DrawMode Mode, Red::Util :: RCMem * IndexData, uint32_t IndexCount, GPU::IndexBuffer :: IndexType IType = GPU::IndexBuffer :: kIndexType_UInts, GPU::IndexBuffer :: UsageType IUsage = GPU::IndexBuffer :: kUsageType_Static_Draw );
+			Mesh ( MemMapIndexData MAP_INDEXBUFFER_WRITEONLY, GPU::DrawCall :: DrawMode Mode, uint32_t IndexCount, GPU::IndexBuffer :: IndexType IType = GPU::IndexBuffer :: kIndexType_UInts, bool Draw = true );
 			
 			virtual ~Mesh ();
 			
-			void SetDrawMode ( DrawMode Mode );
+			void SetDrawMode ( GPU::DrawCall :: DrawMode Mode );
 			
 			void ReIndex ( uint32_t IndexCount, Red::Util :: RCMem * IndexData );
 			void ReIndex ( MemMapIndexData MapIndexBufferMemory, uint32_t IndexCount );
@@ -73,7 +58,7 @@ namespace Xenon
 			void FlushIndexes ( bool DiscardDataReference );
 			void FlushVertexes ( bool FreeDataReferences );
 			
-			DrawMode GetDrawMode ();
+			GPU::DrawCall :: DrawMode GetDrawMode ();
 			
 			void FlushData ();
 			
@@ -85,6 +70,9 @@ namespace Xenon
 			uint32_t GetIndexCount ();
 			GPU::IndexBuffer :: IndexType GetIndexType ();
 			
+			void ConfigureIndexedDrawCall ( GPU :: IndexedDrawCall & ToConfigure );
+			void ConfigureInstancedIndexedDrawCall ( GPU :: InstancedIndexedDrawCall & ToConfigure, GLuint InstanceCount = 0 );
+			
 		private:
 			
 			GPU :: IndexBuffer IndexBuff;
@@ -92,7 +80,7 @@ namespace Xenon
 			Red::Util :: RCMem * IndexData;
 			uint32_t IndexCount;
 			
-			DrawMode Mode;
+			GPU::DrawCall :: DrawMode Mode;
 			
 			bool IndexDirty;
 			bool GPUAllocated;

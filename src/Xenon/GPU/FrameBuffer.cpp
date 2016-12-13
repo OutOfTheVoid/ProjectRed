@@ -169,83 +169,17 @@ void Xenon::GPU::FrameBuffer :: Clear ( FrameBufferComponent Components )
 void Xenon::GPU::FrameBuffer :: SetRenderTexture2D ( OutputAttachment Attachment, GLuint AttachmentIndex, Texture2D & Texture, GLuint Level )
 {
 	
-	Bind ( kFrameBufferBindingFlag_Draw );
+	Bind ( kFrameBufferBindingFlag_ReadDraw );
 	
-	switch ( Attachment )
-	{
-		
-		case kOutputAttachment_ColorBuffer:
-		{
-			
-			if ( AttachmentIndex > GL_MAX_COLOR_ATTACHMENTS )
-				return;
-			
-			glFramebufferTexture2D ( GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0 + AttachmentIndex, GL_TEXTURE_2D, Texture.THandle, Level );
-			
-		}
-		
-		case kOutputAttachment_DepthBuffer:
-		{
-			
-			if ( AttachmentIndex != 0 )
-				return;
-			
-			glFramebufferTexture2D ( GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, Texture.THandle, Level );
-			
-		}
-		
-		case kOutputAttachment_StencilBuffer:
-		{
-			
-			if ( AttachmentIndex != 0 )
-				return;
-			
-			glFramebufferTexture2D ( GL_FRAMEBUFFER, GL_STENCIL_ATTACHMENT, GL_TEXTURE_2D, Texture.THandle, Level );
-			
-		}
-		
-	}
+	glFramebufferTexture2D ( GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0 + AttachmentIndex, GL_TEXTURE_2D, Texture.THandle, Level );
 	
 }
 
 void Xenon::GPU::FrameBuffer :: SetRenderBuffer ( OutputAttachment Attachment, GLuint AttachmentIndex, RenderBuffer & Buffer )
 {
 	
-	Bind ( kFrameBufferBindingFlag_Draw );
+	Bind ( kFrameBufferBindingFlag_ReadDraw );
 	
-	switch ( Attachment )
-	{
-		
-		case kOutputAttachment_ColorBuffer:
-		{
-			
-			if ( AttachmentIndex > GL_MAX_COLOR_ATTACHMENTS )
-				return;
-			
-			glFramebufferRenderbuffer ( GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0 + AttachmentIndex, GL_TEXTURE_2D, Buffer.RHandle );
-			
-		}
-		
-		case kOutputAttachment_DepthBuffer:
-		{
-			
-			if ( AttachmentIndex != 0 )
-				return;
-			
-			glFramebufferRenderbuffer ( GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, Buffer.RHandle );
-			
-		}
-		
-		case kOutputAttachment_StencilBuffer:
-		{
-			
-			if ( AttachmentIndex != 0 )
-				return;
-			
-			glFramebufferRenderbuffer ( GL_FRAMEBUFFER, GL_STENCIL_ATTACHMENT, GL_TEXTURE_2D, Buffer.RHandle );
-			
-		}
-		
-	}
+	glFramebufferRenderbuffer ( GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0 + AttachmentIndex, GL_RENDERBUFFER, Buffer.RHandle );
 	
 }

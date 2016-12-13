@@ -23,6 +23,7 @@ namespace Xenon
 		public:
 			
 			MeshAttributeData ( Red::Util :: RCMem * Data, GLsizei Size, GPU::VertexBuffer :: UsageType UsageMode, bool Orphaning = true );
+			MeshAttributeData ( MeshAttributeData & CopyFrom );
 			~MeshAttributeData ();
 			
 			void MarkDirty ();

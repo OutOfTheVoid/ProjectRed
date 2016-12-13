@@ -1348,7 +1348,7 @@ bool Xenon::Geometry::Primitives :: GenerateCubeMesh ( Mesh ** Target, const Cub
 		
 	}
 	
-	* Target = new Mesh ( Mesh :: kDrawMode_Triangle, IndexDataBuffer, 36, GPU::IndexBuffer :: kIndexType_UBytes, GPU::IndexBuffer :: kUsageType_Static_Draw );
+	* Target = new Mesh ( GPU::DrawCall :: kDrawMode_Triangle, IndexDataBuffer, 36, GPU::IndexBuffer :: kIndexType_UBytes, GPU::IndexBuffer :: kUsageType_Static_Draw );
 	
 	uint32_t I;
 	
@@ -1780,7 +1780,7 @@ bool Xenon::Geometry::Primitives :: GenerateQuad2DMesh ( Mesh ** Target, const Q
 		
 	}
 	
-	* Target = new Mesh ( Mesh :: kDrawMode_Triangle, IndexDataBuffer, 6, GPU::IndexBuffer :: kIndexType_UBytes, GPU::IndexBuffer :: kUsageType_Static_Draw );
+	* Target = new Mesh ( GPU::DrawCall :: kDrawMode_Triangle, IndexDataBuffer, 6, GPU::IndexBuffer :: kIndexType_UBytes, GPU::IndexBuffer :: kUsageType_Static_Draw );
 	
 	uint32_t I;
 	

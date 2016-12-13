@@ -33,6 +33,7 @@ namespace Xenon
 			static const UsageType kUsageType_Dynamic_Copy = GL_DYNAMIC_COPY;
 			
 			VertexBuffer ( UsageType Usage );
+			VertexBuffer ( VertexBuffer & CopyFrom );
 			~VertexBuffer ();
 			
 			void GPUResourceAlloc ();
@@ -42,6 +43,8 @@ namespace Xenon
 			
 			void Buffer ( const GLvoid * Data, GLsizeiptr Size );
 			void SubBuffer ( const GLvoid * SubData, GLsizeiptr Size, GLintptr Offset );
+			
+			UsageType GetUsageType ();
 			
 			void Orphan ();
 			

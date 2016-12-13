@@ -1,6 +1,6 @@
 #include <Xenon/Geometry/Mesh.h>
 
-Xenon::Geometry::Mesh :: Mesh ( DrawMode Mode, Red::Util :: RCMem * IndexData, uint32_t IndexCount, GPU::IndexBuffer :: IndexType IType, GPU::IndexBuffer :: UsageType IUsage ):
+Xenon::Geometry::Mesh :: Mesh ( GPU::DrawCall :: DrawMode Mode, Red::Util :: RCMem * IndexData, uint32_t IndexCount, GPU::IndexBuffer :: IndexType IType, GPU::IndexBuffer :: UsageType IUsage ):
 	RefCounted ( 0 ),
 	IndexBuff ( IUsage, IType ),
 	IndexData ( IndexData ),
@@ -17,7 +17,7 @@ Xenon::Geometry::Mesh :: Mesh ( DrawMode Mode, Red::Util :: RCMem * IndexData, u
 	
 }
 
-Xenon::Geometry::Mesh :: Mesh ( MemMapIndexData MAP_INDEXBUFFER, DrawMode Mode, uint32_t IndexCount, GPU::IndexBuffer :: IndexType IType, bool Draw ):
+Xenon::Geometry::Mesh :: Mesh ( MemMapIndexData MAP_INDEXBUFFER, GPU::DrawCall :: DrawMode Mode, uint32_t IndexCount, GPU::IndexBuffer :: IndexType IType, bool Draw ):
 	RefCounted ( 0 ),
 	IndexBuff ( Draw ? GPU::IndexBuffer :: kUsageType_Stream_Draw : GPU::IndexBuffer :: kUsageType_Stream_Copy, IType ),
 	IndexData ( NULL ),
@@ -67,7 +67,7 @@ Xenon::Geometry::Mesh :: ~Mesh ()
 	
 }
 			
-void Xenon::Geometry::Mesh :: SetDrawMode ( DrawMode Mode )
+void Xenon::Geometry::Mesh :: SetDrawMode ( GPU::DrawCall :: DrawMode Mode )
 {
 	
 	this -> Mode = Mode;
@@ -185,7 +185,7 @@ void Xenon::Geometry::Mesh :: FlushIndexes ( bool DiscardDataReference )
 	
 }
 
-Xenon::Geometry::Mesh :: DrawMode Xenon::Geometry::Mesh :: GetDrawMode ()
+Xenon::GPU::DrawCall :: DrawMode Xenon::Geometry::Mesh :: GetDrawMode ()
 {
 	
 	return Mode;
@@ -252,5 +252,26 @@ Xenon::GPU::IndexBuffer :: IndexType Xenon::Geometry::Mesh :: GetIndexType ()
 {
 	
 	return IndexBuff.GetIndexType ();
+	
+}
+
+void Xenon::Geometry::Mesh :: ConfigureIndexedDrawCall ( GPU :: IndexedDrawCall & ToConfigure )
+{
+	
+	ToConfigure.SetDrawMode ( Mode );
+	ToConfigure.SetElementCount ( IndexBuff.GetIndexCount () );
+	ToConfigure.SetIndexType ( IndexBuff.GetIndexType () );
+	ToConfigure.SetIndexBufferOffset ( NULL );
+	
+}
+
+void Xenon::Geometry::Mesh :: ConfigureInstancedIndexedDrawCall ( GPU :: InstancedIndexedDrawCall & ToConfigure, GLuint InstanceCount )
+{
+	
+	ToConfigure.SetDrawMode ( Mode );
+	ToConfigure.SetElementCount ( IndexBuff.GetIndexCount () );
+	ToConfigure.SetIndexType ( IndexBuff.GetIndexType () );
+	ToConfigure.SetIndexBufferOffset ( NULL );
+	ToConfigure.SetInstanceCount ( InstanceCount );
 	
 }

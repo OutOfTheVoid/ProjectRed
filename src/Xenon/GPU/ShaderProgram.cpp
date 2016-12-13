@@ -66,12 +66,24 @@ void Xenon::GPU::ShaderProgram :: Bind ()
 	
 }
 
-void Xenon::GPU::ShaderProgram :: Link ()
+bool Xenon::GPU::ShaderProgram :: Link ()
 {
 	
 	glLinkProgram ( SHandle );
 	
-	LinkIteration ++;
+	GLint IsLinked = GL_FALSE;
+	glGetProgramiv ( SHandle, GL_LINK_STATUS, & IsLinked );
+	
+	if ( IsLinked )
+	{
+		
+		LinkIteration ++;
+		
+		return true;
+		
+	}
+	
+	return false;
 	
 }
 

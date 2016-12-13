@@ -7,6 +7,7 @@
 #include <Xenon/GPU/Texture2D.h>
 
 #include <Red/Graphics/Laminar/RenderLayout.h>
+#include <Red/Graphics/Laminar/I2DTextureSource.h>
 
 namespace Red
 {
@@ -21,7 +22,7 @@ namespace Red
 			{
 			public:	
 				
-				Sprite ( Texture2D * Texture );
+				Sprite ( I2DTextureSource * Texture );
 				~Sprite ();
 				
 				const RenderLayout & GetRenderLayout ();
@@ -35,7 +36,7 @@ namespace Red
 				Transform2D Transform;
 				int32_t Z;
 				
-				Texture2D * Texture;
+				I2DTextureSource * TextureSource;
 				
 				RenderLayout Layout ();
 				

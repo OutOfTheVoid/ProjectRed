@@ -363,7 +363,7 @@ Xenon::Geometry :: Mesh * RAUX::STLFile :: CreateMesh ( const MeshParameters & P
 		
 	}
 	
-	Xenon::Geometry :: Mesh * OutMesh = new Xenon::Geometry :: Mesh ( Xenon::Geometry::Mesh :: kDrawMode_Triangle, IndexMemory, 3 * TriangleCount, Xenon::GPU::IndexBuffer :: kIndexType_UInts, Xenon::GPU::IndexBuffer :: kUsageType_Static_Draw );
+	Xenon::Geometry :: Mesh * OutMesh = new Xenon::Geometry :: Mesh ( Xenon::GPU::DrawCall :: kDrawMode_Triangle, IndexMemory, 3 * TriangleCount, Xenon::GPU::IndexBuffer :: kIndexType_UInts, Xenon::GPU::IndexBuffer :: kUsageType_Static_Draw );
 	
 	Xenon::Geometry :: MeshAttributeData * PositionAttributeData = NULL;
 	Xenon::Geometry :: MeshAttribute * PositionMeshAttribute = NULL;

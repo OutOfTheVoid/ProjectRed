@@ -39,6 +39,7 @@ namespace Xenon
 			static const OutputAttachment kOutputAttachment_ColorBuffer = GL_COLOR_ATTACHMENT0;
 			static const OutputAttachment kOutputAttachment_DepthBuffer = GL_DEPTH_ATTACHMENT;
 			static const OutputAttachment kOutputAttachment_StencilBuffer = GL_STENCIL_ATTACHMENT;
+			static const OutputAttachment kOutputAttachment_DepthStencilBuffer = GL_DEPTH_STENCIL_ATTACHMENT;
 			
 			FrameBuffer ();
 			~FrameBuffer ();
@@ -56,7 +57,7 @@ namespace Xenon
 			
 			void Clear ( FrameBufferComponent Components = kFrameBufferComponent_Color | kFrameBufferComponent_Depth );
 			
-			void SetRenderTexture2D ( OutputAttachment Attachment, GLuint AttachmentIndex, Texture2D & Texture, GLuint Level = 0 );
+			void SetRenderTexture2D ( OutputAttachment Attachment, GLuint AttachmentIndex, Texture2D & Texture, GLuint Level );
 			void SetRenderBuffer ( OutputAttachment Attachment, GLuint AttachmentIndex, RenderBuffer & Buffer );
 			
 		private:

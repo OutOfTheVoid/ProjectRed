@@ -30,6 +30,7 @@ namespace Xenon
 			
 			Matrix4x4 ();
 			Matrix4x4 ( const float A, const float B, const float C, const float D, const float E, const float F, const float G, const float H, const float I, const float J, const float K, const float L, const float M, const float N, const float O, const float P );
+			explicit Matrix4x4 ( const float * FloatArray );
 			explicit Matrix4x4 ( const Vec4 & Row1, const Vec4 & Row2, const Vec4 & Row3, const Vec4 & Row4 );
 			Matrix4x4 ( NoInit NO_INIT );
 			Matrix4x4 ( const Matrix4x4 & CopyFrom );

@@ -22,6 +22,11 @@ namespace Red
 			{
 			};
 			
+			inline RefCounted ( const RefCounted & CopyFrom ):
+				RefCount ( CopyFrom.RefCount.load () )
+			{
+			};
+			
 			inline ~RefCounted ()
 			{
 			};

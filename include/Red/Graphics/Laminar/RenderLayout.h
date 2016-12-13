@@ -3,6 +3,8 @@
 
 #include <Red/Graphics/Laminar/Laminar.h>
 
+#include <Xenon/Math/Vec2.h>
+
 namespace Red
 {
 	
@@ -29,17 +31,23 @@ namespace Red
 					
 				} RenderMode;
 				
-				RenderLayout ( RenderMode Mode,  );
+				RenderLayout ( RenderMode Mode, bool ZSortRequired, const Xenon::Math :: Vec2 & SpriteArea, const Xenon::Math :: Vec2 & BaseCoordinateOffset );
 				~RenderLayout ();
+				
+				RenderMode GetRenderMode ();
 				
 				bool GetZSortRequired ();
 				
-				uint32_t GetTextureCount ();
+				const Vec2 & GetSpriteArea ();
+				const Vec2 & GetBaseCoordinateOffset ();
 				
 			private:
 				
 				RenderMode Mode;
+				bool ZSortRequired;
 				
+				Xenon::Math :: Vec2 SpriteArea;
+				Xenon::Math :: Vec2 BaseCoordinateOffset;
 				
 			}
 			

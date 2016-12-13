@@ -9,7 +9,8 @@
 #include <Xenon/Math/Matrix4x4.h>
 #include <Xenon/Math/ConstantIntUniformSource.h>
 #include <Xenon/Math/ConstantBoolUniformSource.h>
-#include <Xenon/Math/RawMatrix4x4UniformSource.h>
+
+#include <Xenon/GPU/IMatrix4x4UniformSource.h>
 
 #include <Xenon/GPU/Context.h>
 #include <Xenon/GPU/FrameBuffer.h>
@@ -21,8 +22,11 @@
 #include <Xenon/GPU/Texture2D.h>
 #include <Xenon/GPU/VertexArray.h>
 #include <Xenon/GPU/UniformSet.h>
+#include <Xenon/GPU/IndexedDrawCall.h>
 
 #include <Xenon/Geometry/Mesh.h>
+
+#include <vector>
 
 namespace Red
 {
@@ -36,17 +40,21 @@ namespace Red
 		{
 		public:
 			
-			static const char * kModelAttributeName_Position;
-			static const char * kModelAttributeName_Normal;
-			static const char * kModelAttributeName_Tangent;
-			static const char * kModelAttributeName_Color;
-			static const char * kModelAttributeName_TextureCoords;
+			static const std :: string kModelAttributeName_Position;
+			static const std :: string kModelAttributeName_Normal;
+			static const std :: string kModelAttributeName_Tangent;
+			static const std :: string kModelAttributeName_Color;
+			static const std :: string kModelAttributeName_TextureCoords;
 			
-			static const char * kModelAttributeName_InstancedTransform;
+			static const std :: string kModelAttributeName_InstancedModelMatrix;
+			static const std :: string kModelAttributeName_InstancedNormalMatrix;
 			
-			static const uint32_t kRenderFlags_InstancedTransform = 1;
-			static const uint32_t kRenderFlags_NormalTexture = 2;
-			static const uint32_t kRenderFlags_ColorTexture = 4;
+			static const std :: string kUniformName_ModelMatrix;
+			static const std :: string kUniformName_NormalMatrix;
+			
+			static const std :: string kUniformName_DoInstancedTransforms;
+			static const std :: string kUniformName_DoNormalTexture;
+			static const std :: string kUniformName_DoColorTexture;
 			
 			DeferredModelRenderer ();
 			~DeferredModelRenderer ();
@@ -69,21 +77,44 @@ namespace Red
 
 #endif
 			
+			static const Model :: ModelShaderConfigurationNames & GetShaderConfigurationNames ();
+			
 			void Initialize ( Xenon::GPU :: Context * GPUContext );
 			
-			void SetProjection ( Xenon::Math :: Matrix4x4 & ProjectionMatrix );
-			void SetView ( Xenon::Math :: Matrix4x4 & ViewMatrix );
+			void SetProjectionSource ( Xenon::GPU :: IMatrix4x4UniformSource * ProjectionMatrixSource );
+			void SetViewSource ( Xenon::GPU :: IMatrix4x4UniformSource * ViewMatrixSource );
 			
 			void SetupRender ( Xenon::GPU :: FrameBuffer * RenderTarget, Xenon::Math :: Vec2 Dimensions );
 			void DestroyRender ();
 			
 			void Render ();
 			
+			void AddModel ( Model * ToAdd );
+			void RemoveModel ( Model * ToRemove );
+						
 		private:
-			
+				
 			class PerModelRenderData
 			{
 			public:
+				
+				#ifdef _WIN32
+				
+				inline void * operator new ( size_t Size )
+				{
+					
+					return _mm_malloc ( Size, 16 );
+					
+				}
+				
+				inline void operator delete ( void * ToFree )
+				{
+					
+					_mm_free ( ToFree );
+					
+				}
+				
+				#endif
 				
 				~PerModelRenderData ();
 				
@@ -91,19 +122,19 @@ namespace Red
 				
 				friend class DeferredModelRenderer;
 				
-				PerModelRenderData ( Model * RenderModel, uint32_t Flags );
+				PerModelRenderData ( Model * RenderModel );
 				
 				Model * RenderModel;
 				
-				Xenon::Math :: ConstantBoolUniformSource DoInstancedTransformUniform;
-				Xenon::Math :: ConstantBoolUniformSource DoNormalTextureUniform;
-				Xenon::Math :: ConstantBoolUniformSource DoColorTextureUniform;
-				
 				Xenon::GPU :: UniformSet Uniforms;
+				Xenon::GPU :: VertexArray VArray;
 				
 				bool GPUAllocated;
 				
 			};
+			
+			void GPUAllocModelData ( PerModelRenderData * Data );
+			void GPUFreeModelData ( PerModelRenderData * Data );
 			
 			Xenon::GPU :: Context * GPUContext;
 			Xenon::GPU :: FrameBuffer * RenderTarget;
@@ -115,7 +146,7 @@ namespace Red
 			Xenon::GPU :: UniformSet GeometryUniforms;
 			
 			Xenon::GPU :: FrameBuffer GBuffer;
-			GLuint AttachmentList [ 3 ];
+			GLuint AttachmentList [ 4 ];
 			
 			Xenon::GPU :: Texture2D AlbedoSpecularTexture;
 			Xenon::GPU :: Texture2D NormalTexture;
@@ -128,13 +159,19 @@ namespace Red
 			
 			Xenon::GPU :: ShaderProgram GeometryProgram;
 			
-			Xenon::Math :: Matrix4x4 ProjectionMatrix;
+			Xenon::GPU :: IMatrix4x4UniformSource * ProjectionMatrixSource;
+			Xenon::GPU :: IMatrix4x4UniformSource * ViewMatrixSource;
 			
-			Xenon::Math :: RawMatrix4x4UniformSource NormalMatrixUniform;
-			Xenon::Math :: RawMatrix4x4UniformSource ModelMatrixUniform;
+			int64_t LastProjectionIteration;
+			int64_t LastViewIteration;
+			
+			Xenon::Math :: Matrix4x4 ViewProjectionMatrix;
+			
 			Xenon::Math :: RawMatrix4x4UniformSource ViewProjectionMatrixUniform;
 			
 			// Lighting pass
+			
+			Xenon::GPU :: IndexedDrawCall LightingDrawCall;
 			
 			Xenon::GPU :: VertexArray LightingVAO;
 			
@@ -150,6 +187,10 @@ namespace Red
 			Xenon::GPU :: ShaderProgram LightingProgram;
 			
 			Xenon::Geometry :: Mesh * RenderQuad;
+			
+			// Objects to render:
+			
+			std :: vector <PerModelRenderData *> RenderDataSet;
 			
 		};
 		

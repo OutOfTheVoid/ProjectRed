@@ -15,6 +15,20 @@ Xenon::Geometry::MeshAttributeData :: MeshAttributeData ( Red::Util :: RCMem * D
 	
 }
 
+Xenon::Geometry::MeshAttributeData :: MeshAttributeData ( MeshAttributeData & CopyFrom ):
+	RefCounted ( CopyFrom ),
+	Data ( CopyFrom.Data ),
+	Size ( CopyFrom.Size ),
+	Written ( CopyFrom.Written ),
+	Buffer ( CopyFrom.Buffer ),
+	Dirty ( true ),
+	Orphaning ( CopyFrom.Orphaning )
+{
+	
+	CopyFrom.Data = NULL;
+	
+}
+
 Xenon::Geometry::MeshAttributeData :: ~MeshAttributeData ()
 {
 	
@@ -56,9 +70,12 @@ bool Xenon::Geometry::MeshAttributeData :: GPUResourceAllocated ()
 void Xenon::Geometry::MeshAttributeData :: Update ( bool FreeDataReference )
 {
 	
+	if ( Data == NULL )
+		return;
+	
 	Buffer.Bind ();
 	
-	if ( ! Written && Data != NULL )
+	if ( ! Written )
 	{
 		
 		Buffer.Buffer ( Data -> GetData (), Size );

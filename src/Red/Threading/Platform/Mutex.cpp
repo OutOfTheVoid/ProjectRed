@@ -5,30 +5,54 @@
 bool __Platform_Red_Threading_Mutex_Init ( __Platform_Mutex_t & Mutex )
 {
 	
-	Mutex = CreateMutex ( NULL, false, NULL );
+	InitializeCriticalSection ( & Mutex );
 	
-	return Mutex != NULL;
+	return true;
 	
 }
 
 void __Platform_Red_Threading_Mutex_Destroy ( __Platform_Mutex_t & Mutex )
 {
 	
-	CloseHandle ( Mutex );
+	DeleteCriticalSection ( & Mutex );
 	
 }
 
 bool __Platform_Red_Threading_Mutex_TryLock ( __Platform_Mutex_t & Mutex )
 {
 	
-	return WaitForSingleObject ( Mutex, 0 ) == WAIT_OBJECT_0;
+	__try
+	{
+		
+		return TryEnterCriticalSection ( & Mutex );
+		
+	}
+	__except ( ( GetExceptionCode () == EXCEPTION_POSSIBLE_DEADLOCK ) ? EXCEPTION_EXECUTE_HANDLER : EXCEPTION_CONTINUE_SEARCH )
+	{
+		
+		return false;
+		
+	}
 	
 }
 
 bool __Platform_Red_Threading_Mutex_Lock ( __Platform_Mutex_t & Mutex )
 {
 	
-	return WaitForSingleObject ( Mutex, INFINITE ) == WAIT_OBJECT_0;
+	__try
+	{
+		
+		EnterCriticalSection ( & Mutex );
+		
+	}
+	__except ( ( GetExceptionCode () == EXCEPTION_POSSIBLE_DEADLOCK ) ? EXCEPTION_EXECUTE_HANDLER : EXCEPTION_CONTINUE_SEARCH )
+	{
+		
+		return false;
+		
+	}
+	
+	return true;
 	
 }
 

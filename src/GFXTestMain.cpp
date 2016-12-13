@@ -48,6 +48,7 @@
 #include <Red/Events/BasicEvent.h>
 
 #include <Red/Graphics/DeferredModelRenderer.h>
+#include <Red/Graphics/Model.h>
 
 #include <Red/Threading/Thread.h>
 #include <Red/Threading/ThreadEvent.h>
@@ -111,6 +112,35 @@ bool SetupScene ( RenderStruct & Data )
 	Data.Renderer -> Initialize ( Data.Cont );
 	Data.Renderer -> SetupRender ( Data.Cont -> GetDefaultFrameBuffer (), Xenon::Math :: Vec2 ( WINDOW_WIDTH_0, WINDOW_HEIGHT_0 ) );
 	
+	const Red::Graphics::Model :: ModelShaderConfigurationNames & ShaderConfigNames = Red::Graphics::DeferredModelRenderer :: GetShaderConfigurationNames ();
+	
+	Xenon::Geometry :: Mesh * CubeMesh = NULL;
+	
+	Xenon::Geometry::Primitives :: CubeSpec Spec;
+	Spec.WindOutwardFacesClockwise = false;
+	Spec.CompositionMode = Xenon::Geometry::Primitives :: kStaticAttributeCompositionMode_Interleaved;
+	Spec.Attributes = Xenon::Geometry::Primitives :: kAttributeFlags_Position | Xenon::Geometry::Primitives :: kAttributeFlags_Color | Xenon::Geometry::Primitives :: kAttributeFlags_Normal;
+	Xenon::Geometry::Primitives :: SetupRealCubeFaceNormalSpec ( Spec.NormalSpec, * ShaderConfigNames.NormalAttributeName, true );
+	Xenon::Geometry::Primitives :: SetupUnitCubeVertexPositionSpec ( Spec.PositionSpec, * ShaderConfigNames.PositionAttributeName, true );
+	Spec.ColorSpec.Layout = Xenon::Geometry::Primitives::CubeColorSpec :: kColorLayout_Face;
+	Spec.ColorSpec.AttributeName = * ShaderConfigNames.ColorAttributeName;
+	Spec.ColorSpec.Static = true;
+	Spec.ColorSpec.FaceColors [ 0 ] = Spec.ColorSpec.FaceColors [ 1 ] = Spec.ColorSpec.FaceColors [ 2 ] = Spec.ColorSpec.FaceColors [ 3 ] = Spec.ColorSpec.FaceColors [ 4 ] = Spec.ColorSpec.FaceColors [ 5 ] = Xenon::Math :: Vec3 ( 1.0f, 1.0f, 1.0f );
+	
+	
+	
+	if ( Xenon::Geometry::Primitives :: GenerateCubeMesh ( & CubeMesh, Spec ) )
+	{
+		
+		Red::Graphics :: Model * CubeModel = new Red::Graphics :: Model ( CubeMesh, Red::Graphics::Model :: kDrawMethod_Single, ShaderConfigNames );
+		Data.Renderer -> AddModel ( CubeModel );
+		
+		std :: cout << "Cube model created!" << std :: endl;
+		
+	}
+	else
+		return false;
+	
 	return true;
 	
 }
@@ -131,6 +161,7 @@ void DestroyScene ( RenderStruct & Data )
 void Render ( RenderStruct & Data )
 {
 	
+	Data.Cont -> GetDefaultFrameBuffer () -> SetClearColor ( 1.0f, 0.0f, 0.0f, 1.0f );
 	Data.Cont -> GetDefaultFrameBuffer () -> Clear ();
 	
 	Data.Renderer -> Render ();

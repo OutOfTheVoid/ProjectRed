@@ -13,6 +13,11 @@ Xenon::Math::Matrix4x4 :: Matrix4x4 ():
 {
 }
 
+Xenon::Math::Matrix4x4 :: Matrix4x4 ( const float * FloatArray ):
+	Elements { { FloatArray [ 0 ], FloatArray [ 1 ], FloatArray [ 2 ], FloatArray [ 3 ] }, { FloatArray [ 4 ], FloatArray [ 5 ], FloatArray [ 6 ], FloatArray [ 7 ] }, { FloatArray [ 8 ], FloatArray [ 9 ], FloatArray [ 10 ], FloatArray [ 11 ] }, { FloatArray [ 12 ], FloatArray [ 13 ], FloatArray [ 14 ], FloatArray [ 15 ] } }
+{
+}
+
 Xenon::Math::Matrix4x4 :: Matrix4x4 ( const float A, const float B, const float C, const float D, const float E, const float F, const float G, const float H, const float I, const float J, const float K, const float L, const float M, const float N, const float O, const float P ):
 	Elements { { A, B, C, D }, { E, F, G, H }, { I, J, K, L }, { M, N, O, P } }
 {

@@ -6,7 +6,7 @@
 #include <Red/Util/IRefCounted.h>
 
 #include <Xenon/Math/Vec2.h>
-#include <Xenon/Math/Matrix4x4.h>
+#include <Xenon/GPU/IMatrix4x4UniformSource.h>
 
 #include <Xenon/GPU/Context.h>
 #include <Xenon/GPU/FrameBuffer.h>
@@ -28,7 +28,8 @@ namespace Red
 			
 			virtual void Initialize ( Xenon::GPU :: Context * GPUContext ) = 0;
 			
-			virtual void SetProjection ( Xenon::Math :: Matrix4x4 & ProjectionMatrix ) = 0;
+			virtual void SetProjectionSource ( Xenon::GPU :: IMatrix4x4UniformSource * ProjectionMatrixSource ) = 0;
+			virtual void SetViewSource ( Xenon::GPU :: IMatrix4x4UniformSource * ViewMatrixSource ) = 0;
 			
 			virtual void SetupRender ( Xenon::GPU :: FrameBuffer * RenderTarget, Xenon::Math :: Vec2 Dimensions ) = 0;
 			virtual void DestroyRender () = 0;

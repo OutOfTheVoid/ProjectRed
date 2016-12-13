@@ -2,7 +2,7 @@
 #include <Xenon/GPU/Context.h>
 
 Xenon::GPU::RenderBuffer :: RenderBuffer ():
-	RefCounted (),
+	RefCounted ( 0 ),
 	Allocated ( false ),
 	RHandle ( false )
 {
@@ -68,6 +68,9 @@ void Xenon::GPU::RenderBuffer :: AllocateStorage ( Texture2D :: InternalFormat F
 	
 	Bind ();
 	
-	glRenderbufferStorageMultisample ( GL_RENDERBUFFER, MultisampleLevel, Format, Width, Height );
+	if ( MultisampleLevel == 0 )
+		glRenderbufferStorage ( GL_RENDERBUFFER, Format, Width, Height );
+	else
+		glRenderbufferStorageMultisample ( GL_RENDERBUFFER, MultisampleLevel, Format, Width, Height );
 	
 }

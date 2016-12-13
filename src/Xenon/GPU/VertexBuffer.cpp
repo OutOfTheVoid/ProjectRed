@@ -12,6 +12,21 @@ Xenon::GPU::VertexBuffer :: VertexBuffer ( UsageType Usage ):
 {
 }
 
+Xenon::GPU::VertexBuffer :: VertexBuffer ( VertexBuffer & CopyFrom ):
+	RefCounted ( CopyFrom ),
+	Usage ( CopyFrom.Usage ),
+	Allocated ( CopyFrom.Allocated ),
+	Size ( CopyFrom.Size ),
+	Written ( CopyFrom.Written ),
+	BHandle ( CopyFrom.BHandle )
+{
+	
+	CopyFrom.BHandle = 0;
+	CopyFrom.Allocated = false;
+	CopyFrom.Size = 0;
+	
+}
+
 Xenon::GPU::VertexBuffer :: ~VertexBuffer ()
 {
 	
@@ -101,6 +116,13 @@ void Xenon::GPU::VertexBuffer :: Bind ()
 		Context :: CurrentBoundContext -> CurrentBoundArrayBuffer = this;
 	
 	}
+	
+}
+
+Xenon::GPU::VertexBuffer :: UsageType Xenon::GPU::VertexBuffer :: GetUsageType ()
+{
+	
+	return Usage;
 	
 }
 

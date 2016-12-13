@@ -1,7 +1,7 @@
 #include <Xenon/Geometry/MeshAttribute.h>
 #include <Xenon/Geometry/MeshAttributeData.h>
 
-Xenon::Geometry::MeshAttribute :: MeshAttribute ( const std :: string & Name, GPU::VertexArray :: FPAttributeInputType FloatingType, bool Normalized, GLuint Size, GLuint Stride, GLvoid * Offset, MeshAttributeData * Data, GLuint InstanceDivisor ):
+Xenon::Geometry::MeshAttribute :: MeshAttribute ( const std :: string & Name, GPU::VertexArray :: FPAttributeInputType FloatingType, bool Normalized, GLuint Size, GLuint Stride, GLvoid * Offset, MeshAttributeData * Data, GLuint InstanceDivisor, GLuint MatrixRowing, GLuint RowStride ):
 	RefCounted ( 0 ),
 	Name ( Name ),
 	FloatingPointInput ( true ),
@@ -11,7 +11,9 @@ Xenon::Geometry::MeshAttribute :: MeshAttribute ( const std :: string & Name, GP
 	Stride ( Stride ),
 	Offset ( Offset ),
 	InstanceDivisor ( InstanceDivisor ),
-	Data ( Data )
+	Data ( Data ),
+	MatrixRowing ( MatrixRowing ),
+	RowStride ( RowStride )
 {
 	
 	if ( Data != NULL )
@@ -19,7 +21,7 @@ Xenon::Geometry::MeshAttribute :: MeshAttribute ( const std :: string & Name, GP
 	
 }
 
-Xenon::Geometry::MeshAttribute :: MeshAttribute ( const std :: string & Name, GPU::VertexArray :: IntegerAttributeInputType IntegerType, GLuint Size, GLuint Stride, GLvoid * Offset, MeshAttributeData * Data, GLuint InstanceDivisor ):
+Xenon::Geometry::MeshAttribute :: MeshAttribute ( const std :: string & Name, GPU::VertexArray :: IntegerAttributeInputType IntegerType, GLuint Size, GLuint Stride, GLvoid * Offset, MeshAttributeData * Data, GLuint InstanceDivisor, GLuint MatrixRowing, GLuint RowStride ):
 	RefCounted ( 0 ),
 	Name ( Name ),
 	FloatingPointInput ( false ),
@@ -29,11 +31,36 @@ Xenon::Geometry::MeshAttribute :: MeshAttribute ( const std :: string & Name, GP
 	Stride ( Stride ),
 	Offset ( Offset ),
 	InstanceDivisor ( InstanceDivisor ),
-	Data ( Data )
+	Data ( Data ),
+	MatrixRowing ( MatrixRowing ),
+	RowStride ( RowStride )
 {
 	
 	if ( Data != NULL )
 		Data -> Reference ();
+	
+}
+
+Xenon::Geometry::MeshAttribute :: MeshAttribute ( MeshAttribute & CopyFrom ):
+	RefCounted ( CopyFrom ),
+	Name ( CopyFrom.Name ),
+	FloatingPointInput ( CopyFrom.FloatingPointInput ),
+	Normalized ( CopyFrom.Normalized ),
+	Size ( CopyFrom.Size ),
+	Stride ( CopyFrom.Stride ),
+	Offset ( CopyFrom.Offset ),
+	InstanceDivisor ( CopyFrom.InstanceDivisor ),
+	Data ( CopyFrom.Data ),
+	MatrixRowing ( CopyFrom.MatrixRowing ),
+	RowStride ( CopyFrom.RowStride )
+{
+	
+	if ( FloatingPointInput )
+		this -> FloatingType = CopyFrom.FloatingType;
+	else
+		this -> IntegerType = CopyFrom.IntegerType;
+	
+	CopyFrom.Data = NULL;
 	
 }
 
@@ -62,9 +89,19 @@ void Xenon::Geometry::MeshAttribute :: ApplyToVertexArray ( GPU :: VertexArray &
 		return;
 	
 	if ( FloatingPointInput )
-		Target.AddFPAttribute ( Name, Size, FloatingType, Normalized, Stride, Offset, Data -> GetBuffer (), InstanceDivisor );
+	{
+		
+		for ( uint32_t I = 0; I < MatrixRowing; I ++ )
+			Target.AddFPAttribute ( Name, Size, FloatingType, Normalized, Stride, & reinterpret_cast <GLchar *> ( Offset ) [ RowStride * I ], Data -> GetBuffer (), InstanceDivisor, I );
+		
+	}
 	else
-		Target.AddIntegerAttribute ( Name, Size, IntegerType, Stride, Offset, Data -> GetBuffer (), InstanceDivisor );
+	{
+		
+		for ( uint32_t I = 0; I < MatrixRowing; I ++ )
+			Target.AddIntegerAttribute ( Name, Size, IntegerType, Stride, & reinterpret_cast <GLchar *> ( Offset ) [ RowStride * I ], Data -> GetBuffer (), InstanceDivisor, I );
+		
+	}
 	
 }
 
@@ -107,6 +144,20 @@ bool Xenon::Geometry::MeshAttribute :: IsFloatingPoint ()
 {
 	
 	return FloatingPointInput;
+	
+}
+
+GLuint Xenon::Geometry::MeshAttribute :: GetMatrixRowing ()
+{
+	
+	return MatrixRowing;
+	
+}
+
+GLuint Xenon::Geometry::MeshAttribute :: GetRowStride ()
+{
+	
+	return RowStride;
 	
 }
 

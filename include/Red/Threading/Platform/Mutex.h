@@ -13,7 +13,7 @@
 	
 	#include <windows.h>
 	
-	typedef HANDLE __Platform_Mutex_t;
+	typedef CRITICAL_SECTION __Platform_Mutex_t;
 	
 #else
 

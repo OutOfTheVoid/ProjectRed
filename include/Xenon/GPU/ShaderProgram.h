@@ -32,7 +32,7 @@ namespace Xenon
 			void AddShader ( IShader & Shader );
 			void RemoveShader ( IShader & Shader );
 			
-			void Link ();
+			bool Link ();
 			
 			int64_t GetLinkIteration ();
 			
