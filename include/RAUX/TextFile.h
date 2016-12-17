@@ -21,8 +21,11 @@ namespace RAUX
 		static const uint32_t kStatus_Failure_Load = 2;
 		static const uint32_t kStatus_Failure_MemoryAllocation = 3;
 		static const uint32_t kStatus_Failure_FileBounds = 4;
+		static const uint32_t kStatus_Failure_Write = 5;
+		static const uint32_t kStatus_Failure_StringBounds = 6;
+		static const uint32_t kStatus_Failure_Permissions = 7;
 		
-		TextFile ( const std :: string & Name );
+		TextFile ( const std :: string & Name, bool Writeable = false );
 		~TextFile ();
 		
 		bool Exists () const;
@@ -35,6 +38,7 @@ namespace RAUX
 		bool IsOpen () const;
 		
 		void LoadToString ( uint32_t * Status, std :: string & String, uint64_t Offset, uint64_t Length = 0xFFFFFFFFFFFFFFFF, bool TrimToFileEdge = true );
+		void WriteFromString ( uint32_t * Status, const std :: string & String, uint64_t StringOffset, uint64_t FileOffset, uint64_t Length = 0xFFFFFFFFFFFFFFFF, bool FillFileGap = false, char FillChar = ' ' );
 		
 	private:
 		

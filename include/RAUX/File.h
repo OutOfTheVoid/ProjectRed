@@ -65,10 +65,10 @@ namespace RAUX
 		
 		// Read and write to the file sequentially. < Buffer > is the read source or write sink. < Length > specifies how many bytes to read/write. Status returned in < Status>.
 		int64_t ReadSequential ( void * Buffer, uint64_t Length, uint32_t * Status );
-		int64_t WriteSequential ( void * Buffer, uint64_t Length, uint32_t * Status );
+		int64_t WriteSequential ( const void * Buffer, uint64_t Length, uint32_t * Status );
 		
 		// Read and write to the file with a specific starting offset: < Offset >. < Buffer > is the read source or write sink. < Length > specifies how many bytes to read/write. Status returned in < Status>.
-		int64_t Write ( void * Buffer, uint64_t Length, int64_t Offset, uint32_t * Status );
+		int64_t Write ( const void * Buffer, uint64_t Length, int64_t Offset, uint32_t * Status );
 		int64_t Read ( void * Buffer, uint64_t Length, int64_t Offset, uint32_t * Status );
 		
 		// Flush all read/write operations. Status returned in < Status >

@@ -335,7 +335,7 @@ int64_t RAUX::File :: ReadSequential ( void * Buffer, uint64_t Length, uint32_t 
 	
 }
 
-int64_t RAUX::File :: WriteSequential ( void * Buffer, uint64_t Length, uint32_t * Status )
+int64_t RAUX::File :: WriteSequential ( const void * Buffer, uint64_t Length, uint32_t * Status )
 {
 	
 	if ( ! Opened )
@@ -380,7 +380,7 @@ int64_t RAUX::File :: Read ( void * Buffer, uint64_t Length, int64_t Offset, uin
 	
 }
 
-int64_t RAUX::File :: Write ( void * Buffer, uint64_t Length, int64_t Offset, uint32_t * Status )
+int64_t RAUX::File :: Write ( const void * Buffer, uint64_t Length, int64_t Offset, uint32_t * Status )
 {
 	
 	* Status = kStatus_Success;
