@@ -15,6 +15,8 @@ namespace RAUX
 	{
 	public:
 		
+		
+		
 		// Creates a new JSON file with the name < Name >.
 		JsonFile ( const std :: string & Path );
 		
@@ -22,6 +24,8 @@ namespace RAUX
 		
 		
 	private:
+		
+		
 		
 		TextFile FileInstance;
 		

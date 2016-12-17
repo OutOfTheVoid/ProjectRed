@@ -146,7 +146,7 @@ namespace Red
 			Xenon::GPU :: UniformSet GeometryUniforms;
 			
 			Xenon::GPU :: FrameBuffer GBuffer;
-			GLuint AttachmentList [ 4 ];
+			GLuint AttachmentList [ 3 ];
 			
 			Xenon::GPU :: Texture2D AlbedoSpecularTexture;
 			Xenon::GPU :: Texture2D NormalTexture;

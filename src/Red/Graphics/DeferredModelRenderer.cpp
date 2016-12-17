@@ -249,7 +249,7 @@ Red::Graphics::DeferredModelRenderer :: DeferredModelRenderer ():
 	GPUAllocated ( false ),
 	GeometryUniforms (),
 	GBuffer (),
-	AttachmentList { GL_COLOR_ATTACHMENT0, GL_COLOR_ATTACHMENT1, GL_COLOR_ATTACHMENT2, GL_DEPTH_ATTACHMENT },
+	AttachmentList { GL_COLOR_ATTACHMENT0, GL_COLOR_ATTACHMENT1, GL_COLOR_ATTACHMENT2 },
 	AlbedoSpecularTexture (),
 	NormalTexture (),
 	PositionTexture (),
@@ -296,6 +296,10 @@ Red::Graphics::DeferredModelRenderer :: DeferredModelRenderer ():
 	
 	GeometryUniforms.AddMatrix4x4Uniform ( "ViewProjectionMatrix", & ViewProjectionMatrixUniform, false );
 	
+	LightingProgram.Reference ();
+	GeometryProgram.Reference ();
+	
+	ViewProjectionMatrixUniform.Reference ();
 	AlbedoSpecularSamplerUniform.Reference ();
 	NormalSamplerUniform.Reference ();
 	PositionSamplerUniform.Reference ();
@@ -419,13 +423,13 @@ void Red::Graphics::DeferredModelRenderer :: SetupRender ( Xenon::GPU :: FrameBu
 	
 	std :: cout << "FrameBuffer Check: " << glCheckFramebufferStatus ( GL_FRAMEBUFFER ) << std :: endl;
 	
-	GBuffer.SetRenderBuffer ( Xenon::GPU::FrameBuffer :: kOutputAttachment_DepthBuffer, 0, DepthBuffer );
+	//GBuffer.SetRenderBuffer ( Xenon::GPU::FrameBuffer :: kOutputAttachment_DepthBuffer, 0, DepthBuffer );
 	
 	std :: cout << "GL Error: " << glGetError () << std :: endl;
 	
 	std :: cout << "FrameBuffer Check: " << glCheckFramebufferStatus ( GL_FRAMEBUFFER ) << std :: endl;
 	
-	glDrawBuffers ( 4, AttachmentList );
+	glDrawBuffers ( 3, AttachmentList );
 	
 	std :: cout << "GL Error: " << glGetError () << std :: endl;
 	
@@ -461,8 +465,6 @@ void Red::Graphics::DeferredModelRenderer :: SetupRender ( Xenon::GPU :: FrameBu
 	
 	LightingVAO.Bind ();
 	
-	RenderTarget -> Bind ();
-	
 	if ( ! LightingVShader.Compile ( true, false ) )
 		std :: cout << "DeferredModelRenderer :: LightingVShader failed to compile:" << std :: endl << LightingVShader.GetCompilationLog () << std :: endl;
 	
@@ -479,8 +481,6 @@ void Red::Graphics::DeferredModelRenderer :: SetupRender ( Xenon::GPU :: FrameBu
 	
 	if ( ! LightingProgram.Link () )
 		std :: cout << "DeferredModelRenderer :: LightingProgram failed to link: " << std :: endl << LightingProgram.GetInfoLog () << std :: endl;
-	
-	LightingProgram.Reference ();
 	
 	LightingVAO.SetProgram ( & LightingProgram );
 	
