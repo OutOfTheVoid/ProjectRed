@@ -11,6 +11,7 @@
 #include <Red/Behaviors/DebugBehavior.h>
 
 #include <Red/Data/JSON/Decoder.h>
+#include <Red/Data/JSON/Encoder.h>
 #include <Red/Data/JSON/IType.h>
 #include <Red/Data/JSON/Object.h>
 
@@ -69,14 +70,15 @@ int main ( int argc, char const * argv [] )
 		
 		Red::Data::JSON :: Object * RootObj = dynamic_cast <Red::Data::JSON :: Object *> ( JSONRoot );
 		
-		for ( uint32_t I = 0; I < RootObj -> GetKeyCount (); I ++ )
+		if ( RootObj != NULL )
 		{
 			
-			std :: string Key;
+			Red::Data::JSON :: Encoder JSONEncoder;
 			
-			RootObj -> GetKeyByIndex ( I, Key );
+			std :: string JSONOut;
 			
-			std :: cout << "root object key: \"" << Key << "\"" << std :: endl;
+			if ( JSONEncoder.Encode ( JSONRoot, JSONOut ) )
+				std :: cout << JSONOut << std :: endl;
 			
 		}
 		

@@ -29,9 +29,13 @@ namespace Red
 				
 				void Set ( const std :: string & ValueName, IType * Value );
 				IType * Get ( const std :: string & ValueName );
+				
 				void Clear ( const std :: string & ValueName );
 				bool Exists ( const std :: string & ValueName );
+				
 				void GetKeyByIndex ( uint32_t Index, std :: string & KeyOut );
+				IType * GetItemByIndex ( uint32_t Index );
+				
 				uint32_t GetKeyCount ();
 				
 			private:

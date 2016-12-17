@@ -85,6 +85,19 @@ void Red::Data::JSON::Object :: GetKeyByIndex ( uint32_t Index, std :: string & 
 	
 }
 
+Red::Data::JSON :: IType * Red::Data::JSON::Object :: GetItemByIndex ( uint32_t Index )
+{
+	
+	std :: map <std :: string, IType *> :: iterator It = ValueMap.begin ();
+	std :: advance ( It, Index );
+	
+	if ( It == ValueMap.end () )
+		return NULL;
+	
+	return It -> second;
+	
+}
+
 uint32_t Red::Data::JSON::Object :: GetKeyCount ()
 {
 	
