@@ -10,10 +10,24 @@
 #include <Red/Behaviors/BehaviorController.h>
 #include <Red/Behaviors/DebugBehavior.h>
 
+#include <Red/Data/JSON/Decoder.h>
+#include <Red/Data/JSON/IType.h>
+#include <Red/Data/JSON/Object.h>
+
 #define WINDOW_WIDTH 800
 #define WINDOW_HEIGHT 600
 
 void WindowCloseEvent ( SDL_WindowEvent * Event, SDLX::Window * Win, void * Data );
+
+const char * TestJSON =
+"{\n"
+"    \"MyBoolValue\" : false,\n"
+"    \"MyStringValue\" : \"Hello world!\",\n"
+"    \"MyNumberValue\" : -6.7,\n"
+"    \"MyNullValue\" : null,\n"
+"    \"MyArrayValue\" : [ 1, 2, 3, 4 ],\n"
+"    \"MyObjectValue\" : { \"MyStringValueSub\" : \"!!!\"\n }\n"
+"}";
 
 int main ( int argc, char const * argv [] )
 {
@@ -41,6 +55,34 @@ int main ( int argc, char const * argv [] )
 	
 	Win -> Own ();
 	Win -> AddEventHook ( SDLX::Window :: kWindowEventID_Closed, & WindowCloseEvent, NULL );
+	
+	Red::Data::JSON :: Decoder JSONDecoder ( Red::Data::JSON::Decoder :: kDecodeFlags_AllowKeyOverwrite );
+	
+	Red::Data::JSON :: IType * JSONRoot = JSONDecoder.Decode ( std :: string ( TestJSON ) );
+	
+	if ( JSONRoot != NULL )
+	{
+		
+		std :: cout << "JSON parsed!" << std :: endl;
+		
+		std :: cout << "Root object type: " << static_cast <uint32_t> ( JSONRoot -> GetType () ) << std :: endl;
+		
+		Red::Data::JSON :: Object * RootObj = dynamic_cast <Red::Data::JSON :: Object *> ( JSONRoot );
+		
+		for ( uint32_t I = 0; I < RootObj -> GetKeyCount (); I ++ )
+		{
+			
+			std :: string Key;
+			
+			RootObj -> GetKeyByIndex ( I, Key );
+			
+			std :: cout << "root object key: \"" << Key << "\"" << std :: endl;
+			
+		}
+		
+		delete JSONRoot;
+		
+	}
 	
 	/*================================*/
 	

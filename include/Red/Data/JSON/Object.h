@@ -31,6 +31,8 @@ namespace Red
 				IType * Get ( const std :: string & ValueName );
 				void Clear ( const std :: string & ValueName );
 				bool Exists ( const std :: string & ValueName );
+				void GetKeyByIndex ( uint32_t Index, std :: string & KeyOut );
+				uint32_t GetKeyCount ();
 				
 			private:
 				

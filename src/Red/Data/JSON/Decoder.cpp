@@ -6,6 +6,8 @@
 #include <Red/Data/JSON/Array.h>
 #include <Red/Data/JSON/Object.h>
 
+#include <iostream>
+
 Red::Data::JSON::Decoder :: Decoder ( DecodeFlags Flags ):
 	Flags ( Flags )
 {
@@ -35,11 +37,17 @@ Red::Data::JSON :: IType * Red::Data::JSON::Decoder :: Decode ( const std :: str
 	SkipWhitespace ( Info );
 	DecodeSubObject ( Info );
 	
+	if ( Info.ObjectStack -> size () == 0 )
+		Info.RootObject = NULL;
+	
 	if ( Info.Error )
 	{
 		
 		if ( ( Flags & kDecodeFlags_KeepOnError ) != 0 )
 			return Info.RootObject;
+		
+		if ( Info.RootObject != NULL )
+			delete Info.RootObject;
 		
 		return NULL;
 		
@@ -85,12 +93,14 @@ void Red::Data::JSON::Decoder :: DecodeSubObject ( DecodeInfo & Info )
 		case '{':
 		{
 			
+			std :: cout << "Object begin" << std :: endl;
+			
 			Object * Obj = new Object ();
+			
+			Info.ObjectStack -> push_back ( Obj );
 			
 			if ( Info.RootObject == NULL )
 				Info.RootObject = Obj;
-			
-			Info.ObjectStack -> push_back ( Obj );
 			
 			Info.TextOffset ++;
 			
@@ -104,7 +114,6 @@ void Red::Data::JSON::Decoder :: DecodeSubObject ( DecodeInfo & Info )
 				if ( C == '}' )
 				{
 					
-					Info.ObjectStack -> push_back ( Obj );
 					Info.TextOffset ++;
 					
 					return;
@@ -184,6 +193,8 @@ void Red::Data::JSON::Decoder :: DecodeSubObject ( DecodeInfo & Info )
 					
 				}
 				
+				Info.TextOffset ++;
+				
 				SkipWhitespace ( Info );
 				
 				if ( Info.TextOffset >= Info.TextSize )
@@ -198,6 +209,8 @@ void Red::Data::JSON::Decoder :: DecodeSubObject ( DecodeInfo & Info )
 					
 				}
 				
+				std :: cout << "Decoding sub object: " << Key << std :: endl;
+				
 				DecodeSubObject ( Info );
 				
 				if ( Info.Error )
@@ -209,6 +222,8 @@ void Red::Data::JSON::Decoder :: DecodeSubObject ( DecodeInfo & Info )
 					return;
 					
 				}
+				
+				std :: cout << "Decoded!" << std :: endl;
 				
 				Obj -> Set ( Key, ( * Info.ObjectStack ) [ Info.ObjectStack -> size () - 1 ] );
 				Info.ObjectStack -> pop_back ();
@@ -227,7 +242,47 @@ void Red::Data::JSON::Decoder :: DecodeSubObject ( DecodeInfo & Info )
 					
 				}
 				
+				std :: cout << "Obj per-key end loop" << std :: endl;
+				
+				C = Info.Text -> at ( Info.TextOffset );
+				
+				if ( C == ',' )
+				{
+					
+					std :: cout << "found comma!" << std :: endl;
+					
+					Info.TextOffset ++;
+					
+					SkipWhitespace ( Info );
+					
+					if ( Info.TextOffset >= Info.TextSize )
+					{
+						
+						Info.Error = true;
+						
+						Info.ObjectStack -> pop_back ();
+						delete Obj;
+						
+						return;
+						
+					}
+					
+				}
+				else if ( C != '}' )
+				{
+					
+					std :: cout << "object error!" << std :: endl;
+					
+					break;
+				}
+				
 			}
+			
+			Info.Error = true;
+			
+			Info.ObjectStack -> pop_back ();
+			
+			delete Obj;
 			
 		}
 		break;
@@ -252,7 +307,7 @@ void Red::Data::JSON::Decoder :: DecodeSubObject ( DecodeInfo & Info )
 		case 't':
 		{
 			
-			if ( Info.TextOffset + 3 < Info.TextSize )
+			if ( Info.TextOffset + 3 >= Info.TextSize )
 			{
 				
 				Info.Error = true;
@@ -282,7 +337,7 @@ void Red::Data::JSON::Decoder :: DecodeSubObject ( DecodeInfo & Info )
 		case 'f':
 		{
 			
-			if ( Info.TextOffset + 4 < Info.TextSize )
+			if ( Info.TextOffset + 4 >= Info.TextSize )
 			{
 				
 				Info.Error = true;
@@ -312,7 +367,7 @@ void Red::Data::JSON::Decoder :: DecodeSubObject ( DecodeInfo & Info )
 		case 'n':
 		{
 			
-			if ( Info.TextOffset + 3 < Info.TextSize )
+			if ( Info.TextOffset + 3 >= Info.TextSize )
 			{
 				
 				Info.Error = true;
@@ -352,25 +407,27 @@ void Red::Data::JSON::Decoder :: DecodeSubObject ( DecodeInfo & Info )
 		case '9':
 		{
 			
+			std :: cout << "Number case found!" << std :: endl;
+			
 			uint32_t InitialOffset = Info.TextOffset;
 			
-			bool Negative = false;
-			
 			if ( C == '-' )
-				Negative = true;
-			
-			Info.TextOffset ++;
-			
-			if ( Info.TextOffset >= Info.TextSize )
 			{
 				
-				Info.Error = true;
+				Info.TextOffset ++;
 				
-				return;
+				if ( Info.TextOffset >= Info.TextSize )
+				{
+					
+					Info.Error = true;
+					
+					return;
+					
+				}
+				
+				C = Info.Text -> at ( Info.TextOffset );
 				
 			}
-			
-			C = Info.Text -> at ( Info.TextOffset );
 			
 			int64_t IntValue = 0;
 			
@@ -393,16 +450,31 @@ void Red::Data::JSON::Decoder :: DecodeSubObject ( DecodeInfo & Info )
 				
 			}
 			
-			if ( ( Info.TextOffset < Info.TextSize ) && Info.Text -> at ( Info.TextOffset ) == '.' )
-				Info.TextOffset ++;
-			
-			while ( ( Info.TextOffset < Info.TextSize ) && ( ( C >= '0' ) && ( C <= '9' ) ) )
+			if ( ( Info.TextOffset < Info.TextSize ) && C == '.' )
 			{
 				
 				Info.TextOffset ++;
 				
-				if ( Info.TextOffset < Info.TextSize )
-					C = Info.Text -> at ( Info.TextOffset );
+				if ( Info.TextOffset >= Info.TextSize )
+				{
+					
+					Info.Error = true;
+					
+					return;
+					
+				}
+				
+				C = Info.Text -> at ( Info.TextOffset );
+				
+				while ( ( Info.TextOffset < Info.TextSize ) && ( ( C >= '0' ) && ( C <= '9' ) ) )
+				{
+					
+					Info.TextOffset ++;
+					
+					if ( Info.TextOffset < Info.TextSize )
+						C = Info.Text -> at ( Info.TextOffset );
+					
+				}
 				
 			}
 			
@@ -466,18 +538,9 @@ void Red::Data::JSON::Decoder :: DecodeSubObject ( DecodeInfo & Info )
 		case '[':
 		{
 			
+			std :: cout << "Array case found!" << std :: endl;
+			
 			Info.TextOffset ++;
-			
-			SkipWhitespace ( Info );
-			
-			if ( Info.TextOffset >= Info.TextSize )
-			{
-				
-				Info.Error = true;
-				
-				return;
-				
-			}
 			
 			Array * Arr = new Array ();
 			
@@ -505,11 +568,15 @@ void Red::Data::JSON::Decoder :: DecodeSubObject ( DecodeInfo & Info )
 				if ( C == ']' )
 				{
 					
+					std :: cout << "Array ended" << std :: endl;
+					
 					Info.TextOffset ++;
 					
 					return;
 					
 				}
+				
+				std :: cout << "Decoding sub object with remaining string: \"" << Info.Text -> substr ( Info.TextOffset ) << "\"" << std :: endl;
 				
 				DecodeSubObject ( Info );
 				
@@ -523,8 +590,43 @@ void Red::Data::JSON::Decoder :: DecodeSubObject ( DecodeInfo & Info )
 					
 				}
 				
+				std :: cout << "Decoded!" << std :: endl;
+				
 				Arr -> AddItem ( ( * Info.ObjectStack ) [ Info.ObjectStack -> size () - 1 ] );
 				Info.ObjectStack -> pop_back ();
+				
+				SkipWhitespace ( Info );
+				
+				if ( Info.TextOffset >= Info.TextSize )
+				{
+					
+					Info.Error = true;
+					
+					Info.ObjectStack -> pop_back ();
+					delete Arr;
+					
+					return;
+					
+				}
+				
+				C = Info.Text -> at ( Info.TextOffset );
+				
+				if ( C == ']' )
+					continue;
+				
+				if ( C != ',' )
+				{
+					
+					Info.Error = true;
+					
+					Info.ObjectStack -> pop_back ();
+					delete Arr;
+					
+					return;
+					
+				}
+				
+				Info.TextOffset ++;
 				
 			}
 			
@@ -538,8 +640,17 @@ void Red::Data::JSON::Decoder :: DecodeSubObject ( DecodeInfo & Info )
 		}
 		break;
 		
+		default:
+		{
+			
+			Info.Error = true;
+			
+			return;
+			
+		}
+		break;
+		
 	}
-	
 	
 }
 

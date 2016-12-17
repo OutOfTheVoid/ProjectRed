@@ -71,3 +71,23 @@ bool Red::Data::JSON::Object :: Exists ( const std :: string & ValueName )
 		return true;
 	
 }
+
+void Red::Data::JSON::Object :: GetKeyByIndex ( uint32_t Index, std :: string & KeyOut )
+{
+	
+	std :: map <std :: string, IType *> :: iterator It = ValueMap.begin ();
+	std :: advance ( It, Index );
+	
+	if ( It == ValueMap.end () )
+		return;
+	
+	KeyOut.assign ( It -> first );
+	
+}
+
+uint32_t Red::Data::JSON::Object :: GetKeyCount ()
+{
+	
+	return ValueMap.size ();
+	
+}
