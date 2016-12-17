@@ -1,10 +1,10 @@
 #include <RAUX/JSONFile.h>
 
-RAUX::JSONFile :: JSONFile ( const std :: string & Path, bool Writable, Red::Data::JSON::Decoder :: DecodeFlags DecFlags, Red::Data::JSON::Encoder :: EncodeFlags EncFlags, const std :: string & NewlineSequence ):
+RAUX::JSONFile :: JSONFile ( const std :: string & Path, bool Writable, Red::Data::JSON::Decoder :: DecodeFlags DecFlags, Red::Data::JSON::Encoder :: EncodeFlags EncFlags, const std :: string & NewlineSequence, uint32_t IndentSize ):
 	FileInstance ( Path, Writable ),
 	JSONBuffer ( "null" ),
 	JSONDecoder ( DecFlags ),
-	JSONEncoder ( EncFlags, 0, NewlineSequence )
+	JSONEncoder ( EncFlags, IndentSize, NewlineSequence )
 {
 }
 
@@ -30,19 +30,10 @@ const std :: string & RAUX::JSONFile :: GetName () const
 void RAUX::JSONFile :: Load ( bool ToDecode, uint32_t * Status )
 {
 	
-	if ( ! FileInstance.Exists () )
-	{
-		
-		* Status = kStatus_Failure_NonExistantFile;
-		
-		return;
-		
-	}
-	
 	if ( ! FileInstance.IsOpen () )
 	{
 		
-		FileInstance.Open ( Status );
+		FileInstance.Open ( Status, ! ToDecode );
 		
 		if ( * Status != kStatus_Success )
 		{
@@ -101,6 +92,17 @@ void RAUX::JSONFile :: Commit ( uint32_t * Status )
 		
 	}
 	
+	FileInstance.SetWritable ( Status, true, true );
+	
+	if ( * Status != File :: kStatus_Success )
+	{
+		
+		* Status = kStatus_Failure_Permissions;
+		
+		return;
+		
+	}
+	
 	FileInstance.WriteFromString ( Status, JSONBuffer, 0, 0 );
 	
 	if ( * Status == File :: kStatus_Failure_Permissions )
@@ -123,7 +125,7 @@ void RAUX::JSONFile :: Commit ( uint32_t * Status )
 	
 }
 
-void RAUX::JSONFile :: CloseFile ()
+void RAUX::JSONFile :: Close ()
 {
 	
 	FileInstance.Close ();
@@ -152,6 +154,8 @@ Red::Data::JSON :: IType * RAUX::JSONFile :: Decode ( uint32_t * Status )
 
 void RAUX::JSONFile :: Encode ( Red::Data::JSON :: IType * Data, uint32_t * Status )
 {
+	
+	JSONBuffer.clear ();
 	
 	if ( ! JSONEncoder.Encode ( Data, JSONBuffer ) )
 	{

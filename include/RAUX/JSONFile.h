@@ -29,7 +29,7 @@ namespace RAUX
 		static const uint32_t kStatus_Failure_Encode = 6;
 		
 		// Creates a new JSON file with the name < Name >.
-		JSONFile ( const std :: string & Path, bool Writable = false, Red::Data::JSON::Decoder :: DecodeFlags DecFlags = Red::Data::JSON::Decoder :: kDecodeFlags_AllowKeyOverwrite, Red::Data::JSON::Encoder :: EncodeFlags EncFlags = Red::Data::JSON::Encoder :: kEncodeFlags_PrettyPrint, const std :: string & NewlineSequence = "\n" );
+		JSONFile ( const std :: string & Path, bool Writable = false, Red::Data::JSON::Decoder :: DecodeFlags DecFlags = Red::Data::JSON::Decoder :: kDecodeFlags_AllowKeyOverwrite, Red::Data::JSON::Encoder :: EncodeFlags EncFlags = Red::Data::JSON::Encoder :: kEncodeFlags_PrettyPrint, const std :: string & NewlineSequence = "\n", uint32_t IndentSize = 1 );
 		~JSONFile ();
 		
 		bool Exists () const;
@@ -39,7 +39,7 @@ namespace RAUX
 		// Load and close a file.
 		void Load ( bool ToDecode, uint32_t * Status );
 		void Commit ( uint32_t * Status );
-		void CloseFile ();
+		void Close ();
 		
 		Red::Data::JSON :: IType * Decode ( uint32_t * Status );
 		void Encode ( Red::Data::JSON :: IType * Data, uint32_t * Status );

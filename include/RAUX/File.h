@@ -61,7 +61,7 @@ namespace RAUX
 		void Seek ( uint32_t * Status, int64_t Position, SeekMode Mode = kSeekMode_Absolute );
 		
 		// Set whether we want to be able to write to the file.
-		void SetWritable ( uint32_t * Status, bool Writable = true );
+		void SetWritable ( uint32_t * Status, bool Writable = true, bool Overwrite = true );
 		
 		// Read and write to the file sequentially. < Buffer > is the read source or write sink. < Length > specifies how many bytes to read/write. Status returned in < Status>.
 		int64_t ReadSequential ( void * Buffer, uint64_t Length, uint32_t * Status );

@@ -199,10 +199,10 @@ void RAUX::File :: Open ( uint32_t * Status, bool Overwrite )
 	
 }
 
-void RAUX::File :: SetWritable ( uint32_t * Status, bool Writable )
+void RAUX::File :: SetWritable ( uint32_t * Status, bool Writable, bool Overwrite )
 {
 	
-	if ( this -> Writable == Writable )
+	if ( ( this -> Writable == Writable ) && ( ! Overwrite ) )
 	{
 		
 		* Status = kStatus_Success;
@@ -221,7 +221,7 @@ void RAUX::File :: SetWritable ( uint32_t * Status, bool Writable )
 		
 		this -> Writable = Writable;
 		
-		Open ( Status, false );
+		Open ( Status, Overwrite );
 		
 		return;
 		

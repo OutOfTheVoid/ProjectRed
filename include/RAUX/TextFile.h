@@ -32,10 +32,12 @@ namespace RAUX
 		
 		const std :: string & GetName () const;
 		
-		void Open ( uint32_t * Status );
+		void Open ( uint32_t * Status, bool Create = false );
 		void Close ();
 		
 		bool IsOpen () const;
+		
+		void SetWritable ( uint32_t * Status, bool Writeable, bool Overwrite = false );
 		
 		void LoadToString ( uint32_t * Status, std :: string & String, uint64_t Offset, uint64_t Length = 0xFFFFFFFFFFFFFFFF, bool TrimToFileEdge = true );
 		void WriteFromString ( uint32_t * Status, const std :: string & String, uint64_t StringOffset, uint64_t FileOffset, uint64_t Length = 0xFFFFFFFFFFFFFFFF, bool FillFileGap = false, char FillChar = ' ' );

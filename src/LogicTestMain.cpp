@@ -15,6 +15,8 @@
 #include <Red/Data/JSON/IType.h>
 #include <Red/Data/JSON/Object.h>
 
+#include <RAUX/JSONFile.h>
+
 #define WINDOW_WIDTH 800
 #define WINDOW_HEIGHT 600
 
@@ -64,23 +66,12 @@ int main ( int argc, char const * argv [] )
 	if ( JSONRoot != NULL )
 	{
 		
-		std :: cout << "JSON parsed!" << std :: endl;
+		RAUX :: JSONFile TestFile ( "Test.json", true );
 		
-		std :: cout << "Root object type: " << static_cast <uint32_t> ( JSONRoot -> GetType () ) << std :: endl;
-		
-		Red::Data::JSON :: Object * RootObj = dynamic_cast <Red::Data::JSON :: Object *> ( JSONRoot );
-		
-		if ( RootObj != NULL )
-		{
-			
-			Red::Data::JSON :: Encoder JSONEncoder;
-			
-			std :: string JSONOut;
-			
-			if ( JSONEncoder.Encode ( JSONRoot, JSONOut ) )
-				std :: cout << JSONOut << std :: endl;
-			
-		}
+		TestFile.Load ( false, & Status );
+		TestFile.Encode ( JSONRoot, & Status );
+		TestFile.Commit ( & Status );
+		TestFile.Close ();
 		
 		delete JSONRoot;
 		

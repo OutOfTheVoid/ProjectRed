@@ -22,3 +22,4 @@ Makefile
 *.db
 *.suo
 *.VC.opendb
+*.json

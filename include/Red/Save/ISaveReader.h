@@ -16,9 +16,9 @@ namespace Red
 			
 			virtual inline ~ISaveWriter () {};
 			
-			virtual void SetSaveObject ( ISavable * SetSaveRoot ) = 0;
+			virtual void SetSaveObject ( ISavable * SaveRoot ) = 0;
 			
-			virtual void RunRead () = 0;
+			virtual bool RunRead () = 0;
 			
 		}
 		

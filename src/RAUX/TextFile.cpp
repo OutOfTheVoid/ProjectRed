@@ -29,10 +29,10 @@ const std :: string & RAUX::TextFile :: GetName () const
 	
 }
 
-void RAUX::TextFile :: Open ( uint32_t * Status )
+void RAUX::TextFile :: Open ( uint32_t * Status, bool Create )
 {
 	
-	if ( ! FileInstance.Exists () )
+	if ( ( ! FileInstance.Exists () ) && ( ! Create ) )
 	{
 		
 		* Status = kStatus_Failure_NonExistantFile;
@@ -69,6 +69,27 @@ void RAUX::TextFile :: Close ()
 	uint32_t DummyStatus;
 	
 	FileInstance.Close ( & DummyStatus );
+	
+}
+
+void RAUX::TextFile :: SetWritable ( uint32_t * Status, bool Writeable, bool Overwrite )
+{
+	
+	if ( ( ! FileInstance.Exists () ) && ( ! Writeable ) )
+	{
+		
+		* Status = kStatus_Failure_NonExistantFile;
+		
+		return;
+		
+	}
+	
+	FileInstance.SetWritable ( Status, Writeable, Overwrite );
+	
+	if ( * Status != File :: kStatus_Success )
+		* Status = kStatus_Failure_Permissions;
+	else 
+		* Status = kStatus_Success;
 	
 }
 
