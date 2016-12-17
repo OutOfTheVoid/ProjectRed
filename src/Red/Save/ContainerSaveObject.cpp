@@ -2,7 +2,7 @@
 
 Red::Save::ContainerSaveObject :: ContainerSaveObject ( const std :: string & Name ):
 	RefCounted ( 0 ),
-	Name ( 0 ),
+	Name ( Name ),
 	ChildLock (),
 	Children ()
 {
@@ -11,24 +11,19 @@ Red::Save::ContainerSaveObject :: ContainerSaveObject ( const std :: string & Na
 Red::Save::ContainerSaveObject :: ~ContainerSaveObject ()
 {
 	
-	while ( Children.size () != 0 )
-	{
-		
-		ISaveObject * Child = Children [ Children.size () - 1 ];
-		Child -> Dereference ();
-		
-	}
+	for ( uint32_t I = 0; I < Children.size (); I ++ )
+		Children [ I ] -> Dereference ();
 	
 }
 
-Red::Save::ISaveObject :: SaveType Red::Save::ContainerSaveObject :: GetType ()
+Red::Save::ISaveObject :: SaveType Red::Save::ContainerSaveObject :: GetType () const
 {
 	
-	return kSaveType_Array;
+	return kSaveType_Container;
 	
 }
 
-const std :: string & Red::Save::ContainerSaveObject :: GetName ()
+const std :: string & Red::Save::ContainerSaveObject :: GetName () const
 {
 	
 	return Name;

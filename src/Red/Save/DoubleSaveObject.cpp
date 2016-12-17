@@ -25,14 +25,14 @@ double Red::Save::DoubleSaveObject :: GetState ()
 	
 }
 
-Red::Save::ISaveObject :: SaveType Red::Save::DoubleSaveObject :: GetType ()
+Red::Save::ISaveObject :: SaveType Red::Save::DoubleSaveObject :: GetType () const
 {
 	
 	return ISaveObject :: kSaveType_Double;
 	
 }
 
-const std :: string & Red::Save::DoubleSaveObject :: GetName ()
+const std :: string & Red::Save::DoubleSaveObject :: GetName () const
 {
 	
 	return Name;

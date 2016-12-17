@@ -25,14 +25,14 @@ bool Red::Save::BooleanSaveObject :: GetState ()
 	
 }
 
-Red::Save::ISaveObject :: SaveType Red::Save::BooleanSaveObject :: GetType ()
+Red::Save::ISaveObject :: SaveType Red::Save::BooleanSaveObject :: GetType () const
 {
 	
 	return ISaveObject :: kSaveType_Boolean;
 	
 }
 
-const std :: string & Red::Save::BooleanSaveObject :: GetName ()
+const std :: string & Red::Save::BooleanSaveObject :: GetName () const
 {
 	
 	return Name;

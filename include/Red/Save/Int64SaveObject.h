@@ -1,5 +1,5 @@
-#ifndef RED_SAVE_INT32SAVEOBJECT_H
-#define RED_SAVE_INT32SAVEOBJECT_H
+#ifndef RED_SAVE_INT64SAVEOBJECT_H
+#define RED_SAVE_INT64SAVEOBJECT_H
 
 #include <Red/Save/Save.h>
 #include <Red/Save/ISaveObject.h>
@@ -26,9 +26,9 @@ namespace Red
 			void SetState ( int64_t State );
 			int64_t GetState ();
 			
-			SaveType GetType ();
+			SaveType GetType () const;
 			
-			const std :: string & GetName ();
+			const std :: string & GetName () const;
 			
 		private:
 			

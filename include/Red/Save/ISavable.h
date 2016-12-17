@@ -5,21 +5,27 @@
 
 #include <Red/Save/ISaveObject.h>
 
+#include <Red/Util/IRefCounted.h>
+
 namespace Red
 {
 	
 	namespace Save
 	{
 		
-		class ISavable
+		class ISavable : public virtual Util :: IRefCounted
 		{
 		public:
 			
 			typedef enum
 			{
 				
-				kSaveAction_Restore,
-				kSaveAction_Save
+				kSaveAction_Restore_Prepare,
+				kSaveAction_Restore_Failure,
+				kSaveAction_Restore_Success,
+				kSaveAction_Save_Prepare,
+				kSaveAction_Save_Success,
+				kSaveAction_Save_Failure
 				
 			} SaveAction;
 			
@@ -29,7 +35,7 @@ namespace Red
 			
 			virtual void NotifySaveAction ( SaveAction Action ) = 0;
 			
-		}
+		};
 		
 	}
 	

@@ -26,9 +26,9 @@ namespace Red
 			void SetState ( float State );
 			float GetState ();
 			
-			SaveType GetType ();
+			SaveType GetType () const;
 			
-			const std :: string & GetName ();
+			const std :: string & GetName () const;
 			
 		private:
 			

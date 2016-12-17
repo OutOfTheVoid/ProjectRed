@@ -25,14 +25,14 @@ uint32_t Red::Save::UInt32SaveObject :: GetState ()
 	
 }
 
-Red::Save::ISaveObject :: SaveType Red::Save::UInt32SaveObject :: GetType ()
+Red::Save::ISaveObject :: SaveType Red::Save::UInt32SaveObject :: GetType () const
 {
 	
 	return ISaveObject :: kSaveType_UInt32;
 	
 }
 
-const std :: string & Red::Save::UInt32SaveObject :: GetName ()
+const std :: string & Red::Save::UInt32SaveObject :: GetName () const
 {
 	
 	return Name;

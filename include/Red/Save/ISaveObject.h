@@ -33,19 +33,15 @@ namespace Red
 				
 				kSaveType_String,
 				
-				kSaveType_Container,
-				
-				kSaveType_Array,
-				
-				kSaveType_BinaryData
+				kSaveType_Container
 				
 			} SaveType;
 			
 			virtual inline ~ISaveObject () {};
 			
-			virtual SaveType GetType () = 0;
+			virtual SaveType GetType () const = 0;
 			
-			virtual const std :: string & GetName () = 0;
+			virtual const std :: string & GetName () const = 0;
 			
 		};
 		

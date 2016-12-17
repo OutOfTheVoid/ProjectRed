@@ -96,14 +96,14 @@ bool Red::Save::StringSaveObject :: SetString_AutoLock_Try ( std :: string & Val
 	
 }
 
-Red::Save::ISaveObject :: SaveType Red::Save::StringSaveObject :: GetType ()
+Red::Save::ISaveObject :: SaveType Red::Save::StringSaveObject :: GetType () const
 {
 	
 	return kSaveType_String;
 	
 }
 
-const std :: string & Red::Save::StringSaveObject :: GetName ()
+const std :: string & Red::Save::StringSaveObject :: GetName () const
 {
 	
 	return Name;

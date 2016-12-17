@@ -20,15 +20,15 @@ namespace Red
 		{
 		public:
 			
-			Int32SaveObject ( const std :: string & Name, int32_t DefaultState );
+			Int32SaveObject ( const std :: string & Name, int32_t DefaultState = 0 );
 			~Int32SaveObject ();
 			
 			void SetState ( int32_t State );
 			int32_t GetState ();
 			
-			SaveType GetType ();
+			SaveType GetType () const;
 			
-			const std :: string & GetName ();
+			const std :: string & GetName () const;
 			
 		private:
 			

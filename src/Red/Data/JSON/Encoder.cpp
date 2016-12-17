@@ -25,8 +25,6 @@ Red::Data::JSON::Encoder :: ~Encoder ()
 bool Red::Data::JSON::Encoder :: Encode ( IType * RootObj, std :: string & OutString, uint32_t BaseIndent )
 {
 	
-	std :: cout << "Encode: ( " << RootObj << " );" << std :: endl;
-	
 	if ( RootObj == NULL )
 	{
 		

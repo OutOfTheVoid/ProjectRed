@@ -26,9 +26,9 @@ namespace Red
 			void SetState ( uint32_t State );
 			uint32_t GetState ();
 			
-			SaveType GetType ();
+			SaveType GetType () const;
 			
-			const std :: string & GetName ();
+			const std :: string & GetName () const;
 			
 		private:
 			

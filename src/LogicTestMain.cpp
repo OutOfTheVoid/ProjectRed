@@ -6,14 +6,15 @@
 #include <Red/Util/Closure.h>
 #include <Red/Util/Function.h>
 #include <Red/Util/Time.h>
+#include <Red/Util/RefCounted.h>
 
 #include <Red/Behaviors/BehaviorController.h>
 #include <Red/Behaviors/DebugBehavior.h>
 
-#include <Red/Data/JSON/Decoder.h>
-#include <Red/Data/JSON/Encoder.h>
-#include <Red/Data/JSON/IType.h>
-#include <Red/Data/JSON/Object.h>
+#include <Red/Save/JSONSaveFile.h>
+#include <Red/Save/ISavable.h>
+#include <Red/Save/ContainerSaveObject.h>
+#include <Red/Save/Int32SaveObject.h>
 
 #include <RAUX/JSONFile.h>
 
@@ -22,15 +23,78 @@
 
 void WindowCloseEvent ( SDL_WindowEvent * Event, SDLX::Window * Win, void * Data );
 
-const char * TestJSON =
-"{\n"
-"    \"MyBoolValue\" : false,\n"
-"    \"MyStringValue\" : \"Hello world!\",\n"
-"    \"MyNumberValue\" : -6.7,\n"
-"    \"MyNullValue\" : null,\n"
-"    \"MyArrayValue\" : [ 1, 2, 3, 4 ],\n"
-"    \"MyObjectValue\" : { \"MyStringValueSub\" : \"!!!\"\n }\n"
-"}";
+class TestSavable : public virtual Red::Save :: ISavable, public Red::Util :: RefCounted
+{
+public:
+	
+	TestSavable ():
+		RefCounted ( 0 ),
+		RootObj ( new Red::Save :: ContainerSaveObject ( "Root" ) ),
+		IntSave ( new Red::Save :: Int32SaveObject ( "MyInt" ) ),
+		IntValue ( 0 )
+	{
+		
+		RootObj -> Reference ();
+		IntSave -> Reference ();
+		RootObj -> AddChild ( IntSave );
+		
+	};
+	
+	~TestSavable ()
+	{
+		
+		RootObj -> Dereference ();
+		IntSave -> Dereference ();
+		
+	}
+	
+	Red::Save :: ISaveObject * GetRootSaveObject ()
+	{
+		
+		return dynamic_cast <Red::Save :: ISaveObject *> ( RootObj );
+		
+	};
+	
+	void NotifySaveAction ( SaveAction Action )
+	{
+		
+		switch ( Action )
+		{
+			
+			case Red::Save::ISavable :: kSaveAction_Restore_Success:
+				IntValue = IntSave -> GetState ();
+				break;
+				
+			case Red::Save::ISavable :: kSaveAction_Save_Prepare:
+				IntSave -> SetState ( IntValue );
+				break;
+			
+		}
+		
+	};
+	
+	void SetIntValue ( int32_t Value )
+	{
+		
+		IntValue = Value;
+		
+	};
+	
+	int32_t GetIntValue ()
+	{
+		
+		return IntValue;
+		
+	}
+	
+private:
+	
+	Red::Save :: ContainerSaveObject * RootObj;
+	Red::Save :: Int32SaveObject * IntSave;
+	
+	int32_t IntValue;
+	
+};
 
 int main ( int argc, char const * argv [] )
 {
@@ -59,23 +123,16 @@ int main ( int argc, char const * argv [] )
 	Win -> Own ();
 	Win -> AddEventHook ( SDLX::Window :: kWindowEventID_Closed, & WindowCloseEvent, NULL );
 	
-	Red::Data::JSON :: Decoder JSONDecoder ( Red::Data::JSON::Decoder :: kDecodeFlags_AllowKeyOverwrite );
+	TestSavable SaveData;
+	SaveData.Reference ();
 	
-	Red::Data::JSON :: IType * JSONRoot = JSONDecoder.Decode ( std :: string ( TestJSON ) );
+	Red::Save :: JSONSaveFile SaveFile ( "TestSave.json" );
+	SaveFile.SetSaveObject ( & SaveData );
+	SaveFile.Open ( false );
 	
-	if ( JSONRoot != NULL )
-	{
-		
-		RAUX :: JSONFile TestFile ( "Test.json", true );
-		
-		TestFile.Load ( false, & Status );
-		TestFile.Encode ( JSONRoot, & Status );
-		TestFile.Commit ( & Status );
-		TestFile.Close ();
-		
-		delete JSONRoot;
-		
-	}
+	SaveData.SetIntValue ( 1000 );
+	
+	SaveFile.RunSave ();
 	
 	/*================================*/
 	

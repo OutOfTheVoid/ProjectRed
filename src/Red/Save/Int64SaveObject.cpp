@@ -25,14 +25,14 @@ int64_t Red::Save::Int64SaveObject :: GetState ()
 	
 }
 
-Red::Save::ISaveObject :: SaveType Red::Save::Int64SaveObject :: GetType ()
+Red::Save::ISaveObject :: SaveType Red::Save::Int64SaveObject :: GetType () const
 {
 	
 	return ISaveObject :: kSaveType_Int64;
 	
 }
 
-const std :: string & Red::Save::Int64SaveObject :: GetName ()
+const std :: string & Red::Save::Int64SaveObject :: GetName () const
 {
 	
 	return Name;

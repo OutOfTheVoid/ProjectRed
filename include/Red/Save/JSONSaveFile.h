@@ -4,11 +4,6 @@
 #include <Red/Save/Save.h>
 
 #include <Red/Data/JSON/IType.h>
-// #include <Red/Data/JSON/Array.h>
-// #include <Red/Data/JSON/Object.h>
-// #include <Red/Data/JSON/Number.h>
-// #include <Red/Data/JSON/Boolean.h>
-// #include <Red/Data/JSON/String.h>
 
 #include <Red/Save/ISaveObject.h>
 #include <Red/Save/ISavable.h>
@@ -16,6 +11,8 @@
 #include <Red/Save/ISaveWriter.h>
 
 #include <RAUX/JSONFile.h>
+
+#include <Red/Threading/Mutex.h>
 
 #include <string>
 
@@ -38,15 +35,19 @@ namespace Red
 			void SetSaveObject ( ISavable * SaveRoot );
 			
 			bool RunSave ();
-			bool RunRead ();
+			bool RunRestore ();
 			
 		private:
+			
+			Data::JSON :: IType * SaveToJSON ( ISaveObject * Object, std :: string & ObjName );
 			
 			RAUX :: JSONFile FileInstance;
 			
 			ISavable * SaveRoot;
 			
-		}
+			Threading :: Mutex RootLock;
+			
+		};
 		
 	}
 	

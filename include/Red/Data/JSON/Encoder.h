@@ -33,7 +33,7 @@ namespace Red
 				static const EncodeFlags kEncodeFlags_MemberNameSeperator_SuffixSpace = 256;
 				static const EncodeFlags kEncodeFlags_ArrayObjectMemberSeperateLine = 512;
 				
-				static const EncodeFlags kEncodeFlags_PrettyPrint = kEncodeFlags_Pretty | kEncodeFlags_TrailingCommaLists | kEncodeFlags_MemberNameSeperator_SuffixSpace | kEncodeFlags_ArrayObjectMemberSeperateLine;
+				static const EncodeFlags kEncodeFlags_PrettyPrint = kEncodeFlags_Pretty | kEncodeFlags_TrailingCommaLists | kEncodeFlags_MemberNameSeperator_SuffixSpace | kEncodeFlags_MemberNameSeperator_PrefixSpace | kEncodeFlags_AllObjectNewlines | kEncodeFlags_ArrayObjectMemberSeperateLine;
 				static const EncodeFlags kEncodeFlags_Tight = kEncodeFlags_None;
 				
 				Encoder ( EncodeFlags Flags = kEncodeFlags_PrettyPrint, uint32_t IndentLevel = 1, const std :: string & NewlineSequence = "\n" );

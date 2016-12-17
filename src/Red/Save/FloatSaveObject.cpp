@@ -25,14 +25,14 @@ float Red::Save::FloatSaveObject :: GetState ()
 	
 }
 
-Red::Save::ISaveObject :: SaveType Red::Save::FloatSaveObject :: GetType ()
+Red::Save::ISaveObject :: SaveType Red::Save::FloatSaveObject :: GetType () const
 {
 	
 	return ISaveObject :: kSaveType_Float;
 	
 }
 
-const std :: string & Red::Save::FloatSaveObject :: GetName ()
+const std :: string & Red::Save::FloatSaveObject :: GetName () const
 {
 	
 	return Name;

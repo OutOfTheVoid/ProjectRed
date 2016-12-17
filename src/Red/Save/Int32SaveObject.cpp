@@ -25,14 +25,14 @@ int32_t Red::Save::Int32SaveObject :: GetState ()
 	
 }
 
-Red::Save::ISaveObject :: SaveType Red::Save::Int32SaveObject :: GetType ()
+Red::Save::ISaveObject :: SaveType Red::Save::Int32SaveObject :: GetType () const
 {
 	
 	return ISaveObject :: kSaveType_Int32;
 	
 }
 
-const std :: string & Red::Save::Int32SaveObject :: GetName ()
+const std :: string & Red::Save::Int32SaveObject :: GetName () const
 {
 	
 	return Name;

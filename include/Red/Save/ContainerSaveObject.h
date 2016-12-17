@@ -24,9 +24,9 @@ namespace Red
 			ContainerSaveObject ( const std :: string & Name );
 			~ContainerSaveObject ();
 			
-			SaveType GetType ();
+			SaveType GetType () const;
 			
-			const std :: string & GetName ();
+			const std :: string & GetName () const;
 			
 			void LockChildren ();
 			bool TryLockChildren ();

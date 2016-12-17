@@ -1,5 +1,5 @@
-#ifndef RED_SAVE_FLOATSAVEOBJECT_H
-#define RED_SAVE_FLOATSAVEOBJECT_H
+#ifndef RED_SAVE_DOUBLESAVEOBJECT_H
+#define RED_SAVE_DOUBLESAVEOBJECT_H
 
 #include <Red/Save/Save.h>
 #include <Red/Save/ISaveObject.h>
@@ -26,9 +26,9 @@ namespace Red
 			void SetState ( double State );
 			double GetState ();
 			
-			SaveType GetType ();
+			SaveType GetType () const;
 			
-			const std :: string & GetName ();
+			const std :: string & GetName () const;
 			
 		private:
 			

@@ -14,13 +14,13 @@ namespace Red
 		{
 		public:
 			
-			virtual inline ~ISaveWriter () {};
+			virtual inline ~ISaveReader () {};
 			
 			virtual void SetSaveObject ( ISavable * SaveRoot ) = 0;
 			
-			virtual bool RunRead () = 0;
+			virtual bool RunRestore () = 0;
 			
-		}
+		};
 		
 	}
 	

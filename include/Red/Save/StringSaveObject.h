@@ -34,9 +34,9 @@ namespace Red
 			void GetString_AutoLock ( std :: string & ValueOut );
 			bool SetString_AutoLock_Try ( std :: string & ValueOut );
 			
-			SaveType GetType ();
+			SaveType GetType () const;
 			
-			const std :: string & GetName ();
+			const std :: string & GetName () const;
 			
 		private:
 			

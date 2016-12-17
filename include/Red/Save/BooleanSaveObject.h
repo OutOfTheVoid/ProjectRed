@@ -24,9 +24,9 @@ namespace Red
 			void SetState ( bool State );
 			bool GetState ();
 			
-			SaveType GetType ();
+			SaveType GetType () const;
 			
-			const std :: string & GetName ();
+			const std :: string & GetName () const;
 			
 		private:
 			
