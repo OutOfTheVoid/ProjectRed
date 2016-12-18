@@ -9,6 +9,7 @@
 #include <Red/Save/DoubleSaveObject.h>
 #include <Red/Save/StringSaveObject.h>
 #include <Red/Save/ContainerSaveObject.h>
+#include <Red/Save/BinarySaveObject.h>
 
 #include <Red/Data/JSON/Array.h>
 #include <Red/Data/JSON/Object.h>
@@ -21,7 +22,9 @@
 Red::Save::JSONSaveFile :: JSONSaveFile ( const std :: string & Name ):
 	FileInstance ( Name, true ),
 	SaveRoot ( NULL ),
-	RootLock ()
+	RootLock (),
+	B64Encoder (),
+	B64Decoder ()
 {
 }
 
@@ -215,11 +218,40 @@ Red::Data::JSON :: IType * Red::Save::JSONSaveFile :: SaveToJSON ( ISaveObject *
 			if ( StrObj == NULL )
 				return NULL;
 			
-			ObjName.assign ( StrObj -> GetName () );
+			ObjName.assign ( std :: string ( "s_" ) + StrObj -> GetName () );
 			
 			StrObj -> LockStringAccess ();
 			Data::JSON :: String * NewStr = new Data::JSON :: String ( StrObj -> GetStringRef () );
 			StrObj -> UnlockStringAccess ();
+			
+			return NewStr;
+			
+		}
+		break;
+		
+		case ISaveObject :: kSaveType_Binary:
+		{
+			
+			BinarySaveObject * BinObj = dynamic_cast <BinarySaveObject *> ( Object );
+			
+			if ( BinObj == NULL )
+				return NULL;
+			
+			ObjName.assign ( std :: string ( "b64_" ) + BinObj -> GetName () );
+			
+			BinObj -> LockData ();
+			
+			std :: string B64Out;
+			
+			Util :: RCMem * BinData = BinObj -> GetData ();
+			uint64_t BinSize = BinObj -> GetDataSize ();
+			
+			if ( BinData != NULL )
+				B64Encoder.Encode ( BinData -> GetData (), BinSize, B64Out );
+			
+			BinObj -> UnlockData ();
+			
+			Data::JSON :: String * NewStr = new Data::JSON :: String ( B64Out );
 			
 			return NewStr;
 			

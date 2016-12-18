@@ -5,6 +5,9 @@
 
 #include <Red/Data/JSON/IType.h>
 
+#include <Red/Data/Base64/Decoder.h>
+#include <Red/Data/Base64/Encoder.h>
+
 #include <Red/Save/ISaveObject.h>
 #include <Red/Save/ISavable.h>
 #include <Red/Save/ISaveReader.h>
@@ -46,6 +49,9 @@ namespace Red
 			ISavable * SaveRoot;
 			
 			Threading :: Mutex RootLock;
+			
+			Data::Base64 :: Encoder B64Encoder;
+			Data::Base64 :: Decoder B64Decoder;
 			
 		};
 		

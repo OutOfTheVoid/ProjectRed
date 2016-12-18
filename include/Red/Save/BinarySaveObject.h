@@ -7,6 +7,8 @@
 #include <Red/Util/RCMem.h>
 #include <Red/Util/RefCounted.h>
 
+#include <Red/Threading/Mutex.h>
+
 #include <stdint.h>
 
 #include <string>
@@ -21,16 +23,19 @@ namespace Red
 		{
 		public:
 			
-			BinarySaveObject ( const std :: string & Name, void * InitialData = NULL, uint32_t DataSize = 0, uint32_t Alignment = 8 );
+			BinarySaveObject ( const std :: string & Name, Util :: RCMem * Data = NULL, uint64_t Size = 0, uint32_t Alignment = 4 );
 			~BinarySaveObject ();
 			
 			void LockData ();
 			bool TryLockData ();
 			void UnlockData ();
 			
-			void SetData ( void * Data, uint32_t DataSize, uint32_t Alignment = 8 );
+			void SetData ( Util :: RCMem * Data, uint32_t DataSize, uint32_t Alignment = 8 );
 			
-			void * GetDataPTR ();
+			void SetData_AutoLock ( Util :: RCMem * Data, uint32_t DataSize, uint32_t Alignment = 8 );
+			bool SetData_AutoLock_Try ( Util :: RCMem * Data, uint32_t DataSize, uint32_t Alignment = 8 );
+			
+			Red::Util :: RCMem * GetData ();
 			uint32_t GetDataSize ();
 			uint32_t GetDataAlign ();
 			
@@ -41,6 +46,13 @@ namespace Red
 		private:
 			
 			const std :: string Name;
+			
+			Util :: RCMem * Data;
+			
+			uint64_t Size;
+			uint32_t Alignment;
+			
+			Threading :: Mutex DataLock;
 			
 		};
 		

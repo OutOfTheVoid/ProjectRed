@@ -33,7 +33,9 @@ namespace Red
 				
 				kSaveType_String,
 				
-				kSaveType_Container
+				kSaveType_Container,
+				
+				kSaveType_Binary
 				
 			} SaveType;
 			
