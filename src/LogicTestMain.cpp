@@ -18,6 +18,9 @@
 
 #include <RAUX/JSONFile.h>
 
+#include <Red/Data/Base64/Encoder.h>
+#include <Red/Data/Base64/Decoder.h>
+
 #define WINDOW_WIDTH 800
 #define WINDOW_HEIGHT 600
 
@@ -134,20 +137,29 @@ int main ( int argc, char const * argv [] )
 	
 	SaveFile.RunSave ();
 	
-	/*================================*/
+	Red::Data::Base64 :: Encoder B64Encoder;
+	Red::Data::Base64 :: Decoder B64Decoder;
 	
-	Red::Behaviors :: BehaviorController BehaviorControl;
+	const char * TestData = "Hello World!";
+	std :: string B64Out;
 	
-	Red::Behaviors :: DebugBehavior Debug ( "debug", "Hello, world!", Red::Behaviors::DebugBehavior :: kDebugMessageFlags_All );
-	Debug.Reference ();
+	std :: cout << "B64 Original: " << TestData << std :: endl;
 	
-	BehaviorControl.AddBehaviorExternal ( & Debug );
+	B64Encoder.Encode ( reinterpret_cast <const void *> ( TestData ), 12, B64Out );
 	
-	BehaviorControl.StartBehaviorExternal ( "debug" );
-	BehaviorControl.IssueUpdate ( Red::Util::Time :: Duration ( 0.0 ) );
-	BehaviorControl.IssueSpecificUpdate ();
-	BehaviorControl.StopBehaviorExternal ( "debug" );
-	BehaviorControl.RemoveBehaviorExternal ( & Debug );
+	std :: cout << "B64 Encode: " << B64Out << std :: endl;
+	
+	void * MemOut = NULL;
+	uint32_t CharCount;
+	
+	if ( B64Decoder.Decode ( B64Out, & MemOut, & CharCount ) )
+	{
+		
+		std :: string B64OutString ( reinterpret_cast <const char *> ( MemOut ), CharCount );
+		
+		std :: cout << "B64 Decode: " << B64OutString << std :: endl;
+		
+	}
 	
 	/*================================*/
 	
