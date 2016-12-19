@@ -3,7 +3,7 @@
 
 #include <Red/Save/Save.h>
 
-#include <Red/Save/ISaveObject.h>
+#include <Red/Save/ContainerSaveObject.h>
 
 #include <Red/Util/IRefCounted.h>
 
@@ -31,7 +31,7 @@ namespace Red
 			
 			virtual inline ~ISavable () {};
 			
-			virtual ISaveObject * GetRootSaveObject () = 0;
+			virtual ContainerSaveObject * GetRootSaveObject () = 0;
 			
 			virtual void NotifySaveAction ( SaveAction Action ) = 0;
 			

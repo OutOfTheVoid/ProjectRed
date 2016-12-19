@@ -1,5 +1,15 @@
 #include <Red/Save/ContainerSaveObject.h>
 
+#include <Red/Save/BooleanSaveObject.h>
+#include <Red/Save/DoubleSaveObject.h>
+#include <Red/Save/FloatSaveObject.h>
+#include <Red/Save/Int32SaveObject.h>
+#include <Red/Save/Int64SaveObject.h>
+#include <Red/Save/UInt32SaveObject.h>
+#include <Red/Save/UInt64SaveObject.h>
+#include <Red/Save/StringSaveObject.h>
+#include <Red/Save/BinarySaveObject.h>
+
 Red::Save::ContainerSaveObject :: ContainerSaveObject ( const std :: string & Name ):
 	RefCounted ( 0 ),
 	Name ( Name ),
@@ -167,5 +177,285 @@ Red::Save :: ISaveObject * Red::Save::ContainerSaveObject :: FindChildWithName (
 	}
 	
 	return NULL;
+	
+}
+
+Red::Save :: ContainerSaveObject * Red::Save::ContainerSaveObject :: FindOrCreateContainerChild ( const std :: string & ChildName )
+{
+	
+	ContainerSaveObject * Container = dynamic_cast <ContainerSaveObject *> ( FindChildWithName ( ChildName ) );
+	
+	if ( Container != NULL )
+		return Container;
+	
+	Container = new ContainerSaveObject ( ChildName );
+	AddChild ( Container );
+	
+	return Container;
+	
+}
+
+Red::Save :: BooleanSaveObject * Red::Save::ContainerSaveObject :: FindOrCreateBooleanChild ( const std :: string & ChildName, bool DefaultValue )
+{
+	
+	BooleanSaveObject * Bool = dynamic_cast <BooleanSaveObject *> ( FindChildWithName ( ChildName ) );
+	
+	if ( Bool != NULL )
+		return Bool;
+	
+	Bool = new BooleanSaveObject ( ChildName, DefaultValue );
+	AddChild ( Bool );
+	
+	return Bool;
+	
+}
+
+Red::Save :: BinarySaveObject * Red::Save::ContainerSaveObject :: FindOrCreateBinaryChild ( const std :: string & ChildName, Util :: RCMem * DefaultData, uint32_t DefaultDataSize )
+{
+	
+	BinarySaveObject * Bin = dynamic_cast <BinarySaveObject *> ( FindChildWithName ( ChildName ) );
+	
+	if ( Bin != NULL )
+		return Bin;
+	
+	Bin = new BinarySaveObject ( ChildName, DefaultData, DefaultDataSize );
+	AddChild ( Bin );
+	
+	return Bin;
+	
+}
+
+Red::Save :: DoubleSaveObject * Red::Save::ContainerSaveObject :: FindOrCreateDoubleChild ( const std :: string & ChildName, double DefaultValue )
+{
+	
+	DoubleSaveObject * Double = dynamic_cast <DoubleSaveObject *> ( FindChildWithName ( ChildName ) );
+	
+	if ( Double != NULL )
+		return Double;
+	
+	Double = new DoubleSaveObject ( ChildName, DefaultValue );
+	AddChild ( Double );
+	
+	return Double;
+	
+}
+
+Red::Save :: FloatSaveObject * Red::Save::ContainerSaveObject :: FindOrCreateFloatChild ( const std :: string & ChildName, float DefaultValue )
+{
+	
+	FloatSaveObject * Float = dynamic_cast <FloatSaveObject *> ( FindChildWithName ( ChildName ) );
+	
+	if ( Float != NULL )
+		return Float;
+	
+	Float = new FloatSaveObject ( ChildName, DefaultValue );
+	AddChild ( Float );
+	
+	return Float;
+	
+}
+
+Red::Save :: Int32SaveObject * Red::Save::ContainerSaveObject :: FindOrCreateInt32Child ( const std :: string & ChildName, int32_t DefaultValue )
+{
+	
+	Int32SaveObject * Int = dynamic_cast <Int32SaveObject *> ( FindChildWithName ( ChildName ) );
+	
+	if ( Int != NULL )
+		return Int;
+	
+	Int = new Int32SaveObject ( ChildName, DefaultValue );
+	AddChild ( Int );
+	
+	return Int;
+	
+}
+
+Red::Save :: Int64SaveObject * Red::Save::ContainerSaveObject :: FindOrCreateInt64Child ( const std :: string & ChildName, int64_t DefaultValue )
+{
+	
+	Int64SaveObject * Int = dynamic_cast <Int64SaveObject *> ( FindChildWithName ( ChildName ) );
+	
+	if ( Int != NULL )
+		return Int;
+	
+	Int = new Int64SaveObject ( ChildName, DefaultValue );
+	AddChild ( Int );
+	
+	return Int;
+	
+}
+
+Red::Save :: UInt32SaveObject * Red::Save::ContainerSaveObject :: FindOrCreateUInt32Child ( const std :: string & ChildName, uint32_t DefaultValue )
+{
+	
+	UInt32SaveObject * UInt = dynamic_cast <UInt32SaveObject *> ( FindChildWithName ( ChildName ) );
+	
+	if ( UInt != NULL )
+		return UInt;
+	
+	UInt = new UInt32SaveObject ( ChildName, DefaultValue );
+	AddChild ( UInt );
+	
+	return UInt;
+	
+}
+
+Red::Save :: UInt64SaveObject * Red::Save::ContainerSaveObject :: FindOrCreateUInt64Child ( const std :: string & ChildName, uint64_t DefaultValue )
+{
+	
+	UInt64SaveObject * UInt = dynamic_cast <UInt64SaveObject *> ( FindChildWithName ( ChildName ) );
+	
+	if ( UInt != NULL )
+		return UInt;
+	
+	UInt = new UInt64SaveObject ( ChildName, DefaultValue );
+	AddChild ( UInt );
+	
+	return UInt;
+	
+}
+
+Red::Save :: StringSaveObject * Red::Save::ContainerSaveObject :: FindOrCreateStringChild ( const std :: string & ChildName, const std :: string & DefaultValue )
+{
+	
+	StringSaveObject * StringObj = dynamic_cast <StringSaveObject *> ( FindChildWithName ( ChildName ) );
+	
+	if ( StringObj != NULL )
+		return StringObj;
+	
+	StringObj = new StringSaveObject ( ChildName, DefaultValue );
+	AddChild ( StringObj );
+	
+	return StringObj;
+	
+}
+
+Red::Save :: BooleanSaveObject * Red::Save::ContainerSaveObject :: SetOrCreateBooleanChild_AutoLock ( const std :: string & ChildName, bool Value )
+{
+	
+	LockChildren ();
+	
+	BooleanSaveObject * Child = FindOrCreateBooleanChild ( ChildName, Value );
+	Child -> SetState ( Value );
+	
+	UnlockChildren ();
+	
+	return Child;
+	
+}
+
+Red::Save :: BinarySaveObject * Red::Save::ContainerSaveObject :: SetOrCreateBinaryChild_AutoLock ( const std :: string & ChildName, Util :: RCMem * Data, uint32_t DataSize )
+{
+	
+	LockChildren ();
+	
+	BinarySaveObject * Child = FindOrCreateBinaryChild ( ChildName, Data, DataSize );
+	
+	if ( ( Children.size () != 0 ) && ( Children [ Children.size () - 1 ] == Child ) )
+		Child -> SetData_AutoLock ( Data, DataSize );
+	
+	UnlockChildren ();
+	
+	return Child;
+	
+}
+
+Red::Save :: DoubleSaveObject * Red::Save::ContainerSaveObject :: SetOrCreateDoubleChild_AutoLock ( const std :: string & ChildName, double Value )
+{
+	
+	LockChildren ();
+	
+	DoubleSaveObject * Child = FindOrCreateDoubleChild ( ChildName, Value );
+	Child -> SetState ( Value );
+	
+	UnlockChildren ();
+	
+	return Child;
+	
+}
+
+Red::Save :: FloatSaveObject * Red::Save::ContainerSaveObject :: SetOrCreateFloatChild_AutoLock ( const std :: string & ChildName, float Value )
+{
+	
+	LockChildren ();
+	
+	FloatSaveObject * Child = FindOrCreateFloatChild ( ChildName, Value );
+	Child -> SetState ( Value );
+	
+	UnlockChildren ();
+	
+	return Child;
+	
+}
+
+Red::Save :: Int32SaveObject * Red::Save::ContainerSaveObject :: SetOrCreateInt32Child_AutoLock ( const std :: string & ChildName, int32_t Value )
+{
+	
+	LockChildren ();
+	
+	Int32SaveObject * Child = FindOrCreateInt32Child ( ChildName, Value );
+	Child -> SetState ( Value );
+	
+	UnlockChildren ();
+	
+	return Child;
+	
+}
+
+Red::Save :: Int64SaveObject * Red::Save::ContainerSaveObject :: SetOrCreateInt64Child_AutoLock ( const std :: string & ChildName, int64_t Value )
+{
+	
+	LockChildren ();
+	
+	Int64SaveObject * Child = FindOrCreateInt64Child ( ChildName, Value );
+	Child -> SetState ( Value );
+	
+	UnlockChildren ();
+	
+	return Child;
+	
+}
+
+Red::Save :: UInt32SaveObject * Red::Save::ContainerSaveObject :: SetOrCreateUInt32Child_AutoLock ( const std :: string & ChildName, uint32_t Value )
+{
+	
+	LockChildren ();
+	
+	UInt32SaveObject * Child = FindOrCreateUInt32Child ( ChildName, Value );
+	Child -> SetState ( Value );
+	
+	UnlockChildren ();
+	
+	return Child;
+	
+}
+
+Red::Save :: UInt64SaveObject * Red::Save::ContainerSaveObject :: SetOrCreateUInt64Child_AutoLock ( const std :: string & ChildName, uint64_t Value )
+{
+	
+	LockChildren ();
+	
+	UInt64SaveObject * Child = FindOrCreateUInt64Child ( ChildName, Value );
+	Child -> SetState ( Value );
+	
+	UnlockChildren ();
+	
+	return Child;
+	
+}
+
+Red::Save :: StringSaveObject * Red::Save::ContainerSaveObject :: SetOrCreateStringChild_AutoLock ( const std :: string & ChildName, const std :: string & Value )
+{
+	
+	LockChildren ();
+	
+	StringSaveObject * Child = FindOrCreateStringChild ( ChildName, Value );
+	
+	if ( ( Children.size () != 0 ) && ( Children [ Children.size () - 1 ] == Child ) )
+		Child -> SetString_AutoLock ( Value );
+	
+	UnlockChildren ();
+	
+	return Child;
 	
 }

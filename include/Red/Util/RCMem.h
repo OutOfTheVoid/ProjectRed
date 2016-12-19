@@ -35,7 +35,7 @@ namespace Red
 			inline ~RCMem ()
 			{
 			
-				if ( Data != NULL )
+				if ( ( Data != NULL ) && ( Delete != NULL ) )
 					Delete ( Data );
 	
 				Data = NULL;

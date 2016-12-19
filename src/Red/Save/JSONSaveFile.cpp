@@ -17,6 +17,10 @@
 #include <Red/Data/JSON/Boolean.h>
 #include <Red/Data/JSON/String.h>
 
+#include <string.h>
+
+#include <stdlib.h>
+
 #include <iostream>
 
 Red::Save::JSONSaveFile :: JSONSaveFile ( const std :: string & Name ):
@@ -125,6 +129,85 @@ bool Red::Save::JSONSaveFile :: RunSave ()
 	return Status == RAUX::JSONFile :: kStatus_Success;
 	
 }
+
+bool Red::Save::JSONSaveFile :: RunRestore ()
+{
+	
+	std :: cout << "A" << std :: endl;
+	
+	uint32_t Status;
+	
+	FileInstance.Load ( true, & Status );
+	
+	std :: cout << "B" << std :: endl;
+	
+	if ( Status != RAUX::JSONFile :: kStatus_Success )
+		return false;
+	
+	std :: cout << "C" << std :: endl;
+	
+	Data::JSON :: IType * JSONRoot = FileInstance.Decode ( & Status );
+	
+	if ( Status != RAUX::JSONFile :: kStatus_Success )
+		return false;
+	
+	std :: cout << "D" << std :: endl;
+	
+	RootLock.Lock ();
+	
+	if ( SaveRoot == NULL )
+	{
+		
+		RootLock.Unlock ();
+		
+		return false;
+		
+	}
+	
+	std :: cout << "E" << std :: endl;
+	
+	SaveRoot -> NotifySaveAction ( ISavable :: kSaveAction_Restore_Prepare );
+	
+	ContainerSaveObject * RootSaveObject = SaveRoot -> GetRootSaveObject ();
+	
+	if ( RootSaveObject == NULL )
+	{
+		
+		RootLock.Unlock ();
+		
+		return false;
+		
+	}
+	
+	std :: cout << "F" << std :: endl;
+	
+	ContainerSaveObject TempRootContainer ( "" );
+	
+	TempRootContainer.AddChild ( RootSaveObject );
+	bool Success = RestoreFromJSON ( & TempRootContainer, JSONRoot, RootSaveObject -> GetName () ) != NULL;
+	TempRootContainer.RemoveChild ( RootSaveObject );
+	
+	RootLock.Unlock ();
+	
+	std :: cout << "G" << std :: endl;
+	
+	if ( Success )
+	{
+		
+		SaveRoot -> NotifySaveAction ( ISavable :: kSaveAction_Restore_Success );
+		
+		return true;
+		
+	}
+	
+	std :: cout << "H" << std :: endl;
+	
+	SaveRoot -> NotifySaveAction ( ISavable :: kSaveAction_Restore_Failure );
+	
+	return false;
+	
+}
+
 
 Red::Data::JSON :: IType * Red::Save::JSONSaveFile :: SaveToJSON ( ISaveObject * Object, std :: string & ObjName )
 {
@@ -255,6 +338,8 @@ Red::Data::JSON :: IType * Red::Save::JSONSaveFile :: SaveToJSON ( ISaveObject *
 			
 			return NewStr;
 			
+			return NULL;
+			
 		}
 		break;
 		
@@ -332,30 +417,249 @@ Red::Data::JSON :: IType * Red::Save::JSONSaveFile :: SaveToJSON ( ISaveObject *
 		}
 		break;
 		
+		default:
+			return NULL;
+			break;
+		
 	}
 	
 }
 
-bool Red::Save::JSONSaveFile :: RunRestore ()
+Red::Save :: ISaveObject * Red::Save::JSONSaveFile :: RestoreFromJSON ( ContainerSaveObject * RootSaveObject, Data::JSON :: IType * RootObject, const std :: string & ObjName )
 {
 	
-	RootLock.Lock ();
+	if ( RootObject == NULL )
+		return NULL;
 	
-	if ( SaveRoot == NULL )
+	ContainerSaveObject * RootSaveContainer = ( RootSaveObject != NULL ) ? dynamic_cast <ContainerSaveObject *> ( RootSaveObject ) : NULL;
+	
+	switch ( RootObject -> GetType () )
 	{
 		
-		RootLock.Unlock ();
+		case Data::JSON::IType :: kDataType_Boolean:
+		{
+			
+			Data::JSON :: Boolean * BoolValue = dynamic_cast <Data::JSON :: Boolean *> ( RootObject );
+			
+			if ( BoolValue == NULL )
+				return NULL;
+			
+			if ( RootSaveContainer != NULL )
+				return RootSaveContainer -> SetOrCreateBooleanChild_AutoLock ( ObjName, BoolValue -> Get () );
+			
+			return new BooleanSaveObject ( ObjName, BoolValue -> Get () );
+			
+		}
+		break;
 		
-		return false;
+		case Data::JSON::IType :: kDataType_Number:
+		{
+			
+			Data::JSON :: Number * NumberValue = dynamic_cast <Data::JSON :: Number *> ( RootObject );
+			
+			if ( NumberValue == NULL )
+				return NULL;
+			
+			if ( ObjName.size () < 2 )
+			{
+				
+				if ( RootSaveContainer != NULL )
+					return RootSaveContainer -> SetOrCreateDoubleChild_AutoLock ( ObjName, NumberValue -> Get () );
+				
+				return new DoubleSaveObject ( ObjName, NumberValue -> Get () );
+				
+			}
+			
+			if ( strncmp ( ObjName.c_str (), "f_", 2 ) == 0 )
+			{
+				
+				if ( RootSaveContainer != NULL )
+					return RootSaveContainer -> SetOrCreateFloatChild_AutoLock ( ObjName.substr ( 2 ), NumberValue -> Get () );
+				
+				return new FloatSaveObject ( ObjName.substr ( 2 ), NumberValue -> Get () );
+				
+			}
+			
+			if ( strncmp ( ObjName.c_str (), "d_", 2 ) == 0 )
+			{
+				
+				if ( RootSaveContainer != NULL )
+					return RootSaveContainer -> SetOrCreateDoubleChild_AutoLock ( ObjName.substr ( 2 ), NumberValue -> Get () );
+				
+				
+				return new DoubleSaveObject ( ObjName.substr ( 2 ), NumberValue -> Get () );
+				
+			}
+			
+			if ( ObjName.size () < 4 )
+			{
+				
+				if ( RootSaveContainer != NULL )
+					return RootSaveContainer -> SetOrCreateDoubleChild_AutoLock ( ObjName, NumberValue -> Get () );
+				
+				new DoubleSaveObject ( ObjName, NumberValue -> Get () );
+				
+			}
+			
+			if ( strncmp ( ObjName.c_str (), "i32_", 4 ) == 0 )
+			{
+				
+				if ( RootSaveContainer != NULL )
+					return RootSaveContainer -> SetOrCreateInt32Child_AutoLock ( ObjName.substr ( 4 ), NumberValue -> Get () );
+				
+				return new Int32SaveObject ( ObjName.substr ( 4 ), NumberValue -> Get () );
+				
+			}
+			
+			if ( strncmp ( ObjName.c_str (), "u32_", 4 ) == 0 )
+			{
+				
+				if ( RootSaveContainer != NULL )
+					return RootSaveContainer -> SetOrCreateUInt32Child_AutoLock ( ObjName.substr ( 4 ), NumberValue -> Get () );
+				
+				return new UInt32SaveObject ( ObjName.substr ( 4 ), NumberValue -> Get () );
+				
+			}
+			
+			if ( strncmp ( ObjName.c_str (), "i64_", 4 ) == 0 )
+			{
+				
+				if ( RootSaveContainer != NULL )
+					return RootSaveContainer -> SetOrCreateInt64Child_AutoLock ( ObjName.substr ( 4 ), NumberValue -> Get () );
+				
+				return new Int64SaveObject ( ObjName.substr ( 4 ), NumberValue -> Get () );
+				
+			}
+			
+			if ( strncmp ( ObjName.c_str (), "u64_", 4 ) == 0 )
+			{
+				
+				if ( RootSaveContainer != NULL )
+					return RootSaveContainer -> SetOrCreateUInt64Child_AutoLock ( ObjName.substr ( 4 ), NumberValue -> Get () );
+				
+				return new UInt64SaveObject ( ObjName.substr ( 4 ), NumberValue -> Get () );
+				
+			}
+			
+			if ( RootSaveContainer != NULL )
+				return RootSaveContainer -> SetOrCreateDoubleChild_AutoLock ( ObjName, NumberValue -> Get () );
+			
+			return new DoubleSaveObject ( ObjName, NumberValue -> Get () );
+			
+		}
+		break;
+		
+		case Data::JSON::IType :: kDataType_String:
+		{
+			
+			Data::JSON :: String * StringValue = dynamic_cast <Data::JSON :: String *> ( RootObject );
+			
+			if ( StringValue == NULL )
+				return NULL;
+			
+			std :: string ValueData;
+			StringValue -> Get ( ValueData );
+			
+			if ( ObjName.size () < 2 )
+			{
+				
+				if ( RootSaveContainer != NULL )
+					return RootSaveContainer -> SetOrCreateStringChild_AutoLock ( ObjName, ValueData );
+				
+				return new StringSaveObject ( ObjName, ValueData );
+				
+			}
+			
+			if ( strncmp ( ObjName.c_str (), "s_", 2 ) )
+			{
+				
+				if ( RootSaveContainer != NULL )
+					return RootSaveContainer -> SetOrCreateStringChild_AutoLock ( ObjName.substr ( 2 ), ValueData );
+				
+				return new StringSaveObject ( ObjName.substr ( 2 ), ValueData );
+				
+			}
+			
+			if ( ObjName.size () < 4 )
+			{
+				
+				if ( RootSaveContainer != NULL )
+					return RootSaveContainer -> SetOrCreateStringChild_AutoLock ( ObjName, ValueData );
+				
+				return new StringSaveObject ( ObjName, ValueData );
+				
+			}
+			
+			if ( strncmp ( ObjName.c_str (), "b64_", 4 ) )
+			{
+				
+				void * DataPTR = NULL;
+				uint64_t MemSize = 0;
+				
+				if ( B64Decoder.Decode ( ValueData, & DataPTR, & MemSize ) )
+				{
+					
+					if ( RootSaveContainer != NULL )
+						return RootSaveContainer -> SetOrCreateBinaryChild_AutoLock ( ObjName, new Util :: RCMem ( DataPTR, & free ), MemSize );
+					
+					return new BinarySaveObject ( ObjName, new Util :: RCMem ( DataPTR, & free ), MemSize );
+					
+				}
+				else
+					return NULL;
+				
+			}
+			
+			if ( RootSaveContainer != NULL )
+				return RootSaveContainer -> SetOrCreateStringChild_AutoLock ( ObjName, ValueData );
+			
+			return new StringSaveObject ( ObjName, ValueData );
+			
+		}
+		break;
+		
+		case Data::JSON::IType :: kDataType_Object:
+		{
+			
+			Data::JSON :: Object * ObjectValue = dynamic_cast <Data::JSON :: Object *> ( RootObject );
+			
+			if ( ObjectValue == NULL )
+				return NULL;
+			
+			RootSaveContainer -> LockChildren ();
+			
+			ContainerSaveObject * Container = RootSaveContainer -> FindOrCreateContainerChild ( ObjName );
+			
+			RootSaveContainer -> UnlockChildren ();
+			
+			for ( uint32_t I = 0; I < ObjectValue -> GetKeyCount (); I ++ )
+			{
+				
+				std :: string ChildName;
+				
+				ObjectValue -> GetKeyByIndex ( I, ChildName );
+				Data::JSON :: IType * Child = ObjectValue -> GetItemByIndex ( I );
+				
+				RestoreFromJSON ( Container, Child, ChildName );
+				
+			}
+			
+			return Container;
+			
+		}
+		break;
+		
+		case Data::JSON::IType :: kDataType_Array:
+		{
+			
+			return NULL;
+			
+		}
+		break;
+		
+		default:
+			return NULL;
 		
 	}
-	
-	SaveRoot -> NotifySaveAction ( ISavable :: kSaveAction_Restore_Prepare );
-	
-	// Todo: Red::Save translation from Red::Data::JSON format
-	
-	RootLock.Unlock ();
-	
-	return true;
 	
 }

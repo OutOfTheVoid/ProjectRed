@@ -15,6 +15,7 @@
 #include <Red/Save/ISavable.h>
 #include <Red/Save/ContainerSaveObject.h>
 #include <Red/Save/Int32SaveObject.h>
+#include <Red/Save/BinarySaveObject.h>
 
 #include <RAUX/JSONFile.h>
 
@@ -34,12 +35,18 @@ public:
 		RefCounted ( 0 ),
 		RootObj ( new Red::Save :: ContainerSaveObject ( "Root" ) ),
 		IntSave ( new Red::Save :: Int32SaveObject ( "MyInt" ) ),
+		BinSave ( new Red::Save :: BinarySaveObject ( "MyBin" ) ),
 		IntValue ( 0 )
 	{
 		
 		RootObj -> Reference ();
 		IntSave -> Reference ();
+		BinSave -> Reference ();
+		
+		BinSave -> SetData_AutoLock ( new Red::Util :: RCMem ( const_cast <void *> ( reinterpret_cast <const void *> ( "Hello world!" ) ), NULL ), 12 );
+		
 		RootObj -> AddChild ( IntSave );
+		RootObj -> AddChild ( BinSave );
 		
 	};
 	
@@ -48,13 +55,14 @@ public:
 		
 		RootObj -> Dereference ();
 		IntSave -> Dereference ();
+		BinSave -> Dereference ();
 		
 	}
 	
-	Red::Save :: ISaveObject * GetRootSaveObject ()
+	Red::Save :: ContainerSaveObject * GetRootSaveObject ()
 	{
 		
-		return dynamic_cast <Red::Save :: ISaveObject *> ( RootObj );
+		return RootObj;
 		
 	};
 	
@@ -94,6 +102,7 @@ private:
 	
 	Red::Save :: ContainerSaveObject * RootObj;
 	Red::Save :: Int32SaveObject * IntSave;
+	Red::Save :: BinarySaveObject * BinSave;
 	
 	int32_t IntValue;
 	
@@ -131,35 +140,18 @@ int main ( int argc, char const * argv [] )
 	
 	Red::Save :: JSONSaveFile SaveFile ( "TestSave.json" );
 	SaveFile.SetSaveObject ( & SaveData );
-	SaveFile.Open ( false );
+	SaveFile.Open ( true );
 	
 	SaveData.SetIntValue ( 1000 );
 	
 	SaveFile.RunSave ();
 	
-	Red::Data::Base64 :: Encoder B64Encoder;
-	Red::Data::Base64 :: Decoder B64Decoder;
+	SaveData.SetIntValue ( 400 );
 	
-	const char * TestData = "Hello World!";
-	std :: string B64Out;
+	if ( SaveFile.RunRestore () )
+		std :: cout << "Restore successful!" << std :: endl;
 	
-	std :: cout << "B64 Original: " << TestData << std :: endl;
-	
-	B64Encoder.Encode ( reinterpret_cast <const void *> ( TestData ), 12, B64Out );
-	
-	std :: cout << "B64 Encode: " << B64Out << std :: endl;
-	
-	void * MemOut = NULL;
-	uint32_t CharCount;
-	
-	if ( B64Decoder.Decode ( B64Out, & MemOut, & CharCount ) )
-	{
-		
-		std :: string B64OutString ( reinterpret_cast <const char *> ( MemOut ), CharCount );
-		
-		std :: cout << "B64 Decode: " << B64OutString << std :: endl;
-		
-	}
+	std :: cout << "IntVal: " << SaveData.GetIntValue () << std :: endl;
 	
 	/*================================*/
 	

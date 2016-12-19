@@ -29,7 +29,7 @@ Red::Data::Base64::Decoder :: ~Decoder ()
 {
 }
 
-bool Red::Data::Base64::Decoder :: Decode ( const std :: string & B64In, void ** MemoryOut, uint32_t * MemSizeOut )
+bool Red::Data::Base64::Decoder :: Decode ( const std :: string & B64In, void ** MemoryOut, uint64_t * MemSizeOut )
 {
 	
 	if ( ( B64In.size () % 4 ) != 0 )
@@ -42,7 +42,7 @@ bool Red::Data::Base64::Decoder :: Decode ( const std :: string & B64In, void **
 		
 	}
 	
-	uint32_t PadCount = 0;
+	uint64_t PadCount = 0;
 	
 	if ( B64In.at ( B64In.size () - 1 ) == PadChar )
 		PadCount ++;
@@ -50,8 +50,8 @@ bool Red::Data::Base64::Decoder :: Decode ( const std :: string & B64In, void **
 	if ( B64In.at ( B64In.size () - 2 ) == PadChar )
 		PadCount ++;
 	
-	uint32_t MemSize = ( ( B64In.size () / 4 ) * 3 ) - PadCount;
-	uint32_t RunCount = MemSize / 3;
+	uint64_t MemSize = ( ( B64In.size () / 4 ) * 3 ) - PadCount;
+	uint64_t RunCount = MemSize / 3;
 	
 	if ( PadCount == 1 )
 		PadCount = 2;
@@ -75,7 +75,7 @@ bool Red::Data::Base64::Decoder :: Decode ( const std :: string & B64In, void **
 	
 	std :: cout << "MemSize: " << MemSize << std :: endl;
 	
-	for ( uint32_t I = 0; I < RunCount; I ++ )
+	for ( uint64_t I = 0; I < RunCount; I ++ )
 	{
 		
 		uint32_t MiniSection = ( Lookup [ B64In.at ( ( I * 4 ) + 3 ) ] << 0 ) | ( Lookup [ B64In.at ( ( I * 4 ) + 2 ) ] << 6 ) | ( Lookup [ B64In.at ( ( I * 4 ) + 1 ) ] << 12 ) | ( Lookup [ B64In.at ( ( I * 4 ) + 0 ) ] << 18 );

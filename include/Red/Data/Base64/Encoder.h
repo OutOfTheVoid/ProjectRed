@@ -26,7 +26,7 @@ namespace Red
 				Encoder ( EncodeFlags Flags = kEncodeFlags_None, char C62 = '+', char C63 = '/', char PadChar = '=' );
 				~Encoder ();
 				
-				bool Encode ( const void * SourceData, uint32_t Size, std :: string & B64Out );
+				bool Encode ( const void * SourceData, uint64_t Size, std :: string & B64Out );
 				
 			private:
 				

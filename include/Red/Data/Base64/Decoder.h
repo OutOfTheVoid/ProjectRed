@@ -22,7 +22,7 @@ namespace Red
 				Decoder ( char C62 = '+', char C63 = '/', char PadChar = '=' );
 				~Decoder ();
 				
-				bool Decode ( const std :: string & B64In, void ** MemoryOut, uint32_t * MemSizeOut );
+				bool Decode ( const std :: string & B64In, void ** MemoryOut, uint64_t * MemSizeOut );
 				
 			private:
 				

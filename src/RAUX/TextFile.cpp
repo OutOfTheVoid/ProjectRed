@@ -3,6 +3,8 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include <iostream>
+
 RAUX::TextFile :: TextFile ( const std :: string & Name, bool Writeable ):
 	FileInstance ( Name, Writeable )
 {
@@ -120,6 +122,8 @@ void RAUX::TextFile :: LoadToString ( uint32_t * Status, std :: string & String,
 		}
 		
 	}
+	else
+		FileInstance.Flush ( Status );
 	
 	uint64_t FileLength = FileInstance.GetLength ( Status );
 	

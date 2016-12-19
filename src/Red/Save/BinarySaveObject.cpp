@@ -1,11 +1,10 @@
 #include <Red/Save/BinarySaveObject.h>
 
-Red::Save::BinarySaveObject :: BinarySaveObject ( const std :: string & Name, RCMem * Data, uint64_t Size, uint32_t Alignment ):
+Red::Save::BinarySaveObject :: BinarySaveObject ( const std :: string & Name, Util :: RCMem * Data, uint64_t Size ):
 	RefCounted ( 0 ),
 	Name ( Name ),
 	Data ( Data ),
 	Size ( Size ),
-	Alignment ( Alignment ),
 	DataLock ()
 {
 	
@@ -43,7 +42,7 @@ void Red::Save::BinarySaveObject :: UnlockData ()
 	
 }
 
-void Red::Save::BinarySaveObject :: SetData ( Util :: RCMem * Data, uint32_t DataSize, uint32_t Alignment )
+void Red::Save::BinarySaveObject :: SetData ( Util :: RCMem * Data, uint32_t DataSize )
 {
 	
 	if ( this -> Data != NULL )
@@ -55,30 +54,29 @@ void Red::Save::BinarySaveObject :: SetData ( Util :: RCMem * Data, uint32_t Dat
 		this -> Data -> Reference ();
 	
 	Size = DataSize;
-	this -> Alignment = Alignment;
 	
 }
 
-void Red::Save::BinarySaveObject :: SetData_AutoLock ( Util :: RCMem * Data, uint32_t DataSize, uint32_t Alignment )
+void Red::Save::BinarySaveObject :: SetData_AutoLock ( Util :: RCMem * Data, uint32_t DataSize )
 {
 	
-	LockData.Lock ();
+	DataLock.Lock ();
 	
-	SetData ( Data, DataSize, Alignment );
+	SetData ( Data, DataSize );
 	
-	LockData.Unlock ();
+	DataLock.Unlock ();
 	
 }
 
-bool Red::Save::BinarySaveObject :: SetData_AutoLock_Try ( Util :: RCMem * Data, uint32_t DataSize, uint32_t Alignment )
+bool Red::Save::BinarySaveObject :: SetData_AutoLock_Try ( Util :: RCMem * Data, uint32_t DataSize )
 {
 	
-	if ( LockData.TryLock () )
+	if ( DataLock.TryLock () )
 	{
 		
-		SetData ( Data, DataSize, Alignment );
+		SetData ( Data, DataSize );
 		
-		LockData.Unlock ();
+		DataLock.Unlock ();
 		
 		return true;
 		
@@ -88,7 +86,7 @@ bool Red::Save::BinarySaveObject :: SetData_AutoLock_Try ( Util :: RCMem * Data,
 	
 }
 
-Util :: RCMem * Red::Save::BinarySaveObject :: GetData ()
+Red::Util :: RCMem * Red::Save::BinarySaveObject :: GetData ()
 {
 	
 	return Data;
@@ -99,13 +97,6 @@ uint32_t Red::Save::BinarySaveObject :: GetDataSize ()
 {
 	
 	return Size;
-	
-}
-
-uint32_t Red::Save::BinarySaveObject :: GetDataAlign ()
-{
-	
-	return Alignment;
 	
 }
 

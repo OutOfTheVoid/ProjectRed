@@ -9,6 +9,7 @@
 #include <Red/Data/Base64/Encoder.h>
 
 #include <Red/Save/ISaveObject.h>
+#include <Red/Save/ContainerSaveObject.h>
 #include <Red/Save/ISavable.h>
 #include <Red/Save/ISaveReader.h>
 #include <Red/Save/ISaveWriter.h>
@@ -43,6 +44,8 @@ namespace Red
 		private:
 			
 			Data::JSON :: IType * SaveToJSON ( ISaveObject * Object, std :: string & ObjName );
+			
+			ISaveObject * RestoreFromJSON ( ContainerSaveObject * ParentSaveObject, Data::JSON :: IType * RootObject, const std :: string & ObjName );
 			
 			RAUX :: JSONFile FileInstance;
 			

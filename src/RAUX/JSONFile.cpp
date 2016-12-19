@@ -1,5 +1,7 @@
 #include <RAUX/JSONFile.h>
 
+#include <iostream>
+
 RAUX::JSONFile :: JSONFile ( const std :: string & Path, bool Writable, Red::Data::JSON::Decoder :: DecodeFlags DecFlags, Red::Data::JSON::Encoder :: EncodeFlags EncFlags, const std :: string & NewlineSequence, uint32_t IndentSize ):
 	FileInstance ( Path, Writable ),
 	JSONBuffer ( "null" ),
@@ -35,7 +37,7 @@ void RAUX::JSONFile :: Load ( bool ToDecode, uint32_t * Status )
 		
 		FileInstance.Open ( Status, ! ToDecode );
 		
-		if ( * Status != kStatus_Success )
+		if ( * Status != TextFile :: kStatus_Success )
 		{
 			
 			* Status = kStatus_Failure_Load;
@@ -51,7 +53,7 @@ void RAUX::JSONFile :: Load ( bool ToDecode, uint32_t * Status )
 		
 		FileInstance.LoadToString ( Status, JSONBuffer, 0 );
 		
-		if ( * Status != kStatus_Success )
+		if ( * Status != TextFile :: kStatus_Success )
 		{
 			
 			* Status = kStatus_Failure_Load;

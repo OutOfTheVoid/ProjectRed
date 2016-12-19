@@ -25,15 +25,15 @@ Red::Data::Base64::Encoder :: ~Encoder ()
 {
 }
 
-bool Red::Data::Base64::Encoder :: Encode ( const void * SourceData, uint32_t Size, std :: string & B64Out )
+bool Red::Data::Base64::Encoder :: Encode ( const void * SourceData, uint64_t Size, std :: string & B64Out )
 {
 	
-	uint32_t PadCount = Size % 3;
-	uint32_t ModSize = ( Size / 3 );
+	uint64_t PadCount = Size % 3;
+	uint64_t ModSize = ( Size / 3 );
 	
 	B64Out.clear ();
 	
-	for ( uint32_t I = 0; I < ModSize; I ++ )
+	for ( uint64_t I = 0; I < ModSize; I ++ )
 	{
 		
 		char MiniString [ 5 ];
