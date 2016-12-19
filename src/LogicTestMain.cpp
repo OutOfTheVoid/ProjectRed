@@ -148,9 +148,6 @@ int main ( int argc, char const * argv [] )
 	
 	SaveData.SetIntValue ( 400 );
 	
-	if ( SaveFile.RunRestore () )
-		std :: cout << "Restore successful!" << std :: endl;
-	
 	std :: cout << "IntVal: " << SaveData.GetIntValue () << std :: endl;
 	
 	/*================================*/

@@ -81,6 +81,8 @@ void Red::Save::JSONSaveFile :: SetSaveObject ( ISavable * SaveRoot )
 bool Red::Save::JSONSaveFile :: RunSave ()
 {
 	
+	// Make sure that our root object is consistent for a save call.
+	
 	RootLock.Lock ();
 	
 	if ( SaveRoot == NULL )
@@ -103,7 +105,17 @@ bool Red::Save::JSONSaveFile :: RunSave ()
 	if ( JSONRoot != NULL )
 		SaveRoot -> NotifySaveAction ( ISavable :: kSaveAction_Save_Success );
 	else
+	{
+		
 		SaveRoot -> NotifySaveAction ( ISavable :: kSaveAction_Save_Failure );
+		
+		RootLock.Unlock ();
+		
+		return false;
+		
+	}
+	
+	JSONRoot -> Reference ();
 	
 	RootLock.Unlock ();
 	
@@ -115,14 +127,14 @@ bool Red::Save::JSONSaveFile :: RunSave ()
 	{
 		
 		if ( JSONRoot != NULL )
-			delete JSONRoot;
+			JSONRoot -> Dereference ();
 		
 		return false;
 		
 	}
 	
 	if ( JSONRoot != NULL )
-		delete JSONRoot;
+		JSONRoot -> Dereference ();
 	
 	FileInstance.Commit ( & Status );
 	
@@ -133,25 +145,19 @@ bool Red::Save::JSONSaveFile :: RunSave ()
 bool Red::Save::JSONSaveFile :: RunRestore ()
 {
 	
-	std :: cout << "A" << std :: endl;
-	
 	uint32_t Status;
 	
 	FileInstance.Load ( true, & Status );
 	
-	std :: cout << "B" << std :: endl;
-	
 	if ( Status != RAUX::JSONFile :: kStatus_Success )
 		return false;
-	
-	std :: cout << "C" << std :: endl;
 	
 	Data::JSON :: IType * JSONRoot = FileInstance.Decode ( & Status );
 	
 	if ( Status != RAUX::JSONFile :: kStatus_Success )
 		return false;
 	
-	std :: cout << "D" << std :: endl;
+	JSONRoot -> Reference ();
 	
 	RootLock.Lock ();
 	
@@ -163,8 +169,6 @@ bool Red::Save::JSONSaveFile :: RunRestore ()
 		return false;
 		
 	}
-	
-	std :: cout << "E" << std :: endl;
 	
 	SaveRoot -> NotifySaveAction ( ISavable :: kSaveAction_Restore_Prepare );
 	
@@ -179,8 +183,6 @@ bool Red::Save::JSONSaveFile :: RunRestore ()
 		
 	}
 	
-	std :: cout << "F" << std :: endl;
-	
 	ContainerSaveObject TempRootContainer ( "" );
 	
 	TempRootContainer.AddChild ( RootSaveObject );
@@ -188,8 +190,6 @@ bool Red::Save::JSONSaveFile :: RunRestore ()
 	TempRootContainer.RemoveChild ( RootSaveObject );
 	
 	RootLock.Unlock ();
-	
-	std :: cout << "G" << std :: endl;
 	
 	if ( Success )
 	{
@@ -200,9 +200,9 @@ bool Red::Save::JSONSaveFile :: RunRestore ()
 		
 	}
 	
-	std :: cout << "H" << std :: endl;
-	
 	SaveRoot -> NotifySaveAction ( ISavable :: kSaveAction_Restore_Failure );
+	
+	JSONRoot -> Dereference ();
 	
 	return false;
 	
