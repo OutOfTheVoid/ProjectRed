@@ -8,6 +8,8 @@
 
 #include <utility>
 
+const Xenon::Math::Matrix4x4 Xenon::Math::Matrix4x4 :: IDENTITY;
+
 Xenon::Math::Matrix4x4 :: Matrix4x4 ():
 	Elements { { 1.0f, 0.0f, 0.0f, 0.0f }, { 0.0f, 1.0f, 0.0f, 0.0f }, { 0.0f, 0.0f, 1.0f, 0.0f }, { 0.0f, 0.0f, 0.0f, 1.0f } }
 {

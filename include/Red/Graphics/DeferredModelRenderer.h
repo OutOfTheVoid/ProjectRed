@@ -9,6 +9,7 @@
 #include <Xenon/Math/Matrix4x4.h>
 #include <Xenon/Math/ConstantIntUniformSource.h>
 #include <Xenon/Math/ConstantBoolUniformSource.h>
+#include <Xenon/Math/RawMatrix4x4UniformSource.h>
 
 #include <Xenon/GPU/IMatrix4x4UniformSource.h>
 
@@ -143,31 +144,18 @@ namespace Red
 			
 			// Geometry pass
 			
-			Xenon::GPU :: UniformSet GeometryUniforms;
-			
-			Xenon::GPU :: FrameBuffer GBuffer;
-			GLuint AttachmentList [ 3 ];
-			
-			Xenon::GPU :: Texture2D AlbedoSpecularTexture;
-			Xenon::GPU :: Texture2D NormalTexture;
-			Xenon::GPU :: Texture2D PositionTexture;
-			
-			Xenon::GPU :: RenderBuffer DepthBuffer;
-			
 			Xenon::GPU :: VertexShader GeometryVShader;
 			Xenon::GPU :: FragmentShader GeometryFShader;
 			
 			Xenon::GPU :: ShaderProgram GeometryProgram;
 			
-			Xenon::GPU :: IMatrix4x4UniformSource * ProjectionMatrixSource;
-			Xenon::GPU :: IMatrix4x4UniformSource * ViewMatrixSource;
-			
-			int64_t LastProjectionIteration;
-			int64_t LastViewIteration;
+			Xenon::GPU :: UniformSet GeometryUniforms;
 			
 			Xenon::Math :: Matrix4x4 ViewProjectionMatrix;
+			Xenon::Math :: RawMatrix4x4UniformSource ViewProjectionUniformSource;
 			
-			Xenon::Math :: RawMatrix4x4UniformSource ViewProjectionMatrixUniform;
+			Xenon::GPU :: IMatrix4x4UniformSource * ViewMatrixSource;
+			Xenon::GPU :: IMatrix4x4UniformSource * ProjectionMatrixSource;
 			
 			// Lighting pass
 			

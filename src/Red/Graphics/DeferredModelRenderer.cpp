@@ -29,187 +29,60 @@ const std :: string Red::Graphics::DeferredModelRenderer :: kUniformName_DoColor
 const std :: string _DeferredModelRenderer_VShader_Geometry =
 "#version 330 core\n"
 
-"in vec3 Position;\n"
-"in vec3 Normal;\n"
-"in vec3 Tangent;\n"
-"in vec3 Color;\n"
-"in vec2 TextureCoord;\n"
-
-"in mat4 InstancedModelMatrix;\n"
-"in mat4 InstancedNormalMatrix;\n"
-
 "uniform mat4 ModelMatrix;\n"
-"uniform mat4 NormalMatrix;\n"
 "uniform mat4 ViewProjectionMatrix;\n"
 
-"uniform bool DoNormalTexture;\n"
-
-"uniform bool DoInstancedTransformation;\n"
-
-"out vec3 FragPosition;\n"
-"out vec3 FragNormal;\n"
-"out vec3 FragTangent;\n"
-"out vec3 FragBinormal;\n"
-"out vec3 FragColor;\n"
-"out vec2 FragTextureCoords;\n"
+"in vec3 Position;\n"
 
 "void main ()\n"
 "{\n"
 
-"	vec4 WorldPosition;\n"
+"	gl_Position = vec4 ( Position, 1.0 ) * ModelMatrix * ViewProjectionMatrix;\n"
 
-"	if ( DoInstancedTransformation )\n"
-"	{\n"
-"		WorldPosition = vec4 ( Position, 1.0 ) * InstancedModelMatrix;\n"
-"		if ( DoNormalTexture )\n"
-"		{\n"
-"			FragTangent = normalize ( ( vec4 ( Tangent, 1.0 ) * InstancedNormalMatrix ).xyz );\n"
-"			FragBinormal = normalize ( ( vec4 ( cross ( Tangent, Normal ), 1.0 ) * InstancedNormalMatrix ).xyz );\n"
-"			FragNormal = normalize ( ( vec4 ( Normal, 1.0 ) * InstancedNormalMatrix ).xyz );\n"
-"		}\n"
-"	}\n"
-"	else\n"
-"	{\n"
-"		WorldPosition = vec4 ( Position, 1.0 ) * ModelMatrix;\n"
-"		if ( DoNormalTexture )\n"
-"		{\n"
-"			FragTangent = normalize ( ( vec4 ( Tangent, 1.0 ) * NormalMatrix ).xyz );\n"
-"			FragBinormal = normalize ( ( vec4 ( cross ( Tangent, Normal ), 1.0 ) * NormalMatrix ).xyz );\n"
-"			FragNormal = normalize ( ( vec4 ( Normal, 1.0 ) * NormalMatrix ).xyz );\n"
-"		}\n"
-"	}\n"
-
-
-"	FragPosition = WorldPosition.xyz;\n"
-"	FragColor = Color;\n"
-"	FragTextureCoords = TextureCoord;\n"
-"	gl_Position = WorldPosition * ViewProjectionMatrix;\n"
-
-"}\n";
+"}"
+;
 
 const char * _DeferredModelRenderer_FShader_Geometry =
 "#version 330 core\n"
-
-"in vec3 FragPosition;\n"
-"in vec3 FragNormal;\n"
-"in vec3 FragTangent;\n"
-"in vec3 FragBinormal;\n"
-"in vec3 FragColor;\n"
-"in vec2 FragTextureCoords;\n"
-
-"uniform float BaseSpecular;\n"
-
-"uniform bool DoColorTexture;\n"
-"uniform bool DoNormalTexture;\n"
-
-"uniform sampler2D ColorSampler;\n"
-"uniform sampler2D NormalSampler;\n"
-
-"layout ( location = 0 ) out vec4 AlbedoSpecularOut;\n"
-"layout ( location = 1 ) out vec3 NormalOut;\n"
-"layout ( location = 2 ) out vec3 PositionOut;\n"
-
-"void main ()\n"
-"{\n"
-
-"	vec3 TotalColor = FragColor;\n"
-"	vec3 TotalNormal = FragNormal;\n"
-
-"	if ( DoColorTexture )\n"
-"		TotalColor *= texture ( ColorSampler, FragTextureCoords ).rgb;\n"
-
-"	if ( DoNormalTexture )\n"
-"	{\n"
-
-"		TotalNormal += texture ( NormalSampler, FragTextureCoords ).xyz * mat3 ( FragTangent, FragBinormal, FragNormal );"
-"		TotalNormal = normalize ( TotalNormal );\n"
-
-"	}\n"
-
-"	AlbedoSpecularOut = vec4 ( TotalColor, BaseSpecular );\n"
-"	NormalOut = FragNormal;\n"
-"	PositionOut = FragPosition;\n"
-
-"}\n";
-
-const char * _DeferredModelRenderer_VShader_Lighting =
-"#version 330 core\n"
-
-"in vec2 Position;\n"
-
-"out vec2 TexturePosition;\n"
-
-"void main ()\n"
-"{\n"
-
-"	TexturePosition = Position;\n"
-"	gl_Position = vec4 ( Position, 0.5, 1.0 );\n"
-
-"}\n";
-
-const char * _DeferredModelRenderer_FShader_Lighting =
-"#version 330 core\n"
-
-"const int LightCount_Directional = 2;\n"
-"const int LightCount_Point = 20;\n"
-
-"struct PointLight\n"
-"{\n"
-
-"	vec3 Position;\n"
-"	vec3 Intensity;\n"
-
-"};\n"
-
-"struct DirectionalLight\n"
-"{\n"
-
-"	vec3 Position;\n"
-"	vec3 Intensity;\n"
-"	vec3 Direction;\n"
-
-"};\n"
-
-"struct Spotlight\n"
-"{\n"
-
-"	vec3 Position;\n"
-"	vec3 Intensity;\n"
-"	vec3 Direction;\n"
-"	float Radius;\n"
-
-"};\n"
-
-
-"in vec2 TexturePosition;\n"
-
-"uniform sampler2D AlbedoSpecularSampler;\n"
-"uniform sampler2D NormalSampler;\n"
-"uniform sampler2D PositionSampler;\n"
-
-//"uniform vec3 ViewPosition;\n"
-
-//"uniform vec3 AmbientLight;\n"
 
 "out vec4 OutColor;\n"
 
 "void main ()\n"
 "{\n"
 
-//"	vec4 AlbedoSpecular = texture ( AlbedoSpecularSampler, TexturePosition );\n"
-//"	vec3 Normal = texture ( NormalSampler, TexturePosition ).xyz;\n"
-//"	vec3 Position = texture ( PositionSampler, TexturePosition ).xyz;\n"
+"	OutColor = vec4 ( 1.0, 1.0, 0.0, 1.0 );\n"
 
-//"	vec3 ViewDirection = normalize ( ViewPosition - Position );"
+"}";
 
-//"	vec3 Accumulator = AlbedoSpecular.rgb * AmbientLight;\n"
+const char * _DeferredModelRenderer_VShader_Lighting =
+"#version 330 core\n"
 
-	/* Various lighting calculations... */
+"in vec2 Position;\n"
 
-"	OutColor = vec4 ( TexturePosition.x, 0.0, TexturePosition.y, 1.0 );\n"
+"out vec2 SamplePosition;\n"
 
+"void main ()\n"
+"{\n"
 
-"}\n";
+"	SamplePosition = ( Position + vec2 ( 1.0, 1.0 ) ) * vec2 ( 0.5, 0.5 );\n"
+
+"	gl_Position = vec4 ( Position, 0.5, 1.0 );\n"
+
+"}";
+
+const char * _DeferredModelRenderer_FShader_Lighting =
+"#version 330 core\n"
+
+"in vec2 SamplePosition;\n"
+
+"out vec4 OutColor;\n"
+
+"void main ()\n"
+"{\n"
+
+"	OutColor = vec4 ( SamplePosition, 1.0, 1.0 );\n"
+
+"}";
 
 const Red::Graphics::Model :: ModelShaderConfigurationNames & Red::Graphics::DeferredModelRenderer :: GetShaderConfigurationNames ()
 {
@@ -243,32 +116,24 @@ const Red::Graphics::Model :: ModelShaderConfigurationNames & Red::Graphics::Def
 }
 
 Red::Graphics::DeferredModelRenderer :: DeferredModelRenderer ():
-	RefCounted (),
+	RefCounted ( 0 ),
 	GPUContext ( NULL ),
 	RenderTarget ( NULL ),
 	GPUAllocated ( false ),
-	GeometryUniforms (),
-	GBuffer (),
-	AttachmentList { GL_COLOR_ATTACHMENT0, GL_COLOR_ATTACHMENT1, GL_COLOR_ATTACHMENT2 },
-	AlbedoSpecularTexture (),
-	NormalTexture (),
-	PositionTexture (),
-	DepthBuffer (),
 	GeometryVShader ( _DeferredModelRenderer_VShader_Geometry, "DeferredModelRenderer :: GeometryVShader" ),
 	GeometryFShader ( _DeferredModelRenderer_FShader_Geometry, "DeferredModelRenderer :: GeometryFShader" ),
 	GeometryProgram ( "DeferredModelRenderer :: GeometryProgram" ),
-	ProjectionMatrixSource ( NULL ),
-	ViewMatrixSource ( NULL ),
-	LastProjectionIteration ( - 1 ),
-	LastViewIteration ( - 1 ),
+	GeometryUniforms (),
 	ViewProjectionMatrix (),
-	ViewProjectionMatrixUniform ( & ViewProjectionMatrix, true ),
-	LightingDrawCall ( Xenon::GPU::IndexedDrawCall :: NO_INIT ),
-	LightingVAO (),
-	LightingUniforms (),
+	ViewProjectionUniformSource ( & ViewProjectionMatrix, true ),
+	ViewMatrixSource ( NULL ),
+	ProjectionMatrixSource ( NULL ),
 	AlbedoSpecularSamplerUniform ( 0 ),
 	NormalSamplerUniform ( 1 ),
 	PositionSamplerUniform ( 2 ),
+	LightingDrawCall ( Xenon::GPU::IndexedDrawCall :: NO_INIT ),
+	LightingVAO (),
+	LightingUniforms (),
 	LightingVShader ( _DeferredModelRenderer_VShader_Lighting, "DeferredModelRenderer :: LightingVShader" ),
 	LightingFShader ( _DeferredModelRenderer_FShader_Lighting, "DeferredModelRenderer :: LightingFShader" ),
 	LightingProgram ( "DeferredModelRenderer :: LightingProgram" ),
@@ -277,11 +142,18 @@ Red::Graphics::DeferredModelRenderer :: DeferredModelRenderer ():
 {
 	
 	Xenon::Geometry::Primitives :: Quad2DSpec RenderQuadSpec;
-	RenderQuadSpec.WindOutwardFacesClockwise = true;
+	
+	RenderQuadSpec.WindOutwardFacesClockwise = false;
 	RenderQuadSpec.Attributes = Xenon::Geometry::Primitives :: kAttributeFlags_Position;
 	RenderQuadSpec.CompositionMode = Xenon::Geometry::Primitives :: kStaticAttributeCompositionMode_Interleaved;
-	RenderQuadSpec.TexturePositionCount = 0;
-	Xenon::Geometry::Primitives :: SetupNormalQuad2DPositionSpec ( RenderQuadSpec.PositionSpec, "Position", true );
+	
+	RenderQuadSpec.PositionSpec.Positions [ Xenon::Geometry::Primitives :: kQuad2DVertexIndex_XNeg_YNeg ] = Xenon::Math :: Vec2 ( - 1.0, - 1.0 );
+	RenderQuadSpec.PositionSpec.Positions [ Xenon::Geometry::Primitives :: kQuad2DVertexIndex_XPos_YNeg ] = Xenon::Math :: Vec2 ( + 1.0, - 1.0 );
+	RenderQuadSpec.PositionSpec.Positions [ Xenon::Geometry::Primitives :: kQuad2DVertexIndex_XNeg_YPos ] = Xenon::Math :: Vec2 ( - 1.0, + 1.0 );
+	RenderQuadSpec.PositionSpec.Positions [ Xenon::Geometry::Primitives :: kQuad2DVertexIndex_XPos_YPos ] = Xenon::Math :: Vec2 ( + 1.0, + 1.0 );
+	RenderQuadSpec.PositionSpec.AttributeName = "Position";
+	RenderQuadSpec.PositionSpec.Static = true;
+	
 	Xenon::Geometry::Primitives :: GenerateQuad2DMesh ( & RenderQuad, RenderQuadSpec );
 	
 	if ( RenderQuad != NULL )
@@ -292,17 +164,19 @@ Red::Graphics::DeferredModelRenderer :: DeferredModelRenderer ():
 		
 	}
 	
-	ViewProjectionMatrixUniform.Reference ();
-	
-	GeometryUniforms.AddMatrix4x4Uniform ( "ViewProjectionMatrix", & ViewProjectionMatrixUniform, false );
-	
-	LightingProgram.Reference ();
 	GeometryProgram.Reference ();
 	
-	ViewProjectionMatrixUniform.Reference ();
+	GeometryUniforms.Reference ();
+	
+	GeometryUniforms.AddMatrix4x4Uniform ( "ViewProjectionMatrix", & ViewProjectionUniformSource, false );
+	
 	AlbedoSpecularSamplerUniform.Reference ();
 	NormalSamplerUniform.Reference ();
 	PositionSamplerUniform.Reference ();
+	
+	LightingProgram.Reference ();
+	
+	LightingUniforms.Reference ();
 	
 	LightingUniforms.AddIntUniform ( "AlbedoSpecularSampler", & AlbedoSpecularSamplerUniform, false );
 	LightingUniforms.AddIntUniform ( "NormalSampler", & NormalSamplerUniform, false );
@@ -381,63 +255,23 @@ void Red::Graphics::DeferredModelRenderer :: SetupRender ( Xenon::GPU :: FrameBu
 	
 	GPUContext -> MakeCurrent ();
 	
-	if ( this -> RenderTarget != NULL )
-		this -> RenderTarget -> Dereference ();
+	if ( this -> RenderTarget != RenderTarget )
+	{
+		
+		if ( this -> RenderTarget != NULL )
+			this -> RenderTarget -> Dereference ();
+		
+		this -> RenderTarget = RenderTarget;
+		
+		if ( this -> RenderTarget != NULL )
+			this -> RenderTarget -> Reference ();
+		
+	}
 	
-	this -> RenderTarget = RenderTarget;
-	
-	if ( this -> RenderTarget != NULL )
-		this -> RenderTarget -> Reference ();
-	else
+	if ( this -> RenderTarget == NULL )
 		return;
 	
-	std :: cout << "GL Error: " << glGetError () << std :: endl;
 	
-	DepthBuffer.AllocateStorage ( Xenon::GPU::Texture2D :: kInternalFormat_Depth, Dimensions.X, Dimensions.Y );
-	
-	std :: cout << "GL Error: " << glGetError () << std :: endl;
-	
-	AlbedoSpecularTexture.BlankTextureImage ( 0, Xenon::GPU::Texture2D :: kInternalFormat_RGBA, Dimensions.X, Dimensions.Y );
-	NormalTexture.BlankTextureImage ( 0, Xenon::GPU::Texture2D :: kInternalFormat_RGB32f, Dimensions.X, Dimensions.Y );
-	PositionTexture.BlankTextureImage ( 0, Xenon::GPU::Texture2D :: kInternalFormat_RGB32f, Dimensions.X, Dimensions.Y );
-	
-	std :: cout << "GL Error: " << glGetError () << std :: endl;
-	
-	AlbedoSpecularTexture.SetFiltering ( Xenon::GPU::Texture2D :: kMinimizingFilter_Nearest, Xenon::GPU::Texture2D :: kMagnificationFilter_Nearest );
-	NormalTexture.SetFiltering ( Xenon::GPU::Texture2D :: kMinimizingFilter_Nearest, Xenon::GPU::Texture2D :: kMagnificationFilter_Nearest );
-	PositionTexture.SetFiltering ( Xenon::GPU::Texture2D :: kMinimizingFilter_Nearest, Xenon::GPU::Texture2D :: kMagnificationFilter_Nearest );
-	
-	AlbedoSpecularTexture.SetWrapMode ( Xenon::GPU::Texture2D :: kWrapMode_EdgeClamp );
-	NormalTexture.SetWrapMode ( Xenon::GPU::Texture2D :: kWrapMode_EdgeClamp );
-	PositionTexture.SetWrapMode ( Xenon::GPU::Texture2D :: kWrapMode_EdgeClamp );
-	
-	std :: cout << "GL Error: " << glGetError () << std :: endl;
-	
-	GBuffer.Bind ();
-	
-	GBuffer.SetRenderTexture2D ( Xenon::GPU::FrameBuffer :: kOutputAttachment_ColorBuffer, 0, AlbedoSpecularTexture, 0 );
-	GBuffer.SetRenderTexture2D ( Xenon::GPU::FrameBuffer :: kOutputAttachment_ColorBuffer, 1, NormalTexture, 0 );
-	GBuffer.SetRenderTexture2D ( Xenon::GPU::FrameBuffer :: kOutputAttachment_ColorBuffer, 2, PositionTexture, 0 );
-	
-	std :: cout << "GL Error: " << glGetError () << std :: endl;
-	
-	std :: cout << "FrameBuffer Check: " << glCheckFramebufferStatus ( GL_FRAMEBUFFER ) << std :: endl;
-	
-	//GBuffer.SetRenderBuffer ( Xenon::GPU::FrameBuffer :: kOutputAttachment_DepthBuffer, 0, DepthBuffer );
-	
-	std :: cout << "GL Error: " << glGetError () << std :: endl;
-	
-	std :: cout << "FrameBuffer Check: " << glCheckFramebufferStatus ( GL_FRAMEBUFFER ) << std :: endl;
-	
-	glDrawBuffers ( 3, AttachmentList );
-	
-	std :: cout << "GL Error: " << glGetError () << std :: endl;
-	
-	std :: cout << "FrameBuffer Check: " << glCheckFramebufferStatus ( GL_FRAMEBUFFER ) << std :: endl;
-	
-	GBuffer.SetClearColor ( 0.0f, 0.0f, 0.0f, 0.0f );
-	
-	GBuffer.Clear ();
 	
 	if ( ! GeometryVShader.Compile ( true, false ) )
 		std :: cout << "DeferredModelRenderer :: GeometryVShader failed to compile:" << std :: endl << GeometryVShader.GetCompilationLog () << std :: endl;
@@ -445,21 +279,17 @@ void Red::Graphics::DeferredModelRenderer :: SetupRender ( Xenon::GPU :: FrameBu
 	if ( ! GeometryFShader.Compile ( true, false ) )
 		std :: cout << "DeferredModelRenderer :: GeometryFShader failed to compile:" << std :: endl << GeometryFShader.GetCompilationLog () << std :: endl;
 	
-	/*
-	GeometryFShader.Compile ( false, false );
-	GeometryFShader.Compile ( false, false );
-	*/
-	
 	GeometryProgram.AddShader ( GeometryVShader );
 	GeometryProgram.AddShader ( GeometryFShader );
 	
 	if ( ! GeometryProgram.Link () )
 		std :: cout << "DeferredModelRenderer :: GeometryProgram failed to compile: " << std :: endl << GeometryProgram.GetInfoLog () << std :: endl;
 	
-	GeometryProgram.Reference ();
-	
 	GeometryUniforms.SetProgram ( & GeometryProgram );
 	GeometryUniforms.Link ();
+	GeometryUniforms.UpdateUniforms ();
+	
+	//================================================================//
 	
 	// Set up lighting pass
 	
@@ -470,11 +300,6 @@ void Red::Graphics::DeferredModelRenderer :: SetupRender ( Xenon::GPU :: FrameBu
 	
 	if ( ! LightingFShader.Compile ( true, false ) )
 		std :: cout << "DeferredModelRenderer :: LightingFShader failed to compile:" << std :: endl << LightingFShader.GetCompilationLog () << std :: endl;
-	
-	/*
-	LightingVShader.Compile ( false, false );
-	LightingFShader.Compile ( false, false );
-	*/
 	
 	LightingProgram.AddShader ( LightingVShader );
 	LightingProgram.AddShader ( LightingFShader );
@@ -488,12 +313,11 @@ void Red::Graphics::DeferredModelRenderer :: SetupRender ( Xenon::GPU :: FrameBu
 	LightingUniforms.Link ();
 	LightingUniforms.UpdateUniforms ();
 	
-	RenderQuad -> FlushData ();
+	RenderQuad -> GPUResourceAlloc ();
 	RenderQuad -> BuildVertexArray ( LightingVAO );
+	RenderQuad -> FlushData ();
 	
-	AlbedoSpecularTexture.AssignToTextureUnit ( 0 );
-	NormalTexture.AssignToTextureUnit ( 1 );
-	PositionTexture.AssignToTextureUnit ( 2 );
+	LightingVAO.Build ();
 	
 }
 
@@ -502,16 +326,6 @@ void Red::Graphics::DeferredModelRenderer :: DestroyRender ()
 	
 	if ( ! GPUAllocated )
 		return;
-	
-	GBuffer.GPUResourceFree ();
-	
-	AlbedoSpecularTexture.GPUResourceFree ();
-	NormalTexture.GPUResourceFree ();
-	PositionTexture.GPUResourceFree ();
-	DepthBuffer.GPUResourceFree ();
-	
-	GeometryUniforms.SetProgram ( NULL );
-	GeometryUniforms.ResetUniformStates ();
 	
 	GeometryProgram.GPUResourceFree ();
 	GeometryVShader.GPUResourceFree ();
@@ -536,80 +350,81 @@ void Red::Graphics::DeferredModelRenderer :: DestroyRender ()
 void Red::Graphics::DeferredModelRenderer :: Render ()
 {
 	
-	// TODO: Implement and test
-	
-	GPUContext -> MakeCurrent ();
-	
-	//std :: cout << "1. GL Error: " << glGetError () << std :: endl;
-	
-	GBuffer.Bind ( Xenon::GPU::FrameBuffer :: kFrameBufferBindingFlag_ReadDraw );
-	GBuffer.Clear ();
-	
-	//std :: cout << "2. GL Error: " << glGetError () << std :: endl;
-	
-	GeometryProgram.Bind ();
-	
-	if ( ( ProjectionMatrixSource != NULL ) && ( ViewMatrixSource != NULL ) )
+	if ( ( ViewMatrixSource != NULL ) && ( ProjectionMatrixSource != NULL ) )
 	{
 		
-		if ( ( ProjectionMatrixSource -> GetIteration () > LastProjectionIteration ) || ( ViewMatrixSource -> GetIteration () > LastViewIteration ) )
-		{
-			
-			LastProjectionIteration = ProjectionMatrixSource -> GetIteration ();
-			LastViewIteration = ViewMatrixSource -> GetIteration ();
-			
-			new ( & ViewProjectionMatrix ) Xenon::Math :: Matrix4x4 ( ProjectionMatrixSource -> GetFloatArray () );
-			Xenon::Math::Matrix4x4 :: Append ( ViewProjectionMatrix, Xenon::Math :: Matrix4x4 ( ViewMatrixSource -> GetFloatArray () ) );
-			
-			ViewProjectionMatrixUniform.SetDirty ();
-			
-		}
+		Xenon::Math :: Matrix4x4 View ( ViewMatrixSource -> GetFloatArray () );
+		Xenon::Math :: Matrix4x4 Projection ( ProjectionMatrixSource -> GetFloatArray () );
+		
+		Xenon::Math::Matrix4x4 :: Copy ( ViewProjectionMatrix, Projection );
+		Xenon::Math::Matrix4x4 :: Append ( ViewProjectionMatrix, View );
+		
+		ViewProjectionUniformSource.SetDirty ();
 		
 	}
-	
-	GeometryUniforms.UpdateUniforms ();
-	
-	// For now, we'll just render each individual component to the output render target for debugging purposes.
-	
-	uint32_t DataSetLength = RenderDataSet.size ();
-	
-	for ( uint32_t I = 0; I < DataSetLength; I ++ )
-	{
-		
-		PerModelRenderData * RenderData = RenderDataSet [ I ];
-		
-		if ( ! RenderData -> RenderModel -> Visible )
-			continue;
-		
-		GPUAllocModelData ( RenderData );
-		
-		RenderData -> RenderModel -> Draw ();
-		
-	}
-	
-	// Now that all the items are rendered to the G-Buffers, we can do lighting rendering
-	
-	//std :: cout << "0. GL Error: " << glGetError () << std :: endl;
 	
 	GPUContext -> SetCullingEnabled ( false );
-	
-	//std :: cout << "1. GL Error: " << glGetError () << std :: endl;
+	GPUContext -> SetDepthTestEnabled ( false );
+	GPUContext -> SetFrontFace ( Xenon::GPU::Context :: kFrontFace_CounterClockwise );
+	GPUContext -> SetCullingFace ( Xenon::GPU::Context :: kCullingFace_Back );
+	GPUContext -> BlendFunc ( Xenon::GPU::Context :: kBlendFactor_SourceAlpha, Xenon::GPU::Context :: kBlendFactor_OneMinusSourceAlpha, Xenon::GPU::Context :: kBlendFactor_One, Xenon::GPU::Context :: kBlendFactor_Zero );
+	GPUContext -> BlendEquation ( Xenon::GPU::Context :: kBlendOperator_Add, Xenon::GPU::Context :: kBlendOperator_Add );
 	
 	RenderTarget -> Bind ();
 	
-	//std :: cout << "2. GL Error: " << glGetError () << std :: endl;
+	uint32_t ModelCount = RenderDataSet.size ();
+	
+	for ( uint32_t I = 0; I < ModelCount; I ++ )
+	{
+		
+		std :: cout << "0 GL ERROR: " << glGetError () << std :: endl;
+		
+		PerModelRenderData * RenderData = RenderDataSet [ I ];
+		
+		GPUAllocModelData ( RenderData );
+		
+		std :: cout << "1 GL ERROR: " << glGetError () << std :: endl;
+		
+		RenderData -> VArray.Bind ();
+		RenderData -> RenderModel -> FlushData ();
+		
+		std :: cout << "2 GL ERROR: " << glGetError () << std :: endl;
+		
+		GeometryProgram.Bind ();
+		
+		std :: cout << "3 GL ERROR: " << glGetError () << std :: endl;
+		
+		RenderData -> Uniforms.ResetUniformStates ();
+		RenderData -> Uniforms.UpdateUniforms ();
+		GeometryUniforms.UpdateUniforms ();
+		
+		std :: cout << "4 GL ERROR: " << glGetError () << std :: endl;
+		
+		RenderData -> RenderModel -> Draw ();
+		
+		std :: cout << "5 GL ERROR: " << glGetError () << std :: endl;
+		
+	}
+	
+	/*
+	
+	GPUContext -> SetCullingEnabled ( false );
+	GPUContext -> SetDepthTestEnabled ( false );
+	GPUContext -> SetFrontFace ( Xenon::GPU::Context :: kFrontFace_CounterClockwise );
+	GPUContext -> SetCullingFace ( Xenon::GPU::Context :: kCullingFace_Back );
+	GPUContext -> BlendFunc ( Xenon::GPU::Context :: kBlendFactor_SourceAlpha, Xenon::GPU::Context :: kBlendFactor_Zero, Xenon::GPU::Context :: kBlendFactor_One, Xenon::GPU::Context :: kBlendFactor_Zero );
+	GPUContext -> BlendEquation ( Xenon::GPU::Context :: kBlendOperator_Add, Xenon::GPU::Context :: kBlendOperator_Add );
+	
+	RenderTarget -> Bind ();
 	
 	LightingVAO.Bind ();
-	
-	//std :: cout << "3. GL Error: " << glGetError () << std :: endl;
-	
 	LightingProgram.Bind ();
 	
-	//std :: cout << "4. GL Error: " << glGetError () << std :: endl;
+	LightingUniforms.UpdateUniforms ();
 	
 	LightingDrawCall.Draw ();
 	
-	//std :: cout << "5. GL Error: " << glGetError () << std :: endl;
+	*/
 	
 }
 
@@ -622,10 +437,15 @@ void Red::Graphics::DeferredModelRenderer :: GPUAllocModelData ( PerModelRenderD
 	Data -> RenderModel -> GPUAlloc ();
 	
 	Data -> Uniforms.SetProgram ( & GeometryProgram );
-	Data -> VArray.SetProgram ( & GeometryProgram );
-	
 	Data -> RenderModel -> ApplyUniforms ( Data -> Uniforms );
+	Data -> Uniforms.Link ();
+	
+	Data -> VArray.GPUResourceAlloc ();
+	Data -> VArray.SetProgram ( & GeometryProgram );
 	Data -> RenderModel -> ApplyVertexData ( Data -> VArray );
+	Data -> VArray.Build ();
+	
+	Data -> GPUAllocated = true;
 	
 }
 
@@ -642,6 +462,8 @@ void Red::Graphics::DeferredModelRenderer :: GPUFreeModelData ( PerModelRenderDa
 	Data -> VArray.GPUResourceFree ();
 	
 	Data -> RenderModel -> GPUFree ();
+	
+	Data -> GPUAllocated = false;
 	
 }
 

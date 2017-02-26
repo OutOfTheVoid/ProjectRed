@@ -21,6 +21,8 @@ namespace Xenon
 		{
 		public:
 			
+			static const Matrix4x4 IDENTITY;
+			
 			enum NoInit
 			{
 				

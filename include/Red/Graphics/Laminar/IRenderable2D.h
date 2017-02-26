@@ -21,9 +21,7 @@ namespace Red
 				
 				virtual ~IRenderable2D () {};
 				
-				const RenderLayout & GetLayout ();
-				
-				
+				const RenderLayout & GetRenderLayout () const;
 				
 			}
 			

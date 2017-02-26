@@ -69,6 +69,8 @@ namespace Red
 			void ApplyUniforms ( Xenon::GPU :: UniformSet & TargetSet );
 			void ApplyVertexData ( Xenon::GPU :: VertexArray & Array );
 			
+			void FlushData ();
+			
 			void Draw ();
 			
 		private:
@@ -122,8 +124,6 @@ namespace Red
 			
 			void GPUAlloc ();
 			void GPUFree ();
-			
-			void FlushData ();
 			
 			DrawMethod Method;
 			

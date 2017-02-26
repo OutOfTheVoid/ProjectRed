@@ -57,7 +57,7 @@ namespace SDLX
 		static void ButtonEventInternal ( SDL_MouseButtonEvent * Event );
 		static void MotionEventInternal ( SDL_MouseMotionEvent * Event );
 		
-		class ButtonListenerCompare : public std :: unary_function <ButtonListenerStruct, bool>
+		class ButtonListenerCompare
 		{
 		public:
 			
@@ -79,7 +79,7 @@ namespace SDLX
 			
 		};
 		
-		class MotionListenerCompare : public std :: unary_function <MotionListenerStruct, bool>
+		class MotionListenerCompare
 		{
 		public:
 			

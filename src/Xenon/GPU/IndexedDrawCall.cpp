@@ -1,5 +1,7 @@
 #include <Xenon/GPU/IndexedDrawCall.h>
 
+#include <iostream>
+
 Xenon::GPU::IndexedDrawCall :: IndexedDrawCall ( DrawCall :: DrawMode Mode, GLuint ElementCount, IndexBuffer :: IndexType Type, void * IndexBufferOffset ):
 	RefCounted ( 0 ),
 	Mode ( Mode ),

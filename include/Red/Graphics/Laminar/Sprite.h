@@ -25,7 +25,7 @@ namespace Red
 				Sprite ( I2DTextureSource * Texture );
 				~Sprite ();
 				
-				const RenderLayout & GetRenderLayout ();
+				const RenderLayout & GetRenderLayout () const;
 				
 				Transform2D & GetTransform ();
 				

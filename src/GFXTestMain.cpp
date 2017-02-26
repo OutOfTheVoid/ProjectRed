@@ -100,6 +100,14 @@ struct RenderStruct_Struct
 	
 	Red::Graphics :: DeferredModelRenderer * Renderer;
 	
+	Red::Graphics :: Model * CubeModel;
+	
+	Xenon::Math :: Matrix4x4 ProjectionMatrix;
+	Xenon::Math :: RawMatrix4x4UniformSource * ProjectionMatrixSource;
+	
+	Xenon::Math :: Matrix4x4 ViewMatrix;
+	Xenon::Math :: RawMatrix4x4UniformSource * ViewMatrixSource;
+	
 	uint32_t Frame;
 	
 };
@@ -107,10 +115,21 @@ struct RenderStruct_Struct
 bool SetupScene ( RenderStruct & Data )
 {
 	
+	Data.ProjectionMatrixSource = new Xenon::Math::RawMatrix4x4UniformSource ( & Data.ProjectionMatrix, true );
+	Data.ProjectionMatrixSource -> Reference ();
+	Data.ViewMatrixSource = new Xenon::Math::RawMatrix4x4UniformSource ( & Data.ViewMatrix, true );
+	Data.ViewMatrixSource -> Reference ();
+	
+	Data.ViewMatrixSource -> SetDirty ();
+	Data.ProjectionMatrixSource -> SetDirty ();
+	
+	Xenon::Math::Matrix4x4 :: SetAsPerspectiveProjectionFieldOfView ( Data.ProjectionMatrix, 0.1, 10.0, 3.1415926 / 3, 4.0 / 3.0 );
+	
 	Data.Renderer = new Red::Graphics :: DeferredModelRenderer ();
 	Data.Renderer -> Reference ();
 	Data.Renderer -> Initialize ( Data.Cont );
-	Data.Renderer -> SetupRender ( Data.Cont -> GetDefaultFrameBuffer (), Xenon::Math :: Vec2 ( WINDOW_WIDTH_0, WINDOW_HEIGHT_0 ) );
+	Data.Renderer -> SetProjectionSource ( Data.ProjectionMatrixSource );
+	Data.Renderer -> SetViewSource ( Data.ViewMatrixSource );
 	
 	const Red::Graphics::Model :: ModelShaderConfigurationNames & ShaderConfigNames = Red::Graphics::DeferredModelRenderer :: GetShaderConfigurationNames ();
 	
@@ -127,19 +146,26 @@ bool SetupScene ( RenderStruct & Data )
 	Spec.ColorSpec.Static = true;
 	Spec.ColorSpec.FaceColors [ 0 ] = Spec.ColorSpec.FaceColors [ 1 ] = Spec.ColorSpec.FaceColors [ 2 ] = Spec.ColorSpec.FaceColors [ 3 ] = Spec.ColorSpec.FaceColors [ 4 ] = Spec.ColorSpec.FaceColors [ 5 ] = Xenon::Math :: Vec3 ( 1.0f, 1.0f, 1.0f );
 	
-	
-	
 	if ( Xenon::Geometry::Primitives :: GenerateCubeMesh ( & CubeMesh, Spec ) )
 	{
 		
-		Red::Graphics :: Model * CubeModel = new Red::Graphics :: Model ( CubeMesh, Red::Graphics::Model :: kDrawMethod_Single, ShaderConfigNames );
-		Data.Renderer -> AddModel ( CubeModel );
+		Data.CubeModel = new Red::Graphics :: Model ( CubeMesh, Red::Graphics::Model :: kDrawMethod_Single, ShaderConfigNames );
+		Data.Renderer -> AddModel ( Data.CubeModel );
+		
+		Xenon::Math::Matrix4x4 ModelTransform;
+		Xenon::Math::Matrix4x4 :: SetAsTranslation ( ModelTransform, 0.0, 0.0, - 2.0 );
+		
+		Data.CubeModel -> CopyModelTransform ( ModelTransform, 1 );
 		
 		std :: cout << "Cube model created!" << std :: endl;
 		
 	}
 	else
 		return false;
+	
+	Data.Frame = 0;
+	
+	Data.Renderer -> SetupRender ( Data.Cont -> GetDefaultFrameBuffer (), Xenon::Math :: Vec2 ( WINDOW_WIDTH_0, WINDOW_HEIGHT_0 ) );
 	
 	return true;
 	
@@ -161,8 +187,15 @@ void DestroyScene ( RenderStruct & Data )
 void Render ( RenderStruct & Data )
 {
 	
-	Data.Cont -> GetDefaultFrameBuffer () -> SetClearColor ( 1.0f, 0.0f, 0.0f, 1.0f );
+	Data.Cont -> GetDefaultFrameBuffer () -> SetClearColor ( 1.0f, 1.0f, 1.0f, 1.0f );
 	Data.Cont -> GetDefaultFrameBuffer () -> Clear ();
+	
+	Data.Frame ++;
+	
+	Xenon::Math::Matrix4x4 ModelTransform;
+	Xenon::Math::Matrix4x4 :: SetAsTranslation ( ModelTransform, 0.0, 0.0, sin ( static_cast <double> ( Data.Frame ) / 10.0 ) * 2.0 );
+	
+	Data.CubeModel -> CopyModelTransform ( ModelTransform, 1 );
 	
 	Data.Renderer -> Render ();
 	

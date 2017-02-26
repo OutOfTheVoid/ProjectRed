@@ -34,12 +34,12 @@ namespace Red
 				RenderLayout ( RenderMode Mode, bool ZSortRequired, const Xenon::Math :: Vec2 & SpriteArea, const Xenon::Math :: Vec2 & BaseCoordinateOffset );
 				~RenderLayout ();
 				
-				RenderMode GetRenderMode ();
+				RenderMode GetRenderMode () const;
 				
-				bool GetZSortRequired ();
+				bool GetZSortRequired () const;
 				
-				const Vec2 & GetSpriteArea ();
-				const Vec2 & GetBaseCoordinateOffset ();
+				const Vec2 & GetSpriteArea () const;
+				const Vec2 & GetBaseCoordinateOffset () const;
 				
 			private:
 				

@@ -901,9 +901,9 @@ void Red::Text::Rendering::ShadedRenderer :: RenderUnicodeString ( const std :: 
 	Xenon::Math::Matrix3x3 :: SetAsTranslation ( GlobalTransform, DeltaX, DeltaY );
 	Xenon::Math::Matrix3x3 :: Prepend ( GlobalTransform, ExternalGlobalTransform );
 	Xenon::Math::Matrix3x3 :: PrependScale ( GlobalTransform, ScalingFactorX, ScalingFactorY );
+	
 	GlobalTransformUniform.SetDirty ();
 	
-	Cont -> GetDefaultFrameBuffer () -> Clear ();
 	Cont -> SetCullingEnabled ( false );
 	Cont -> SetDepthTestEnabled ( DepthTesting );
 	Cont -> SetFrontFace ( Xenon::GPU::Context :: kFrontFace_Clockwise );

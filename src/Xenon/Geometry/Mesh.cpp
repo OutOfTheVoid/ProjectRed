@@ -259,9 +259,9 @@ void Xenon::Geometry::Mesh :: ConfigureIndexedDrawCall ( GPU :: IndexedDrawCall 
 {
 	
 	ToConfigure.SetDrawMode ( Mode );
-	ToConfigure.SetElementCount ( IndexBuff.GetIndexCount () );
+	ToConfigure.SetElementCount ( IndexCount );
 	ToConfigure.SetIndexType ( IndexBuff.GetIndexType () );
-	ToConfigure.SetIndexBufferOffset ( NULL );
+	ToConfigure.SetIndexBufferOffset ( 0 );
 	
 }
 
@@ -269,9 +269,9 @@ void Xenon::Geometry::Mesh :: ConfigureInstancedIndexedDrawCall ( GPU :: Instanc
 {
 	
 	ToConfigure.SetDrawMode ( Mode );
-	ToConfigure.SetElementCount ( IndexBuff.GetIndexCount () );
+	ToConfigure.SetElementCount ( IndexCount );
 	ToConfigure.SetIndexType ( IndexBuff.GetIndexType () );
-	ToConfigure.SetIndexBufferOffset ( NULL );
+	ToConfigure.SetIndexBufferOffset ( 0 );
 	ToConfigure.SetInstanceCount ( InstanceCount );
 	
 }

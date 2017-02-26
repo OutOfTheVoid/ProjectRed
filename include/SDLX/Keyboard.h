@@ -8,6 +8,7 @@
 
 #include <vector>
 #include <algorithm>
+#include <functional>
 
 // Keyboard: Represents the machine keyboard.
 

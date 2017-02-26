@@ -279,8 +279,6 @@ void Xenon::GPU::UniformSet :: AddBoolUniform ( const std :: string & Name, IBoo
 void Xenon::GPU::UniformSet :: ResetUniformStates ()
 {
 	
-	LastLinkIteration = - 1;
-	
 	uint32_t I = 0;
 	
 	for ( I = 0; I < FloatUniforms.size (); I ++ )

@@ -120,14 +120,6 @@ void Red::Graphics::Model :: GPUAlloc ()
 	
 	switch ( Method )
 	{
-		
-		case kDrawMethod_Single:
-		{
-			
-			
-			
-		}
-		break;
 			
 		case kDrawMethod_Instanced:
 		{
@@ -148,16 +140,10 @@ void Red::Graphics::Model :: GPUAlloc ()
 void Red::Graphics::Model :: GPUFree ()
 {
 	
+	ModelMesh -> GPUResourceFree ();
+	
 	switch ( Method )
 	{
-		
-		case kDrawMethod_Single:
-		{
-			
-			
-			
-		}
-		break;
 			
 		case kDrawMethod_Instanced:
 		{
@@ -182,14 +168,6 @@ void Red::Graphics::Model :: FlushData ()
 	
 	switch ( Method )
 	{
-		
-		case kDrawMethod_Single:
-		{
-			
-			
-			
-		}
-		break;
 		
 		case kDrawMethod_Instanced:
 		{
@@ -255,12 +233,21 @@ void Red::Graphics::Model :: SetInstanceCount ( uint32_t InstanceCount )
 			TransformData.Instanced -> InstancedModelTransforms = new Red::Util :: RCMem ( reinterpret_cast <void *> ( NewModelMatrixArray ), & DeleteMatrixArray );
 			TransformData.Instanced -> InstancedNormalTransforms = new Red::Util :: RCMem ( reinterpret_cast <void *> ( NewNormalMatrixArray ), & DeleteMatrixArray );
 			
+			bool GPUAllocated = TransformData.Instanced -> InstancedModelTransformData.GPUResourceAllocated ();
+			
 			TransformData.Instanced -> InstancedModelTransformData.~MeshAttributeData (); 
 			TransformData.Instanced -> InstancedNormalTransformData.~MeshAttributeData ();
 			
 			new ( & TransformData.Instanced -> InstancedModelTransformData ) Xenon::Geometry :: MeshAttributeData ( TransformData.Instanced -> InstancedModelTransforms, sizeof ( Xenon::Math::Matrix4x4 ) * InstanceCount, Xenon::GPU::VertexBuffer :: kUsageType_Dynamic_Draw, true );
 			new ( & TransformData.Instanced -> InstancedNormalTransformData ) Xenon::Geometry :: MeshAttributeData ( TransformData.Instanced -> InstancedNormalTransforms, sizeof ( Xenon::Math::Matrix4x4 ) * InstanceCount, Xenon::GPU::VertexBuffer :: kUsageType_Dynamic_Draw, true );
 			
+			if ( GPUAllocated )
+			{
+				
+				TransformData.Instanced -> InstancedModelTransformData.GPUResourceAlloc (); 
+				TransformData.Instanced -> InstancedNormalTransformData.GPUResourceAlloc ();
+				
+			}
 			
 			TransformData.Instanced -> InstanceCountAllocated = InstanceCount;
 			
@@ -286,6 +273,7 @@ void Red::Graphics::Model :: CopyModelTransform ( const Xenon::Math::Matrix4x4 &
 				return;
 			
 			Xenon::Math::Matrix4x4 :: Copy ( TransformData.Single -> NonIndexedModelTransform, CopyFrom );
+			TransformData.Single -> ModelTransformUniform.SetDirty ();
 			
 		}
 		break;
@@ -297,6 +285,7 @@ void Red::Graphics::Model :: CopyModelTransform ( const Xenon::Math::Matrix4x4 &
 				return;
 			
 			Xenon::Math::Matrix4x4 :: Copy ( reinterpret_cast <Xenon::Math :: Matrix4x4 *> ( TransformData.Instanced -> InstancedModelTransforms -> GetData () ) [ Index ], CopyFrom );
+			TransformData.Instanced -> InstancedModelTransformData.MarkDirty ();
 			
 		}
 		break;
@@ -321,6 +310,7 @@ void Red::Graphics::Model :: CopyNormalTransform ( const Xenon::Math::Matrix4x4 
 				return;
 			
 			Xenon::Math::Matrix4x4 :: Copy ( TransformData.Single -> NonIndexedNormalTransform, CopyFrom );
+			TransformData.Single -> NormalTransformUniform.SetDirty ();
 			
 		}
 		break;
@@ -332,6 +322,7 @@ void Red::Graphics::Model :: CopyNormalTransform ( const Xenon::Math::Matrix4x4 
 				return;
 			
 			Xenon::Math::Matrix4x4 :: Copy ( reinterpret_cast <Xenon::Math :: Matrix4x4 *> ( TransformData.Instanced -> InstancedNormalTransforms -> GetData () ) [ Index ], CopyFrom );
+			TransformData.Instanced -> InstancedNormalTransformData.MarkDirty ();
 			
 		}
 		break;
@@ -364,6 +355,7 @@ void Red::Graphics::Model :: ApplyUniforms ( Xenon::GPU :: UniformSet & TargetSe
 	}
 	
 	TargetSet.AddBoolUniform ( DoInstancedTransformUniformName, & DoInstancedTransformUniform );
+	TargetSet.AddBoolUniform ( DoColorTextureUniformName, & DoColorTextureUniform );
 	TargetSet.AddBoolUniform ( DoNormalTextureUniformName, & DoNormalTextureUniform );
 	
 }
@@ -371,8 +363,6 @@ void Red::Graphics::Model :: ApplyUniforms ( Xenon::GPU :: UniformSet & TargetSe
 void Red::Graphics::Model :: ApplyVertexData ( Xenon::GPU :: VertexArray & VArray )
 {
 	
-	
-	ModelMesh -> FlushVertexes ( false );
 	ModelMesh -> BuildVertexArray ( VArray );
 	
 	switch ( Method )

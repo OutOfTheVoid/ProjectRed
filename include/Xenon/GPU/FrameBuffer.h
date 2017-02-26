@@ -51,9 +51,9 @@ namespace Xenon
 			
 			void Bind ( FrameBufferBindingFlag FrameBuffers = kFrameBufferBindingFlag_ReadDraw );
 			
-			void SetClearColor ( GLfloat Red, GLfloat Green, GLfloat Blue, GLfloat Alpha = 1.0f );
-			void SetClearDepth ( GLfloat Depth );
-			void SetClearStencil ( GLint Value );
+			static void SetClearColor ( GLfloat Red, GLfloat Green, GLfloat Blue, GLfloat Alpha = 1.0f );
+			static void SetClearDepth ( GLfloat Depth );
+			static void SetClearStencil ( GLint Value );
 			
 			void Clear ( FrameBufferComponent Components = kFrameBufferComponent_Color | kFrameBufferComponent_Depth );
 			

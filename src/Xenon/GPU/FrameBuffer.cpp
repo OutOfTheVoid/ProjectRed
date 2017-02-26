@@ -133,16 +133,12 @@ void Xenon::GPU::FrameBuffer :: Bind ( FrameBufferBindingFlag FrameBuffers )
 void Xenon::GPU::FrameBuffer :: SetClearColor ( GLfloat Red, GLfloat Green, GLfloat Blue, GLfloat Alpha )
 {
 	
-	Bind ( kFrameBufferBindingFlag_Draw );
-	
 	glClearColor ( Red, Green, Blue, Alpha );
 	
 }
 
 void Xenon::GPU::FrameBuffer :: SetClearDepth ( GLfloat Depth )
 {
-	
-	Bind ( kFrameBufferBindingFlag_Draw );
 	
 	glClearDepth ( Depth );
 	
@@ -151,16 +147,12 @@ void Xenon::GPU::FrameBuffer :: SetClearDepth ( GLfloat Depth )
 void Xenon::GPU::FrameBuffer :: SetClearStencil ( GLint Value )
 {
 	
-	Bind ( kFrameBufferBindingFlag_Draw );
-	
 	glClearStencil ( Value );
 	
 }
 
 void Xenon::GPU::FrameBuffer :: Clear ( FrameBufferComponent Components )
 {
-	
-	Bind ( kFrameBufferBindingFlag_Draw );
 	
 	glClear ( Components );
 	
