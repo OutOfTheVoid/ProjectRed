@@ -11,6 +11,22 @@ namespace Red
 		
 		namespace Laminar
 		{
+			
+			typedef enum
+			{
+				
+				kRenderMode_Overlay,
+				kRenderMode_Add,
+				kRenderMode_Subtract,
+				kRenderMode_Multiply,
+				kRenderMode_Max,
+				kRenderMode_Min,
+				kRenderMode_Mask,
+				kRenderMode_NegativeMask,
+				kRenderMode_Default
+				
+			} RenderMode;
+			
 		}
 		
 	}

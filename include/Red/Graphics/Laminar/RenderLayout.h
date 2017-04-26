@@ -14,42 +14,31 @@ namespace Red
 		namespace Laminar
 		{
 			
+			class Renderer;
+			
 			class RenderLayout
 			{
 			public:
 				
-				typedef enum
-				{
-					
-					kRenderMode_Overlay = 0;
-					kRenderMode_Add = 1;
-					kRenderMode_Subtract = 2;
-					kRenderMode_Multiply = 3;
-					kRenderMode_Max = 4;
-					kRenderMode_Min = 5;
-					kRenderMode_Mask = 6;
-					
-				} RenderMode;
-				
-				RenderLayout ( RenderMode Mode, bool ZSortRequired, const Xenon::Math :: Vec2 & SpriteArea, const Xenon::Math :: Vec2 & BaseCoordinateOffset );
+				RenderLayout ( RenderMode Mode, const Xenon::Math :: Vec2 & SpriteArea, const Xenon::Math :: Vec2 & BaseCoordinateOffset );
+				RenderLayout ( const RenderLayout & Layout );
 				~RenderLayout ();
 				
 				RenderMode GetRenderMode () const;
 				
-				bool GetZSortRequired () const;
-				
-				const Vec2 & GetSpriteArea () const;
-				const Vec2 & GetBaseCoordinateOffset () const;
+				const Xenon::Math :: Vec2 & GetSpriteArea () const;
+				const Xenon::Math :: Vec2 & GetBaseCoordinateOffset () const;
 				
 			private:
 				
+				friend class Renderer;
+				
 				RenderMode Mode;
-				bool ZSortRequired;
 				
 				Xenon::Math :: Vec2 SpriteArea;
 				Xenon::Math :: Vec2 BaseCoordinateOffset;
 				
-			}
+			};
 			
 		}
 		

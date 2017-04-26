@@ -1,10 +1,16 @@
 #include <Red/Graphics/Laminar/RenderLayout.h>
 
-Red::Graphics::Laminar::RenderLayout :: RenderLayout ( RenderMode Mode, bool ZSortRequired, const Xenon::Math :: Vec2 & SpriteArea, const Xenon::Math :: Vec2 & BaseCoordinateOffset ):
+Red::Graphics::Laminar::RenderLayout :: RenderLayout ( RenderMode Mode, const Xenon::Math :: Vec2 & SpriteArea, const Xenon::Math :: Vec2 & BaseCoordinateOffset ):
 	Mode ( Mode ),
-	ZSortRequired ( ZSortRequired ),
 	SpriteArea ( SpriteArea ),
 	BaseCoordinateOffset ( BaseCoordinateOffset )
+{
+}
+
+Red::Graphics::Laminar::RenderLayout :: RenderLayout ( const RenderLayout & Layout ):
+	Mode ( Layout.Mode ),
+	SpriteArea ( Layout.SpriteArea ),
+	BaseCoordinateOffset ( Layout.BaseCoordinateOffset )
 {
 }
 
@@ -12,17 +18,10 @@ Red::Graphics::Laminar::RenderLayout :: ~RenderLayout ()
 {
 }
 
-Red::Graphics::Laminar::RenderLayout :: RenderMode Red::Graphics::Laminar::RenderLayout :: GetRenderMode () const
+Red::Graphics::Laminar :: RenderMode Red::Graphics::Laminar::RenderLayout :: GetRenderMode () const
 {
 	
 	return Mode;
-	
-}
-
-bool Red::Graphics::Laminar::RenderLayout :: GetZSortRequired () const
-{
-	
-	return ZSortRequired;
 	
 }
 

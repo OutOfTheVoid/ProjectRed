@@ -3,6 +3,7 @@
 
 #include <Red/Graphics/Laminar/Laminar.h>
 #include <Xenon/Math/Matrix3x3.h>
+#include <Red/Util/IRefCounted.h>
 
 namespace Red
 {
@@ -13,11 +14,11 @@ namespace Red
 		namespace Laminar
 		{
 			
-			class I2DTextureSource
+			class I2DTextureSource : public virtual Util :: IRefCounted
 			{
 			public:
 				
-				inline virtual ~IRenderable2DTextureSource () {};
+				inline virtual ~I2DTextureSource () {};
 				
 				virtual Xenon::GPU :: ITexture * GetOutputTexture () = 0;
 				virtual Xenon::Math :: Matrix3x3 * GetOutputTextureTransform () = 0;

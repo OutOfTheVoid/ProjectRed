@@ -47,9 +47,6 @@
 #include <Red/Events/IEvent.h>
 #include <Red/Events/BasicEvent.h>
 
-#include <Red/Graphics/DeferredModelRenderer.h>
-#include <Red/Graphics/Model.h>
-
 #include <Red/Threading/Thread.h>
 #include <Red/Threading/ThreadEvent.h>
 
@@ -98,10 +95,6 @@ struct RenderStruct_Struct
 	SDLX :: Window * Win;
 	SDLX :: Timer * RTimer;
 	
-	Red::Graphics :: DeferredModelRenderer * Renderer;
-	
-	Red::Graphics :: Model * CubeModel;
-	
 	Xenon::Math :: Matrix4x4 ProjectionMatrix;
 	Xenon::Math :: RawMatrix4x4UniformSource * ProjectionMatrixSource;
 	
@@ -125,63 +118,12 @@ bool SetupScene ( RenderStruct & Data )
 	
 	Xenon::Math::Matrix4x4 :: SetAsPerspectiveProjectionFieldOfView ( Data.ProjectionMatrix, 0.1, 10.0, 3.1415926 / 3, 4.0 / 3.0 );
 	
-	Data.Renderer = new Red::Graphics :: DeferredModelRenderer ();
-	Data.Renderer -> Reference ();
-	Data.Renderer -> Initialize ( Data.Cont );
-	Data.Renderer -> SetProjectionSource ( Data.ProjectionMatrixSource );
-	Data.Renderer -> SetViewSource ( Data.ViewMatrixSource );
-	
-	const Red::Graphics::Model :: ModelShaderConfigurationNames & ShaderConfigNames = Red::Graphics::DeferredModelRenderer :: GetShaderConfigurationNames ();
-	
-	Xenon::Geometry :: Mesh * CubeMesh = NULL;
-	
-	Xenon::Geometry::Primitives :: CubeSpec Spec;
-	Spec.WindOutwardFacesClockwise = false;
-	Spec.CompositionMode = Xenon::Geometry::Primitives :: kStaticAttributeCompositionMode_Interleaved;
-	Spec.Attributes = Xenon::Geometry::Primitives :: kAttributeFlags_Position | Xenon::Geometry::Primitives :: kAttributeFlags_Color | Xenon::Geometry::Primitives :: kAttributeFlags_Normal;
-	Xenon::Geometry::Primitives :: SetupRealCubeFaceNormalSpec ( Spec.NormalSpec, * ShaderConfigNames.NormalAttributeName, true );
-	Xenon::Geometry::Primitives :: SetupUnitCubeVertexPositionSpec ( Spec.PositionSpec, * ShaderConfigNames.PositionAttributeName, true );
-	Spec.ColorSpec.Layout = Xenon::Geometry::Primitives::CubeColorSpec :: kColorLayout_Face;
-	Spec.ColorSpec.AttributeName = * ShaderConfigNames.ColorAttributeName;
-	Spec.ColorSpec.Static = true;
-	Spec.ColorSpec.FaceColors [ 0 ] = Spec.ColorSpec.FaceColors [ 1 ] = Spec.ColorSpec.FaceColors [ 2 ] = Spec.ColorSpec.FaceColors [ 3 ] = Spec.ColorSpec.FaceColors [ 4 ] = Spec.ColorSpec.FaceColors [ 5 ] = Xenon::Math :: Vec3 ( 1.0f, 1.0f, 1.0f );
-	
-	if ( Xenon::Geometry::Primitives :: GenerateCubeMesh ( & CubeMesh, Spec ) )
-	{
-		
-		Data.CubeModel = new Red::Graphics :: Model ( CubeMesh, Red::Graphics::Model :: kDrawMethod_Single, ShaderConfigNames );
-		Data.Renderer -> AddModel ( Data.CubeModel );
-		
-		Xenon::Math::Matrix4x4 ModelTransform;
-		Xenon::Math::Matrix4x4 :: SetAsTranslation ( ModelTransform, 0.0, 0.0, - 2.0 );
-		
-		Data.CubeModel -> CopyModelTransform ( ModelTransform, 1 );
-		
-		std :: cout << "Cube model created!" << std :: endl;
-		
-	}
-	else
-		return false;
-	
-	Data.Frame = 0;
-	
-	Data.Renderer -> SetupRender ( Data.Cont -> GetDefaultFrameBuffer (), Xenon::Math :: Vec2 ( WINDOW_WIDTH_0, WINDOW_HEIGHT_0 ) );
-	
 	return true;
 	
 }
 
 void DestroyScene ( RenderStruct & Data )
 {
-	
-	if ( Data.Renderer != NULL )
-	{
-		
-		Data.Renderer -> DestroyRender ();
-		Data.Renderer -> Dereference ();
-		
-	}
-	
 }
 
 void Render ( RenderStruct & Data )
@@ -194,10 +136,6 @@ void Render ( RenderStruct & Data )
 	
 	Xenon::Math::Matrix4x4 ModelTransform;
 	Xenon::Math::Matrix4x4 :: SetAsTranslation ( ModelTransform, 0.0, 0.0, sin ( static_cast <double> ( Data.Frame ) / 10.0 ) * 2.0 );
-	
-	Data.CubeModel -> CopyModelTransform ( ModelTransform, 1 );
-	
-	Data.Renderer -> Render ();
 	
 }
 
@@ -365,7 +303,6 @@ void KeyListener ( int32_t ScanCode, int32_t KeyCode, bool Down, void * Data )
 			reinterpret_cast <KeyboardStruct *> ( Data ) -> Resized = false;
 			reinterpret_cast <KeyboardStruct *> ( Data ) -> RenderData -> Win -> Resize ( WINDOW_WIDTH_0, WINDOW_HEIGHT_0 );
 			glViewport ( 0, 0, WINDOW_WIDTH_0, WINDOW_HEIGHT_0 );
-			reinterpret_cast <KeyboardStruct *> ( Data ) -> RenderData -> Renderer -> SetupRender ( reinterpret_cast <KeyboardStruct *> ( Data ) -> RenderData -> Cont -> GetDefaultFrameBuffer (), Xenon::Math :: Vec2 ( WINDOW_WIDTH_0, WINDOW_HEIGHT_0 ) );
 			
 		}
 		else
@@ -374,7 +311,6 @@ void KeyListener ( int32_t ScanCode, int32_t KeyCode, bool Down, void * Data )
 			reinterpret_cast <KeyboardStruct *> ( Data ) -> Resized = true;
 			reinterpret_cast <KeyboardStruct *> ( Data ) -> RenderData -> Win -> Resize ( WINDOW_WIDTH_1, WINDOW_HEIGHT_1 );
 			glViewport ( 0, 0, WINDOW_WIDTH_1, WINDOW_HEIGHT_1 );
-			reinterpret_cast <KeyboardStruct *> ( Data ) -> RenderData -> Renderer -> SetupRender ( reinterpret_cast <KeyboardStruct *> ( Data ) -> RenderData -> Cont -> GetDefaultFrameBuffer (), Xenon::Math :: Vec2 ( WINDOW_WIDTH_1, WINDOW_HEIGHT_1 ) );
 			
 		}
 		

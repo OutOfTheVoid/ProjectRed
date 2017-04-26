@@ -18,27 +18,37 @@ namespace Red
 		namespace Laminar
 		{
 			
+			class Renderer;
+			
 			class Sprite
 			{
 			public:	
 				
-				Sprite ( I2DTextureSource * Texture );
+				Sprite ( I2DTextureSource * TextureSource, const RenderLayout & Layout ); // 1:15:19
 				~Sprite ();
 				
 				const RenderLayout & GetRenderLayout () const;
+				RenderLayout & GetRenderLayout ();
 				
-				Transform2D & GetTransform ();
+				const Xenon::Math :: Transform2D & GetTransform () const;
+				Xenon::Math :: Transform2D & GetTransform ();
 				
-				int32_t GetZ ();
+				I2DTextureSource * GetTextureSource () const;
 				
 			private:
 				
-				Transform2D Transform;
-				int32_t Z;
+				friend class Renderer;
+				
+				Xenon::Math :: Transform2D Transform;
 				
 				I2DTextureSource * TextureSource;
 				
-				RenderLayout Layout ();
+				RenderLayout Layout;
+				
+				Sprite * Next;
+				Sprite * Last;
+				Renderer * RenderInstance;
+				uint32_t Layer;
 				
 			};
 			
