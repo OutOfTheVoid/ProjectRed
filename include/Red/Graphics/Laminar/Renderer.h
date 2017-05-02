@@ -9,6 +9,9 @@
 #include <Xenon/GPU/VertexArray.h>
 #include <Xenon/GPU/VertexBuffer.h>
 #include <Xenon/GPU/IndexBuffer.h>
+#include <Xenon/GPU/VertexShader.h>
+#include <Xenon/GPU/FragmentShader.h>
+#include <Xenon/GPU/ShaderProgram.h>
 
 #include <vector>
 
@@ -25,10 +28,12 @@ namespace Red
 			{
 			public:
 				
-				Renderer ( uint32_t TargetWidth, uint32_t TargetHeight, uint32_t InitialLayerCount = 100, bool DefaultMaskModeCleared = true );
+				Renderer ( Xenon::GPU::Context * RenderContext, uint32_t TargetWidth, uint32_t TargetHeight, uint32_t InitialLayerCount = 100, bool DefaultMaskModeCleared = true, bool OrphanGeometry = true );
 				~Renderer ();
 				
 				void SetRenderTarget ( Xenon::GPU :: FrameBuffer * TargetBuffer );
+				
+				void Resize ( uint32_t TargetWidth, uint32_t TargetHeight );
 				
 				// Note: Calling AddSprite on a sprite that has already been added will just move it to the selected layer, rather than duplicate it.
 				void AddSprite ( Sprite * Instance, uint32_t Layer );
@@ -41,19 +46,33 @@ namespace Red
 				
 				void Render ();
 				
-			private:
+				//void Destroy ();
 				
-				void SetupGPUResources ();
-				void FreeGPUResources ();
+			private:
 				
 				typedef struct LayerModeGeometry_Struct
 				{
 					
-					LayerModeGeometry_Struct ();
+					LayerModeGeometry_Struct ( uint32_t MinElementCount );
 					~LayerModeGeometry_Struct ();
 					
+					void SizeTo ( uint32_t ElementCount );
+					
 					Xenon::GPU :: VertexBuffer TransformBuff;
+					uint32_t TransformBufferSize;
+					
+					uint32_t TransformArraySize;
+					uint32_t TransformArrayBufferSize;
+					
+					Xenon::Math :: Matrix3x3 * TransformArray;
+					int64_t * TransformIterationList;
+					Sprite ** TransformSourceList;
+					
 					Xenon::GPU :: VertexArray VArray;
+					
+					Xenon::GPU :: InstancedIndexedDrawCall DrawCall;
+					
+					bool Dirty;
 					
 				} LayerModeGeometry;
 				
@@ -62,31 +81,50 @@ namespace Red
 					
 					Sprite * OverlayListHead;
 					uint32_t OverlayListLength;
+					LayerModeGeometry * OverlayListGeometry;
 					
 					Sprite * AddListHead;
 					uint32_t AddListLength;
+					LayerModeGeometry * AddListGeometry;
 					
 					Sprite * SubtractListHead;
 					uint32_t SubtractListLength;
+					LayerModeGeometry * SubtractListGeometry;
 					
 					Sprite * MultiplyListHead;
 					uint32_t MultiplyListLength;
+					LayerModeGeometry * MultiplyListGeometry;
 					
 					Sprite * MaxListHead;
 					uint32_t MaxListLength;
+					LayerModeGeometry * MaxListGeometry;
 					
 					Sprite * MinListHead;
 					uint32_t MinListLength;
+					LayerModeGeometry * MinListGeometry;
 					
 					Sprite * MaskListHead;
 					uint32_t MaskListLength;
+					LayerModeGeometry * MaskListGeometry;
 					
 					Sprite * NegativeMaskListHead;
 					uint32_t NegativeMaskListLength;
+					LayerModeGeometry * NegativeMaskListGeometry;
 					
 					bool ClearMasked;
 					
 				} RenderLayer;
+				
+				void SetupGPUResources ();
+				void FreeGPUResources ();
+				
+				void PrepGeometry ();
+				void UpdateGeometry ();
+				
+				void PrepGeometryList ( LayerModeGeometry *& GeometryPTR, Sprite * ListHead, uint32_t ListLength, ShaderProgram * Program );
+				void UpdateGeometryBuffers ( LayerModeGeometry & Geometry );
+				
+				Xenon::GPU :: Context * RenderContext;
 				
 				bool DefaultMaskModeCleared;
 				
@@ -103,11 +141,24 @@ namespace Red
 				Xenon::GPU :: IndexBuffer QuadIBuff;
 				Xenon::GPU :: VertexBuffer QuadVBuff;
 				
+				static const char * kQuadVShader_String;
+				Xenon::GPU :: VertexShader QuadVShader;
+				
+				static const char * kMaskFShader_String;
+				Xenon::GPU :: FragmentShader MaskFShader;
+				Xenon::GPU :: ShaderProgram MaskProgram;
+				
+				static const char * kColorFShader_String;
+				Xenon::GPU :: FragmentShader ColorFShader;
+				Xenon::GPU :: ShaderProgram ColorProgram;
+				
 				bool Running;
 				bool GPUAlloc;
 				
 				uint32_t TargetWidth;
 				uint32_t TargetHeight;
+				
+				bool OrphanGeometry;
 				
 			};
 			

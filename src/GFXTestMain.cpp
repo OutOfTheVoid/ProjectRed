@@ -3,62 +3,21 @@
 
 #include <SDLX/Lib.h>
 #include <SDLX/Window.h>
-#include <SDLX/Surface.h>
 #include <SDLX/GLContext.h>
 #include <SDLX/Timer.h>
 #include <SDLX/UserEvent.h>
 #include <SDLX/Keyboard.h>
 #include <SDLX/Mouse.h>
 
-#include <Xenon/GPU/GLInclude.h>
 #include <Xenon/GPU/Context.h>
-#include <Xenon/GPU/VertexShader.h>
-#include <Xenon/GPU/FragmentShader.h>
-#include <Xenon/GPU/ShaderProgram.h>
-#include <Xenon/GPU/VertexBuffer.h>
-#include <Xenon/GPU/IndexBuffer.h>
-#include <Xenon/GPU/VertexArray.h>
-#include <Xenon/GPU/Texture2D.h>
-#include <Xenon/GPU/FrameBuffer.h>
-#include <Xenon/GPU/UniformSet.h>
 
-#include <Xenon/Math/Vec3.h>
-#include <Xenon/Math/Matrix4x4.h>
-#include <Xenon/Math/Matrix3x3.h>
-#include <Xenon/Math/Quaternion.h>
-#include <Xenon/Math/Transform3D.h>
-#include <Xenon/Math/RawFloatUniformSource.h>
-#include <Xenon/Math/RawMatrix4x4UniformSource.h>
-#include <Xenon/Math/RawMatrix3x3UniformSource.h>
-#include <Xenon/Math/ConstantIntUniformSource.h>
-
-#include <Xenon/Geometry/Mesh.h>
-#include <Xenon/Geometry/Primitives.h>
+#include <Xenon/Math/Transform2D.h>
 
 #include <RAUX/PNGFile.h>
 #include <RAUX/VertexShaderFile.h>
 #include <RAUX/FragmentShaderFile.h>
 
-#include <Red/Util/Function.h>
-#include <Red/Util/MethodObjectParameterClosure.h>
-
-#include <Red/Events/IEventDispatcher.h>
-#include <Red/Events/EventDispatcher.h>
-#include <Red/Events/IEvent.h>
-#include <Red/Events/BasicEvent.h>
-
-#include <Red/Threading/Thread.h>
-#include <Red/Threading/ThreadEvent.h>
-
-#include <Red/Text/Rendering/RawFontTextureAtlas.h>
-#include <Red/Text/Rendering/FontRenderData.h>
-#include <Red/Text/Rendering/FreeType/FTLibrary.h>
-#include <Red/Text/Rendering/FreeType/FontFace.h>
-#include <Red/Text/Rendering/FreeType/FreeTypeFontRenderData.h>
-#include <Red/Text/Rendering/ShadedRenderer.h>
-
-#include <thread>
-#include <chrono>
+#include <Red/Graphics/Laminar/Renderer.h>
 
 #include <math.h>
 
@@ -95,11 +54,7 @@ struct RenderStruct_Struct
 	SDLX :: Window * Win;
 	SDLX :: Timer * RTimer;
 	
-	Xenon::Math :: Matrix4x4 ProjectionMatrix;
-	Xenon::Math :: RawMatrix4x4UniformSource * ProjectionMatrixSource;
-	
-	Xenon::Math :: Matrix4x4 ViewMatrix;
-	Xenon::Math :: RawMatrix4x4UniformSource * ViewMatrixSource;
+	Red::Graphics::Laminar :: Renderer * Renderer;
 	
 	uint32_t Frame;
 	
@@ -108,15 +63,10 @@ struct RenderStruct_Struct
 bool SetupScene ( RenderStruct & Data )
 {
 	
-	Data.ProjectionMatrixSource = new Xenon::Math::RawMatrix4x4UniformSource ( & Data.ProjectionMatrix, true );
-	Data.ProjectionMatrixSource -> Reference ();
-	Data.ViewMatrixSource = new Xenon::Math::RawMatrix4x4UniformSource ( & Data.ViewMatrix, true );
-	Data.ViewMatrixSource -> Reference ();
+	Data.Renderer = new Red::Graphics::Laminar :: Renderer ( Data.Cont, WINDOW_WIDTH_0, WINDOW_HEIGHT_0 );
 	
-	Data.ViewMatrixSource -> SetDirty ();
-	Data.ProjectionMatrixSource -> SetDirty ();
-	
-	Xenon::Math::Matrix4x4 :: SetAsPerspectiveProjectionFieldOfView ( Data.ProjectionMatrix, 0.1, 10.0, 3.1415926 / 3, 4.0 / 3.0 );
+	Data.Renderer -> SetRenderTarget ( Data.Cont -> GetDefaultFrameBuffer () );
+	Data.Renderer -> Begin ();
 	
 	return true;
 	
@@ -124,6 +74,9 @@ bool SetupScene ( RenderStruct & Data )
 
 void DestroyScene ( RenderStruct & Data )
 {
+	
+	Data.Renderer -> End ();
+	
 }
 
 void Render ( RenderStruct & Data )
@@ -133,9 +86,6 @@ void Render ( RenderStruct & Data )
 	Data.Cont -> GetDefaultFrameBuffer () -> Clear ();
 	
 	Data.Frame ++;
-	
-	Xenon::Math::Matrix4x4 ModelTransform;
-	Xenon::Math::Matrix4x4 :: SetAsTranslation ( ModelTransform, 0.0, 0.0, sin ( static_cast <double> ( Data.Frame ) / 10.0 ) * 2.0 );
 	
 }
 
@@ -302,6 +252,7 @@ void KeyListener ( int32_t ScanCode, int32_t KeyCode, bool Down, void * Data )
 			
 			reinterpret_cast <KeyboardStruct *> ( Data ) -> Resized = false;
 			reinterpret_cast <KeyboardStruct *> ( Data ) -> RenderData -> Win -> Resize ( WINDOW_WIDTH_0, WINDOW_HEIGHT_0 );
+			reinterpret_cast <KeyboardStruct *> ( Data ) -> RenderData -> Renderer -> Resize ( WINDOW_WIDTH_0, WINDOW_HEIGHT_0 );
 			glViewport ( 0, 0, WINDOW_WIDTH_0, WINDOW_HEIGHT_0 );
 			
 		}
@@ -310,6 +261,7 @@ void KeyListener ( int32_t ScanCode, int32_t KeyCode, bool Down, void * Data )
 			
 			reinterpret_cast <KeyboardStruct *> ( Data ) -> Resized = true;
 			reinterpret_cast <KeyboardStruct *> ( Data ) -> RenderData -> Win -> Resize ( WINDOW_WIDTH_1, WINDOW_HEIGHT_1 );
+			reinterpret_cast <KeyboardStruct *> ( Data ) -> RenderData -> Renderer -> Resize ( WINDOW_WIDTH_1, WINDOW_HEIGHT_1 );
 			glViewport ( 0, 0, WINDOW_WIDTH_1, WINDOW_HEIGHT_1 );
 			
 		}
@@ -340,7 +292,9 @@ void DrawEventPush ( SDLX :: Timer * Source, void * Data )
 	
 	if ( TimerLock )
 		TimerLock -> Lock ();
+	
 	Source -> Stop ();
+	
 	if ( TimerLock )
 		TimerLock -> Unlock ();
 	
@@ -370,8 +324,10 @@ void DrawEvent ( SDL_UserEvent * Event )
 	
 	if ( TimerLock )
 		TimerLock -> Lock ();
+	
 	RData -> RTimer -> Stop ();
 	RData -> RTimer -> Start ( 1000 / 120 );
+	
 	if ( TimerLock )
 		TimerLock -> Unlock ();
 	
