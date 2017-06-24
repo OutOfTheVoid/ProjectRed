@@ -235,9 +235,9 @@ void Xenon::Math::Transform2D :: Flush ()
 	
 }
 
-Xenon::GPU :: IMatrix3x3UniformSource & Xenon::Math::Transform2D :: GetTransformUniformSource ()
+Xenon::GPU :: IMatrix3x3UniformSource * Xenon::Math::Transform2D :: GetTransformUniformSource ()
 {
 	
-	return MatrixSource;
+	return & MatrixSource;
 	
 }

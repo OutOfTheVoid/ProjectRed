@@ -101,7 +101,7 @@ void Xenon::GPU::VertexArray :: AddFPAttribute ( const std :: string & Name, GLi
 	Attribute.AttributeOffset = AttributeOffset;
 	
 	if ( Program != NULL )
-		Attribute.AttributeLocation = Program -> GetAttributeLocation ( Name.c_str () ) + AttributeOffset;
+		Attribute.AttributeLocation = Program -> GetAttributeLocation ( Name.c_str () );
 	else
 		Attribute.AttributeLocation = 0;
 	
@@ -125,7 +125,7 @@ void Xenon::GPU::VertexArray :: AddIntegerAttribute ( const std :: string & Name
 	Attribute.AttributeOffset = AttributeOffset;
 	
 	if ( Program != NULL )
-		Attribute.AttributeLocation = Program -> GetAttributeLocation ( Name.c_str () ) + AttributeOffset;
+		Attribute.AttributeLocation = Program -> GetAttributeLocation ( Name.c_str () );
 	else
 		Attribute.AttributeLocation = 0;
 	

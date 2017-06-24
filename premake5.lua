@@ -7,7 +7,9 @@ workspace "ProjectRed"
 	includedirs "include"
 	
 	filter "system:macosx"
-	
+		
+		toolset "clang"
+		
 		buildoptions "-std=c++11 -F/Library/Frameworks"
 		
 		includedirs { "/opt/local/include", "/opt/local/include/freetype2", "include" }
@@ -20,6 +22,8 @@ workspace "ProjectRed"
 		linkoptions "-stdlib=libc++"
 		
 	filter "system:linux"
+		
+		toolset "clang"
 		
 		buildoptions "-std=c++11"
 		includedirs "/usr/include/freetype2/"
@@ -44,12 +48,16 @@ workspace "ProjectRed"
 	
 	filter "configurations:Release"
 		
+		defines { "RELEASE" }
+		
 		optimize "Full"
 		flags { "LinkTimeOptimization" }
 		
 	filter "configurations:Debug"
 		
-		defines { "RED_DEBUG" }
+		symbols "On"
+		
+		defines { "RED_DEBUG", "DEBUG" }
 	
 	filter {}
 	

@@ -10,6 +10,16 @@ Xenon::GPU::InstancedIndexedDrawCall :: InstancedIndexedDrawCall ( DrawCall :: D
 {
 }
 
+Xenon::GPU::InstancedIndexedDrawCall :: InstancedIndexedDrawCall ( DrawCall :: DrawMode Mode, IndexBuffer & ForBuffer, GLuint InstanceCount, void * IndexBufferOffset ):
+	RefCounted ( 0 ),
+	Mode ( Mode ),
+	ElementCount ( ForBuffer.GetIndexCount () ),
+	Type ( ForBuffer.GetIndexType () ),
+	InstanceCount ( InstanceCount ),
+	IndexBufferOffset ( IndexBufferOffset )
+{
+}
+
 Xenon::GPU::InstancedIndexedDrawCall :: InstancedIndexedDrawCall ( NoInit NO_INIT ):
 	RefCounted ( 0 ),
 	Mode ( DrawCall :: kDrawMode_Point ),
@@ -65,7 +75,8 @@ void Xenon::GPU::InstancedIndexedDrawCall :: SetInstanceCount ( GLuint InstanceC
 void Xenon::GPU::InstancedIndexedDrawCall :: Draw ()
 {
 	
-	glDrawElementsInstanced ( Mode, ElementCount, Type, IndexBufferOffset, InstanceCount );
+	if ( InstanceCount != 0 )
+		glDrawElementsInstanced ( Mode, ElementCount, Type, IndexBufferOffset, InstanceCount );
 	
 }
 

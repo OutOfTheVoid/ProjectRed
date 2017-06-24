@@ -45,11 +45,11 @@ namespace Xenon
 			
 			const Matrix3x3 & ReadMatrix ();
 			
-			GPU :: IMatrix3x3UniformSource & GetTransformUniformSource ();
+			GPU :: IMatrix3x3UniformSource * GetTransformUniformSource ();
 			
 		private:
 			
-			class InternalMatrix3x3UniformSource : public GPU :: IMatrix3x3UniformSource
+			class InternalMatrix3x3UniformSource : public virtual GPU :: IMatrix3x3UniformSource
 			{
 			public:
 				

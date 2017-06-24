@@ -16,16 +16,14 @@ const GLchar * Red::Graphics::Laminar::Renderer :: kQuadVShader_String =
 "layout (location = 0) in vec2 Vertex;\n"
 "layout (location = 1) in mat3 Transform;\n"
 
-"uniform mat3 GlobalTransform;\n"
-
 "out vec2 TexturePosition;\n"
 
 "void main ()\n"
 "{\n"
 
-"	TexturePosition = ( Vertex + vec2 ( 1.0f, 1.0f ) ) * 0.5f;\n"
+"	TexturePosition = ( ( Vertex + vec2 ( 1.0, 1.0 ) ) * 0.5 ).xy;\n"
 
-"	gl_Position = vec4 ( GlobalTransform * Transform * vec3 ( Vertex, 0.0 ), 1.0 );\n"
+"	gl_Position = vec4 ( vec3 ( Vertex, 0.0 ) * Transform, 1.0 );\n"
 
 "}\n";
 
@@ -34,14 +32,15 @@ const GLchar * Red::Graphics::Laminar::Renderer :: kMaskFShader_String =
 
 "in vec2 TexturePosition;\n"
 
-"out float MaskOutput;\n"
+"out vec4 MaskOutput;\n"
 
-"uniform sampler2D MaskTexture;\n"
+//"uniform sampler2D MaskTexture;\n"
 
 "void main ()\n"
 "{\n"
-	
-"	MaskOutput = texture ( MaskTexture, TexturePosition ).r;\n"
+//"	MaskOutput = texture ( MaskTexture, TexturePosition ).r"	
+//"	MaskOutput = vec4 ( texture ( MaskTexture, TexturePosition ).r, 0.0, 0.0, 1.0 );\n"
+"	MaskOutput = vec4 ( TexturePosition.x, TexturePosition.y, 1.0, 1.0 );\n"
 	
 "}\n";
 
@@ -52,12 +51,13 @@ const GLchar * Red::Graphics::Laminar::Renderer :: kColorFShader_String =
 
 "out vec4 ColorOutput;\n"
 
-"uniform sampler2D ColorTexture;\n"
+//"uniform sampler2D ColorTexture;\n"
 
 "void main ()\n"
 "{\n"
 	
-"	ColorOutput = texture ( ColorTexture, TexturePosition );\n"
+//"	ColorOutput = texture ( ColorTexture, TexturePosition );\n"
+"	ColorOutput = vec4 ( 0.0, 0.0, 1.0, 1.0 );\n"
 	
 "}\n";
 
@@ -88,9 +88,7 @@ Red::Graphics::Laminar::Renderer :: Renderer ( Xenon::GPU::Context * RenderConte
 	TargetWidth ( TargetWidth ),
 	TargetHeight ( TargetHeight ),
 	
-	OrphanGeometry ( OrphanGeometry ),
-	
-	SpriteListDrawCall ( Xenon::GPU::DrawCall :: kDrawMode_Triangle, 6, Xenon::GPU::IndexBuffer :: kIndexType_UBytes, NULL )
+	OrphanGeometry ( OrphanGeometry )
 {
 	
 	for ( uint32_t I = 0; I < InitialLayerCount; I ++ )
@@ -160,46 +158,85 @@ inline uint32_t NextPowerOfTwo ( uint32_t X )
 
 Red::Graphics::Laminar::Renderer :: ~Renderer ()
 {
+	
+	for ( uint32_t I = 0; I < Layers.size (); I ++ )
+	{
+		
+		delete Layers [ I ];
+		
+	}
+	
+	QuadVShader.GPUResourceFree ();
+	MaskFShader.GPUResourceFree ();
+	ColorFShader.GPUResourceFree ();
+	
 }
 
-Red::Graphics::Laminar::Renderer::LayerModeGeometry_Struct :: LayerModeGeometry_Struct ( uint32_t MinElementCount ):
+Red::Graphics::Laminar::Renderer::LayerModeGeometry_Struct :: LayerModeGeometry_Struct ( uint32_t MinElementCount, Xenon::GPU :: IndexBuffer * QuadBuffer ):
 	TransformBuff ( Xenon::GPU::VertexBuffer :: kUsageType_Dynamic_Draw ),
 	TransformBufferSize ( 0 ),
 	TransformArraySize ( 0 ),
 	TransformArrayBufferSize ( NextPowerOfTwo ( MinElementCount ) > LAMINAR_RENDERER_DEFAULT_GEOMETRY_BUFFER_ALLOC ?  NextPowerOfTwo ( MinElementCount ) : LAMINAR_RENDERER_DEFAULT_GEOMETRY_BUFFER_ALLOC ),
+	TextureUseRecords (),
+	TextureIndexArray ( new uint32_t [ TransformArrayBufferSize ] ),
 	TransformArray ( new Xenon::Math :: Matrix3x3 [ TransformArrayBufferSize ] ),
 	TransformIterationList ( new int64_t [ TransformArrayBufferSize ] ),
 	TransformSourceList ( new Sprite * [ TransformArrayBufferSize ] ),
 	VArray (),
-	Dirty ( true ),
-	DrawCall ( Xenon::GPU::DrawCall :: kDrawMode_Triangle, 6, Xenon::GPU::IndexBuffer :: kIndexType_UBytes, 0, NULL )
+	DrawCall ( Xenon::GPU::DrawCall :: kDrawMode_Triangle, * QuadBuffer, 0 ),
+	Dirty ( true )
 {
+	
+	for ( uint32_t I = 0; I < MinElementCount; I ++ )
+	{
+		
+		TransformIterationList [ I ] = 0;
+		TransformSourceList [ I ] = NULL;
+		TextureIndexArray [ I ] = 0xFFFFFFFF;
+		
+	}
+	
 }
 
 Red::Graphics::Laminar::Renderer::LayerModeGeometry_Struct :: ~LayerModeGeometry_Struct ()
 {
 	
-	delete[] TransformArray;
-	delete[] TransformIterationList;
-	delete[] TransformSourceList;
+	delete [] TextureIndexArray;
+	delete [] TransformArray;
+	delete [] TransformIterationList;
+	delete [] TransformSourceList;
 	
 }
 
 void Red::Graphics::Laminar::Renderer::LayerModeGeometry_Struct :: SizeTo ( uint32_t ElementCount )
 {
 	
-	if ( TransformArraySize >= ElementCount )
+	if ( TransformArrayBufferSize >= ElementCount )
 		return;
 	
 	uint32_t NewSize = NextPowerOfTwo ( ElementCount );
 	
+	uint32_t * TextureIndexArray = new uint32_t [ NewSize ];
 	Xenon::Math :: Matrix3x3 * TransformArray = new Xenon::Math::Matrix3x3 [ NewSize ];
 	int64_t * TransformIterationList = new int64_t [ NewSize ];
 	Sprite ** TransformSourceList = new Sprite * [ NewSize ];
 	
+	std :: memcpy ( TextureIndexArray, this -> TextureIndexArray, sizeof ( uint32_t ) * TransformArraySize );
 	std :: memcpy ( TransformArray, this -> TransformArray, sizeof ( Xenon::Math :: Matrix3x3 ) * TransformArraySize );
 	std :: memcpy ( TransformIterationList, this -> TransformIterationList, sizeof ( int64_t ) * TransformArraySize );
 	std :: memcpy ( TransformSourceList, this -> TransformSourceList, sizeof ( Sprite * ) * TransformArraySize );
+	
+	delete [] this -> TextureIndexArray;
+	delete [] this -> TransformArray;
+	delete [] this -> TransformIterationList;
+	delete [] this -> TransformSourceList;
+	
+	this -> TextureIndexArray = TextureIndexArray;
+	this -> TransformArray = TransformArray;
+	this -> TransformIterationList = TransformIterationList;
+	this -> TransformSourceList = TransformSourceList;
+	
+	TransformArrayBufferSize = NewSize;
 	
 }
 			
@@ -343,59 +380,147 @@ void Red::Graphics::Laminar::Renderer :: AddSprite ( Sprite * Instance, uint32_t
 		case kRenderMode_Default:
 			Instance -> Layout.Mode = kRenderMode_Overlay;
 		case kRenderMode_Overlay:
-			Layers [ Instance -> Layer ] -> OverlayListHead -> Last = Instance;
-			Instance -> Next = Layers [ Instance -> Layer ] -> OverlayListHead -> Last;
+			
+			if ( Layers [ Instance -> Layer ] -> OverlayListHead != NULL )
+			{
+				
+				Layers [ Instance -> Layer ] -> OverlayListHead -> Last = Instance;
+				Instance -> Next = Layers [ Instance -> Layer ] -> OverlayListHead -> Last;
+				
+			}
+			
 			Layers [ Instance -> Layer ] -> OverlayListHead = Instance;
 			Layers [ Instance -> Layer ] -> OverlayListLength ++;
+			
+			if ( Layers [ Instance -> Layer ] -> OverlayListGeometry != NULL )
+				Layers [ Instance -> Layer ] -> OverlayListGeometry -> Dirty = true;
+			
 			break;
 			
 		case kRenderMode_Add:
-			Layers [ Instance -> Layer ] -> AddListHead -> Last = Instance;
-			Instance -> Next = Layers [ Instance -> Layer ] -> AddListHead -> Last;
+			
+			if ( Layers [ Instance -> Layer ] -> AddListHead != NULL )
+			{
+				
+				Layers [ Instance -> Layer ] -> AddListHead -> Last = Instance;
+				Instance -> Next = Layers [ Instance -> Layer ] -> AddListHead -> Last;
+				
+			}
+			
 			Layers [ Instance -> Layer ] -> AddListHead = Instance;
 			Layers [ Instance -> Layer ] -> AddListLength ++;
+			
+			if ( Layers [ Instance -> Layer ] -> AddListGeometry != NULL )
+				Layers [ Instance -> Layer ] -> AddListGeometry -> Dirty = true;
+			
 			break;
 			
 		case kRenderMode_Subtract:
-			Layers [ Instance -> Layer ] -> SubtractListHead -> Last = Instance;
-			Instance -> Next = Layers [ Instance -> Layer ] -> SubtractListHead -> Last;
+			
+			if ( Layers [ Instance -> Layer ] -> SubtractListHead != NULL )
+			{
+				
+				Layers [ Instance -> Layer ] -> SubtractListHead -> Last = Instance;
+				Instance -> Next = Layers [ Instance -> Layer ] -> SubtractListHead -> Last;
+				
+			}
+			
 			Layers [ Instance -> Layer ] -> SubtractListHead = Instance;
 			Layers [ Instance -> Layer ] -> SubtractListLength ++;
+			
+			if ( Layers [ Instance -> Layer ] -> SubtractListGeometry != NULL )
+				Layers [ Instance -> Layer ] -> SubtractListGeometry -> Dirty = true;
+			
 			break;
 			
 		case kRenderMode_Multiply:
-			Layers [ Instance -> Layer ] -> MultiplyListHead -> Last = Instance;
-			Instance -> Next = Layers [ Instance -> Layer ] -> MultiplyListHead -> Last;
+			
+			if ( Layers [ Instance -> Layer ] -> MultiplyListHead != NULL )
+			{
+				
+				Layers [ Instance -> Layer ] -> MultiplyListHead -> Last = Instance;
+				Instance -> Next = Layers [ Instance -> Layer ] -> MultiplyListHead -> Last;
+				
+			}
+			
 			Layers [ Instance -> Layer ] -> MultiplyListHead = Instance;
 			Layers [ Instance -> Layer ] -> MultiplyListLength ++;
+			
+			if ( Layers [ Instance -> Layer ] -> MultiplyListGeometry != NULL )
+				Layers [ Instance -> Layer ] -> MultiplyListGeometry -> Dirty = true;
+			
 			break;
 			
 		case kRenderMode_Max:
-			Layers [ Instance -> Layer ] -> MaxListHead -> Last = Instance;
-			Instance -> Next = Layers [ Instance -> Layer ] -> MaxListHead -> Last;
+			
+			if ( Layers [ Instance -> Layer ] -> MaxListHead != NULL )
+			{
+				
+				Layers [ Instance -> Layer ] -> MaxListHead -> Last = Instance;
+				Instance -> Next = Layers [ Instance -> Layer ] -> MaxListHead -> Last;
+				
+			}
+			
 			Layers [ Instance -> Layer ] -> MaxListHead = Instance;
 			Layers [ Instance -> Layer ] -> MaxListLength ++;
+			
+			if ( Layers [ Instance -> Layer ] -> MaxListGeometry != NULL )
+				Layers [ Instance -> Layer ] -> MaxListGeometry -> Dirty = true;
+			
 			break;
 								
 		case kRenderMode_Min:
-			Layers [ Instance -> Layer ] -> MinListHead -> Last = Instance;
-			Instance -> Next = Layers [ Instance -> Layer ] -> MinListHead -> Last;
+			
+			if ( Layers [ Instance -> Layer ] -> MinListHead != NULL )
+			{
+				
+				Layers [ Instance -> Layer ] -> MinListHead -> Last = Instance;
+				Instance -> Next = Layers [ Instance -> Layer ] -> MinListHead -> Last;
+				
+			}
+			
 			Layers [ Instance -> Layer ] -> MinListHead = Instance;
 			Layers [ Instance -> Layer ] -> MinListLength ++;
+			
+			if ( Layers [ Instance -> Layer ] -> MinListGeometry != NULL )
+				Layers [ Instance -> Layer ] -> MinListGeometry -> Dirty = true;
+			
 			break;
 			
 		case kRenderMode_Mask:
-			Layers [ Instance -> Layer ] -> MaskListHead -> Last = Instance;
-			Instance -> Next = Layers [ Instance -> Layer ] -> MaskListHead -> Last;
+			
+			if ( Layers [ Instance -> Layer ] -> MaskListHead != NULL )
+			{
+				
+				Layers [ Instance -> Layer ] -> MaskListHead -> Last = Instance;
+				Instance -> Next = Layers [ Instance -> Layer ] -> MaskListHead -> Last;
+				
+			}
+			
 			Layers [ Instance -> Layer ] -> MaskListHead = Instance;
 			Layers [ Instance -> Layer ] -> MaskListLength ++;
+			
+			if ( Layers [ Instance -> Layer ] -> MaskListGeometry != NULL )
+				Layers [ Instance -> Layer ] -> MaskListGeometry -> Dirty = true;
+			
 			break;
 			
 		case kRenderMode_NegativeMask:
-			Layers [ Instance -> Layer ] -> NegativeMaskListHead -> Last = Instance;
-			Instance -> Next = Layers [ Instance -> Layer ] -> NegativeMaskListHead -> Last;
+			
+			if ( Layers [ Instance -> Layer ] -> NegativeMaskListHead != NULL )
+			{
+				
+				Layers [ Instance -> Layer ] -> NegativeMaskListHead -> Last = Instance;
+				Instance -> Next = Layers [ Instance -> Layer ] -> NegativeMaskListHead -> Last;
+				
+			}
+			
 			Layers [ Instance -> Layer ] -> NegativeMaskListHead = Instance;
 			Layers [ Instance -> Layer ] -> NegativeMaskListLength ++;
+			
+			if ( Layers [ Instance -> Layer ] -> NegativeMaskListGeometry != NULL )
+				Layers [ Instance -> Layer ] -> NegativeMaskListGeometry -> Dirty = true;
+			
 			break;
 		
 	}
@@ -420,41 +545,73 @@ void Red::Graphics::Laminar::Renderer :: RemoveSprite ( Sprite * Instance )
 				case kRenderMode_Overlay:
 					Layers [ Instance -> Layer ] -> OverlayListHead = NULL;
 					Layers [ Instance -> Layer ] -> OverlayListLength --;
+					
+					if ( Layers [ Instance -> Layer ] -> OverlayListGeometry != NULL )
+						Layers [ Instance -> Layer ] -> OverlayListGeometry -> Dirty = true;
+					
 					break;
 					
 				case kRenderMode_Add:
 					Layers [ Instance -> Layer ] -> AddListHead = NULL;
 					Layers [ Instance -> Layer ] -> AddListLength --;
+					
+					if ( Layers [ Instance -> Layer ] -> AddListGeometry != NULL )
+						Layers [ Instance -> Layer ] -> AddListGeometry -> Dirty = true;
+					
 					break;
 					
 				case kRenderMode_Subtract:
 					Layers [ Instance -> Layer ] -> SubtractListHead = NULL;
 					Layers [ Instance -> Layer ] -> SubtractListLength --;
+					
+					if ( Layers [ Instance -> Layer ] -> OverlayListGeometry != NULL )
+						Layers [ Instance -> Layer ] -> OverlayListGeometry -> Dirty = true;
+					
 					break;
 					
 				case kRenderMode_Multiply:
 					Layers [ Instance -> Layer ] -> MultiplyListHead = NULL;
 					Layers [ Instance -> Layer ] -> MultiplyListLength --;
+					
+					if ( Layers [ Instance -> Layer ] -> OverlayListGeometry != NULL )
+						Layers [ Instance -> Layer ] -> OverlayListGeometry -> Dirty = true;
+					
 					break;
 					
 				case kRenderMode_Max:
 					Layers [ Instance -> Layer ] -> MaxListHead = NULL;
 					Layers [ Instance -> Layer ] -> MaxListLength --;
+					
+					if ( Layers [ Instance -> Layer ] -> OverlayListGeometry != NULL )
+						Layers [ Instance -> Layer ] -> OverlayListGeometry -> Dirty = true;
+					
 					break;
 					
 				case kRenderMode_Min:
 					Layers [ Instance -> Layer ] -> MinListHead = NULL;
 					Layers [ Instance -> Layer ] -> MinListLength --;
+					
+					if ( Layers [ Instance -> Layer ] -> OverlayListGeometry != NULL )
+						Layers [ Instance -> Layer ] -> OverlayListGeometry -> Dirty = true;
+					
 					break;
 					
 				case kRenderMode_Mask:
 					Layers [ Instance -> Layer ] -> MaskListHead = NULL;
 					Layers [ Instance -> Layer ] -> MaskListLength --;
+					
+					if ( Layers [ Instance -> Layer ] -> MaskListGeometry != NULL )
+						Layers [ Instance -> Layer ] -> MaskListGeometry -> Dirty = true;
+					
 					break;
 					
 				case kRenderMode_NegativeMask:
 					Layers [ Instance -> Layer ] -> NegativeMaskListHead = NULL;
 					Layers [ Instance -> Layer ] -> NegativeMaskListLength --;
+					
+					if ( Layers [ Instance -> Layer ] -> NegativeMaskListGeometry != NULL )
+						Layers [ Instance -> Layer ] -> NegativeMaskListGeometry -> Dirty = true;
+					
 					break;
 					
 				case kRenderMode_Default:
@@ -475,34 +632,66 @@ void Red::Graphics::Laminar::Renderer :: RemoveSprite ( Sprite * Instance )
 				
 				case kRenderMode_Overlay:
 					Layers [ Instance -> Layer ] -> OverlayListLength --;
+					
+					if ( Layers [ Instance -> Layer ] -> OverlayListGeometry != NULL )
+						Layers [ Instance -> Layer ] -> OverlayListGeometry -> Dirty = true;
+					
 					break;
 					
 				case kRenderMode_Add:
 					Layers [ Instance -> Layer ] -> AddListLength --;
+					
+					if ( Layers [ Instance -> Layer ] -> AddListGeometry != NULL )
+						Layers [ Instance -> Layer ] -> AddListGeometry -> Dirty = true;
+					
 					break;
 					
 				case kRenderMode_Subtract:
 					Layers [ Instance -> Layer ] -> SubtractListLength --;
+					
+					if ( Layers [ Instance -> Layer ] -> SubtractListGeometry != NULL )
+						Layers [ Instance -> Layer ] -> SubtractListGeometry -> Dirty = true;
+					
 					break;
 					
 				case kRenderMode_Multiply:
 					Layers [ Instance -> Layer ] -> MultiplyListLength --;
+					
+					if ( Layers [ Instance -> Layer ] -> MultiplyListGeometry != NULL )
+						Layers [ Instance -> Layer ] -> MultiplyListGeometry -> Dirty = true;
+					
 					break;
 					
 				case kRenderMode_Max:
 					Layers [ Instance -> Layer ] -> MaxListLength --;
+					
+					if ( Layers [ Instance -> Layer ] -> MaxListGeometry != NULL )
+						Layers [ Instance -> Layer ] -> MaxListGeometry -> Dirty = true;
+					
 					break;
 					
 				case kRenderMode_Min:
 					Layers [ Instance -> Layer ] -> MinListLength --;
+					
+					if ( Layers [ Instance -> Layer ] -> MinListGeometry != NULL )
+						Layers [ Instance -> Layer ] -> MinListGeometry -> Dirty = true;
+					
 					break;
 					
 				case kRenderMode_Mask:
 					Layers [ Instance -> Layer ] -> MaskListLength --;
+					
+					if ( Layers [ Instance -> Layer ] -> MaskListGeometry != NULL )
+						Layers [ Instance -> Layer ] -> MaskListGeometry -> Dirty = true;
+					
 					break;
 					
 				case kRenderMode_NegativeMask:
 					Layers [ Instance -> Layer ] -> NegativeMaskListLength --;
+					
+					if ( Layers [ Instance -> Layer ] -> NegativeMaskListGeometry != NULL )
+						Layers [ Instance -> Layer ] -> NegativeMaskListGeometry -> Dirty = true;
+					
 					break;
 					
 				default:
@@ -527,41 +716,73 @@ void Red::Graphics::Laminar::Renderer :: RemoveSprite ( Sprite * Instance )
 				case kRenderMode_Overlay:
 					Layers [ Instance -> Layer ] -> OverlayListHead = Instance -> Next;
 					Layers [ Instance -> Layer ] -> OverlayListLength --;
+					
+					if ( Layers [ Instance -> Layer ] -> OverlayListGeometry != NULL )
+						Layers [ Instance -> Layer ] -> OverlayListGeometry -> Dirty = true;
+					
 					break;
 					
 				case kRenderMode_Add:
 					Layers [ Instance -> Layer ] -> AddListHead = Instance -> Next;
 					Layers [ Instance -> Layer ] -> AddListLength --;
+					
+					if ( Layers [ Instance -> Layer ] -> AddListGeometry != NULL )
+						Layers [ Instance -> Layer ] -> AddListGeometry -> Dirty = true;
+					
 					break;
 					
 				case kRenderMode_Subtract:
 					Layers [ Instance -> Layer ] -> SubtractListHead = Instance -> Next;
 					Layers [ Instance -> Layer ] -> SubtractListLength --;
+					
+					if ( Layers [ Instance -> Layer ] -> SubtractListGeometry != NULL )
+						Layers [ Instance -> Layer ] -> SubtractListGeometry -> Dirty = true;
+					
 					break;
 					
 				case kRenderMode_Multiply:
 					Layers [ Instance -> Layer ] -> MultiplyListHead = Instance -> Next;
 					Layers [ Instance -> Layer ] -> MultiplyListLength --;
+					
+					if ( Layers [ Instance -> Layer ] -> MultiplyListGeometry != NULL )
+						Layers [ Instance -> Layer ] -> MultiplyListGeometry -> Dirty = true;
+					
 					break;
 					
 				case kRenderMode_Max:
 					Layers [ Instance -> Layer ] -> MaxListHead = Instance -> Next;
 					Layers [ Instance -> Layer ] -> MaxListLength --;
+					
+					if ( Layers [ Instance -> Layer ] -> MaxListGeometry != NULL )
+						Layers [ Instance -> Layer ] -> MaxListGeometry -> Dirty = true;
+					
 					break;
 					
 				case kRenderMode_Min:
 					Layers [ Instance -> Layer ] -> MinListHead = Instance -> Next;
 					Layers [ Instance -> Layer ] -> MinListLength --;
+					
+					if ( Layers [ Instance -> Layer ] -> MinListGeometry != NULL )
+						Layers [ Instance -> Layer ] -> MinListGeometry -> Dirty = true;
+					
 					break;
 					
 				case kRenderMode_Mask:
 					Layers [ Instance -> Layer ] -> MaskListHead = Instance -> Next;
 					Layers [ Instance -> Layer ] -> MaskListLength --;
+					
+					if ( Layers [ Instance -> Layer ] -> MaskListGeometry != NULL )
+						Layers [ Instance -> Layer ] -> MaskListGeometry -> Dirty = true;
+					
 					break;
 					
 				case kRenderMode_NegativeMask:
 					Layers [ Instance -> Layer ] -> NegativeMaskListHead = Instance -> Next;
 					Layers [ Instance -> Layer ] -> NegativeMaskListLength --;
+					
+					if ( Layers [ Instance -> Layer ] -> NegativeMaskListGeometry != NULL )
+						Layers [ Instance -> Layer ] -> NegativeMaskListGeometry -> Dirty = true;
+					
 					break;
 					
 				case kRenderMode_Default:
@@ -585,34 +806,66 @@ void Red::Graphics::Laminar::Renderer :: RemoveSprite ( Sprite * Instance )
 				
 				case kRenderMode_Overlay:
 					Layers [ Instance -> Layer ] -> OverlayListLength --;
+					
+					if ( Layers [ Instance -> Layer ] -> OverlayListGeometry != NULL )
+						Layers [ Instance -> Layer ] -> OverlayListGeometry -> Dirty = true;
+					
 					break;
 					
 				case kRenderMode_Add:
 					Layers [ Instance -> Layer ] -> AddListLength --;
+					
+					if ( Layers [ Instance -> Layer ] -> AddListGeometry != NULL )
+						Layers [ Instance -> Layer ] -> AddListGeometry -> Dirty = true;
+					
 					break;
 					
 				case kRenderMode_Subtract:
 					Layers [ Instance -> Layer ] -> SubtractListLength --;
+					
+					if ( Layers [ Instance -> Layer ] -> SubtractListGeometry != NULL )
+						Layers [ Instance -> Layer ] -> SubtractListGeometry -> Dirty = true;
+					
 					break;
 					
 				case kRenderMode_Multiply:
 					Layers [ Instance -> Layer ] -> MultiplyListLength --;
+					
+					if ( Layers [ Instance -> Layer ] -> MultiplyListGeometry != NULL )
+						Layers [ Instance -> Layer ] -> MultiplyListGeometry -> Dirty = true;
+					
 					break;
 					
 				case kRenderMode_Max:
 					Layers [ Instance -> Layer ] -> MaxListLength --;
+					
+					if ( Layers [ Instance -> Layer ] -> MaxListGeometry != NULL )
+						Layers [ Instance -> Layer ] -> MaxListGeometry -> Dirty = true;
+					
 					break;
 					
 				case kRenderMode_Min:
 					Layers [ Instance -> Layer ] -> MinListLength --;
+					
+					if ( Layers [ Instance -> Layer ] -> MinListGeometry != NULL )
+						Layers [ Instance -> Layer ] -> MinListGeometry -> Dirty = true;
+					
 					break;
 					
 				case kRenderMode_Mask:
 					Layers [ Instance -> Layer ] -> MaskListLength --;
+					
+					if ( Layers [ Instance -> Layer ] -> MaskListGeometry != NULL )
+						Layers [ Instance -> Layer ] -> MaskListGeometry -> Dirty = true;
+					
 					break;
 					
 				case kRenderMode_NegativeMask:
 					Layers [ Instance -> Layer ] -> NegativeMaskListLength --;
+					
+					if ( Layers [ Instance -> Layer ] -> NegativeMaskListGeometry != NULL )
+						Layers [ Instance -> Layer ] -> NegativeMaskListGeometry -> Dirty = true;
+					
 					break;
 					
 				default:
@@ -637,6 +890,7 @@ void Red::Graphics::Laminar::Renderer :: Begin ()
 	Running = true;
 	
 	SetupGPUResources ();
+	PrepGeometry ();
 	
 }
 
@@ -650,22 +904,14 @@ void Red::Graphics::Laminar::Renderer :: End ()
 void Red::Graphics::Laminar::Renderer :: Resize ( uint32_t TargetWidth, uint32_t TargetHeight )
 {
 	
+	this -> TargetWidth = TargetWidth;
+	this -> TargetHeight = TargetHeight;
+	
 	if ( GPUAlloc )
 	{
 		
-		FreeGPUResources ();
-		
-		this -> TargetWidth = TargetWidth;
-		this -> TargetHeight = TargetHeight;
-		
-		SetupGPUResources ();
-		
-	}
-	else
-	{
-		
-		this -> TargetWidth = TargetWidth;
-		this -> TargetHeight = TargetHeight;
+		LayerMaskTex.BlankTextureImage ( 0, Xenon::GPU::Texture2D :: kInternalFormat_R, TargetWidth, TargetHeight );
+		AccumulatorTex.BlankTextureImage ( 0, Xenon::GPU::Texture2D :: kInternalFormat_RGBA, TargetWidth, TargetHeight );
 		
 	}
 	
@@ -684,10 +930,7 @@ void Red::Graphics::Laminar::Renderer :: FreeGPUResources ()
 	QuadVBuff.GPUResourceFree ();
 	QuadIBuff.GPUResourceFree ();
 	
-	QuadVShader.GPUResourceFree ();
-	MaskFShader.GPUResourceFree ();
 	MaskProgram.GPUResourceFree ();
-	ColorFShader.GPUResourceFree ();
 	ColorProgram.GPUResourceFree ();
 	
 	Running = false;
@@ -701,7 +944,7 @@ void Red::Graphics::Laminar::Renderer :: SetupGPUResources ()
 	if ( GPUAlloc )
 		return;
 	
-	RenderContext -> Bind ();
+	RenderContext -> MakeCurrent ();
 	
 	LayerMaskTex.GPUResourceAlloc ();
 	LayerMaskBuffer.GPUResourceAlloc ();
@@ -717,6 +960,12 @@ void Red::Graphics::Laminar::Renderer :: SetupGPUResources ()
 	MaskProgram.GPUResourceAlloc ();
 	ColorFShader.GPUResourceAlloc ();
 	ColorProgram.GPUResourceAlloc ();
+	
+	if ( ! LayerMaskBuffer.GPUResourceAllocated () )
+		std :: cout << "Layer mask buffer alloc failed" << std :: endl;
+	
+	if ( ! LayerMaskTex.GPUResourceAllocated () )
+		std :: cout << "Layer mask texture alloc failed" << std :: endl;
 	
 	LayerMaskTex.BlankTextureImage ( 0, Xenon::GPU::Texture2D :: kInternalFormat_R, TargetWidth, TargetHeight );
 	LayerMaskBuffer.SetRenderTexture2D ( Xenon::GPU::FrameBuffer :: kOutputAttachment_ColorBuffer, 0, LayerMaskTex, 0 );
@@ -758,6 +1007,8 @@ void Red::Graphics::Laminar::Renderer :: SetupGPUResources ()
 	PrepGeometry ();
 	UpdateGeometry ();
 	
+	GPUAlloc = true;
+	
 }
 
 void Red::Graphics::Laminar::Renderer :: UpdateGeometryBuffers ( LayerModeGeometry & Geometry )
@@ -769,8 +1020,8 @@ void Red::Graphics::Laminar::Renderer :: UpdateGeometryBuffers ( LayerModeGeomet
 	if ( Geometry.TransformBufferSize < Geometry.TransformArraySize )
 	{
 		
-		Geometry.TransformBufferSize = sizeof ( Xenon::Math :: Matrix3x3 ) * Geometry.TransformArrayBufferSize;
-		Geometry.TransformBuff.Buffer ( reinterpret_cast <const void *> ( Geometry.TransformArray ), Geometry.TransformArrayBufferSize );
+		Geometry.TransformBufferSize = Geometry.TransformArrayBufferSize;
+		Geometry.TransformBuff.Buffer ( reinterpret_cast <const void *> ( Geometry.TransformArray ), Geometry.TransformBufferSize * sizeof ( Xenon::Math :: Matrix3x3 ) );
 		
 	}
 	else
@@ -779,17 +1030,17 @@ void Red::Graphics::Laminar::Renderer :: UpdateGeometryBuffers ( LayerModeGeomet
 		if ( OrphanGeometry )
 			Geometry.TransformBuff.Orphan ();
 		
-		Geometry.TransformBuff.SubBuffer ( reinterpret_cast <const void *> ( Geometry.TransformArray ), Geometry.TransformArraySize, 0 );
+		Geometry.TransformBuff.SubBuffer ( reinterpret_cast <const void *> ( Geometry.TransformArray ), Geometry.TransformArraySize * sizeof ( Xenon::Math :: Matrix3x3 ), 0 );
 		
 	}
 	
-	Geometry.DrawCall.SetElementCount ( Geometry.TransformArraySize );
+	Geometry.DrawCall.SetInstanceCount ( Geometry.TransformArraySize );
 	
 	Geometry.Dirty = false;
 	
 }
 
-void Red::Graphics::Laminar::Renderer :: PrepGeometryList ( LayerModeGeometry *& GeometryPTR, Sprite * ListHead, uint32_t ListLength, ShaderProgram * Program )
+void Red::Graphics::Laminar::Renderer :: PrepGeometryList ( LayerModeGeometry *& GeometryPTR, Sprite * ListHead, uint32_t ListLength, Xenon::GPU :: ShaderProgram * Program, Xenon::GPU :: IndexBuffer * QuadIndexBuffer )
 {
 	
 	if ( ListLength == 0 )
@@ -798,36 +1049,108 @@ void Red::Graphics::Laminar::Renderer :: PrepGeometryList ( LayerModeGeometry *&
 	if ( GeometryPTR == NULL )
 	{
 		
-		GeometryPTR = new LayerModeGeometry ( ListLength );
+		GeometryPTR = new LayerModeGeometry ( ListLength, QuadIndexBuffer );
 		
 		GeometryPTR -> VArray.SetProgram ( Program );
 		
-		GeometryPTR -> VArray.AddFPAttribute ( "Transform", 3, Xenon::GPU::VertexArray :: kFPAttributeInputType_Float, false, 6, NULL, & GeometryPTR -> TransformBuff, 1, 0 );
-		GeometryPTR -> VArray.AddFPAttribute ( "Transform", 3, Xenon::GPU::VertexArray :: kFPAttributeInputType_Float, false, 6, sizeof ( float ) * 3, & GeometryPTR -> TransformBuff, 1, 1 );
-		GeometryPTR -> VArray.AddFPAttribute ( "Transform", 3, Xenon::GPU::VertexArray :: kFPAttributeInputType_Float, false, 6, sizeof ( float ) * 6, & GeometryPTR -> TransformBuff, 1, 2 );
+		GeometryPTR -> VArray.AddFPAttribute ( "Vertex", 2, Xenon::GPU::VertexArray :: kFPAttributeInputType_Float, false, 0, NULL, & QuadVBuff );
 		
-		GeometryPTR -> VArray.AddFPAttribute ( "Vertex", 2, Xenon::GPU::VertexArray :: kFPAttributeInputType_Float, false, 0, NULL, & QuadVBuff, 0, 0 );
-		GeometryPTR -> VArray.SetIndexBuffer ( QuadIBuff );
+		GeometryPTR -> VArray.AddFPAttribute ( "Transform", 3, Xenon::GPU::VertexArray :: kFPAttributeInputType_Float, false, ( sizeof ( float ) * 9 ), NULL, & GeometryPTR -> TransformBuff, 1, 0 );
+		GeometryPTR -> VArray.AddFPAttribute ( "Transform", 3, Xenon::GPU::VertexArray :: kFPAttributeInputType_Float, false, ( sizeof ( float ) * 9 ), (void *) ( sizeof ( float ) * 3 ), & GeometryPTR -> TransformBuff, 1, 1 );
+		GeometryPTR -> VArray.AddFPAttribute ( "Transform", 3, Xenon::GPU::VertexArray :: kFPAttributeInputType_Float, false, ( sizeof ( float ) * 9 ), (void *) ( sizeof ( float ) * 6 ), & GeometryPTR -> TransformBuff, 1, 2 );
+		
+		GeometryPTR -> VArray.SetIndexBuffer ( & QuadIBuff );
+		
+		GeometryPTR -> VArray.Build ();
 		
 	}
 	else
 		GeometryPTR -> SizeTo ( ListLength );
 	
-	for ( uint32_t I = 0; ListLength; I ++ )
+	bool Dirty = false;
+	
+	for ( uint32_t I = 0; I < ListLength; I ++ )
 	{
 		
 		Xenon::Math :: Transform2D & Transform = ListHead -> GetTransform ();
-		int64_t Iteration = Transform.GetTransformUniformSource ().GetIteration ();
+		int64_t Iteration = Transform.GetTransformUniformSource () -> GetIteration ();
 		
 		if ( ( GeometryPTR -> TransformSourceList [ I ] != ListHead ) || ( GeometryPTR -> TransformIterationList [ I ] < Iteration ) )
 		{
 			
-			GeometryPTR -> Dirty = true;
+			Dirty = true;
 			
 			GeometryPTR -> TransformSourceList [ I ] = ListHead;
 			
-			GeometryPTR -> TransformIterationList [ I ] = Transform.GetTransformUniformSource ().GetIteration ();
+			GeometryPTR -> TransformIterationList [ I ] = Transform.GetTransformUniformSource () -> GetIteration ();
 			GeometryPTR -> TransformArray [ I ] = Transform.ReadMatrix ();
+			
+		}
+		
+		I2DTextureSource * TexSource = ListHead -> GetTextureSource ();
+		
+		std :: cout << "TSOURCE: " << reinterpret_cast <void *> ( TexSource ) << std :: endl;
+		std :: cout << "TEX: " << reinterpret_cast <void *> ( TexSource -> GetOutputTexture () ) << std :: endl;
+		
+		Xenon::GPU:: ITexture * SourceTexture = TexSource -> GetOutputTexture ();
+		
+		uint32_t TextureIndex = GeometryPTR -> TextureIndexArray [ I ];
+		
+		bool TexSearch = false;
+		
+		if ( TextureIndex >= GeometryPTR -> TextureUseRecords.size () )
+			TexSearch = true;
+		else if ( GeometryPTR -> TextureUseRecords [ TextureIndex ].Texture != SourceTexture )
+		{
+			
+			GeometryPTR -> TextureUseRecords [ TextureIndex ].UsageCount --;
+			
+			if ( GeometryPTR -> TextureUseRecords [ TextureIndex ].UsageCount == 0 )
+			{
+				
+				GeometryPTR -> TextureUseRecords [ TextureIndex ].Texture -> Dereference ();
+				GeometryPTR -> TextureUseRecords.erase ( GeometryPTR -> TextureUseRecords.begin () + TextureIndex );
+				
+			}
+			
+			TexSearch = true;
+			
+		}
+		
+		if ( TexSearch )
+		{
+			
+			Dirty = true;
+			
+			bool Found = false;
+			
+			uint32_t RecordCount = GeometryPTR -> TextureUseRecords.size ();
+			
+			for ( uint32_t J = 0; J < RecordCount; J ++ )
+			{
+				
+				if ( GeometryPTR -> TextureUseRecords [ J ].Texture == SourceTexture )
+				{
+					
+					GeometryPTR -> TextureIndexArray [ I ] = J;
+					GeometryPTR -> TextureUseRecords [ J ].UsageCount ++;
+					
+					Found = true;
+					
+					break;
+					
+				}
+				
+			}
+			
+			if ( ! Found )
+			{
+				
+				GeometryPTR -> TextureIndexArray [ I ] = RecordCount;
+				GeometryPTR -> TextureUseRecords.push_back ( { SourceTexture, 1 } );
+				SourceTexture -> Reference ();
+				
+			}
 			
 		}
 		
@@ -835,38 +1158,65 @@ void Red::Graphics::Laminar::Renderer :: PrepGeometryList ( LayerModeGeometry *&
 		
 	}
 	
+	for ( uint32_t I = ListLength; I < GeometryPTR -> TransformArrayBufferSize; I ++ )
+	{
+		
+		uint32_t TextureIndex = GeometryPTR -> TextureIndexArray [ I ];
+		uint32_t RecordCount = GeometryPTR -> TextureUseRecords.size ();
+		
+		if ( TextureIndex < GeometryPTR -> TextureUseRecords.size () )
+		{
+			
+			GeometryPTR -> TextureUseRecords [ TextureIndex ].UsageCount --;
+			GeometryPTR -> TextureIndexArray [ I ] = 0xFFFFFFFF;
+			
+			if ( GeometryPTR -> TextureUseRecords [ TextureIndex ].UsageCount == 0 )
+			{
+				
+				GeometryPTR -> TextureUseRecords [ TextureIndex ].Texture -> Dereference ();
+				GeometryPTR -> TextureUseRecords.erase ( GeometryPTR -> TextureUseRecords.begin () + TextureIndex );
+				
+			}
+			
+		}
+		
+	}
+	
+	GeometryPTR -> Dirty = Dirty;
+	GeometryPTR -> TransformArraySize = ListLength;
+	
 }
 
 void Red::Graphics::Laminar::Renderer :: UpdateGeometry ()
 {
 	
-	RenderContext -> Bind ();
+	RenderContext -> MakeCurrent ();
 	
 	for ( uint32_t I = 0; I < Layers.size (); I ++ )
 	{
 		
-		if ( ( Layers [ I ] -> OverlayListGeometry != NULL ) && ( ! Layers [ I ] -> OverlayListGeometry -> Dirty ) )
+		if ( ( Layers [ I ] -> OverlayListGeometry != NULL ) && ( Layers [ I ] -> OverlayListGeometry -> Dirty ) )
 			UpdateGeometryBuffers ( * Layers [ I ] -> OverlayListGeometry );
 		
-		if ( ( Layers [ I ] -> AddListGeometry != NULL ) && ( ! Layers [ I ] -> AddListGeometry -> Dirty ) )
+		if ( ( Layers [ I ] -> AddListGeometry != NULL ) && ( Layers [ I ] -> AddListGeometry -> Dirty ) )
 			UpdateGeometryBuffers ( * Layers [ I ] -> AddListGeometry );
 		
-		if ( ( Layers [ I ] -> SubtractListGeometry != NULL ) && ( ! Layers [ I ] -> SubtractListGeometry -> Dirty ) )
+		if ( ( Layers [ I ] -> SubtractListGeometry != NULL ) && ( Layers [ I ] -> SubtractListGeometry -> Dirty ) )
 			UpdateGeometryBuffers ( * Layers [ I ] -> SubtractListGeometry );
 		
-		if ( ( Layers [ I ] -> MultiplyListGeometry != NULL ) && ( ! Layers [ I ] -> MultiplyListGeometry -> Dirty ) )
+		if ( ( Layers [ I ] -> MultiplyListGeometry != NULL ) && ( Layers [ I ] -> MultiplyListGeometry -> Dirty ) )
 			UpdateGeometryBuffers ( * Layers [ I ] -> MultiplyListGeometry );
 		
-		if ( ( Layers [ I ] -> MaxListGeometry != NULL ) && ( ! Layers [ I ] -> MaxListGeometry -> Dirty ) )
+		if ( ( Layers [ I ] -> MaxListGeometry != NULL ) && ( Layers [ I ] -> MaxListGeometry -> Dirty ) )
 			UpdateGeometryBuffers ( * Layers [ I ] -> MaxListGeometry );
 		
-		if ( ( Layers [ I ] -> MinListGeometry != NULL ) && ( ! Layers [ I ] -> MinListGeometry -> Dirty ) )
+		if ( ( Layers [ I ] -> MinListGeometry != NULL ) && ( Layers [ I ] -> MinListGeometry -> Dirty ) )
 			UpdateGeometryBuffers ( * Layers [ I ] -> MinListGeometry );
 		
-		if ( ( Layers [ I ] -> MaskListGeometry != NULL ) && ( ! Layers [ I ] -> MaskListGeometry -> Dirty ) )
+		if ( ( Layers [ I ] -> MaskListGeometry != NULL ) && ( Layers [ I ] -> MaskListGeometry -> Dirty ) )
 			UpdateGeometryBuffers ( * Layers [ I ] -> MaskListGeometry );
 		
-		if ( ( Layers [ I ] -> NegativeMaskListGeometry != NULL ) && ( ! Layers [ I ] -> NegativeMaskListGeometry -> Dirty ) )
+		if ( ( Layers [ I ] -> NegativeMaskListGeometry != NULL ) && ( Layers [ I ] -> NegativeMaskListGeometry -> Dirty ) )
 			UpdateGeometryBuffers ( * Layers [ I ] -> NegativeMaskListGeometry );
 		
 	}
@@ -876,19 +1226,19 @@ void Red::Graphics::Laminar::Renderer :: UpdateGeometry ()
 void Red::Graphics::Laminar::Renderer :: PrepGeometry ()
 {
 	
-	RenderContext -> Bind ();
+	RenderContext -> MakeCurrent ();
 	
 	for ( uint32_t I = 0; I < Layers.size (); I ++ )
 	{
 		
-		PrepGeometryList ( Layers [ I ] -> OverlayListGeometry, Layers [ I ] -> OverlayListHead, Layers [ I ] -> OverlayListLength );
-		PrepGeometryList ( Layers [ I ] -> AddListGeometry, Layers [ I ] -> AddListHead, Layers [ I ] -> AddListLength );
-		PrepGeometryList ( Layers [ I ] -> SubtractListGeometry, Layers [ I ] -> SubtractListHead, Layers [ I ] -> SubtractListLength );
-		PrepGeometryList ( Layers [ I ] -> MultiplyListGeometry, Layers [ I ] -> MultiplyListHead, Layers [ I ] -> MultiplyListLength );
-		PrepGeometryList ( Layers [ I ] -> MaxListGeometry, Layers [ I ] -> MaxListHead, Layers [ I ] -> MaxListLength );
-		PrepGeometryList ( Layers [ I ] -> MinListGeometry, Layers [ I ] -> MinListHead, Layers [ I ] -> MinListLength );
-		PrepGeometryList ( Layers [ I ] -> MaskListGeometry, Layers [ I ] -> MaskListHead, Layers [ I ] -> MaskListLength );
-		PrepGeometryList ( Layers [ I ] -> NegativeMaskListGeometry, Layers [ I ] -> NegativeMaskListHead, Layers [ I ] -> NegativeMaskListLength );
+		PrepGeometryList ( Layers [ I ] -> OverlayListGeometry, Layers [ I ] -> OverlayListHead, Layers [ I ] -> OverlayListLength, & ColorProgram, & QuadIBuff );
+		PrepGeometryList ( Layers [ I ] -> AddListGeometry, Layers [ I ] -> AddListHead, Layers [ I ] -> AddListLength, & ColorProgram, & QuadIBuff );
+		PrepGeometryList ( Layers [ I ] -> SubtractListGeometry, Layers [ I ] -> SubtractListHead, Layers [ I ] -> SubtractListLength, & ColorProgram, & QuadIBuff );
+		PrepGeometryList ( Layers [ I ] -> MultiplyListGeometry, Layers [ I ] -> MultiplyListHead, Layers [ I ] -> MultiplyListLength, & ColorProgram, & QuadIBuff );
+		PrepGeometryList ( Layers [ I ] -> MaxListGeometry, Layers [ I ] -> MaxListHead, Layers [ I ] -> MaxListLength, & ColorProgram, & QuadIBuff );
+		PrepGeometryList ( Layers [ I ] -> MinListGeometry, Layers [ I ] -> MinListHead, Layers [ I ] -> MinListLength, & ColorProgram, & QuadIBuff );
+		PrepGeometryList ( Layers [ I ] -> MaskListGeometry, Layers [ I ] -> MaskListHead, Layers [ I ] -> MaskListLength, & MaskProgram, & QuadIBuff );
+		PrepGeometryList ( Layers [ I ] -> NegativeMaskListGeometry, Layers [ I ] -> NegativeMaskListHead, Layers [ I ] -> NegativeMaskListLength, & MaskProgram, & QuadIBuff );
 		
 	}
 	
@@ -896,6 +1246,10 @@ void Red::Graphics::Laminar::Renderer :: PrepGeometry ()
 
 void Red::Graphics::Laminar::Renderer :: Render ()
 {
+	
+	// This could potentially be done in another thread, but would still require a barrier between Render() calls
+	PrepGeometry ();
+	UpdateGeometry ();
 	
 	if ( ! Running )
 		Begin ();
@@ -906,14 +1260,41 @@ void Red::Graphics::Laminar::Renderer :: Render ()
 	for ( uint32_t I = 0; I < Layers.size (); I ++ )
 	{
 		
-		LayerMaskBuffer.Bind ();
-		LayerMaskBuffer.SetClearColor ( Layers [ I ] -> ClearMasked ? 1.0f : 0.0f, 0.0f, 0.0f, 1.0f );
-		LayerMaskBuffer.Clear ();
-		
-		uint32_t MaskListLength = Layers [ I ] -> MaskListLength;
-		Sprite * MaskListHead = Layers [ I ] -> MaskListHead;
-		
-		
+		if ( ( Layers [ I ] -> MaskListLength != 0 ) || ( Layers [ I ] -> NegativeMaskListLength != 0 ) )
+		{
+			
+			MaskProgram.Bind ();
+			
+			// TEST! We're rendering masks directly to output buffer for debug purposes for now.
+			TargetBuffer -> Bind ();
+			TargetBuffer -> SetClearColor ( Layers [ I ] -> ClearMasked ? 1.0f : 0.0f, 0.0f, 0.0f, 1.0f );
+			TargetBuffer -> Clear ();
+			/*LayerMaskBuffer.Bind ();
+			LayerMaskBuffer.SetClearColor ( Layers [ I ] -> ClearMasked ? 1.0f : 0.0f, 0.0f, 0.0f, 1.0f );
+			LayerMaskBuffer.Clear ();
+			*/
+			
+			if ( NULL != Layers [ I ] -> MaskListGeometry )
+			{
+				
+				RenderContext -> BlendEquation ( Xenon::GPU::Context :: kBlendOperator_Add, Xenon::GPU::Context :: kBlendOperator_Max );
+				
+				Layers [ I ] -> MaskListGeometry -> VArray.Bind ();
+				Layers [ I ] -> MaskListGeometry -> DrawCall.Draw ();
+				
+			}
+			
+			if ( NULL != Layers [ I ] -> NegativeMaskListGeometry )
+			{
+				
+				//RenderContext -> BlendEquation ( Xenon::GPU::Context :: kBlendOperator_Subtract, Xenon::GPU::Context :: kBlendOperator_Max );
+				
+				//Layers [ I ] -> MaskListGeometry -> VArray.Bind ();
+				//Layers [ I ] -> MaskListGeometry -> DrawCall.Draw ();
+				
+			}
+			
+		}
 		
 	}
 	

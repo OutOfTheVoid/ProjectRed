@@ -87,24 +87,8 @@ namespace Xenon
 			static void Prepend ( Matrix3x3 & Target, const Matrix3x3 & Source, const Matrix3x3 & Pendant );
 			
 		private:
-				
-			typedef union
-			{
-				
-				struct
-				{
-					
-					float E0;
-					float E1;
-					float E2;
-					
-				} SubElements;
-				
-				float Sub [ 3 ];
-				
-			} Row_t;
 			
-			Row_t Elements [ 3 ];
+			float Elements [ 3 ][ 3 ];
 			
 			static float DummyFloatRef;
 			

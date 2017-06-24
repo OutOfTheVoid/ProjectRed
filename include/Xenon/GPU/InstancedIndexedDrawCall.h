@@ -25,6 +25,7 @@ namespace Xenon
 				
 			} NoInit;
 			
+			InstancedIndexedDrawCall ( DrawCall :: DrawMode Mode, IndexBuffer & ForBuffer, GLuint InstanceCount, void * IndexBufferOffset = NULL );
 			InstancedIndexedDrawCall ( DrawCall :: DrawMode Mode, GLuint ElementCount, IndexBuffer :: IndexType Type, GLuint InstanceCount, void * IndexBufferOffset = NULL );
 			InstancedIndexedDrawCall ( NoInit NO_INIT );
 			~InstancedIndexedDrawCall ();

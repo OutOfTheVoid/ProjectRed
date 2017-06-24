@@ -79,6 +79,9 @@ public:
 			case Red::Save::ISavable :: kSaveAction_Save_Prepare:
 				IntSave -> SetState ( IntValue );
 				break;
+				
+			default:
+			break;
 			
 		}
 		
@@ -145,6 +148,8 @@ int main ( int argc, char const * argv [] )
 	SaveData.SetIntValue ( 1000 );
 	
 	SaveFile.RunSave ();
+	
+	std :: cout << "IntVal: " << SaveData.GetIntValue () << std :: endl;
 	
 	SaveData.SetIntValue ( 400 );
 	

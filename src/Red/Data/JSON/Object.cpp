@@ -70,6 +70,8 @@ bool Red::Data::JSON::Object :: Exists ( const std :: string & ValueName )
 	if ( ValueMap.find ( ValueName ) != ValueMap.end () )
 		return true;
 	
+	return false;
+	
 }
 
 void Red::Data::JSON::Object :: GetKeyByIndex ( uint32_t Index, std :: string & KeyOut )

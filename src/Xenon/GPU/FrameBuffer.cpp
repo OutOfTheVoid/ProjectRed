@@ -154,6 +154,8 @@ void Xenon::GPU::FrameBuffer :: SetClearStencil ( GLint Value )
 void Xenon::GPU::FrameBuffer :: Clear ( FrameBufferComponent Components )
 {
 	
+	Bind ( kFrameBufferBindingFlag_Draw );
+	
 	glClear ( Components );
 	
 }

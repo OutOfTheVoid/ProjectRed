@@ -61,7 +61,7 @@ namespace Red
 				
 			private:
 				
-				inline explicit operator int64_t () {};
+				//inline explicit operator int64_t () {};
 				
 				friend void BlockFor ( const Duration & TimeSpan );
 				

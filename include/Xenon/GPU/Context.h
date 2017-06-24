@@ -20,6 +20,7 @@ namespace Xenon
 		class IndexBuffer;
 		class VertexArray;
 		class Texture2D;
+		class ArrayTexture2D;
 		class FrameBuffer;
 		class RenderBuffer;
 		
@@ -95,6 +96,7 @@ namespace Xenon
 			friend class IndexBuffer;
 			friend class VertexArray;
 			friend class Texture2D;
+			friend class ArrayTexture2D;
 			friend class FrameBuffer;
 			friend class RenderBuffer;
 			
@@ -112,6 +114,7 @@ namespace Xenon
 			FrameBuffer * CurrentBoundReadFrameBuffer;
 			FrameBuffer * CurrentBoundDrawFrameBuffer;
 			RenderBuffer * CurrentBoundRenderBuffer;
+			ArrayTexture2D * CurrentBoundTextureArray2D;
 			
 			FrameBuffer DefaultFrameBuffer;
 			

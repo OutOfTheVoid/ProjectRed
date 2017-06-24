@@ -16,6 +16,7 @@ Xenon::GPU::Context :: Context ( IGLContext * GLContext ):
 	CurrentBoundReadFrameBuffer ( NULL ),
 	CurrentBoundDrawFrameBuffer ( NULL ),
 	CurrentBoundRenderBuffer ( NULL ),
+	CurrentBoundTextureArray2D ( NULL ),
 	DefaultFrameBuffer ( 0 ),
 	CullingEnabledCurrent ( false ),
 	CullingFaceCurrent ( kCullingFace_Back ),

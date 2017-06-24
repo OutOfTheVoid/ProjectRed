@@ -5,15 +5,18 @@ Red::Graphics::Laminar::Sprite :: Sprite ( I2DTextureSource * TextureSource, con
 	TextureSource ( TextureSource ),
 	Layout ( Layout ),
 	Next ( NULL ),
-	Last ( NULL )
+	Last ( NULL ),
+	RenderInstance ( NULL )
 {
+	
+	TextureSource -> Reference ();
+	
 }
 
 Red::Graphics::Laminar::Sprite :: ~Sprite ()
 {
 	
-	if ( TextureSource != NULL )
-		TextureSource -> Dereference ();
+	TextureSource -> Dereference ();
 	
 	if ( Next != NULL )
 		Next -> Last = Last;

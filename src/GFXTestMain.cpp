@@ -12,12 +12,14 @@
 #include <Xenon/GPU/Context.h>
 
 #include <Xenon/Math/Transform2D.h>
+#include <Xenon/Math/Matrix3x3.h>
 
 #include <RAUX/PNGFile.h>
 #include <RAUX/VertexShaderFile.h>
 #include <RAUX/FragmentShaderFile.h>
 
 #include <Red/Graphics/Laminar/Renderer.h>
+#include <Red/Graphics/Laminar/Raw2DTextureSource.h>
 
 #include <math.h>
 
@@ -50,9 +52,21 @@ void KeyListener ( int32_t ScanCode, int32_t KeyCode, bool Down, void * Data );
 struct RenderStruct_Struct
 {
 	
+	inline RenderStruct_Struct ():
+		Cont ( NULL ),
+		Win ( NULL ),
+		RTimer ( NULL ),
+		TestSprite ( NULL ),
+		Renderer ( NULL )
+	{
+	}
+		
+	
 	Xenon::GPU :: Context * Cont;
 	SDLX :: Window * Win;
 	SDLX :: Timer * RTimer;
+	
+	Red::Graphics::Laminar :: Sprite * TestSprite;
 	
 	Red::Graphics::Laminar :: Renderer * Renderer;
 	
@@ -63,10 +77,32 @@ struct RenderStruct_Struct
 bool SetupScene ( RenderStruct & Data )
 {
 	
+	uint32_t TestTexturePNGStatus = RAUX::PNGFile :: kStatus_Success;
+	
+	RAUX :: PNGFile TestTexturePNG ( "TestImage.png" );
+	TestTexturePNG.Load ( & TestTexturePNGStatus );
+	
+	if ( ( TestTexturePNGStatus != RAUX::PNGFile :: kStatus_Success ) || ( TestTexturePNG.GetBitmapData () == NULL ) )
+		return false;
+	
+	Xenon::GPU :: Texture2D * TestTexture = new Xenon::GPU :: Texture2D ();
+	TestTexture -> TextureImage ( 0, TestTexturePNG.HasAlpha () ? Xenon::GPU::Texture2D :: kExternalFormat_RGBA : Xenon::GPU::Texture2D :: kExternalFormat_RGB, TestTexturePNG.GetWidth (), TestTexturePNG.GetHeight (), TestTexturePNG.HasAlpha () ? Xenon::GPU::Texture2D :: kExternalFormat_RGBA : Xenon::GPU::Texture2D :: kExternalFormat_RGB, Xenon::GPU::Texture2D :: kExternalLayout_UByte, TestTexturePNG.GetBitmapData () );
+	
+	Red::Graphics::Laminar :: Raw2DTextureSource * TestTextureSource = new Red::Graphics::Laminar :: Raw2DTextureSource ( TestTexture );
+	
+	Data.TestSprite = new Red::Graphics::Laminar :: Sprite ( TestTextureSource, Red::Graphics::Laminar :: RenderLayout ( Red::Graphics::Laminar :: kRenderMode_Mask, Xenon::Math::Vec2 ( 100, 100 ), Xenon::Math::Vec2 () ) );
+	Data.TestSprite -> GetTransform ().SetScale ( Xenon::Math::Vec2 ( 0.5, 0.5 ) );
+	
+	std :: cout << "Texture Source: " << reinterpret_cast <void *> ( Data.TestSprite -> GetTextureSource () ) << std :: endl;
+	std :: cout << "Texture Source: " << reinterpret_cast <void *> ( Data.TestSprite -> GetTextureSource () ) << std :: endl;
+	
 	Data.Renderer = new Red::Graphics::Laminar :: Renderer ( Data.Cont, WINDOW_WIDTH_0, WINDOW_HEIGHT_0 );
 	
 	Data.Renderer -> SetRenderTarget ( Data.Cont -> GetDefaultFrameBuffer () );
+	
 	Data.Renderer -> Begin ();
+	
+	Data.Renderer -> AddSprite ( Data.TestSprite, 0 );
 	
 	return true;
 	
@@ -75,15 +111,35 @@ bool SetupScene ( RenderStruct & Data )
 void DestroyScene ( RenderStruct & Data )
 {
 	
-	Data.Renderer -> End ();
+	if ( Data.TestSprite != NULL )
+	{
+		
+		delete Data.TestSprite;
+		Data.TestSprite = NULL;
+		
+	}
+	
+	if ( Data.Renderer != NULL )
+	{
+		
+		Data.Renderer -> End ();
+		
+		delete Data.Renderer;
+		Data.Renderer = NULL;
+		
+	}
 	
 }
 
 void Render ( RenderStruct & Data )
 {
 	
-	Data.Cont -> GetDefaultFrameBuffer () -> SetClearColor ( 1.0f, 1.0f, 1.0f, 1.0f );
+	Data.Cont -> GetDefaultFrameBuffer () -> SetClearColor ( 0.0f, 1.0f, 1.0f );
 	Data.Cont -> GetDefaultFrameBuffer () -> Clear ();
+	
+	Data.TestSprite -> GetTransform ().SetRotation ( static_cast <float> ( Data.Frame ) * 0.01f );
+	
+	Data.Renderer -> Render ();
 	
 	Data.Frame ++;
 	
@@ -161,7 +217,8 @@ extern "C" int main ( int argc, const char * argv [] )
 	
 	Cont -> Reference ();
 	Cont -> MakeCurrent ();
-	Cont -> GetDefaultFrameBuffer () -> SetClearColor ( 0.0f, 0.0f, 0.0f );
+	Cont -> GetDefaultFrameBuffer () -> SetClearColor ( 1.0f, 1.0f, 1.0f );
+	Cont -> GetDefaultFrameBuffer () -> Clear ();
 	
 	RenderStruct RData;
 	
@@ -192,7 +249,7 @@ extern "C" int main ( int argc, const char * argv [] )
 	UEData.RenderData = & RData;
 	
 	SDLX :: Timer * DrawTimer = new SDLX :: Timer ( & DrawEventPush, reinterpret_cast <void *> ( & UEData ) );
-	DrawTimer -> Start ( 1000 / 60 );
+	DrawTimer -> Start ( 1000 / 30 );
 	
 	RData.RTimer = DrawTimer;
 	
@@ -326,7 +383,7 @@ void DrawEvent ( SDL_UserEvent * Event )
 		TimerLock -> Lock ();
 	
 	RData -> RTimer -> Stop ();
-	RData -> RTimer -> Start ( 1000 / 120 );
+	RData -> RTimer -> Start ( 1000 / 30 );
 	
 	if ( TimerLock )
 		TimerLock -> Unlock ();

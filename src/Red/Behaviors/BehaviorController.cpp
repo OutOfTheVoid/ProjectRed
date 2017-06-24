@@ -165,6 +165,8 @@ int32_t Red::Behaviors::BehaviorController :: GetBehaviorIndex ( const std :: st
 		
 	}
 	
+	return -1;
+	
 }
 
 void Red::Behaviors::BehaviorController :: StartBehavior ( int32_t Index )
@@ -218,6 +220,8 @@ bool Red::Behaviors::BehaviorController :: GetBehaviorActive ( int32_t Index )
 		return BehaviorList [ Index ].Running;
 		
 	}
+	
+	return false;
 	
 }
 

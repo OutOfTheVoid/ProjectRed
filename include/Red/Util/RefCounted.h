@@ -7,6 +7,10 @@
 
 #include <atomic>
 
+#ifdef RED_DEBUG
+	#include <iostream>
+#endif
+
 namespace Red
 {
 	
@@ -40,6 +44,21 @@ namespace Red
 			
 			inline void Dereference ()
 			{
+				
+				#ifdef RED_DEBUG
+				
+				if ( RefCount == 0 )
+				{
+					
+					std :: cerr << "DEBUG_ERROR: RefCounted dereferenced was not referenced" << std :: endl;
+					
+					delete this;
+					
+					return;
+					
+				}
+				
+				#endif
 				
 				RefCount --;
 				

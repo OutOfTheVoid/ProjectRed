@@ -257,7 +257,7 @@ bool Xenon::Geometry::Primitives :: GenerateCubeMesh ( Mesh ** Target, const Cub
 	} AttributeGenTracker;
 	
 	if ( AttributeCount > 40 ) // Something obviously went wrong, we shouldn't have more than 100 attributes.
-		return NULL;
+		return false;
 	
 	AttributeGenTracker AttributeTrackers [ 40 ];
 	
@@ -485,7 +485,7 @@ bool Xenon::Geometry::Primitives :: GenerateCubeMesh ( Mesh ** Target, const Cub
 		AttributeDataCount ++;
 	
 	if ( AttributeDataCount > 40 )
-		return NULL;
+		return false;
 	
 	uint32_t AttributeDataIndex = 0;
 	MeshAttributeData * AttributeDataList [ 40 ];
@@ -1421,7 +1421,7 @@ bool Xenon::Geometry::Primitives :: GenerateQuad2DMesh ( Mesh ** Target, const Q
 	} AttributeGenTracker;
 	
 	if ( AttributeCount > 40 ) // Something obviously went wrong, we shouldn't have more than 40 attributes for a simple quad.
-		return NULL;
+		return false;
 	
 	AttributeGenTracker AttributeTrackers [ 40 ];
 	
@@ -1574,7 +1574,7 @@ bool Xenon::Geometry::Primitives :: GenerateQuad2DMesh ( Mesh ** Target, const Q
 		AttributeDataCount ++;
 	
 	if ( AttributeDataCount > 40 )
-		return NULL;
+		return false;
 	
 	uint32_t AttributeDataIndex = 0;
 	MeshAttributeData * AttributeDataList [ 40 ];

@@ -58,7 +58,7 @@ int main ( int argc, char const * argv [] )
 	
 	/*================================*/
 	
-	RAUX :: WAVFile TestWAV ( "LittlePistol.wav" );
+	RAUX :: WAVFile TestWAV ( "VHSCollection_Lean.wav" );
 	
 	TestWAV.Load ( & Status );
 	
@@ -96,8 +96,8 @@ int main ( int argc, char const * argv [] )
 	WAVSourceLeftChannel.SetOffset ( 0 );
 	WAVSourceRightChannel.SetOffset ( 0 );
 	
-	Red::Audio::Effects :: Echo LeftChannelEcho ( 4096, & WAVSourceLeftChannel, 0.5f, 1.0f, 0.4f, 0.2f );
-	Red::Audio::Effects :: Echo RightChannelEcho ( 4096, & WAVSourceRightChannel, 0.5f, 1.0f, 0.4f, 0.2f );
+	Red::Audio::Effects :: Echo LeftChannelEcho ( 20000, & WAVSourceLeftChannel, 0.5f, 0.5f, 0.5f, 0.2f );
+	Red::Audio::Effects :: Echo RightChannelEcho ( 20000, & WAVSourceRightChannel, 0.5f, 0.5f, 0.5f, 0.2f );
 	
 	LeftChannelEcho.Reference ();
 	RightChannelEcho.Reference ();

@@ -1,5 +1,5 @@
-#ifndef XENON_TEXTURE2D_H
-#define XENON_TEXTURE2D_H
+#ifndef XENON_ARRAYTEXTURE2D_H
+#define XENON_ARRAYTEXTURE2D_H
 
 #include <Xenon/Xenon.h>
 #include <Xenon/GPU/GPU.h>
@@ -18,7 +18,7 @@ namespace Xenon
 		
 		class FrameBuffer;
 		
-		class Texture2D : public virtual ITexture, public Red::Util :: RefCounted
+		class ArrayTexture2D : public ITexture, public Red::Util :: RefCounted
 		{
 		public:
 			
@@ -163,18 +163,20 @@ namespace Xenon
 			static const WrapMode kWrapMode_MirroredRepeat = GL_MIRRORED_REPEAT;
 			static const WrapMode kWrapMode_Repeat = GL_REPEAT;
 			
-			Texture2D ();
-			~Texture2D ();
+			ArrayTexture2D ();
+			~ArrayTexture2D ();
 			
 			void GPUResourceAlloc ();
 			void GPUResourceFree ();
 			
 			bool GPUResourceAllocated ();
 			
-			void BlankTextureImage ( GLint DetailLevel, InternalFormat FInternal, GLsizei Width, GLsizei Height );
-			void TextureImage ( GLint DetailLevel, InternalFormat FInternal, GLsizei Width, GLsizei Height, ExternalFormat EFormat, ExternalLayout ELayout, const GLvoid * Data, GLuint Alignment = 1, GLuint Pitch = 0 );
-			void TextureSubImage ( GLint DetailLevel, GLsizei Width, GLsizei Height, GLint XOffset, GLint YOffset, ExternalFormat EFormat, ExternalLayout ELayout, const GLvoid * Data, GLuint Alignment = 1, GLuint Pitch = 0 );
-			void CopySubImageFromFrameBuffer ( GLint DetailLevel, GLint XOffset, GLint YOffset, GLsizei Width, GLsizei Height, GLint FrameBufferXOffset, GLint FrameBufferYOffset, GLuint ColorAttachment );
+			void BlankTextureImage ( GLint DetailLevel, InternalFormat FInternal, GLsizei Width, GLsizei Height, GLsizei LayerCount );
+			void TextureImage ( GLint DetailLevel, InternalFormat FInternal, GLsizei Width, GLsizei Height, GLsizei LayerCount, GLsizei XOffset, GLsizei YOffset, GLsizei LayerOffset, ExternalFormat EFormat, ExternalLayout ELayout, const GLvoid * Data, GLuint Alignment = 1, GLuint Pitch = 0 );
+			
+			void TextureSubImage ( GLint DetailLevel, GLsizei Width, GLsizei Height, GLsizei LayerCount, GLsizei XOffset, GLsizei YOffset, GLsizei LayerOffset, ExternalFormat EFormat, ExternalLayout ELayout, const GLvoid * Data, GLuint Alignment = 1, GLuint Pitch = 0 );
+			void TextureSubImageLayer ( GLint DetailLevel, GLsizei Width, GLsizei Height, GLsizei XOffset, GLsizei YOffset, GLsizei Layer, ExternalFormat EFormat, ExternalLayout ELayout, const GLvoid * Data, GLuint Alignment = 1, GLuint Pitch = 0 );
+			void CopySubImageLayerFromFrameBuffer ( GLint DetailLevel, GLint XOffset, GLint YOffset, GLint Layer, GLsizei Width, GLsizei Height, GLint FrameBufferXOffset, GLint FrameBufferYOffset, GLuint ColorAttachment );
 			
 			void GenerateMipMaps ();
 			
@@ -183,7 +185,7 @@ namespace Xenon
 			void SetFiltering ( MinimizingFilter MinFilter, MagnificationFilter MagFilter );
 			
 			void SetWrapMode ( WrapMode Mode );
-			void SetWrapMode ( WrapMode ModeS, WrapMode ModeT );
+			void SetWrapMode ( WrapMode ModeS, WrapMode ModeT, WrapMode ModeR );
 			
 			void AssignToTextureUnit ( GLuint Unit );
 			

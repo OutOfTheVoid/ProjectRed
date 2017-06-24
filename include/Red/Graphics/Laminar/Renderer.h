@@ -12,6 +12,7 @@
 #include <Xenon/GPU/VertexShader.h>
 #include <Xenon/GPU/FragmentShader.h>
 #include <Xenon/GPU/ShaderProgram.h>
+#include <Xenon/GPU/InstancedIndexedDrawCall.h>
 
 #include <vector>
 
@@ -28,7 +29,7 @@ namespace Red
 			{
 			public:
 				
-				Renderer ( Xenon::GPU::Context * RenderContext, uint32_t TargetWidth, uint32_t TargetHeight, uint32_t InitialLayerCount = 100, bool DefaultMaskModeCleared = true, bool OrphanGeometry = true );
+				Renderer ( Xenon::GPU::Context * RenderContext, uint32_t TargetWidth, uint32_t TargetHeight, uint32_t InitialLayerCount = 10, bool DefaultMaskModeCleared = false, bool OrphanGeometry = true );
 				~Renderer ();
 				
 				void SetRenderTarget ( Xenon::GPU :: FrameBuffer * TargetBuffer );
@@ -50,10 +51,18 @@ namespace Red
 				
 			private:
 				
+				typedef struct
+				{
+					
+					Xenon::GPU::ITexture * Texture;
+					uint32_t UsageCount;
+					
+				} TextureUsageRecord;
+				
 				typedef struct LayerModeGeometry_Struct
 				{
 					
-					LayerModeGeometry_Struct ( uint32_t MinElementCount );
+					LayerModeGeometry_Struct ( uint32_t MinElementCount, Xenon::GPU :: IndexBuffer * QuadBuffer );
 					~LayerModeGeometry_Struct ();
 					
 					void SizeTo ( uint32_t ElementCount );
@@ -64,6 +73,9 @@ namespace Red
 					uint32_t TransformArraySize;
 					uint32_t TransformArrayBufferSize;
 					
+					std :: vector <TextureUsageRecord> TextureUseRecords;
+					
+					uint32_t * TextureIndexArray;
 					Xenon::Math :: Matrix3x3 * TransformArray;
 					int64_t * TransformIterationList;
 					Sprite ** TransformSourceList;
@@ -121,7 +133,7 @@ namespace Red
 				void PrepGeometry ();
 				void UpdateGeometry ();
 				
-				void PrepGeometryList ( LayerModeGeometry *& GeometryPTR, Sprite * ListHead, uint32_t ListLength, ShaderProgram * Program );
+				void PrepGeometryList ( LayerModeGeometry *& GeometryPTR, Sprite * ListHead, uint32_t ListLength, Xenon::GPU :: ShaderProgram * Program, Xenon::GPU :: IndexBuffer * QuadIndexBuffer );
 				void UpdateGeometryBuffers ( LayerModeGeometry & Geometry );
 				
 				Xenon::GPU :: Context * RenderContext;

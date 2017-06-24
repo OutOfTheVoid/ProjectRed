@@ -2,8 +2,12 @@
 #define RED_GRAPHICS_LAMINAR_IRENDERABLE2DTEXTURESOURCE_H
 
 #include <Red/Graphics/Laminar/Laminar.h>
-#include <Xenon/Math/Matrix3x3.h>
+
 #include <Red/Util/IRefCounted.h>
+
+#include <Xenon/GPU/ITexture.h>
+
+#include <Xenon/Math/Matrix3x3.h>
 
 namespace Red
 {

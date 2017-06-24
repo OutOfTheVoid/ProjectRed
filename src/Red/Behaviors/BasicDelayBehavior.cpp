@@ -14,7 +14,7 @@ Red::Behaviors::BasicDelayBehavior :: BasicDelayBehavior ( const std :: string &
 
 Red::Behaviors::BasicDelayBehavior::BehaviorTracker_Struct :: BehaviorTracker_Struct ( const struct BehaviorTracker_Struct & CopyFrom ):
 	ID ( CopyFrom.ID ),
-	Index ( Index )
+	Index ( CopyFrom.Index )
 {
 }
 

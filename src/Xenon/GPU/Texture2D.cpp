@@ -9,6 +9,9 @@ Xenon::GPU::Texture2D :: Texture2D ():
 
 Xenon::GPU::Texture2D :: ~Texture2D ()
 {
+	
+	GPUResourceFree ();
+	
 }
 
 void Xenon::GPU::Texture2D :: GPUResourceAlloc ()
@@ -67,7 +70,7 @@ void Xenon::GPU::Texture2D :: BlankTextureImage ( GLint DetailLevel, InternalFor
 	
 }
 
-void Xenon::GPU::Texture2D :: TextureImage ( GLint DetailLevel, InternalFormat FInternal, GLsizei Width, GLsizei Height, ExternalLayout ELayout, ExternalFormat EFormat, const GLvoid * Data, GLuint Alignment, GLuint Pitch )
+void Xenon::GPU::Texture2D :: TextureImage ( GLint DetailLevel, InternalFormat FInternal, GLsizei Width, GLsizei Height, ExternalFormat EFormat, ExternalLayout ELayout, const GLvoid * Data, GLuint Alignment, GLuint Pitch )
 {
 	
 	Bind ();
@@ -78,6 +81,32 @@ void Xenon::GPU::Texture2D :: TextureImage ( GLint DetailLevel, InternalFormat F
 	glTexImage2D ( GL_TEXTURE_2D, DetailLevel, FInternal, Width, Height, 0, EFormat, ELayout, Data );
 	
 	glPixelStorei ( GL_UNPACK_ROW_LENGTH, 0 );
+	glPixelStorei ( GL_UNPACK_ALIGNMENT, 4 );
+	
+}
+
+void Xenon::GPU::Texture2D :: TextureSubImage ( GLint DetailLevel, GLsizei Width, GLsizei Height, GLint XOffset, GLint YOffset, ExternalFormat EFormat, ExternalLayout ELayout, const GLvoid * Data, GLuint Alignment, GLuint Pitch )
+{
+	
+	Bind ();
+	
+	glPixelStorei ( GL_UNPACK_ROW_LENGTH, Pitch );
+	glPixelStorei ( GL_UNPACK_ALIGNMENT, Alignment );
+	
+	glTexSubImage2D ( GL_TEXTURE_2D, DetailLevel, XOffset, YOffset, Width, Height, EFormat, ELayout, Data );
+	
+	glPixelStorei ( GL_UNPACK_ROW_LENGTH, 0 );
+	glPixelStorei ( GL_UNPACK_ALIGNMENT, 4 );
+	
+}
+
+void Xenon::GPU::Texture2D :: CopySubImageFromFrameBuffer ( GLint DetailLevel, GLint XOffset, GLint YOffset, GLsizei Width, GLsizei Height, GLint FrameBufferXOffset, GLint FrameBufferYOffset, GLuint ColorAttachment )
+{
+	
+	Bind ();
+	
+	glReadBuffer ( GL_COLOR_ATTACHMENT0 + ColorAttachment );
+	glCopyTexSubImage2D ( GL_TEXTURE_2D, DetailLevel, XOffset, YOffset, FrameBufferXOffset, FrameBufferYOffset, Width, Height );
 	
 }
 
